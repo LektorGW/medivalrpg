@@ -1,0 +1,276 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Nowosci — changelog dla graczy MEDIVALRPG.
+# Wpisy są w changelog.yml (albo komendami: /nowosci dodaj | punkt | usun). Ten plik to ustawienia i teksty.
+# Wszystkie teksty to MiniMessage (https://docs.advntr.dev/minimessage/format.html).
+
+# ------------------------------------------------------------------ kiedy i co pokazać
+show:
+  # Jak pokazać nowości po zalogowaniu (lista, można łączyć):
+  #   title — plansze na środku ekranu: „✦ Nowości ✦”, potem po jednej na każdy nieprzeczytany wpis
+  #   book  — po planszach (albo od razu, gdy bez title) sama otwiera się książka /nowosci
+  #   chat  — zwięzły blok na czacie (trwały ślad w historii czatu)
+  mode: [title, book, chat]
+  # Opóźnienie po udanym /login albo /register w nLoginie (sekundy). nLogin sam pokazuje title „Zalogowano”
+  # przez ok. 2 s — czekamy, aż zniknie, żeby plansze się nie nakładały.
+  delay-after-login-seconds: 3
+  # Gdy nLogina nie ma na serwerze: opóźnienie po wejściu na serwer (sekundy).
+  delay-after-join-seconds: 3
+  # Ile najnowszych nieprzeczytanych wpisów pokazać (plansze title i blok na czacie; reszta w książce).
+  max-entries: 3
+  # Ile pierwszych punktów każdego wpisu pokazać w bloku (0 = sam tytuł; wszystkie punkty są w dymku po najechaniu).
+  points-per-entry: 1
+  # Punkty w bloku są skracane do tylu znaków (żeby blok był zwięzły).
+  point-max-chars: 55
+  # Po ilu pokazaniach bloku wpisy liczą się jako przeczytane, nawet bez kliknięcia
+  # „[Nie pokazuj tych więcej]” (0 = tylko ręcznie albo przez /nowosci — wtedy przypomnienie wisi do skutku).
+  auto-mark-read-after-shows: 0
+  # Otwarcie /nowosci (książka albo czat) oznacza wszystkie wpisy jako przeczytane.
+  mark-read-on-open: true
+  # Książka otwiera się sama tylko wtedy, gdy są nieprzeczytane wpisy.
+  book-only-if-unread: true
+  # Ile razy książka otworzy się sama dla tego samego najnowszego wpisu (potem już tylko title i czat; 0 = nigdy).
+  book-max-auto-opens: 1
+  # Ile ticków po ostatniej planszy otworzyć książkę (20 ticków = 1 s).
+  book-delay-ticks: 5
+  # Czy książka, która otworzyła się SAMA, oznacza wpisy jako przeczytane. false = gracz, który ją od razu zamknął,
+  # dalej widzi przypomnienie; przeczytane liczy się dopiero po /nowosci albo kliknięciu „Przeczytane”.
+  auto-book-marks-read: false
+
+# ------------------------------------------------------------------ przypomnienie, dopóki gracz nie przeczyta
+reminder:
+  # Pasek u góry ekranu z liczbą nieprzeczytanych wpisów. Znika po /nowosci albo kliknięciu „Przeczytane”.
+  bossbar:
+    enabled: true
+    # pink | blue | red | green | yellow | purple | white
+    color: yellow
+    # progress | notched_6 | notched_10 | notched_12 | notched_20
+    overlay: progress
+  # Co ile minut przypomnieć na czacie (z przyciskami), dopóki są nieprzeczytane wpisy (0 = nigdy).
+  chat-every-minutes: 10
+
+# ------------------------------------------------------------------ automatyczne wczytywanie changelog.yml
+auto-reload:
+  # Co ile sekund sprawdzać, czy changelog.yml został podmieniony (SFTP, panel hostingu). 0 = tylko /nowosci reload.
+  check-seconds: 15
+  # Nowe wpisy (z pliku albo po /nowosci reload) od razu pokazać graczom, którzy są w grze: czat, plansze, pasek.
+  announce-new: true
+
+# ------------------------------------------------------------------ Discord
+# Każdy nowy wpis trafia na kanał Discorda (raz; także wpisy wgrane, gdy serwer był wyłączony — przy starcie).
+# Webhook: Discord → ustawienia kanału → Integracje → Webhooki → Nowy webhook → Kopiuj adres URL.
+# Przy pierwszym uruchomieniu z webhookiem plugin tylko zapamiętuje najnowszy wpis (bez wysyłania całej historii).
+# /nowosci oglos wysyła najnowszy wpis także na Discorda.
+discord:
+  webhook-url: ""
+  # Nazwa nadawcy ("" = nazwa ustawiona w webhooku) i awatar (adres obrazka, "" = awatar webhooka).
+  username: "MEDIVALRPG"
+  avatar-url: ""
+  # Wzmianka nad wpisem: "" (brak), "@everyone", "@here" albo rola "<@&ID_ROLI>".
+  mention: ""
+
+# Gracz, który wchodzi na serwer pierwszy raz w życiu:
+#   welcome — krótkie powitanie z przyciskiem do /nowosci; cała historia od razu oznaczona jako przeczytana (domyślnie,
+#             bo dla nowego gracza wszystko jest nowe — lista zmian byłaby tylko szumem)
+#   newest  — pokaż tylko najnowszy wpis, starsze oznacz jako przeczytane
+#   all     — jak każdy gracz: wszystkie wpisy nieprzeczytane
+#   none    — nic nie pokazuj, oznacz wszystko jako przeczytane
+# Gracze, którzy grali przed instalacją pluginu, widzą normalnie wszystkie nieprzeczytane wpisy.
+new-player: welcome
+
+# ------------------------------------------------------------------ plansze na środku ekranu (show.mode: title)
+title-sequence:
+  fade-in-ticks: 10
+  stay-ticks: 50
+  fade-out-ticks: 10
+  # Dodatkowa przerwa między planszami (ticki); 0 = następna wchodzi, gdy poprzednia całkiem zgaśnie.
+  gap-ticks: 0
+  # Tytuł wpisu na planszy jest duży — dłuższe tytuły są skracane, żeby zmieściły się na ekranie.
+  title-max-chars: 28
+  # Pierwszy punkt wpisu jako podtytuł, skrócony do tylu znaków (zwykły tekst, bez kolorów i kliknięć).
+  subtitle-max-chars: 40
+  # Dźwięki (key: "" = bez dźwięku). Przy kolejnych wpisach wysokość rośnie o pitch-step.
+  intro-sound:
+    key: "minecraft:ui.toast.challenge_complete"
+    volume: 0.35
+    pitch: 1.0
+  entry-sound:
+    key: "minecraft:block.note_block.chime"
+    volume: 0.6
+    pitch: 0.9
+    pitch-step: 0.15
+
+# Dźwięk przy bloku na czacie, gdy plansze (title) są wyłączone.
+notify:
+  sound:
+    enabled: true
+    key: "minecraft:block.note_block.chime"
+    volume: 0.8
+    pitch: 1.2
+
+# ------------------------------------------------------------------ książka (/nowosci) i czat (/nowosci czat)
+book:
+  # Strona książki mieści ok. 14 linii po ok. 19 znaków; liczymy konserwatywnie (symbole = 2 znaki, pogrubienie szersze).
+  lines-per-page: 13
+  chars-per-line: 18
+  # Limit stron książki w kliencie Minecrafta to 100.
+  max-pages: 100
+
+chat:
+  # Ile wpisów na jednej stronie /nowosci czat.
+  entries-per-page: 2
+
+# Format daty przy wpisach (java DateTimeFormatter). W changelog.yml data zawsze jako "RRRR-MM-DD".
+date-format: "dd.MM.yyyy"
+
+# ------------------------------------------------------------------ kategorie wpisów
+# color = kolor na czacie, book-color = kolor w książce (ciemniejszy, bo kartka jest jasna).
+categories:
+  nowe:
+    name: "Nowość"
+    icon: "✦"
+    color: "#55FF55"
+    book-color: "#1B7A1B"
+  zmiana:
+    name: "Zmiana"
+    icon: "⚙"
+    color: "#FFAA00"
+    book-color: "#A35A00"
+  poprawka:
+    name: "Poprawka"
+    icon: "✔"
+    color: "#55FFFF"
+    book-color: "#1A5F8A"
+
+# Kolory tagów, których możesz używać w punktach changelogu: <cmd>/glos</cmd> (komenda) i <hl>tekst</hl> (wyróżnienie).
+styles:
+  chat:
+    cmd: "#FFD25A"
+    hl: "#FFFFFF"
+  book:
+    cmd: "#8B1A1A"
+    hl: "#1F2F7A"
+
+# ------------------------------------------------------------------ teksty
+# Liczba mnoga: [1, 2-4, 5+] — np. 1 nowy wpis, 3 nowe wpisy, 7 nowych wpisów.
+plural:
+  new-entries: ["nowy wpis", "nowe wpisy", "nowych wpisów"]
+  entries: ["wpis", "wpisy", "wpisów"]
+  players: ["graczowi", "graczom", "graczom"]
+
+messages:
+  prefix: "<gold>[Nowości]</gold> "
+
+  # --- blok po zalogowaniu
+  login-header: "<gold><st>        </st></gold> <yellow><bold>Nowości na serwerze</bold></yellow> <gold><st>        </st></gold>"
+  login-count: "<gray>Masz <white><count></white> <word>. Najedź na tytuł, żeby zobaczyć szczegóły.</gray>"
+  login-entry: " <cat_color><icon></cat_color> <white><title></white> <dark_gray>· <date></dark_gray>"
+  login-entry-point: "    <gray><point></gray>"
+  login-more: " <gray>…i jeszcze <white><count></white> <word> — kliknij „Pokaż wszystko”.</gray>"
+  login-buttons: " <show_all>   <dismiss>"
+  login-footer: "<gold><st>                                             </st></gold>"
+  login-entry-hover-click: "<dark_gray>Kliknij, żeby otworzyć wszystkie nowości.</dark_gray>"
+  button-show-all: "<green><bold>[Pokaż wszystko]</bold></green>"
+  button-show-all-hover: "<gray>Otwórz książkę z całą historią zmian</gray>\n<dark_gray>/nowosci</dark_gray>"
+  button-dismiss: "<gray>[Nie pokazuj tych więcej]</gray>"
+  button-dismiss-hover: "<gray>Te wpisy nie pokażą się już po zalogowaniu.</gray>\n<dark_gray>Nadal znajdziesz je pod /nowosci.</dark_gray>"
+  welcome: "<gold>Witaj na <yellow><bold>MEDIVALRPG</bold></yellow>!</gold> <gray>Co nowego na serwerze, sprawdzisz zawsze pod</gray> <show_all>"
+
+  # --- przypomnienie, dopóki gracz nie przeczyta (reminder)
+  reminder-bossbar: "<yellow>✦ Nowości na serwerze: <white><count></white> <word> — wpisz <gold>/nowosci</gold></yellow>"
+  reminder-chat: "<prefix><yellow>Czekają na ciebie <white><count></white> <word>.</yellow> <show_all>  <dismiss>"
+
+  # --- dymek wpisu (blok po zalogowaniu i widok czatu)
+  entry-hover: "<cat_color><icon> <category></cat_color> <dark_gray>· <date></dark_gray>\n<white><bold><title></bold></white>\n<points>"
+  entry-hover-point: "<gray>•</gray> <point>"
+
+  # --- ogłoszenie (/nowosci oglos)
+  announce-header: "<gold><st>      </st></gold> <yellow><bold>Nowość na serwerze!</bold></yellow> <gold><st>      </st></gold>"
+  announce-title: " <cat_color><icon> <bold><title></bold></cat_color> <dark_gray>· <date></dark_gray>"
+  announce-point: "  <gray>•</gray> <point>"
+  announce-buttons: " <show_all>   <dismiss>"
+
+  # --- plansze na środku ekranu (show.mode: title)
+  sequence-intro-title: "<gold><bold>✦ Nowości ✦</bold></gold>"
+  sequence-intro-subtitle: "<gray>na serwerze MEDIVALRPG</gray>"
+  sequence-entry-title: "<cat_color><icon> <title></cat_color>"
+  sequence-entry-subtitle: "<gray><point></gray>"
+  sequence-entry-subtitle-empty: "<gray><category> · <date></gray>"
+  sequence-welcome-title: "<gold><bold>✦ Witaj ✦</bold></gold>"
+  sequence-welcome-subtitle: "<gray>na serwerze MEDIVALRPG</gray>"
+
+  # --- widok czatu (/nowosci czat [strona])
+  chat-header: "<gold><st>      </st></gold> <yellow><bold>Nowości</bold></yellow> <gray>(strona <page>/<pages>)</gray> <gold><st>      </st></gold>"
+  chat-entry-title: "<cat_color><icon> <bold><title></bold></cat_color> <dark_gray>#<id> · <category> · <date></dark_gray>"
+  chat-entry-point: "  <gray>•</gray> <point>"
+  chat-entry-separator: " "        # linia między wpisami ("" = bez odstępu)
+  chat-nav: "<prev>  <gray>strona <page>/<pages></gray>  <next>   <book>"
+  chat-prev: "<yellow>[« Poprzednia]</yellow>"
+  chat-prev-disabled: "<dark_gray>[« Poprzednia]</dark_gray>"
+  chat-next: "<yellow>[Następna »]</yellow>"
+  chat-next-disabled: "<dark_gray>[Następna »]</dark_gray>"
+  chat-page-hover: "<gray>Strona <page></gray>"
+  chat-book: "<green>[Książka]</green>"
+  chat-empty: "<prefix><gray>Na razie nie ma żadnych wpisów.</gray>"
+
+  # --- książka (/nowosci)
+  book-title: "Nowości MEDIVALRPG"
+  book-author: "MEDIVALRPG"
+  # Strona tytułowa (kolejne linie: ramka, tytuł, podtytuł, data, stan, ramka, link do spisu).
+  book-cover-frame: "<#8A6D3B>✦ ✧ ✦ ✧ ✦ ✧</#8A6D3B>"
+  book-cover-title: "<#7A4A00><bold>   Nowości</bold></#7A4A00>"
+  book-cover-subtitle: "<dark_gray>   MEDIVALRPG</dark_gray>"
+  book-cover-date: "<dark_gray>stan na <date></dark_gray>"
+  book-cover-unread: "<dark_red>★ <count> <word></dark_red>"
+  book-cover-all-read: "<dark_gray>wszystko przeczytane</dark_gray>"
+  book-cover-toc: "<dark_blue>» Spis treści</dark_blue>"
+  book-cover-toc-hover: "<gray>Przejdź do spisu treści</gray>"
+  book-cover-read: "<dark_green>✔ Przeczytane</dark_green>"
+  book-cover-read-hover: "<gray>Kliknij, gdy przeczytasz — zniknie pasek z przypomnieniem.</gray>"
+  book-toc-header: "<bold>Spis treści</bold>\n<dark_red>★</dark_red><dark_gray> nowe dla ciebie</dark_gray>"
+  book-toc-line: "<cat_color><icon></cat_color> <title> <dark_gray>s.<page></dark_gray>"
+  book-toc-line-new: "<dark_red>★</dark_red> <title> <dark_gray>s.<page></dark_gray>"   # ★ zamiast ikony kategorii
+  book-toc-hover: "<gray>Przejdź do strony <page></gray>"
+  book-entry-title: "<cat_color><icon> <bold><title></bold></cat_color>"
+  book-entry-meta: "<dark_gray><category> · <date></dark_gray>"
+  book-entry-meta-new: "<dark_gray><category> · <date></dark_gray> <dark_red>★ nowe</dark_red>"
+  book-entry-point: "<dark_gray>•</dark_gray> <point>"
+  book-continued: "<dark_gray><italic>(cd.) <title></italic></dark_gray>"
+  book-empty: "<bold>Nowości</bold>\n\n<dark_gray>Na razie nie ma żadnych wpisów.</dark_gray>"
+
+  # --- gracz
+  marked-read: "<prefix><gray>Gotowe — te nowości już się nie pokażą. Całą historię znajdziesz pod <white>/nowosci</white>.</gray>"
+  players-only: "<prefix><red>Tę komendę może użyć tylko gracz.</red>"
+
+  # --- admin
+  admin-added: '<prefix><green>Dodano wpis <white>#<id></white>: <white><title></white> (<category>).</green> <gray>Dopisz punkty: <white>/nowosci punkt \<tekst></white></gray>'
+  admin-point-added: "<prefix><green>Dodano punkt do wpisu <white>#<id></white> (punktów: <count>):</green> <point>"
+  admin-no-entries: '<prefix><red>Nie ma jeszcze żadnego wpisu. Najpierw <white>/nowosci dodaj \<kategoria> \<tytuł></white>.</red>'
+  admin-removed: "<prefix><green>Usunięto wpis <white>#<id></white>: <title>.</green>"
+  admin-not-found: "<prefix><red>Nie ma wpisu o numerze <white><id></white>.</red>"
+  admin-unknown-category: "<prefix><red>Nieznana kategoria <white><category></white>. Dostępne: <white><categories></white>.</red>"
+  admin-empty-text: "<prefix><red>Podaj tekst.</red>"
+  admin-announced: "<prefix><green>Ogłoszono wpis <white>#<id></white> <count> <word>.</green>"
+  admin-reloaded: "<prefix><green>Przeładowano config i changelog (<count> <word>).</green>"
+  admin-reload-warnings: "<prefix><yellow>Uwagi do changelog.yml: <white><count></white> — szczegóły w konsoli.</yellow>"
+  admin-save-failed: "<prefix><red>Nie udało się zapisać changelog.yml — szczegóły w konsoli.</red>"
+  admin-changelog-broken: "<prefix><red>changelog.yml ma błąd (szczegóły w konsoli) — popraw plik i wpisz <white>/nowosci reload</white>. Do tego czasu edycja komendami jest zablokowana.</red>"
+
+  # --- podpowiedzi (Brigadier)
+  suggest-category: "<cat_color><icon> <category></cat_color>"
+  suggest-entry: "<gray>#<id></gray> <white><title></white>"
+  suggest-chat-page: "<gray>Strona <page> z <pages></gray>"
+
+  # --- pomoc (/nowosci pomoc)
+  help-header: "<gold><st>      </st></gold> <yellow><bold>Nowości — pomoc</bold></yellow> <gold><st>      </st></gold>"
+  help-line: " <yellow><syntax></yellow> <gray>— <description></gray>"
+  help-hover: "<yellow><syntax></yellow>\n<gray><description></gray>\n<dark_gray>Kliknij, żeby wpisać komendę.</dark_gray>"
+  help-entries:
+    ksiazka: "otwiera książkę ze wszystkimi nowościami"
+    czat: "nowości na czacie, strona po stronie"
+    przeczytane: "nie pokazuj już obecnych nowości po zalogowaniu"
+    pomoc: "ta pomoc"
+    dodaj: "nowy wpis (kategoria: nowe, zmiana, poprawka)"
+    punkt: 'dopisuje punkt do najnowszego wpisu (MiniMessage, tagi \<cmd> i \<hl>)'
+    usun: "usuwa wpis"
+    oglos: "wysyła najnowszy wpis wszystkim graczom online"
+    reload: "przeładowuje config.yml i changelog.yml"

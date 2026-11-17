@@ -1,0 +1,131 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: chata
+name: '<#C8A165>Chata</#C8A165>'
+description: 'Mieszkanie dla 2 obywateli (2 łóżka); bez wolnych łóżek nie przybywa osadników. Mała drewniana chata na kamiennej podmurówce.'
+function: housing
+beds: 2
+cost: 1500
+tier: 0
+category: housing
+zone: inner
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '1':
+    base: cobblestone
+    floor: spruce_planks
+    frame: spruce_log
+    roof: dark_oak
+    wall: oak_planks
+    window: glass_pane
+palette:
+  'C': '@base'
+  'D': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'red_bed[facing=north,part=foot]'
+  'G': '@window'
+  'H': 'red_bed[facing=north,part=head]'
+  'K': 'chest[facing=south]'
+  'L': '@frame[axis=y]'
+  'M': 'composter'
+  'O': '@wall'
+  'P': '@floor'
+  'R': 'barrel[facing=up]'
+  'T': 'wall_torch[facing=south]'
+  'U': 'furnace[facing=east]'
+  'W': 'crafting_table'
+  'X': '@frame[axis=x]'
+  'Z': '@frame[axis=z]'
+  'c': 'brown_carpet'
+  'd': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'f': 'potted_red_tulip'
+  'l': 'lantern[hanging=true]'
+  'n': '@roof_stairs[facing=north,half=bottom]'
+  's': '@roof_stairs[facing=south,half=bottom]'
+layers:
+  # y=0
+  - |
+    _________
+    _CCCCCCC_
+    _CPPPPPC_
+    _CPPPPPC_
+    _CPPPPPC_
+    _CPPPPPC_
+    _CCCCCCC_
+    _________
+  # y=1
+  - |
+    .........
+    .LCCCCCL.
+    .CHKWRHC.
+    .CF...FC.
+    .C..c..C.
+    .CU...MC.
+    .LCCDCCL.
+    .........
+  # y=2
+  - |
+    .........
+    .LOGOGOL.
+    .O...f.O.
+    .G.....G.
+    .G.....G.
+    .O.....O.
+    .LGOdOGL.
+    ...T.T...
+  # y=3
+  - |
+    .........
+    .LOOOOOL.
+    .O.....O.
+    .O.....O.
+    .O.....O.
+    .O.....O.
+    .LOOOOOL.
+    .........
+  # y=4
+  - |
+    sssssssss
+    .LXXXXXL.
+    .Z.....Z.
+    .Z.....Z.
+    .Z.....Z.
+    .Z.....Z.
+    .LXXXXXL.
+    nnnnnnnnn
+  # y=5
+  - |
+    .........
+    sssssssss
+    .P.....P.
+    .P.....P.
+    .P.....P.
+    .P.....P.
+    nnnnnnnnn
+    .........
+  # y=6
+  - |
+    .........
+    .........
+    sssssssss
+    .P..l..P.
+    .P..l..P.
+    nnnnnnnnn
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    .........
+    .........
+    sssssssss
+    nnnnnnnnn
+    .........
+    .........
+    .........

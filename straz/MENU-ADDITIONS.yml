@@ -1,0 +1,113 @@
+# ============================================================
+#  Propozycja do menu/src/main/resources/menus.yml (NIE wdrożona — do przeniesienia przez osobę od modułu Menu)
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Straż 2026-10-29: raport dzienny dla właściciela, alerty i nocna kopia danych pluginów.
+#  Tylko dla administracji (straz.admin, domyślnie op). Komendy Straży NIE trafiają do pomoc.yml ani na kanał
+#  Server-command (pomoc.yml zawiera wyłącznie komendy graczy — decyzja użytkownika 2026-10-28).
+#  1) w menu „admin” jeden przycisk otwierający podmenu „straz-admin”;
+#  2) nowe podmenu „straz-admin”.
+# ============================================================
+
+menus:
+  admin:
+    items:
+      straz:
+        material: SPYGLASS
+        name: "<dark_red>🛡 Straż — nadzór i kopie"
+        lore:
+          - "<gray>Raport dzienny, alerty, kopie danych pluginów."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– otwórz"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "menu:straz-admin"
+
+  straz-admin:
+    title: "<dark_red>🛡 Straż"
+    rows: 3
+    permission: straz.admin
+    border: BLACK_STAINED_GLASS_PANE
+    items:
+      status:
+        slot: 10
+        material: COMPASS
+        name: "<gold>Stan nadzoru"
+        lore:
+          - "<gray>Pula, TPS, błędy, kolej, kopie, webhook."
+          - "<dark_gray>/straz status"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz status"
+      raport:
+        slot: 11
+        material: WRITTEN_BOOK
+        name: "<gold>Ostatni raport dzienny"
+        lore:
+          - "<gray>Pełny raport na czacie (z listą błędów)."
+          - "<dark_gray>/straz raport"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz raport"
+      raport-teraz:
+        slot: 12
+        material: WRITABLE_BOOK
+        name: "<yellow>Raport teraz"
+        lore:
+          - "<gray>Przygotuj raport od razu i wyślij"
+          - "<gray>na kanał (jeśli ustawiono webhook)."
+          - "<dark_gray>/straz raport teraz"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz raport teraz"
+      alerty:
+        slot: 13
+        material: BELL
+        name: "<red>Ostatnie alerty"
+        lore:
+          - "<gray>Pula, nowe błędy SEVERE, kolej, TPS, kopie."
+          - "<dark_gray>/straz alerty"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz alerty"
+      kopie:
+        slot: 14
+        material: CHEST
+        name: "<gold>Kopie danych pluginów"
+        lore:
+          - "<gray>Lista plików backups/plugins-*.zip."
+          - "<dark_gray>/straz kopia lista"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz kopia lista"
+      kopia-teraz:
+        slot: 15
+        material: ENDER_CHEST
+        name: "<yellow>Kopia teraz"
+        lore:
+          - "<gray>Spójna kopia w tle (bez lagów),"
+          - "<gray>zweryfikowana sumami CRC."
+          - "<dark_gray>/straz kopia teraz"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz kopia teraz"
+      test:
+        slot: 16
+        material: NOTE_BLOCK
+        name: "<aqua>Test kanału Discord"
+        lore:
+          - "<gray>Wiadomość testowa na prywatny kanał."
+          - "<dark_gray>/straz test"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz test"
+      przeladuj:
+        slot: 22
+        material: REPEATER
+        name: "<gray>Wczytaj config Straży"
+        lore:
+          - "<gray>Np. po wpisaniu adresu webhooka. Bez restartu."
+          - "<dark_gray>/straz przeladuj"
+        requires-plugin: Straz
+        permission: straz.admin
+        action: "command:straz przeladuj"

@@ -1,0 +1,1019 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: wiezowiec
+name: '<#B0C4DE>Wieżowiec mieszkalny</#B0C4DE>'
+description: 'Mieszkanie dla 28 obywateli (28 łóżek); bez wolnych łóżek nie przybywa osadników. Wieżowiec mieszkalny (ok. 65 bloków); tylko na płaskiej działce.'
+function: housing
+beds: 28
+cost: 200000
+tier: 5
+category: highrise
+zone: inner
+max-per-country: 3
+requires:
+  population: 120
+  treasury: 250000
+  era: 4
+  discovery: beton_zbrojony
+foundation: fill
+foundation-block: gray_concrete
+ground-layer: 0
+palette:
+  'A': 'smooth_stone'
+  'B': 'polished_andesite'
+  'C': 'gray_stained_glass_pane'
+  'D': 'white_concrete'
+  'E': 'ladder[facing=north]'
+  'F': 'light_gray_concrete'
+  'G': 'sea_lantern'
+  'H': 'white_bed[facing=north,part=head]'
+  'I': 'white_bed[facing=north,part=foot]'
+  'J': 'chest[facing=north,type=single,waterlogged=false]'
+  'K': 'barrel[facing=up,open=false]'
+  'L': 'waxed_copper_door[facing=north,half=lower,hinge=left,open=false]'
+  'M': 'waxed_copper_door[facing=north,half=upper,hinge=left,open=false]'
+  'N': 'smooth_quartz_slab[type=bottom]'
+  'O': 'lectern[facing=south,has_book=false,powered=false]'
+  'P': 'gray_concrete'
+  'Q': 'iron_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]'
+  'R': 'lightning_rod[facing=up,powered=false,waterlogged=false]'
+  'S': 'andesite_wall'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    ABBBBBBBBBBBA
+    AAAAAAAAAAAAA
+  # y=1
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.O.......C.
+    .C.........C.
+    .DCCCCLCCCCD.
+    S...........S
+  # y=2
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCMCCCCD.
+    S...........S
+  # y=3
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    S...NNNNN...S
+  # y=4
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    G...........G
+  # y=5
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=6
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=7
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=8
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=9
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=10
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=11
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=12
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=13
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=14
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=15
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=16
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=17
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=18
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=19
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=20
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=21
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=22
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=23
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=24
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=25
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=26
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=27
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=28
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=29
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=30
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=31
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=32
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=33
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=34
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=35
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=36
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=37
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=38
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=39
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=40
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=41
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=42
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=43
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=44
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=45
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=46
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=47
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=48
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=49
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=50
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=51
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=52
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=53
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=54
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=55
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=56
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=57
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.H.....H.C.
+    .C.I.....I.C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.J.....K.C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=58
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=59
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .D....E....D.
+    .C....F....C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .DCCCCDCCCCD.
+    .............
+  # y=60
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAEAAAAD.
+    .DAAAAAAAAAD.
+    .DAAAAAAAAAD.
+    .DAGAAAAAGAD.
+    .DAAAAAAAAAD.
+    .DDDDDDDDDDD.
+    .............
+  # y=61
+  - |
+    .............
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPQPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .PPPPPPPPPPP.
+    .............
+  # y=62
+  - |
+    .............
+    .DDDDDDDDDDD.
+    .D.........D.
+    .D......FFFD.
+    .D......FFFD.
+    .D......FFFD.
+    .D.........D.
+    .D.........D.
+    .D.........D.
+    .D.........D.
+    .D.........D.
+    .DDDDDDDDDDD.
+    .............
+  # y=63
+  - |
+    .............
+    .G.........G.
+    .............
+    ........FFF..
+    ........FFF..
+    ........FFF..
+    .............
+    .............
+    .............
+    .............
+    .............
+    .G.........G.
+    .............
+  # y=64
+  - |
+    .............
+    .............
+    .............
+    .............
+    .........R...
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............

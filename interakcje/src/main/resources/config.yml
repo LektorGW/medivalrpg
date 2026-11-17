@@ -1,0 +1,765 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Interakcje — konfiguracja pluginu.
+# Wszystkie teksty to MiniMessage (https://docs.advntr.dev/minimessage/format.html).
+# Nicki graczy są wstawiane jako zwykły tekst (nigdy nie są parsowane jako MiniMessage).
+
+settings:
+  # Promień (w blokach), w którym gracze widzą opis RP interakcji na czacie.
+  broadcast-radius: 16.0
+  # Ile sekund ważna jest prośba o zgodę.
+  request-timeout: 30
+  # Globalny anty-spam: minimalny odstęp (ms) między dowolnymi interakcjami jednego gracza.
+  global-cooldown-ms: 1500
+  # true = w komunikatach używany jest displayName gracza (np. z pluginu od nicków), false = zwykły nick.
+  use-display-names: false
+  # Metadane, po których rozpoznawany jest vanish (np. EssentialsX, SuperVanish, PremiumVanish ustawiają "vanished").
+  vanish-metadata: [vanished]
+  # Komenda kończąca trzymanie za rękę (zmiana wymaga restartu serwera).
+  release-command: pusc
+  release-aliases: [puść, release]
+  # Interakcje i emotki dodane w nowszej wersji jara, których brak w tym pliku, są używane z wartościami
+  # domyślnymi (bez zapisu pliku). Wyłączysz je wpisem z enabled: false.
+  add-new-defaults: true
+
+menu:
+  # Shift + prawy klik na gracza otwiera menu interakcji.
+  shift-right-click: true
+  # Menu otwiera się tylko z pustą główną ręką (żeby nie kolidować np. ze smyczą, nametagiem, jedzeniem).
+  require-empty-hand: true
+  # Przedmiot wypełniający puste sloty ("" = brak).
+  filler: GRAY_STAINED_GLASS_PANE
+
+# Definicje interakcji. Klucz = id (używany w uprawnieniu interakcje.<id>).
+#   name, description    – nazwa i opis (menu, /interakcje lista)
+#   command, aliases     – komenda i aliasy (zmiana wymaga restartu serwera)
+#   icon                 – przedmiot w menu (nazwa Material), slot – opcjonalny slot w menu (0–26)
+#   consent              – czy cel musi się zgodzić
+#   target               – required (wymagany cel) | optional (bez celu = do wszystkich w pobliżu)
+#   range                – maks. odległość do celu (bloki)
+#   cooldown             – sekundy między użyciami tej interakcji przez jednego gracza
+#   exempt-gamemodes     – tryby gry celu, na które interakcja nie działa
+#   request-text         – tekst w prośbie: "<nadawca> <request-text>. [✔ Zgoda] [✖ Odmowa]"
+#   broadcast            – opis RP z celem (<sender>, <target>)
+#   broadcast-no-target  – opis RP bez celu (<sender>)
+#   effects:
+#     swing              – none | sender | target | both (machnięcie ręką)
+#     face-each-other    – obaj gracze obracają głowę do siebie (bez zmiany pozycji)
+#     nod                – ukłon: krótkie pochylenie głowy nadawcy i powrót
+#     knockback          – pozioma siła odepchnięcia celu (bez obrażeń), knockback-up – siła w górę
+#     particles          – lista: type (Particle bez danych), at (sender|target|both|between),
+#                          height (wysokość od stóp), count, spread
+#     sounds             – lista: sound (klucz np. entity.chicken.egg albo ENTITY_CHICKEN_EGG), volume, pitch
+#   hold                 – (opcjonalnie) trwała interakcja: duration (s), max-distance, interval-ticks, particles
+#   animation-no-target  – (opcjonalnie) animacja bez celu (np. koronacja samego siebie)
+#   requires             – none | ruler: koronowany (cel, a bez celu nadawca) musi być władcą kraju (Kraje)
+#   grant-title          – pasowanie: cel dostaje tytuł rycerski, jeśli pasuje władca kraju (sekcja knighting)
+#   audience-bow         – gracze w pobliżu kłaniają się koronowanemu (sekcja coronation)
+#   animation            – (opcjonalnie) animacja postaci z katalogu animacji (BetterModel), np. hug, kiss,
+#                          hold, pat, highfive, slap, wave, bow; "" = tylko efekty. Bez BetterModel albo gdy
+#                          animacja się nie wczyta, grają same efekty. Cząsteczki i dźwięki grają zawsze,
+#                          przy animacji w chwili kontaktu (klaśnięcie, uderzenie, pocałunek).
+interactions:
+  kiss:
+    name: "<red>Całus</red>"
+    description: "Pocałuj drugą osobę."
+    command: pocaluj
+    aliases: [calus, kiss]
+    icon: POPPY
+    consent: true
+    target: required
+    range: 3.0
+    cooldown: 5
+    animation: kiss
+    request-text: "chce cię pocałować"
+    broadcast: "<red>❤</red> <gray><i><sender> całuje <target></i></gray>"
+    effects:
+      swing: none
+      face-each-other: true
+      particles:
+        - { type: HEART, at: between, height: 1.75, count: 5, spread: 0.25 }
+      sounds:
+        - { sound: entity.chicken.egg, volume: 0.6, pitch: 1.8 }
+        - { sound: block.amethyst_block.chime, volume: 0.5, pitch: 1.6 }
+
+  hug:
+    name: "<light_purple>Przytulenie</light_purple>"
+    description: "Mocno przytul drugą osobę."
+    command: przytul
+    aliases: [hug]
+    icon: PINK_WOOL
+    consent: true
+    target: required
+    range: 3.0
+    cooldown: 5
+    animation: hug
+    request-text: "chce cię przytulić"
+    broadcast: "<light_purple>❤</light_purple> <gray><i><sender> przytula <target></i></gray>"
+    effects:
+      swing: both
+      face-each-other: true
+      particles:
+        - { type: HEART, at: both, height: 1.2, count: 4, spread: 0.45 }
+      sounds:
+        - { sound: block.wool.place, volume: 0.8, pitch: 0.9 }
+
+  hold:
+    name: "<gold>Trzymanie za rękę</gold>"
+    description: "Chwyć drugą osobę za rękę (aż do /pusc lub oddalenia się)."
+    command: trzymaj
+    aliases: [zareke, holdhand]
+    icon: RED_DYE
+    consent: true
+    target: required
+    range: 3.0
+    cooldown: 5
+    animation: hold
+    request-text: "chce chwycić cię za rękę"
+    broadcast: "<gold>❤</gold> <gray><i><sender> chwyta <target> za rękę</i></gray>"
+    effects:
+      swing: sender
+      particles:
+        - { type: HEART, at: between, height: 1.0, count: 2, spread: 0.15 }
+    hold:
+      duration: 30
+      max-distance: 4.0
+      interval-ticks: 10
+      particles:
+        - { type: HEART, at: between, height: 1.0, count: 1, spread: 0.08 }
+
+  pat:
+    name: "<green>Pogłaskanie</green>"
+    description: "Pogłaszcz kogoś po głowie."
+    command: poglaszcz
+    aliases: [pat]
+    icon: WHEAT
+    consent: false
+    target: required
+    range: 3.0
+    cooldown: 5
+    animation: pat
+    broadcast: "<green>✿</green> <gray><i><sender> głaszcze <target> po głowie</i></gray>"
+    effects:
+      swing: sender
+      particles:
+        - { type: HAPPY_VILLAGER, at: target, height: 2.15, count: 6, spread: 0.25 }
+      sounds:
+        - { sound: item.armor.equip_leather, volume: 0.6, pitch: 1.4 }
+
+  highfive:
+    name: "<yellow>Piątka</yellow>"
+    description: "Przybij z kimś piątkę."
+    command: piatka
+    aliases: [highfive]
+    icon: GOLD_INGOT
+    consent: false
+    target: required
+    range: 3.0
+    cooldown: 5
+    animation: highfive
+    broadcast: "<yellow>✦</yellow> <gray><i><sender> przybija piątkę z <target></i></gray>"
+    effects:
+      swing: both
+      face-each-other: false
+      particles:
+        - { type: ELECTRIC_SPARK, at: between, height: 1.9, count: 10, spread: 0.12 }
+        - { type: CRIT, at: between, height: 1.9, count: 4, spread: 0.1 }
+      sounds:
+        - { sound: entity.player.attack.nodamage, volume: 0.8, pitch: 1.6 }
+        - { sound: block.note_block.hat, volume: 0.7, pitch: 1.8 }
+
+  slap:
+    name: "<dark_red>Liść</dark_red>"
+    description: "Wymierz komuś siarczysty policzek (bez obrażeń)."
+    command: liść
+    aliases: [lisc, slap]
+    icon: LEATHER
+    consent: false
+    target: required
+    range: 3.0
+    cooldown: 10
+    animation: slap
+    exempt-gamemodes: [CREATIVE, SPECTATOR]
+    broadcast: "<dark_red>✋</dark_red> <gray><i><sender> wymierza <target> siarczystego liścia</i></gray>"
+    effects:
+      swing: sender
+      knockback: 0.45
+      knockback-up: 0.18
+      particles:
+        - { type: CRIT, at: target, height: 1.6, count: 12, spread: 0.2 }
+      sounds:
+        - { sound: entity.player.attack.strong, volume: 0.9, pitch: 1.3 }
+
+  wave:
+    name: "<aqua>Pomachanie</aqua>"
+    description: "Pomachaj komuś (albo wszystkim w pobliżu)."
+    command: pomachaj
+    aliases: [wave]
+    icon: WHITE_BANNER
+    consent: false
+    target: optional
+    range: 10.0
+    cooldown: 5
+    animation: wave
+    broadcast: "<aqua>✋</aqua> <gray><i><sender> macha do <target></i></gray>"
+    broadcast-no-target: "<aqua>✋</aqua> <gray><i><sender> macha wszystkim na powitanie</i></gray>"
+    effects:
+      swing: sender
+
+  bow:
+    name: "<gray>Ukłon</gray>"
+    description: "Ukłoń się komuś (albo wszystkim w pobliżu)."
+    command: uklon
+    aliases: [bow]
+    icon: IRON_HELMET
+    consent: false
+    target: optional
+    range: 10.0
+    cooldown: 5
+    animation: bow
+    broadcast: "<white>⚜</white> <gray><i><sender> kłania się <target></i></gray>"
+    broadcast-no-target: "<white>⚜</white> <gray><i><sender> kłania się zebranym</i></gray>"
+    effects:
+      nod: true
+      particles:
+        - { type: END_ROD, at: sender, height: 1.0, count: 3, spread: 0.3 }
+
+  handshake:
+    name: "<gold>Uścisk dłoni</gold>"
+    description: "Podaj komuś rękę na powitanie albo na zgodę."
+    command: uscisk
+    aliases: [dlon, handshake]
+    icon: RABBIT_HIDE
+    consent: true
+    target: required
+    range: 3.0
+    cooldown: 5
+    animation: handshake
+    request-text: "wyciąga do ciebie dłoń"
+    broadcast: "<gold>✋</gold> <gray><i><sender> ściska dłoń <target></i></gray>"
+    effects:
+      swing: both
+      face-each-other: true
+      particles:
+        - { type: HAPPY_VILLAGER, at: between, height: 1.0, count: 4, spread: 0.15 }
+      sounds:
+        - { sound: item.armor.equip_leather, volume: 0.6, pitch: 1.2 }
+
+  toast:
+    name: "<yellow>Wspólny toast</yellow>"
+    description: "Stuknijcie się kuflami i wypijcie (z napitkiem w ręce wygląda najlepiej)."
+    command: toast
+    aliases: [wznies, kufle, cheers]
+    icon: HONEY_BOTTLE
+    consent: true
+    target: required
+    range: 3.0
+    cooldown: 8
+    animation: toast
+    request-text: "wznosi z tobą toast"
+    broadcast: "<yellow>✦</yellow> <gray><i><sender> i <target> wznoszą toast</i></gray>"
+    effects:
+      swing: both
+      face-each-other: true
+      particles:
+        - { type: SPLASH, at: between, height: 1.9, count: 12, spread: 0.12 }
+      sounds:
+        - { sound: block.glass.hit, volume: 0.9, pitch: 1.6 }
+        - { sound: block.amethyst_block.hit, volume: 0.6, pitch: 1.4 }
+
+  courtbow:
+    name: "<white>Ukłon dworski</white>"
+    description: "Wzajemny dworski ukłon: reweranse i dyg."
+    command: reweranse
+    aliases: [dworski, courtbow]
+    icon: FEATHER
+    consent: true
+    target: required
+    range: 4.0
+    cooldown: 5
+    animation: courtbow
+    request-text: "zaprasza cię do dworskiego ukłonu"
+    broadcast: "<white>⚜</white> <gray><i><sender> i <target> wymieniają dworskie ukłony</i></gray>"
+    effects:
+      nod: true
+      particles:
+        - { type: END_ROD, at: both, height: 1.0, count: 3, spread: 0.3 }
+
+  knight:
+    name: "<gold>Pasowanie na rycerza</gold>"
+    description: "Klęczący przyjmuje dotknięcie mieczem obu ramion. Władca kraju nadaje tytuł Sir/Pani."
+    command: pasuj
+    aliases: [pasowanie, knight]
+    icon: GOLDEN_SWORD
+    consent: true
+    target: required
+    range: 3.5
+    cooldown: 30
+    animation: knight
+    grant-title: true
+    request-text: "chce pasować cię na rycerza (klękniesz przed nim)"
+    broadcast: "<gold>⚔</gold> <gray><i><sender> pasuje <target> na rycerza</i></gray>"
+    effects:
+      particles:
+        - { type: END_ROD, at: target, height: 1.6, count: 6, spread: 0.3 }
+      sounds:
+        - { sound: item.armor.equip_iron, volume: 0.7, pitch: 1.3 }
+
+  fealty:
+    name: "<dark_aqua>Przysięga lenna</dark_aqua>"
+    description: "Klękasz i składasz złożone dłonie w dłonie seniora (tylko animacja, bez zmiany relacji)."
+    command: lenno
+    aliases: [przysiega, fealty]
+    icon: SHIELD
+    consent: true
+    target: required
+    range: 3.0
+    cooldown: 30
+    animation: fealty
+    request-text: "chce złożyć ci przysięgę lenną"
+    broadcast: "<dark_aqua>⚜</dark_aqua> <gray><i><sender> składa przysięgę lenną <target></i></gray>"
+    effects:
+      particles:
+        - { type: ENCHANT, at: between, height: 1.2, count: 20, spread: 0.3 }
+      sounds:
+        - { sound: block.enchantment_table.use, volume: 0.5, pitch: 1.2 }
+
+  coronation:
+    name: "<gold>Koronacja</gold>"
+    description: "Włóż koronę władcy kraju (albo /koronuj bez celu: koronuj się sam). Obecni się kłaniają."
+    command: koronuj
+    aliases: [koronacja, crown]
+    icon: GOLDEN_HELMET
+    consent: true
+    target: optional
+    range: 3.0
+    cooldown: 120
+    animation: crown
+    animation-no-target: crown_self
+    requires: ruler
+    audience-bow: true
+    request-text: "chce włożyć ci koronę (klękniesz do koronacji)"
+    broadcast: "<gold>♛</gold> <yellow><i><sender> koronuje <target></i></yellow>"
+    broadcast-no-target: "<gold>♛</gold> <yellow><i><sender> wkłada koronę na swoją głowę</i></yellow>"
+    effects:
+      particles:
+        - { type: TOTEM_OF_UNDYING, at: target, height: 2.1, count: 25, spread: 0.4 }
+      sounds:
+        - { sound: block.bell.use, volume: 1.0, pitch: 0.8 }
+
+# Pozy ciała (akcje solo, bez celu). Zmiana command/aliases wymaga restartu serwera.
+sit:
+  enabled: true
+  name: "<gold>Siadanie</gold>"
+  description: "Usiądź na ziemi. Wstajesz kucnięciem albo ponowną komendą."
+  command: usiadz
+  aliases: [sit, siad]
+  cooldown: 3
+  # Opis RP dla graczy w pobliżu ("" = bez opisu). <player> = nick.
+  broadcast: "<gray><i><player> siada</i></gray>"
+  # Prawy klik pustą ręką w górną powierzchnię schodów / dolnej półpłyty = siadanie na nich.
+  right-click-stairs: true
+  # Korekta wysokości siedziska (bloki); ujemna = niżej. Przesuwa też animację siadania.
+  seat-height-offset: 0.0
+  # Animacja siadania: AUTO (po turecku na ziemi; na schodach, półpłycie i krawędzi bloku z nogami w dół),
+  # FLOOR (zawsze po turecku), CHAIR (zawsze nogi w dół).
+  variant: AUTO
+
+lay:
+  enabled: true
+  name: "<gold>Leżenie</gold>"
+  description: "Połóż się. Wstajesz kucnięciem, ruchem albo ponowną komendą."
+  command: poloz
+  aliases: [lay, lez]
+  cooldown: 3
+  broadcast: "<gray><i><player> kładzie się na ziemi</i></gray>"
+  # SLEEPING = leżenie jak w łóżku (widoczne dla innych), SWIMMING = pełzanie (wersja zapasowa).
+  # Używane bez animacji postaci (brak BetterModel).
+  pose: SLEEPING
+  # Poza prawdziwego gracza, gdy gra animacja leżenia: NONE (wygląd daje animacja), SLEEPING, SWIMMING.
+  animated-pose: NONE
+
+# Tańce: /taniec [numer|stop] (bez numeru: przerywa taniec albo zaczyna pierwszy). Tańce grają w pętli;
+# ruch, kucnięcie albo /taniec stop kończą taniec. Zmiana command/aliases wymaga restartu serwera.
+#   list.<id>: name, description, animation (z katalogu animacji), cooldown, broadcast (<player>, <name>),
+#              effects (jak w interakcjach; bez animacji grają tylko efekty)
+dances:
+  enabled: true
+  command: taniec
+  aliases: [tancz, dance]
+  cooldown: 3
+  list:
+    "1":
+      icon: NOTE_BLOCK
+      name: "<gold>Taniec ludowy</gold>"
+      description: "Przytupy, ręce na biodrach, obrót i klaskanie."
+      animation: dance_1
+      broadcast: "<gold>♪</gold> <gray><i><player> rusza w taniec ludowy</i></gray>"
+      effects:
+        particles:
+          - { type: NOTE, at: sender, height: 2.3, count: 3, spread: 0.4 }
+        sounds:
+          - { sound: block.note_block.flute, volume: 0.6, pitch: 1.2 }
+    "2":
+      icon: JUKEBOX
+      name: "<light_purple>Taniec dworski</light_purple>"
+      description: "Powolny, dostojny korowód z ukłonem."
+      animation: dance_2
+      broadcast: "<light_purple>♪</light_purple> <gray><i><player> tańczy dostojny taniec dworski</i></gray>"
+      effects:
+        particles:
+          - { type: NOTE, at: sender, height: 2.3, count: 2, spread: 0.3 }
+        sounds:
+          - { sound: block.note_block.harp, volume: 0.6, pitch: 0.9 }
+    "3":
+      icon: GOAT_HORN
+      name: "<yellow>Taniec biesiadny</yellow>"
+      description: "Skoczny, karczemny: podskoki i wymachy."
+      animation: dance_3
+      broadcast: "<yellow>♪</yellow> <gray><i><player> puszcza się w skoczny taniec biesiadny</i></gray>"
+      effects:
+        particles:
+          - { type: NOTE, at: sender, height: 2.3, count: 4, spread: 0.5 }
+        sounds:
+          - { sound: block.note_block.banjo, volume: 0.6, pitch: 1.3 }
+
+# Emotki solo: /emotka <nazwa> [gracz]. Efekty grają przy każdym "uderzeniu" animacji (np. przy każdym
+# klaśnięciu, łyku). Emotki w pętli (modlitwa, kleczenie) trwają do ruchu, kucnięcia albo /emotka stop.
+#   list.<id>: icon (przedmiot w menu), name, description, animation, cooldown,
+#              target: none | optional (z celem: /emotka <id> <gracz> obraca do niego, zasięg 10 bl.),
+#              broadcast (<player>, <name>), broadcast-target (<player>, <target>), effects
+#   click-trigger: emotka po prawym kliku z przedmiotem w ręce (np. picie z butelki / trunku BreweryX)
+emotes:
+  enabled: true
+  command: emotka
+  aliases: [emote, em]
+  cooldown: 3
+  click-trigger:
+    enabled: false
+    emote: kufel
+    items: [POTION, HONEY_BOTTLE, MILK_BUCKET]
+  list:
+    klaskanie:
+      icon: GOLD_NUGGET
+      name: "<yellow>Klaskanie</yellow>"
+      description: "Brawa."
+      animation: klaskanie
+      broadcast: "<yellow>✦</yellow> <gray><i><player> klaszcze</i></gray>"
+      effects:
+        sounds:
+          - { sound: entity.player.attack.nodamage, volume: 0.5, pitch: 1.9 }
+    salut:
+      icon: IRON_SWORD
+      name: "<gold>Salut rycerski</gold>"
+      description: "Pięść na sercu i skinienie głową."
+      animation: salut
+      broadcast: "<gold>⚔</gold> <gray><i><player> salutuje po rycersku</i></gray>"
+      effects:
+        sounds:
+          - { sound: item.armor.equip_chain, volume: 0.6, pitch: 1.0 }
+    nie_wiem:
+      icon: BOOK
+      name: "<gray>Nie wiem</gray>"
+      description: "Wzruszenie ramion."
+      animation: nie_wiem
+      broadcast: "<gray><i><player> wzrusza ramionami</i></gray>"
+    facepalm:
+      icon: ROTTEN_FLESH
+      name: "<red>Facepalm</red>"
+      description: "Dłoń na twarz."
+      animation: facepalm
+      broadcast: "<red>✋</red> <gray><i><player> łapie się za głowę</i></gray>"
+      effects:
+        sounds:
+          - { sound: entity.villager.no, volume: 0.4, pitch: 0.9 }
+    modlitwa:
+      icon: CANDLE
+      name: "<white>Modlitwa</white>"
+      description: "Dłonie złożone przy piersi, pochylona głowa (do przerwania)."
+      animation: modlitwa
+      target: optional
+      broadcast: "<white>✟</white> <gray><i><player> składa dłonie do modlitwy</i></gray>"
+      broadcast-target: "<white>✟</white> <gray><i><player> modli się za <target></i></gray>"
+      effects:
+        particles:
+          - { type: END_ROD, at: sender, height: 2.3, count: 2, spread: 0.2 }
+    kleczenie:
+      icon: IRON_CHESTPLATE
+      name: "<gold>Klęczenie</gold>"
+      description: "Przyklęk na jedno kolano jak przed pasowaniem (do przerwania)."
+      animation: kleczenie
+      target: optional
+      broadcast: "<gold>⚜</gold> <gray><i><player> przyklęka na jedno kolano</i></gray>"
+      broadcast-target: "<gold>⚜</gold> <gray><i><player> przyklęka na jedno kolano przed <target></i></gray>"
+      effects:
+        sounds:
+          - { sound: item.armor.equip_chain, volume: 0.5, pitch: 0.8 }
+    poklon:
+      icon: GOLDEN_HELMET
+      name: "<yellow>Pokłon</yellow>"
+      description: "Głęboki pokłon przed władcą z rozłożonym ramieniem."
+      animation: poklon
+      target: optional
+      broadcast: "<yellow>⚜</yellow> <gray><i><player> składa głęboki pokłon</i></gray>"
+      broadcast-target: "<yellow>⚜</yellow> <gray><i><player> składa głęboki pokłon przed <target></i></gray>"
+    salut_miecz:
+      icon: DIAMOND_SWORD
+      name: "<aqua>Salut mieczem</aqua>"
+      description: "Miecz przed twarz i w dół (z mieczem w ręce albo bez)."
+      animation: salut_miecz
+      target: optional
+      broadcast: "<aqua>⚔</aqua> <gray><i><player> salutuje mieczem</i></gray>"
+      broadcast-target: "<aqua>⚔</aqua> <gray><i><player> salutuje mieczem przed <target></i></gray>"
+      effects:
+        sounds:
+          - { sound: item.armor.equip_iron, volume: 0.6, pitch: 1.2 }
+    kufel:
+      icon: POTION
+      name: "<gold>Kufel</gold>"
+      description: "Łyk z kufla i otarcie ust."
+      animation: kufel
+      broadcast: "<gold>✦</gold> <gray><i><player> pociąga solidny łyk z kufla</i></gray>"
+      effects:
+        sounds:
+          - { sound: entity.generic.drink, volume: 0.7, pitch: 1.0 }
+
+# Animacje postaci (BetterModel, model gracza ze skinem). Bez BetterModel wszystko działa na efektach.
+animations:
+  enabled: true
+  # Kopiuje modele z jara do plugins/BetterModel/players/ (interakcje.bbmodel, interakcje_look.bbmodel),
+  # gdy ich brak albo są inne. Ustaw false, jeśli edytujesz te pliki w Blockbench na serwerze.
+  install-models: true
+  # Po instalacji nowych modeli sam przeładowuje BetterModel (to też przebudowuje paczkę zasobów).
+  reload-bettermodel: true
+  # Ustawianie par teleportem (pozycja + obrót) przed animacją dwuosobową. Krótki teleport w miejscu.
+  align-pairs: true
+  # O ile maksymalnie (bloki) można przesunąć gracza przy ustawianiu; dalej = bez animacji (same efekty).
+  align-max-shift: 1.25
+  # Maksymalna różnica wysokości stóp graczy w animacji dwuosobowej.
+  max-height-difference: 0.5
+  # Płynne wejście w animację (ticki).
+  blend-in-ticks: 3
+  # Ruch dalej niż tyle bloków od miejsca startu przerywa animację (także partnerowi).
+  move-tolerance: 0.3
+  # Obrażenia przerywają animację.
+  stop-on-damage: true
+  # Model nie obraca się za kamerą w trakcie animacji (stały kierunek ciała).
+  fix-body-yaw: true
+  # Model widzą tylko gracze z wczytaną paczką zasobów (reszta widzi zwykłą postać i efekty).
+  only-for-pack-users: true
+  # Gracz widzi własną animację w widoku z trzeciej osoby (F5).
+  show-to-self: true
+  # Trzymanie za rękę: po zatrzymaniu się obu graczy animacja wraca sama.
+  resume-hold: true
+  # Dodatkowy katalog animacji w plugins/Interakcje/ (własne animacje z Blockbench, patrz README).
+  custom-catalog: animations-custom.json
+
+# Animacje pracy NPC (Mannequin ze skinem) dla innych modułów: API WorkAnimations (ServicesManager).
+# Moduł mówi, co NPC robi; Interakcje pokazują animację tylko w pobliżu graczy z paczką, najbliższym NPC,
+# z limitem i budżetem czasu. Test: /interakcje npc test <praca>, stan: /interakcje npc status.
+npc-animations:
+  enabled: true
+  # Gracz (z paczką) bliżej niż tyle bloków = NPC jest animowany.
+  range: 32.0
+  # Już animowany NPC przestaje dopiero po oddaleniu o range + hysteresis (bez migania na granicy).
+  hysteresis: 4.0
+  # Najwięcej jednocześnie animowanych NPC na serwerze (najbliżsi graczy mają pierwszeństwo).
+  max-active: 40
+  # Budżet czasu (ms) jednego przeglądu (starty i zatrzymania; koszt przewidywany ze średniej). Co najmniej jedna
+  # zmiana na przegląd i tak się wykona. Start modelu BetterModel to kilka ms na głównym wątku (pierwszy po starcie
+  # serwera: setki ms — rozgrzewka), stąd ostrożne domyślne.
+  budget-ms: 2.0
+  # Co ile ticków przegląd (start/stop animacji w zależności od graczy).
+  scan-interval-ticks: 10
+  # Najwięcej nowych animacji w jednym przeglądzie (start to kilka–kilkanaście ms; 1 = łagodne skoki MSPT,
+  # 40 NPC napełnia się w ok. 20 s).
+  max-starts-per-scan: 1
+  # Zapętlona praca jest zapisywana na encji (PDC) i wraca po restarcie / wczytaniu chunka.
+  persist: true
+  # Gdy skina NPC nie da się pobrać z Mojang: false = bez animacji (zwykły Mannequin), true = skin zapasowy.
+  animate-without-skin: false
+  # Typy encji, które można animować (Mannequin; inne tylko świadomie).
+  entity-types: [MANNEQUIN]
+
+# Koronacja (/koronuj): korona to przedmiot w powietrzu (item display) prowadzony za dłońmi koronującego.
+coronation:
+  crown-item: GOLDEN_HELMET
+  crown-scale: 0.6
+  # Ile sekund po ceremonii korona unosi się nad głową koronowanego.
+  hover-seconds: 10
+  # Obecni (w promieniu audience-radius): auto = stojący nieruchomo sami się kłaniają (ruch przerywa),
+  # prompt = dostają przycisk [Pokłoń się], off = nic.
+  audience-bow: auto
+  audience-radius: 16.0
+  # Bez pluginu Kraje nie da się sprawdzić władcy: true = koronacja zablokowana.
+  require-kraje: true
+
+# Pasowanie na rycerza (/pasuj): tytuł przed nickiem (displayName: czat Kraje i inne pluginy, nie tablista).
+knighting:
+  grant-title: true
+  # Tytuł nadaje tylko władca kraju (Kraje); pasowanie przez innych to sama ceremonia.
+  require-ruler: true
+  default-title: Sir
+  # Do wyboru przez rycerza: /interakcje tytul <tytuł|ukryj|pokaz>
+  titles: [Sir, Pani]
+  title-in-display-name: true
+
+# Paczka zasobów: BetterModel generuje ją przy starcie / przeładowaniu (domyślnie plugins/BetterModel/build.zip),
+# a Interakcje kopiują ją do katalogu WWW squaremapa i wysyłają graczom przy wejściu.
+resource-pack:
+  enabled: true
+  # Adres serwera WWW squaremapa (bez końcowego "/").
+  url-base: "http://mc.example.org:8100"
+  # Ścieżka pliku względem web-root i adresu: http://.../pack/medivalrpg.zip
+  path: "pack/medivalrpg.zip"
+  # Katalog, który squaremap serwuje (względem katalogu serwera).
+  web-root: "plugins/squaremap/web"
+  # Skąd brać paczkę: auto (z ustawień BetterModel) albo ścieżka względem katalogu serwera.
+  source: auto
+  # Wymagana: odmowa = rozłączenie.
+  required: true
+  prompt: "<gold>MEDIVALRPG</gold> <gray>używa paczki zasobów z animacjami postaci (przytulanie, taniec, siadanie…). Bez niej nie wejdziesz na serwer.</gray>"
+  # Co ile sekund sprawdzać, czy plik paczki się zmienił (0 = tylko po przeładowaniu BetterModel).
+  poll-seconds: 30
+  # Nowa wersja paczki (inny SHA-1) trafia od razu do graczy online.
+  resend-on-change: true
+  # Gdy gracz odmówi wymaganej paczki – wyrzuć go z komunikatem.
+  kick-on-decline: true
+  # Po publikacji pobierz paczkę z adresu i porównaj SHA-1 (diagnostyka w logu).
+  verify-download: true
+  # Przy starcie serwer WWW i sieć mogą nie być jeszcze gotowe: najpierw odczekaj, potem ponawiaj
+  # z rosnącą przerwą (5, 10, 20… s, maks. verify-retry-max-seconds). Ostrzeżenie dopiero po ostatniej próbie.
+  verify-initial-delay-seconds: 15
+  verify-attempts: 6
+  verify-retry-seconds: 5
+  verify-retry-max-seconds: 60
+  # Gdy adres publiczny nie odpowiada z wnętrza serwera, sprawdź ten sam plik lokalnie
+  # (auto = http://127.0.0.1:<port z url-base>, off = nie sprawdzaj). Hosting często nie ma NAT loopback.
+  verify-local-url: auto
+  # Dopisuj ?v=<sha1> do adresu (każda wersja ma inny URL, brak problemów z cache).
+  cache-bust: true
+  # Opóźnienie wysłania paczki po wejściu (ticki).
+  send-delay-ticks: 10
+
+messages:
+  prefix: "<light_purple>[Interakcje]</light_purple> "
+  players-only: "<prefix><red>Tę komendę może wykonać tylko gracz.</red>"
+  no-permission: "<prefix><red>Nie masz uprawnień do tej interakcji.</red>"
+  interaction-disabled: "<prefix><red>Ta interakcja jest wyłączona.</red>"
+  usage: "<prefix><gray>Użycie: <white>/<command> <gracz></white></gray>"
+  player-not-found: "<prefix><red>Nie znaleziono gracza <white><player></white> w pobliżu.</red>"
+  self: "<prefix><red>Nie możesz tego zrobić samemu sobie.</red>"
+  too-far: "<prefix><red><target> jest za daleko (maks. <range> bl.).</red>"
+  target-disabled: "<prefix><red><target> ma wyłączone interakcje.</red>"
+  sender-disabled: "<prefix><red>Masz wyłączone interakcje. Włącz je: <white>/interakcje wlacz</white></red>"
+  target-blocked-you: "<prefix><red><target> nie przyjmuje od ciebie interakcji.</red>"
+  you-blocked-target: "<prefix><red>Zablokowałeś <target>. Odblokuj: <white>/interakcje odblokuj <target></white></red>"
+  target-exempt: "<prefix><red>Ta interakcja nie działa na <target> w obecnym trybie gry.</red>"
+  sender-spectator: "<prefix><red>Nie możesz wykonywać interakcji jako obserwator.</red>"
+  cooldown: "<prefix><red>Odczekaj jeszcze <white><seconds> s</white>.</red>"
+  global-cooldown: "<prefix><red>Zwolnij trochę!</red>"
+
+  request-pending: "<prefix><gray>Czekasz już na odpowiedź od <white><target></white>.</gray>"
+  request-sent: "<prefix><gray>Wysłano prośbę do <white><target></white>. Czeka na zgodę…</gray>"
+  request-received: "<prefix><yellow><sender></yellow> <gray><action>.</gray> <accept> <deny>"
+  request-accept-button: "<green><b>[✔ Zgoda]</b></green>"
+  request-accept-hover: "<green>Kliknij, aby się zgodzić</green>"
+  request-deny-button: "<red><b>[✖ Odmowa]</b></red>"
+  request-deny-hover: "<red>Kliknij, aby odmówić</red>"
+  request-not-found: "<prefix><red>Ta prośba wygasła albo nie istnieje.</red>"
+  request-denied-sender: "<prefix><red><target> odmówił(a).</red>"
+  request-denied-target: "<prefix><gray>Odmówiłeś <white><sender></white>.</gray>"
+  request-expired-sender: "<prefix><gray>Prośba do <white><target></white> wygasła.</gray>"
+  request-expired-target: "<prefix><gray>Prośba od <white><sender></white> wygasła.</gray>"
+  request-cancelled: "<prefix><gray>Prośba od/do <white><player></white> została anulowana (wyjście z gry).</gray>"
+  request-too-far: "<prefix><red>Jesteście już za daleko od siebie.</red>"
+
+  hold-already: "<prefix><red>Ty albo <target> już kogoś trzymacie za rękę. Użyj <white>/pusc</white>.</red>"
+  hold-started: "<prefix><gray>Trzymacie się za ręce. Puść: <white>/pusc</white></gray>"
+  hold-none: "<prefix><gray>Nikogo nie trzymasz za rękę.</gray>"
+  hold-end-release: "<gray><i><player> puszcza dłoń <other></i></gray>"
+  hold-end-timeout: "<gray><i><player> i <other> puszczają swoje dłonie</i></gray>"
+  hold-end-distance: "<gray><i><player> i <other> oddalili się od siebie</i></gray>"
+  hold-end-quit: "<prefix><gray><player> wyszedł(a) z gry – puszczacie dłonie.</gray>"
+
+  sit-hint: "<prefix><gray>Siedzisz. Wstań: <white>kucnij</white> albo <white>/usiadz</white>.</gray>"
+  lay-hint: "<prefix><gray>Leżysz (inni widzą cię leżącego). Wstań: <white>kucnij</white>, ruszaj się albo <white>/poloz</white>.</gray>"
+  pose-stood: "<prefix><gray>Wstajesz.</gray>"
+  pose-air: "<prefix><red>Musisz stać na ziemi.</red>"
+  pose-water: "<prefix><red>Nie w wodzie.</red>"
+  pose-riding: "<prefix><red>Najpierw zsiądź.</red>"
+  pose-busy: "<prefix><red>Nie możesz teraz tego zrobić.</red>"
+  pose-headroom: "<prefix><red>Za mało miejsca nad głową.</red>"
+
+  motion-unknown: "<prefix><red>Nie znam <white><name></white>. Dostępne: <white><list></white></red>"
+  motion-stopped: "<prefix><gray>Koniec.</gray>"
+  motion-none: "<prefix><gray>Teraz nic nie odgrywasz.</gray>"
+  motion-stop-tooltip: "<gray>Przerwij</gray>"
+  motion-no-target: "<prefix><red>Tej emotki nie robi się do konkretnej osoby.</red>"
+  emote-list: "<prefix><gray>Emotki: <white><list></white>. Użycie: <white>/<command> <nazwa></white></gray>"
+  pack-resent: "<prefix><gray>Wysłano paczkę zasobów jeszcze raz.</gray>"
+  pack-not-ready: "<prefix><red>Paczka zasobów nie jest jeszcze gotowa.</red>"
+  pack-failed: "<prefix><red>Nie udało się pobrać paczki zasobów – animacje postaci nie będą widoczne. Spróbuj: <white>/interakcje pakiet</white></red>"
+  pack-declined-kick: "<red>Serwer MEDIVALRPG wymaga paczki zasobów.</red><newline><gray>Wejdź ponownie i kliknij <white>Tak</white> albo włącz paczki serwera w ustawieniach serwera na liście.</gray>"
+  status-header: "<prefix><gray>Stan animacji i paczki zasobów:</gray>"
+  requires-ruler: "<prefix><red><target> nie jest władcą kraju – koronować można tylko władcę.</red>"
+  requires-ruler-self: "<prefix><red>Koronować się możesz tylko jako władca kraju.</red>"
+  requires-kraje: "<prefix><red>Koronacja wymaga pluginu Kraje (nie da się sprawdzić władcy).</red>"
+  coronation-bowing: "<prefix><gray>Kłaniasz się koronowanemu władcy <white><target></white>. Ruch przerywa ukłon.</gray>"
+  coronation-bow-prompt: "<prefix><gold>♛</gold> <gray><target> został(a) koronowany(-a).</gray> <button>"
+  coronation-bow-button: "<gold><b>[⚜ Pokłoń się]</b></gold>"
+  coronation-bow-hover: "<gray>Głęboki pokłon w stronę władcy</gray>"
+  knight-title-granted: "<prefix><gold>Zostałeś pasowany(-a) na rycerza przez <sender>. Tytuł: <white><title></white>.</gold> <gray>Zmień: /interakcje tytul <titles>|ukryj</gray>"
+  knight-no-title: "<prefix><gray>Tytuł rycerski może nadać tylko władca kraju – pasowanie <white><target></white> odbyło się bez tytułu.</gray>"
+  title-none: "<prefix><gray>Nie masz tytułu rycerskiego.</gray>"
+  title-info: "<prefix><gray>Tytuł: <white><title></white> (<state>), nadał: <white><by></white>. Zmień: /interakcje tytul <titles>|ukryj|pokaz</gray>"
+  title-set: "<prefix><green>Twój tytuł: <white><title></white>.</green>"
+  title-hidden: "<prefix><gray>Tytuł ukryty (zostaje zapisany; pokaż: /interakcje tytul pokaz).</gray>"
+  title-unknown: "<prefix><red>Dostępne tytuły: <white><titles></white>.</red>"
+  npc-unknown: "<prefix><red>Nie znam pracy <white><name></white>. Dostępne: <white><list></white></red>"
+  npc-test: "<prefix><gray>Testowy NPC z pracą <white><name></white> stoi przed tobą (zniknie przy /interakcje npc usun albo restarcie).</gray>"
+  npc-set: "<prefix><green>NPC ma teraz pracę <white><name></white>.</green>"
+  npc-not-set: "<prefix><red>Spójrz na NPC (Mannequin) z bliska.</red>"
+  npc-stopped: "<prefix><gray>Animacja NPC zatrzymana.</gray>"
+  npc-removed: "<prefix><gray>Usunięto testowych NPC: <count>.</gray>"
+
+  toggle-on: "<prefix><green>Interakcje włączone.</green>"
+  toggle-off: "<prefix><gray>Interakcje wyłączone. Nikt nie może cię wybrać jako celu.</gray>"
+  toggle-already-on: "<prefix><gray>Interakcje są już włączone.</gray>"
+  toggle-already-off: "<prefix><gray>Interakcje są już wyłączone.</gray>"
+  block-added: "<prefix><gray>Zablokowano <white><player></white>. Nie może cię już wybierać.</gray>"
+  block-already: "<prefix><gray><white><player></white> jest już zablokowany.</gray>"
+  block-removed: "<prefix><gray>Odblokowano <white><player></white>.</gray>"
+  block-not-blocked: "<prefix><gray><white><player></white> nie jest zablokowany.</gray>"
+  block-self: "<prefix><red>Nie możesz zablokować samego siebie.</red>"
+  block-unknown: "<prefix><red>Nie znam gracza <white><player></white>.</red>"
+  block-list: "<prefix><gray>Zablokowani: <white><list></white></gray>"
+  block-list-empty: "<prefix><gray>Nie masz nikogo zablokowanego.</gray>"
+  reloaded: "<prefix><green>Przeładowano konfigurację.</green> <gray>(nowe/zmienione komendy wymagają restartu)</gray>"
+
+  list-header: "<prefix><gray>Dostępne interakcje (kliknij, aby wpisać):</gray>"
+  list-entry: " <dark_gray>•</dark_gray> <name> <dark_gray>–</dark_gray> <gray><description></gray> <dark_gray>/<command></dark_gray><consent>"
+  list-entry-hover: "<gray>Kliknij, aby wpisać <white>/<command></white></gray>"
+  list-consent-tag: " <yellow>[zgoda]</yellow>"
+  help: |-
+    <prefix><gray>Komendy:</gray>
+     <white>/interakcje lista</white> <dark_gray>–</dark_gray> <gray>lista interakcji</gray>
+     <white>/interakcje wlacz|wylacz</white> <dark_gray>–</dark_gray> <gray>włącz/wyłącz interakcje z tobą</gray>
+     <white>/interakcje blokuj|odblokuj <gracz></white> <dark_gray>–</dark_gray> <gray>osobista lista blokad</gray>
+     <white>/interakcje zablokowani</white> <dark_gray>–</dark_gray> <gray>twoja lista blokad</gray>
+     <white>/usiadz</white>, <white>/poloz</white> <dark_gray>–</dark_gray> <gray>usiądź / połóż się (kucnięcie = wstań)</gray>
+     <white>/taniec [1-3|stop]</white> <dark_gray>–</dark_gray> <gray>taniec (ruch albo kucnięcie kończy)</gray>
+     <white>/emotka <nazwa> [gracz]</white> <dark_gray>–</dark_gray> <gray>klaskanie, salut, nie_wiem, facepalm, modlitwa, kleczenie, poklon, salut_miecz, kufel</gray>
+     <white>/interakcje pakiet</white> <dark_gray>–</dark_gray> <gray>wyślij paczkę zasobów jeszcze raz</gray>
+     <white>/pusc</white> <dark_gray>–</dark_gray> <gray>puść trzymaną dłoń</gray>
+     <white>/uscisk</white>, <white>/toast</white>, <white>/reweranse</white> <dark_gray>–</dark_gray> <gray>uścisk dłoni, toast, ukłon dworski</gray>
+     <white>/pasuj</white>, <white>/lenno</white>, <white>/koronuj [gracz]</white> <dark_gray>–</dark_gray> <gray>pasowanie, przysięga lenna, koronacja</gray>
+     <white>/interakcje tytul</white> <dark_gray>–</dark_gray> <gray>twój tytuł rycerski (Sir/Pani, ukryj)</gray>
+     <gray>Shift + prawy klik na gracza (pusta ręka) otwiera menu.</gray>
+
+  menu-title: "<dark_purple>Interakcje z <target></dark_purple>"
+  menu-lore-consent: "<yellow>Wymaga zgody</yellow>"
+  menu-lore-no-consent: "<green>Bez zgody</green>"
+  menu-lore-command: "<dark_gray>/<command> <target></dark_gray>"
+  menu-lore-click: "<gray>Kliknij, aby wykonać</gray>"
+  suggestion-distance: "<distance> bl."
+  suggestion-far: "poza zasięgiem"

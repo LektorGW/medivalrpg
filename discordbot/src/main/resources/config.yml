@@ -1,0 +1,84 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Token wpisuje właściciel WYŁĄCZNIE w plugins/DiscordBot/config.yml na serwerze.
+enabled: false
+token: ''
+guild-id: '1000000000000000846'
+roles:
+  join: ''
+  player: ''
+  ruler: ''
+  advisor: ''
+  citizen: ''
+  adopt-by-name:
+    player: 'Whitelisted'
+    join: 'non-whitelisted'
+    ruler: 'Władca'
+    advisor: 'Doradca'
+    citizen: 'Obywatel'
+channels:
+  status: ''
+  events: ''
+  moderation: ''
+  guard: ''
+  chat: ''
+  # Opcjonalne ID istniejących kanałów dla układu; puste = dopasowanie po nazwie albo utworzenie.
+  rules: ''
+  ranking: ''
+  general: ''
+  trade: ''
+  help: ''
+# Role administracji, które mogą widzieć prywatne raporty/logi. Puste = tylko właściciel i administratorzy.
+private-role-ids: []
+# Puste ID wyłącza funkcję. Nie używać announcements ani Server-command.
+bridge:
+  enabled: true
+verification:
+  channels: []
+  minimum-account-age-days: 0
+  rules:
+    - 'Szanuj innych graczy i administrację.'
+    - 'Nie oszukuj, nie spamuj i nie publikuj cudzych danych.'
+    - 'Przestrzegaj regulaminu serwera dostępnego w kanale 📄-rules.'
+# Tworzenie ról/kanałów WYŁĄCZNIE przez /discord admin przygotuj potwierdz.
+# Po zatwierdzeniu komendy automat może tworzyć także nowe kraje.
+countries:
+  auto-create: true
+  roles: {}
+sync-seconds: 60
+presence:
+  interval-seconds: 60
+  # Opcjonalny tekst {epoka}; bez dostawcy Postep/tej wartości linia z {epoka} jest pomijana.
+  epoka: ''
+  lines:
+    - type: PLAYING
+      text: '⚔️ MEDIVALRPG · {online} graczy online'
+    - type: CUSTOM
+      text: '🏰 {kraje} królestw walczy o koronę'
+    - type: CUSTOM
+      text: '👑 Dołącz: play.example.org'
+    - type: CUSTOM
+      text: '🔗 /polacz — połącz konto z grą'
+    - type: CUSTOM
+      text: '🔥 Trwa {wojny} wojen'
+
+# Kanał 🌐-server-info (📜 Information, widoczny dla wszystkich) — tworzy go `uklad zastosuj potwierdz`.
+# Bot trzyma tam jedną wiadomość z przyciskami; po zmianie adresów poprawia ją przy starcie.
+# Puste/nieprawidłowe (tylko http/https) pole jest pomijane.
+server-info:
+  enabled: true
+  address: ''
+  map-url: 'http://mc.example.org:8100'
+  panel-url: 'https://panel.example.workers.dev/'
+
+# Regulamin: pliki *.md w plugins/DiscordBot/regulamin/ (kolejność wg nazwy, pierwsza linia "# Tytuł").
+# Bot publikuje je na 📄-rules po starcie i po /discord admin tresci odswiez; zmienione — publikuje od nowa.
+
+# Kronika korzysta z kanału utworzonego przez układ (ID w links.db).
+chronicle:
+  enabled: true
+  npc: true
+  # 1 = także zmiany ziem; 2 = dyplomacja/bitwy; 3 = najważniejsze fakty.
+  min-importance: 1
+  # Opcjonalny PUBLICZNY HTTPS obrazek z {id}; bez sesji, kluczy i adresu prywatnego panelu.
+  # Obecny Panel zwraca obraz przez uwierzytelnione RPC — brak publicznego URL oznacza brak miniatury.
+  flag-url-template: ''

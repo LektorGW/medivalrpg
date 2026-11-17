@@ -1,0 +1,270 @@
+{
+ "akademia": [
+  "Sala wykładowa z pulpitami i plac ćwiczeń z tarczami, kukłami i torem do kopii."
+ ],
+ "arena": [
+  "Amfiteatr z piaszczystą areną, trybunami, bramami i blankami."
+ ],
+ "bank": [
+  "Bank z kolumnowym portykiem, kasą za kratą i skarbcem."
+ ],
+ "biblioteka": [
+  "Biblioteka z regałami i pulpitami. Szybszy wzrost osady."
+ ],
+ "blok": [
+  "Sześciopiętrowy blok z betonu z oknami w pasach, klatką i płaskim dachem. 15 łóżek."
+ ],
+ "brama": [
+  "Brama z dwiema basztami, broną i chorągwiami kraju."
+ ],
+ "browar": [
+  "Browar z kadziami, warnikami i beczkami. Wyższe podatki."
+ ],
+ "cegielnia": [
+  "Cegielnia z ceglanym piecem komorowym, wiatą suszarni i zasiekiem gliny. Ceglarz kopie glinę z rzek i brzegów, wypala cegły i terakotę."
+ ],
+ "cegielnia_kryta": [
+  "Kryta suszarnia z muru pruskiego z regałami surówki i zasiekiem gliny oraz ceglany piec ze schodkowym sklepieniem i kominem. Ceglarz kopie glinę z rzek i brzegów, wypala cegły i terakotę."
+ ],
+ "chata": [
+  "Mała drewniana chata na kamiennej podmurówce. 2 łóżka."
+ ],
+ "chata_szachulec": [
+  "Niska chata z muru pruskiego na kamiennej podmurówce, z nawisem dachu, okiennicami, skrzynkami kwiatów i kominem. 2 łóżka."
+ ],
+ "chata_zrebowa": [
+  "Chata z bali z gankiem na słupach, kamiennym kominem i okiennicami. 2 łóżka."
+ ],
+ "cmentarz": [
+  "Ogrodzony cmentarz z nagrobkami i krzyżem."
+ ],
+ "dom": [
+  "Piętrowy dom z muru pruskiego. 4 łóżka na piętrze."
+ ],
+ "dom_kamienny": [
+  "Murowany dom z okapem na wspornikach, daszkiem nad wejściem, okiennicami i dużym kominem przy szczycie. 4 łóżka."
+ ],
+ "dom_szachulec": [
+  "Dom z muru pruskiego z wysuniętym piętrem na wspornikach, lukarną, skrzynkami kwiatów i kominem. 4 łóżka na piętrze."
+ ],
+ "drukarnia": [
+  "Warsztat drukarski z prasami (krosna), pulpitami i papierem."
+ ],
+ "dworzec": [
+  "Ceglany dworzec z halą, peronem pod wiatą i torami."
+ ],
+ "dworzec_nowoczesny": [
+  "Przeszklony dworzec z peronem pod szklanym dachem."
+ ],
+ "elektrownia": [
+  "Elektrownia z kotłami, transformatorami i dwoma kominami."
+ ],
+ "fabryka": [
+  "Ceglana hala fabryczna z dachem szedowym, piecami, taśmą i dwoma kominami."
+ ],
+ "galeria": [
+  "Dwupoziomowa galeria ze szklaną fasadą i sklepami."
+ ],
+ "huta_szkla": [
+  "Huta z kopułowym piecem szklarskim i zasiekiem piasku. Hutnik kopie piasek z brzegów na ziemi kraju i wytapia szkło (paliwo: węgiel albo węgiel drzewny)."
+ ],
+ "huta_szkla_murowana": [
+  "Murowana huta ze szkarpami, piecem szklarskim o trzech otworach roboczych, kominem i zasiekiem piasku. Hutnik kopie piasek z brzegów na ziemi kraju i wytapia szkło (paliwo: węgiel albo węgiel drzewny)."
+ ],
+ "kamienica": [
+  "Trzykondygnacyjna kamienica mieszczańska ze sklepem na parterze. 6 łóżek."
+ ],
+ "kamienica_czynszowa": [
+  "Pięciokondygnacyjna ceglana kamienica z balkonami i kominami. 8 łóżek."
+ ],
+ "kamienica_podcieniowa": [
+  "Kamienica z podcieniami na kamiennych filarach, dachem czterospadowym i lukarnami. 6 łóżek."
+ ],
+ "kamienica_renesansowa": [
+  "Tynkowana kamienica z podcieniami, attyką i sklepem na parterze. 6 łóżek."
+ ],
+ "kamienica_renesansowa_loggia": [
+  "Renesansowa kamienica z arkadową loggią na piętrze, gzymsami, boniowanym parterem i attyką. 6 łóżek."
+ ],
+ "kamienica_szczytowa": [
+  "Kamienica zwrócona schodkowym szczytem do ulicy, z kramem pod markizą w barwach kraju i skrzynkami kwiatów. 6 łóżek."
+ ],
+ "kamieniolom": [
+  "Tarasowy kamieniołom z dźwigiem i ogrodzeniem; dochód z kamienia. Najlepiej w skałach."
+ ],
+ "karczma": [
+  "Karczma z szynkiem, kominkiem i pokojami gościnnymi (4 łóżka dla podróżnych)."
+ ],
+ "karczma_zajazd": [
+  "Przydrożny zajazd z galerią na słupach, poidłem i koniowiązem, salą z długimi stołami i kominkiem (4 łóżka dla podróżnych)."
+ ],
+ "katedra": [
+  "Gotycka katedra z dwiema wieżami, witrażami, rozetą i ołtarzem; pod nią katakumby."
+ ],
+ "kopalnia": [
+  "Szyb kopalni z wyciągiem; górnicy drążą chodniki w głąb (rozbudowa daje dochód)."
+ ],
+ "kosciol": [
+  "Kamienny kościół z dzwonnicą, witrażami i ołtarzem."
+ ],
+ "kosciol_drewniany": [
+  "Drewniany kościół z bali z wieżą-dzwonnicą nad wejściem, stromym dachem, prezbiterium, ławami i ołtarzem."
+ ],
+ "koszary": [
+  "Kamienne koszary z 6 pryczami dla żołnierzy (nie liczą się jako mieszkania)."
+ ],
+ "koszary2": [
+  "Dwupiętrowe kamienne koszary z 12 pryczami, zbrojownią i blankami (łóżka dla wojska)."
+ ],
+ "kuznia": [
+  "Otwarta kuźnia z paleniskiem, kowadłem i kominem."
+ ],
+ "kuznia_kamienna": [
+  "Murowana kuźnia z paleniskiem i kominem, zadaszonym placem z kowadłem, korytem do hartowania i węglem."
+ ],
+ "laboratorium": [
+  "Laboratorium z dygestoriami, stołami i aparaturą. Dużo punktów badań."
+ ],
+ "latarnia": [
+  "Pasiasta latarnia z galerią i światłem morskim. Stawiana nad wodą; bezpieczniejsze połowy i handel."
+ ],
+ "laznia": [
+  "Łaźnia z basenem, kadziami gorącej wody i ławami. Zdrowsza i liczniejsza ludność."
+ ],
+ "lotnisko": [
+  "Pas startowy ze światłami, terminal i wieża kontroli lotów."
+ ],
+ "magazyn": [
+  "Magazyn z piwnicą pełną beczek. Duży przyrost pojemności spichlerza."
+ ],
+ "mlyn": [
+  "Wiatrak ze skrzydłami z płotków i wełny, z żarnami w środku."
+ ],
+ "most": [
+  "Kamienny most na dwóch filarach z łukami, balustradą i latarniami."
+ ],
+ "most_stalowy": [
+  "Stalowy most kratownicowy na kamiennych filarach z latarniami."
+ ],
+ "mur": [
+  "Moduł murów miejskich: odcinek muru z blankami i basztą."
+ ],
+ "obserwatorium": [
+  "Wieża z kopułą ze szkła i miedzi i lunetą."
+ ],
+ "ogrody": [
+  "Strzyżone żywopłoty, kwietniki, staw z liliami, altana i posągi."
+ ],
+ "owczarnia": [
+  "Szopa z krosnem i sianem oraz zagroda ze stadem owiec. Pasterz strzyże wełnę i wiąże bele siana z pszenicy z pól; z wełny i drewna powstają łóżka."
+ ],
+ "owczarnia_kamienna": [
+  "Kamienna owczarnia ze stryszkiem na siano, krosnem i zagrodą na kamiennym krawężniku. Pasterz strzyże wełnę i wiąże bele siana z pszenicy z pól; z wełny i drewna powstają łóżka."
+ ],
+ "palac": [
+  "Pałac z kolumnadą, ogrodem z fontanną, salą tronową ze złotym tronem i komnatami (4 łóżka)."
+ ],
+ "palac_renesansowy": [
+  "Czteroskrzydłowy pałac z arkadowym dziedzińcem, ogrodem i fontanną. 4 łóżka."
+ ],
+ "park": [
+  "Ogrodzony park z alejkami, drzewami, stawem, ławkami i latarniami."
+ ],
+ "parking": [
+  "Asfaltowy parking z liniami i latarniami."
+ ],
+ "parlament": [
+  "Gmach parlamentu z kolumnadą, szklaną kopułą i salą obrad."
+ ],
+ "piekarnia": [
+  "Piekarnia z ceglanym piecem i kominem. Więcej jedzenia."
+ ],
+ "piekarnia_szachulec": [
+  "Piekarnia z muru pruskiego z ceglanym piecem chlebowym, okienkiem sprzedaży pod markizą i kominem. Więcej jedzenia."
+ ],
+ "pole": [
+  "Ogrodzone pole z kanałem wody, pszenicą, marchwią i ziemniakami. Daje jedzenie do spichlerza."
+ ],
+ "pomnik": [
+  "Pomnik władcy na schodkowym cokole w barwach kraju."
+ ],
+ "port": [
+  "Port z molo na palach, dźwigiem i magazynem portowym. Handel morski."
+ ],
+ "przystan": [
+  "Chata rybacka z pomostem. Stawiana nad wodą, daje ryby."
+ ],
+ "ratusz": [
+  "Ratusz z wieżą zegarową, salą rady i kancelarią."
+ ],
+ "ratusz_renesansowy": [
+  "Tynkowany ratusz z attyką, salą rady i wieżą zegarową z dzwonem."
+ ],
+ "rynek": [
+  "Duży brukowany rynek z fontanną, ławami, latarniami, drzewami i kramami."
+ ],
+ "skarbiec": [
+  "Grubościenny skarbiec z kratami, złotem i kancelarią. Wyższe podatki."
+ ],
+ "spichlerz": [
+  "Drewniany spichlerz ze skrzyniami na zapasy. Zwiększa pojemność spichlerza kraju."
+ ],
+ "spichlerz_kamienny": [
+  "Murowany spichlerz ze szkarpami, otworami wentylacyjnymi, poddaszem i belką wyciągu. Zwiększa pojemność spichlerza kraju."
+ ],
+ "stadion": [
+  "Stadion z boiskiem, bramkami, trybunami i masztami oświetlenia."
+ ],
+ "stajnia": [
+  "Drewniana stajnia z boksami, sianem i korytami."
+ ],
+ "stajnia_kamienna": [
+  "Murowana stajnia z bramą, boksami, korytami, stryszkiem na siano i siodlarnią."
+ ],
+ "studnia": [
+  "Kamienna studnia z daszkiem — serce osady.",
+  "Kamienna studnia z daszkiem."
+ ],
+ "szkola": [
+  "Ceglana szkoła z dwiema klasami, ławkami i dzwonkiem."
+ ],
+ "szkola_nowoczesna": [
+  "Betonowa szkoła z dużymi oknami i dwoma piętrami klas."
+ ],
+ "szpital": [
+  "Ceglany szpital z salami chorych (8 łóżek dla chorych) i apteką."
+ ],
+ "szpital_nowoczesny": [
+  "Trzypiętrowy szpital z oddziałami (8 łóżek) i lądowiskiem."
+ ],
+ "targ": [
+  "Brukowany plac targowy ze straganami w barwach kraju i fontanną."
+ ],
+ "tartak": [
+  "Zadaszony tartak ze stosami bali i piłą. Najlepiej przy lesie."
+ ],
+ "tartak_kryty": [
+  "Kryta hala tartaku na kamiennych stopach, z zastrzałami, piłą i stosami bali. Najlepiej przy lesie."
+ ],
+ "uniwersytet": [
+  "Kolegium z salami wykładowymi, biblioteką i portykiem. Dużo punktów badań."
+ ],
+ "wieza": [
+  "Kamienna wieża z platformą obserwacyjną i blankami."
+ ],
+ "wieza_okragla": [
+  "Okrągła kamienna baszta ze strzelnicami, drewnianym gankiem obronnym na wspornikach i stożkowym dachem."
+ ],
+ "wiezowiec": [
+  "Mieszkalny wieżowiec (ok. 65 bl.) z 15 piętrami, windą i oświetleniem. 28 łóżek. Tylko na płaskiej działce."
+ ],
+ "wiezowiec_biurowy": [
+  "Szklany biurowiec (ok. 45 bl.) z windą, oświetlonymi piętrami i lądowiskiem na dachu. Tylko na płaskiej działce."
+ ],
+ "zamek": [
+  "Warowny zamek: mury z blankami, cztery wieże, brama z broną, dziedziniec i donżon (4 łóżka)."
+ ],
+ "zielarnia": [
+  "Chata zielarza z ogródkiem ziół i alembikiem. Zdrowsza ludność."
+ ]
+}

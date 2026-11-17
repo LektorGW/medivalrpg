@@ -1,0 +1,161 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: skarbiec
+name: '<#FFD700>Skarbiec królewski</#FFD700>'
+description: 'Podatki +8%. Grubościenny skarbiec z kratami.'
+function: treasury
+beds: 0
+cost: 25000
+tier: 3
+category: representative
+zone: center
+max-per-country: 1
+requires:
+  population: 35
+  treasury: 60000
+foundation: fill
+foundation-block: polished_blackstone_bricks
+ground-layer: 0
+palette:
+  'A': 'polished_blackstone_bricks'
+  'B': 'deepslate_bricks'
+  'C': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'D': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'E': 'chiseled_polished_blackstone'
+  'F': 'iron_bars'
+  'G': 'gold_block'
+  'H': 'chest[facing=south]'
+  'I': 'barrel[facing=up]'
+  'J': 'raw_gold_block'
+  'K': 'raw_iron_block'
+  'L': 'lantern[hanging=true]'
+  'M': 'lectern[facing=east,has_book=false,powered=false]'
+  'N': 'cartography_table'
+  'O': 'chest[facing=east]'
+  'P': '{kolor}_wall_banner[facing=north]'
+  'Q': 'lantern[hanging=false]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+  # y=1
+  - |
+    ABBBBBBBA
+    BGGHIHGGB
+    BJ.....KB
+    B.......B
+    BFFF.FFFB
+    B.......B
+    BM.....NB
+    BO.....IB
+    ABBBCBBBA
+  # y=2
+  - |
+    ABBBBBBBA
+    B.......B
+    B.......B
+    B.......B
+    BFFF.FFFB
+    B.......B
+    B.......B
+    B.......B
+    ABBBDBBBA
+  # y=3
+  - |
+    ABFBBBFBA
+    B.......B
+    F.......F
+    B.......B
+    B.......B
+    B.......B
+    F.......F
+    B..P.P..B
+    ABFBEBFBA
+  # y=4
+  - |
+    ABFBBBFBA
+    B.......B
+    F.......F
+    B.......B
+    B.......B
+    B.......B
+    F.......F
+    B.......B
+    ABFBBBFBA
+  # y=5
+  - |
+    ABBBBBBBA
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    ABBBBBBBA
+  # y=6
+  - |
+    ABBBBBBBA
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    B.......B
+    ABBBBBBBA
+  # y=7
+  - |
+    ABBBBBBBA
+    B.......B
+    B...L...B
+    B.......B
+    B.......B
+    B.......B
+    B...L...B
+    B.......B
+    ABBBBBBBA
+  # y=8
+  - |
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+    BBBBBBBBB
+  # y=9
+  - |
+    A.A.A.A.A
+    .........
+    A.......A
+    .........
+    A.......A
+    .........
+    A.......A
+    .........
+    A.A.A.A.A
+  # y=10
+  - |
+    Q.......Q
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+    Q.......Q

@@ -1,0 +1,16 @@
+{
+  "name": "kraje-mapa-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Panel krajów i nazwy krajów dla mapy squaremap serwera MEDIVALRPG",
+  "author": "Maciej Kaczmarczyk (https://lektoro.pl)",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "serve": "node test/server.mjs",
+    "test": "node test/run.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.16.0"
+  }
+}

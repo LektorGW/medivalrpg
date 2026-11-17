@@ -1,0 +1,205 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: spichlerz_kamienny
+variant-of: spichlerz
+name: '<#D9B36A>Spichlerz murowany</#D9B36A>'
+description: 'Zwiększa pojemność spichlerza kraju o 2000 pkt jedzenia; jedzenie włożone do jego skrzyń i beczek karmi ludność (obywatel zjada 4 pkt dziennie). Przyjmuje też plony z pól i ryby z przystani. Murowany spichlerz ze szkarpami i belką wyciągu.'
+function: granary
+beds: 0
+cost: 3000
+tier: 0
+category: food
+zone: outer
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@frame[axis=y]'
+  'D': 'cobblestone_stairs[facing=east,half=bottom]'
+  'E': 'cobblestone_stairs[facing=west,half=bottom]'
+  'F': '@frame[axis=x]'
+  'G': '@frame[axis=z]'
+  'H': '@roof_stairs[facing=west,half=bottom]'
+  'I': '@roof_stairs[facing=east,half=bottom]'
+  'J': '@wall'
+  'K': '@roof_slab[type=bottom]'
+  'L': 'iron_bars'
+  'M': 'ladder[facing=north]'
+  'N': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'O': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'P': '@door[facing=north,half=lower,hinge=right,open=false]'
+  'Q': '@door[facing=north,half=upper,hinge=right,open=false]'
+  'R': '@fence'
+  'S': 'lantern[hanging=true]'
+  'T': 'wall_torch[facing=south]'
+  'U': 'chest[facing=east]'
+  'V': 'barrel[facing=east]'
+  'W': 'chest[facing=west]'
+  'X': 'barrel[facing=west]'
+  'Y': 'hay_block[axis=x]'
+  'Z': 'barrel[facing=up]'
+  'a': 'hay_block[axis=y]'
+  'b': 'chest[facing=south]'
+layers:
+  # y=0
+  - |
+    __________
+    _BBBBBBBB_
+    _BAAAAAAB_
+    BBAAAAAABB
+    _BAAAAAAB_
+    _BAAAAAAB_
+    _BAAAAAAB_
+    BBAAAAAABB
+    _BAAAAAAB_
+    _BBBBBBBB_
+    __________
+  # y=1
+  - |
+    ..........
+    .CBBBBBBC.
+    .BUYZYYWB.
+    BBU....WBB
+    .B......B.
+    .BU....WB.
+    .BU.....B.
+    BB......BB
+    .B.....MB.
+    .CBBNPBBC.
+    ..........
+  # y=2
+  - |
+    ..........
+    .CBBBBBBC.
+    .BV....XB.
+    DBV....XBE
+    .B......B.
+    .BV....XB.
+    .BV.....B.
+    DB......BE
+    .B.....MB.
+    .CBBOQBBC.
+    ...T..T...
+  # y=3
+  - |
+    ..........
+    .CBBBBBBC.
+    .B......B.
+    .L......L.
+    .B......B.
+    .L..S...L.
+    .B......B.
+    .L......L.
+    .B.....MB.
+    .CBBFFBBC.
+    ..........
+  # y=4
+  - |
+    ..........
+    .CBBBBBBC.
+    .BGAAAAGB.
+    .BGAAAAGB.
+    .BGAAAAGB.
+    .BGAAAAGB.
+    .BGAAAAGB.
+    .BGAAAAGB.
+    .BGAAAAMB.
+    .CBBBBBBC.
+    ..........
+  # y=5
+  - |
+    ..........
+    .CBBBBBBC.
+    .Bb....bB.
+    .L.aa.a.L.
+    .B......B.
+    .L.a.aa.L.
+    .B......B.
+    .L.ZZ...L.
+    .B......B.
+    .CBBBBBBC.
+    ..........
+  # y=6
+  - |
+    ..........
+    .CBBBBBBC.
+    .B......B.
+    .B......B.
+    .B......B.
+    .B......B.
+    .B......B.
+    .B......B.
+    .B......B.
+    .CBBBBBBC.
+    ..........
+  # y=7
+  - |
+    I........H
+    ICFFFFFFCH
+    IG......GH
+    IG......GH
+    IG......GH
+    IG......GH
+    IG......GH
+    IG......GH
+    IG......GH
+    ICFFFFFFCH
+    I........H
+  # y=8
+  - |
+    .I......H.
+    .IJJJJJJH.
+    .I......H.
+    .I......H.
+    .I......H.
+    .I......H.
+    .I......H.
+    .I......H.
+    .I......H.
+    .IJJRRJJH.
+    .I..S...H.
+  # y=9
+  - |
+    ..I....H..
+    ..IJJJJH..
+    ..I....H..
+    ..I....H..
+    ..I....H..
+    ..I..S.H..
+    ..I....H..
+    ..I....H..
+    ..I....H..
+    ..IJFFJH..
+    ..I.G..H..
+  # y=10
+  - |
+    ...I..H...
+    ...IJJH...
+    ...I..H...
+    ...I..H...
+    ...I..H...
+    ...I..H...
+    ...I..H...
+    ...I..H...
+    ...I..H...
+    ...IJJH...
+    ...I..H...
+  # y=11
+  - |
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....
+    ....KK....

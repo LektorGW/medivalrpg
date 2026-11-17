@@ -1,0 +1,56 @@
+{
+  "updated": 1792960083162,
+  "countries": [
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c01", "name": "Aldoria", "color": "#E53935", "npc": false,
+      "description": "Najstarsze królestwo nad Srebrną Rzeką. Słynie z kowali i winnic.",
+      "ruler": "Zbyszko_77", "members": 3, "population": 12, "soldiers": 5, "chunks": 24, "areaBlocks": 6144,
+      "founded": 1792960000000, "capital": { "world": "minecraft_overworld", "x": 120, "z": -340 },
+      "allies": ["Norvik"], "wars": ["Borsk"], "sieges": 1
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c02", "name": "Velmarskie Księstwo Północy", "color": "#1E88E5", "npc": true,
+      "description": "Państwo NPC rządzone przez radę starszych.",
+      "ruler": "Książę Velmar", "members": 0, "population": 34, "soldiers": 18, "chunks": 20, "areaBlocks": 5120,
+      "founded": 1792700000000, "capital": { "world": "minecraft_overworld", "x": -420, "z": 210 },
+      "allies": [], "wars": [], "sieges": 0
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c03", "name": "Norvik", "color": "#43A047", "npc": false,
+      "description": "", "ruler": "Radek_Lucznik", "members": 5, "population": 4, "soldiers": 0, "chunks": 15, "areaBlocks": 3840,
+      "founded": 1792800000000, "capital": { "world": "minecraft_overworld", "x": 260, "z": -180 },
+      "allies": ["Aldoria"], "wars": [], "sieges": 0
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c04", "name": "Borsk", "color": "#FDD835", "npc": false,
+      "description": "Górnicze miasto-państwo w Szarych Wzgórzach.",
+      "ruler": "Wojmir_Kowal", "members": 2, "population": 0, "soldiers": 3, "chunks": 9, "areaBlocks": 2304,
+      "founded": 1792900000000, "capital": { "world": "minecraft_overworld", "x": 40, "z": -420 },
+      "allies": [], "wars": ["Aldoria"], "sieges": 1
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c05", "name": "Mroczne Bractwo", "color": "#1A237E", "npc": true,
+      "description": "Zakon mnichów z bagien.", "ruler": "Opat Grimwald", "members": 0, "population": 7, "soldiers": 2,
+      "chunks": 4, "areaBlocks": 1024, "founded": 1792750000000, "capital": { "world": "minecraft_overworld", "x": -150, "z": 380 },
+      "allies": [], "wars": [], "sieges": 0
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c06", "name": "Piekielne Wrota", "color": "#FF7043", "npc": true,
+      "description": "Forteca w Netherze — kraj testowy w innym świecie.", "ruler": "Wódz Ignis", "members": 0, "population": 3, "soldiers": 6,
+      "chunks": 2, "areaBlocks": 512, "founded": 1792650000000, "capital": { "world": "minecraft_the_nether", "x": 16, "z": 16 },
+      "allies": [], "wars": [], "sieges": 0
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c07", "name": "WPK", "color": "#8E24AA", "npc": false,
+      "description": "", "ruler": "Wojmir_Kowal", "members": 2, "population": 0, "soldiers": 0, "chunks": 1, "areaBlocks": 256,
+      "founded": 1792960000000, "capital": { "world": "minecraft_overworld", "x": -136, "z": -1624 },
+      "allies": [], "wars": [], "sieges": 0
+    },
+    {
+      "id": "6f1d2c1e-4a1b-4c2e-9a51-0d1f3a6b7c08", "name": "Osada Łąka", "color": "#26A69A", "npc": false,
+      "description": "Mała osada tuż przy Borsku (test zasłaniania się napisów).", "ruler": "Żółw_Ęą", "members": 1, "population": 0, "soldiers": 0,
+      "chunks": 1, "areaBlocks": 256, "founded": 1792955000000, "capital": { "world": "minecraft_overworld", "x": 60, "z": -400 },
+      "allies": [], "wars": [], "sieges": 0
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Changelog serwera MEDIVALRPG — to widzą gracze po zalogowaniu i pod /nowosci.
+#
+# Każdy wpis:
+#   id        — liczba, rośnie z każdym wpisem (gracz widzi wpisy o id większym niż ostatni, który już widział)
+#   date      — "RRRR-MM-DD" (w cudzysłowie)
+#   title     — tytuł (zwykły tekst)
+#   category  — nowe | zmiana | poprawka (ikony i kolory w config.yml)
+#   points    — lista punktów w MiniMessage; dodatkowe tagi: <cmd>/komenda</cmd> i <hl>wyróżnienie</hl>
+# next-id    — następny wolny numer (pilnuje go plugin; nie zmniejszaj go, bo gracze nie zobaczą nowych wpisów).
+#
+# Możesz edytować ten plik ręcznie i wpisać /nowosci reload, albo użyć komend /nowosci dodaj | punkt | usun.
+
+next-id: 6
+
+entries:
+  - id: 1
+    date: "2026-10-25"
+    title: "Czat głosowy w przeglądarce"
+    category: nowe
+    points:
+      - "Wpisz <cmd>/glos</cmd> i kliknij link — rozmawiasz z innymi graczami prosto z przeglądarki, bez instalowania modów."
+      - "Słychać cię tylko z bliska, jak naprawdę. Wybierz, jak mówisz: <hl>szept</hl>, <hl>normalnie</hl> albo <hl>krzyk</hl>."
+      - "Kucnij, a zaczniesz szeptać — usłyszą cię tylko ci tuż obok."
+      - "Pod wodą twój głos jest stłumiony. Bul, bul!"
+      - "Gdy ktoś mówi, nad jego głową pojawia się ikona, więc od razu wiesz, kto się odzywa."
+
+  - id: 2
+    date: "2026-10-25"
+    title: "Kraje"
+    category: nowe
+    points:
+      - "Załóż własny kraj komendą <cmd>/kraj zaloz <nazwa></cmd> i zostań jego władcą."
+      - "Zajmuj chunki — twój teren jest chroniony, obcy nie zniszczą ani nie ukradną niczego na twojej ziemi."
+      - "Zawieraj sojusze albo wypowiadaj wojny innym krajom."
+      - "Tag kraju widać w tabie i na czacie, żeby każdy wiedział, skąd jesteś."
+      - "<cmd>/kc</cmd> to czat twojego kraju, a <cmd>/ks</cmd> — czat całego sojuszu."
+
+  - id: 3
+    date: "2026-10-25"
+    title: "Mapa świata"
+    category: nowe
+    points:
+      - "Wpisz <cmd>/mapa</cmd>, a dostaniesz link do mapy świata w przeglądarce."
+      - "Na mapie widać granice wszystkich krajów — sprawdź, kto jest twoim sąsiadem."
+
+  - id: 4
+    date: "2026-10-25"
+    title: "Interakcje"
+    category: nowe
+    points:
+      - "Okaż uczucia: <cmd>/pocaluj</cmd>, <cmd>/przytul</cmd>, <cmd>/trzymaj</cmd> (za rękę), <cmd>/piatka</cmd>."
+      - "Albo wręcz przeciwnie: <cmd>/lisc</cmd>. Do tego <cmd>/pomachaj</cmd> i <cmd>/uklon</cmd>."
+      - "<hl>Shift + prawy klik</hl> na gracza otwiera menu wszystkich interakcji."
+      - "Odpocznij: <cmd>/usiadz</cmd> albo <cmd>/poloz</cmd>."
+      - "Nie chcesz, żeby ktoś cię zaczepiał? <cmd>/interakcje wylacz</cmd>."
+
+  - id: 5
+    date: "2026-10-25"
+    title: "Porządki na serwerze"
+    category: zmiana
+    points:
+      - "Komendy podpowiadają się teraz podczas pisania — z polskimi nazwami i opisem, co wpisać."
+      - "<cmd>/kraj pomoc</cmd> pokazuje wszystkie komendy krajów z opisami. Najedź na komendę, żeby dowiedzieć się więcej, kliknij, żeby ją wpisać."

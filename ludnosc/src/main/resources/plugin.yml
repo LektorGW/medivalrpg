@@ -1,0 +1,22 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Ludnosc
+version: '${version}'
+main: pl.medivalrpg.ludnosc.LudnoscPlugin
+api-version: '26.3'
+description: Obywatele NPC (wieśniacy) państw i budowanie budynków przez budowniczych dla serwera MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+softdepend: [WorldEdit, Armia]
+permissions:
+  ludnosc.use:
+    description: Dostęp do /ludnosc (info, budynki, spichlerz, buduj — budowa wymaga rangi w kraju)
+    default: true
+  ludnosc.admin:
+    description: Komendy administracyjne /ludnosc admin i /ludnosc dom
+    default: op
+    children:
+      ludnosc.use: true
+  ludnosc.bypass:
+    description: Może krzywdzić / prowadzić na smyczy / nazywać obywateli NPC każdego kraju
+    default: op

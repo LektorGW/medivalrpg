@@ -1,0 +1,1581 @@
+# ============================================================
+#  Kraje — system krajów dla MEDIVALRPG
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Teksty używają formatu MiniMessage: https://docs.advntr.dev/minimessage/format.html
+#  Po zmianach: /kraj admin reload
+# ============================================================
+
+country:
+  name-min-length: 3
+  name-max-length: 24
+  description-max-length: 120
+  # Minimalna odległość (w chunkach) od granic innego kraju przy zakładaniu nowego kraju.
+  found-min-distance-chunks: 3
+  # Światy, w których nie można zakładać krajów ani zajmować terenu, np. [world_nether, world_the_end].
+  blocked-worlds: []
+  # Ważność zaproszeń do kraju.
+  invite-expiry-seconds: 300
+  # Ważność propozycji sojuszu i pokoju.
+  proposal-expiry-seconds: 300
+  # Czas na potwierdzenie /kraj rozwiaz potwierdz i /kraj przekaz <gracz> potwierdz.
+  confirm-expiry-seconds: 30
+  # Paleta kolorów losowanych dla nowych krajów (nieużyte kolory mają pierwszeństwo).
+  default-colors:
+    - "#E53935"
+    - "#1E88E5"
+    - "#43A047"
+    - "#FDD835"
+    - "#8E24AA"
+    - "#F57C00"
+    - "#26A69A"
+    - "#F06292"
+    - "#795548"
+    - "#3949AB"
+    - "#C0CA33"
+    - "#00ACC1"
+
+claims:
+  # Limit chunków = base + per-member × gracze-członkowie + per-npc-citizen × obywatele NPC (Ludnosc, w dół),
+  # ale nie więcej niż max (0 = bez twardego limitu). Kraje NPC nie mają graczy: base + ludność.
+  base: 16
+  per-member: 8
+  per-npc-citizen: 0.25
+  max: 300
+  # Planista Ludności (budowa i przebudowa miasta) może dla kraju NPC zająć tyle chunków ponad limit
+  # (-1 = bez limitu). Kraje graczy zawsze mają zwykły limit.
+  npc-planner-bonus: 64
+
+spawn:
+  # /kraj spawn — teleport do punktu spawnu stolicy.
+  enabled: true
+  # Odliczanie przed teleportem (ruch anuluje). Admini teleportują się od razu.
+  warmup-seconds: 5
+
+protection:
+  enabled: true
+  # true = obcy (nie-członkowie) NIE mogą tego robić na terenie kraju.
+  block-break: true
+  block-place: true
+  containers: true          # skrzynie, beczki, piece, lejki, shulkery, półki, pulpity, szafy grające...
+  doors: true               # drzwi i klapy
+  fence-gates: true         # furtki
+  buttons: true             # przyciski i dźwignie
+  pressure-plates: true     # płyty naciskowe
+  buckets: true             # wylewanie i nabieranie wiader
+  fire: true                # rozpalanie ognia, podpalanie TNT
+  animals: true             # bicie, strzyżenie, smycze, łapanie do wiadra
+  decorations: true         # ramy, obrazy, stojaki na zbroję, kryształy, łodzie i wagoniki
+  other-interactions: true  # przekaźniki, komparatory, bloki nutowe, ciasta, doniczki, tabliczki, kowadła, łóżka, kotły, ogniska...
+  # Sojusznicy mogą używać drzwi, klap i furtek.
+  allies-use-doors: true
+  # --- obejścia ---
+  explosions: false               # false = wybuchy (TNT, creepery...) nie niszczą terenu krajów
+  # Wyjątek: zweryfikowane TNT własnego kraju niszczy własny teren oraz aktywnie oblegany teren wroga.
+  # Nie odblokowuje creeperów, obcych krajów neutralnych, kontenerów ani chronionych obszarów.
+  player-tnt: true
+  fire-spread-from-outside: false # false = ogień nie wchodzi do kraju z zewnątrz
+  pistons-across-border: false    # false = tłoki nie przesuwają bloków przez granicę
+  liquids-across-border: false    # false = woda i lawa nie wpływają do cudzego kraju
+  hoppers-across-border: false    # false = lejki nie wyciągają przedmiotów z kraju przez granicę
+  dispensers-across-border: false # false = dozowniki nie działają w cudzy kraj
+  # Odstęp między komunikatami o braku uprawnień (ms).
+  deny-message-cooldown-ms: 1500
+
+border:
+  # Komunikat przy przekraczaniu granicy (sprawdzane tylko przy zmianie chunka).
+  enabled: true
+  display: TITLE   # TITLE albo ACTIONBAR
+  title-fade-in-ticks: 5
+  title-stay-ticks: 30
+  title-fade-out-ticks: 10
+  # Dźwięk przy wejściu na teren kraju (klucze jak w /playsound, pusty = bez dźwięku).
+  # "enemy" gra przy wejściu na teren wroga (wojna) albo do oblężonego chunka.
+  # Ten sam dźwięk gra najwyżej raz na cooldown-seconds (chodzenie po granicy nie spamuje).
+  sound:
+    enter: "block.note_block.chime"
+    enter-volume: 0.35
+    enter-pitch: 1.2
+    enemy: "event.raid.horn"
+    enemy-volume: 0.15
+    enemy-pitch: 1.0
+    cooldown-seconds: 6
+
+map:
+  # Integracja ze squaremap (jeśli zainstalowany).
+  enabled: true
+  layer-name: "Kraje"
+  layer-default-hidden: false
+  layer-priority: 5
+  layer-z-index: 5
+  fill-opacity: 0.55
+  stroke-weight: 4
+  stroke-opacity: 1.0
+  show-capitals: true
+  # Odświeżenie mapy po zmianie (debounce, w tickach; 40 = 2 s).
+  refresh-debounce-ticks: 40
+  # HTML. Placeholdery: {name} {npc} {color} {description} {ruler} {advisors} {members} {chunks} {blocks}
+  # {area} {capital} {founded} {allies} {wars} {population} {housing} {soldiers}
+  # {overlord} {until} (suweren i koniec wasalstwa) {vassals}
+  # {era} (ikona i nazwa epoki w kolorze), {era_icon} (sama ikona), {progress} (postęp do następnej epoki, np. 52%) —
+  # tylko z pluginem Postep (bez niego: puste / —). {name} to nazwa z tytułem epoki (era-titles).
+  # {union} (kraj-partner unii personalnej) {monarch} (wspólny władca) {embassies} (→ ambasady za granicą, ← ambasady u nas)
+  # {extra} (tylko popup) = linie popup-npc / popup-era / popup-population / popup-army / popup-vassal / popup-vassals /
+  # popup-union / popup-embassies / popup-siege, gdy są dane.
+  # Szablon bez {npc} dostaje dopisek NPC zaraz po nazwie; popup bez {extra} — linie przed ostatnim </div>.
+  hover-tooltip: "<span style=\"font-size:15px;font-weight:bold;color:{color}\">{name}</span><br>Władca: {ruler} • {area}"
+  popup: >-
+    <div style="min-width:180px">
+    <span style="font-size:15px;font-weight:bold;color:{color}">{era_icon} {name}</span><br>
+    <i>{description}</i><br>
+    <b>Władca:</b> {ruler}<br>
+    <b>Doradcy:</b> {advisors}<br>
+    <b>Obywatele:</b> {members}<br>
+    <b>Powierzchnia:</b> {area}<br>
+    <b>Stolica:</b> {capital}<br>
+    <b>Sojusze:</b> {allies}<br>
+    <b>Wojny:</b> {wars}<br>
+    <b>Założony:</b> {founded}<br>
+    {extra}
+    </div>
+  npc-suffix: " (NPC)"
+  popup-npc: "<i>Kraj NPC — rządzi nim SI</i><br>"
+  popup-era: "<b>Epoka:</b> {era} • postęp: {progress}<br>"
+  popup-population: "<b>Ludność:</b> {population} (mieszkania: {housing})<br>"
+  popup-army: "<b>Żołnierze:</b> {soldiers}<br>"
+  popup-vassal: "<b>Wasal:</b> {overlord} (do {until})<br>"
+  popup-vassals: "<b>Wasale:</b> {vassals}<br>"
+  popup-union: "<b>Unia personalna:</b> z {union} • wspólny władca: {monarch}<br>"
+  popup-embassies: "<b>Ambasady:</b> {embassies}<br>"
+  popup-siege: "<b style=\"color:#C0392B\">⚔ Oblężenie</b> przy {x}, {z}<br>"
+  # Osobna warstwa z oblężeniami (czerwona ramka chunka + ikona ⚔). Placeholdery: {attacker} {defender} {progress} {time} {x} {z}
+  siege-layer-name: "Oblężenia"
+  siege-tooltip: "<b>⚔ Oblężenie</b><br>{attacker} oblega {defender}<br>Postęp: {progress}% • zostało {time}"
+  # Plik kraje.json w katalogu web squaremapa (dla panelu bocznego strony), zapisywany przy każdym odświeżeniu mapy.
+  export-json: true
+
+# Adres mapy w przeglądarce (np. https://mapa.example.org). Pusty = nie pokazuj linku.
+map-url: ""
+
+# ============================================================
+#  Ekonomia — działa tylko z pluginem Skarbiec (bez niego: koszty 0, brak podatków i skarbca).
+#  Kwoty w miedziakach: 1 sr = 10 md, 1 zł = 100 md.
+# ============================================================
+economy:
+  enabled: true
+  # Założenie kraju (płaci gracz: konto bankowe, a gdy brak — monety z ekwipunku).
+  found-cost: 500
+  # Zajęcie chunka ze skarbca kraju: claim-cost-base + claim-cost-per-chunk × obecna liczba chunków.
+  claim-cost-base: 50
+  claim-cost-per-chunk: 5
+  # Dzienne utrzymanie: upkeep-per-chunk × (chunki − upkeep-free-chunks).
+  upkeep-per-chunk: 2
+  upkeep-free-chunks: 1
+  # Brak pieniędzy na utrzymanie = dzień bankructwa. Po grace-days takich dniach z rzędu kraj codziennie traci
+  # bankruptcy-chunks-per-day chunków najdalszych od stolicy (nigdy stolicy, teren zostaje spójny).
+  grace-days: 3
+  bankruptcy-chunks-per-day: 2
+  # Godzina dziennego rozliczenia (czas serwera). Rozliczenia przegapione podczas wyłączenia serwera są
+  # nadrabiane po starcie (najwyżej max-catch-up-days ostatnich).
+  daily-tick-time: "18:00"
+  max-catch-up-days: 7
+  # Ile ostatnich operacji pokazuje /kraj skarbiec.
+  treasury-log-size: 10
+  tax:
+    # Najwyższy podatek dzienny od gracza, jaki może ustawić Władca (/kraj podatek).
+    max: 100
+    exempt-ruler: true
+    # Po tylu dniach zaległości dłużnika można wyrzucić z adnotacją „za podatki” (dług przepada).
+    kick-after-days: 3
+
+war:
+  # Koszt wypowiedzenia wojny (ze skarbca; bez Skarbca 0).
+  declare-cost: 1000
+  # Pokój można zawrzeć dopiero po tylu minutach wojny.
+  min-duration-minutes: 120
+  # Po zawarciu pokoju ten sam kraj może znów wypowiedzieć wojnę po tylu minutach.
+  redeclare-cooldown-minutes: 720
+
+pvp:
+  # vanilla  = Kraje nie blokuje walki między graczami (domyślnie, zwykłe PvP wszędzie),
+  # war-only = gracze różnych krajów walczą tylko, gdy ich kraje są w wojnie.
+  mode: vanilla
+  # false = członkowie tego samego kraju i sojusznicy nie mogą się ranić (w obu trybach).
+  friendly-fire: true
+  # war-only: czy gracze bez kraju mogą walczyć (atakować i być atakowani).
+  without-country: false
+  # war-only: true = w dziczy (poza krajami) walka zawsze dozwolona.
+  wilderness-free: false
+
+siege:
+  enabled: true
+  # Desant wymaga wojny, nadbrzeżnego chunka i własnego transportu Armia z ludźmi/wojskiem.
+  landing:
+    enabled: true
+    # Dopłata ponad zwykły koszt oblężenia, w miedziakach.
+    extra-cost: 1000
+    # Liczba odłączonych przyczółków; po połączeniu ze stolicą zwalnia się miejsce.
+    max-bridgeheads: 3
+  # Koszt rozpoczęcia oblężenia (ze skarbca atakującego).
+  cost: 500
+  # Kto może zacząć oblężenie: CITIZEN, ADVISOR albo RULER.
+  min-rank: ADVISOR
+  max-duration-minutes: 30
+  # Czas zdobycia przy przewadze 1 (np. 1 gracz bez obrońców). Większa przewaga = szybciej, do max-speed-multiplier.
+  capture-seconds: 300
+  max-speed-multiplier: 3.0
+  # Oblegany chunk musi przylegać do terenu atakującego.
+  require-adjacent: true
+  # false = stolicę można oblegać tylko, gdy to ostatni chunk kraju (zdobycie ostatniego chunka = upadek kraju).
+  capital-anytime: false
+  # Sojusznicy pomagają (liczą się do siły i mogą budować w oblężonym chunku).
+  allies-help: true
+  # Pasek oblężenia widzą uczestnicy w tym promieniu (chunki) i każdy w oblężonym chunku.
+  bossbar-radius-chunks: 6
+  map-refresh-seconds: 15
+  # Co atakujący mogą robić w oblężonym chunku (nazwy jak w ochronie: BLOCK_BREAK, BLOCK_PLACE, DOORS,
+  # FENCE_GATES, BUTTONS, PRESSURE_PLATES, CONTAINERS, BUCKETS, FIRE, ANIMALS, DECORATIONS, OTHER).
+  build:
+    allowed-actions: [BLOCK_BREAK, BLOCK_PLACE, DOORS, FENCE_GATES, BUTTONS, PRESSURE_PLATES]
+    # Bloki, których nie wolno niszczyć ani stawiać (nazwy bloków albo #tagi).
+    excluded-blocks: ["#shulker_boxes", "#beds", ENDER_CHEST, BEACON, SPAWNER, TRIAL_SPAWNER, VAULT, LECTERN, JUKEBOX, CHISELED_BOOKSHELF, DECORATED_POT]
+    # true = żadnych kontenerów (skrzynie, beczki, piece, lejki...).
+    exclude-containers: true
+  # Oblężenia „w tle” państw NPC (Armia, ai.conquest): bitwa liczona abstrakcyjnie, gdy w pobliżu nie ma graczy.
+  # Te same zasady zdobycia co zwykłe oblężenie (wojna, spójność, stolica dopiero jako ostatni chunk, łupy, upadek).
+  abstract:
+    enabled: true
+    # Wyprawa lądowa na odległego wroga zakłada przyczółek (limit jak desanty: landing.max-bridgeheads).
+    expeditions: true
+    # Dopłata za wyprawę ponad koszt oblężenia (md).
+    expedition-extra-cost: 500
+    # false = ziemi krajów graczy nie da się zdobyć w tle (tylko fizycznie, przy graczach). Wymaga też Armia
+    # ai.conquest.abstract-vs-players: true.
+    allow-player-countries: false
+    # Odmowa, gdy gracz jest w tym promieniu (chunki) od celu — wtedy walka fizyczna.
+    player-block-radius-chunks: 8
+
+npc:
+  # Kraje NPC (Armia): czy gracze mogą do nich dołączać (/kraj dolacz bez zaproszenia).
+  players-can-join: false
+
+# ============================================================
+#  Przywracanie terenu: /kraj admin przywroc (wymaga WorldEdit)
+# ============================================================
+# Chunki są generowane od nowa z ziarna świata (oryginalny teren), porcjami na głównym wątku.
+# WorldEdit generuje każdą porcję synchronicznie w tymczasowym świecie: serwer stoi w tym czasie (pomiar: ok. 2 s
+# stałego kosztu na porcję + ok. 0,5 s na chunk, czyli porcja 4 chunków ≈ 4 s przycinki). Duże kraje przywracaj
+# poza godzinami gry.
+restore:
+  # Chunki w jednej porcji (1–16). Większa porcja = szybciej w sumie, ale dłuższa jednorazowa przycinka.
+  chunks-per-batch: 4
+  # Przerwa między porcjami (ticki, 20 = 1 s) — serwer i gracze odpoczywają między regeneracjami.
+  pause-ticks: 20
+  # Szacowany czas jednego chunka (ms) do podglądu, zanim plugin zmierzy prawdziwy (potem liczy z pomiaru).
+  estimated-ms-per-chunk: 1000
+  # /kraj admin usun <kraj> przywroc: ile ticków po usunięciu kraju zaczyna się regeneracja
+  # (czas na sprzątanie Ludnosc/Armia po CountryDisbandEvent).
+  delete-delay-ticks: 60
+  # Co ile procent komunikat o postępie.
+  progress-step-percent: 10
+
+# ============================================================
+#  Podbój: łupy i obywatele upadłego kraju
+# ============================================================
+conquest:
+  # Łupy (tylko ze Skarbcem; transfer między skarbcami z wpisem w historii obu krajów).
+  # Przy każdym zdobytym chunku zwycięzca zabiera taki ułamek AKTUALNEGO skarbca obrońcy (0.05 = 5 %, w dół do miedziaka).
+  loot-per-chunk: 0.05
+  # Upadek kraju (zdobycie ostatniego chunka): po łupie za chunk zwycięzca zabiera jeszcze taki ułamek tego, co zostało.
+  loot-on-fall: 0.75
+  # Reszta skarbca upadłego kraju: destroy = przepada, members = po równo na konta bankowe byłych członków-graczy.
+  fall-remainder: destroy
+  # Byli obywatele-gracze upadłego kraju dostają zaproszenie do kraju zwycięzcy (zapisywane, działa też dla graczy
+  # offline — dostaną je po wejściu). Do zwycięzcy NPC tylko przy npc.players-can-join: true.
+  citizen-invites: true
+  citizen-invite-hours: 24
+
+disband:
+  # Skarbiec kraju rozwiązanego bez wojny (/kraj rozwiaz, /kraj admin usun, API) — tylko ze Skarbcem:
+  # ruler = na konto bankowe władcy, members = po równo na konta członków-graczy, destroy = przepada.
+  # Kraj NPC (brak gracza) — zawsze przepada.
+  treasury: ruler
+
+# ============================================================
+#  Kapitulacja i wasalstwo
+# ============================================================
+vassal:
+  enabled: true
+  # Dzienny trybut wasala = tribute-share × dzienny przychód z podatków (gracze + obywatele NPC z Ludnosc),
+  # ale nie mniej niż tribute-min (miedziaki). Pobierany przy dziennym rozliczeniu; brak pieniędzy = dług.
+  tribute-share: 0.25
+  tribute-min: 20
+  # Długość wasalstwa w dniach: domyślna (/kraj kapitulacja <wróg> bez dni) i dozwolony zakres.
+  default-days: 7
+  min-days: 1
+  max-days: 30
+  # Ważność oferty kapitulacji.
+  offer-expiry-seconds: 300
+  # Wykup (/kraj wykup) = buyout-multiplier × (dzienny trybut × pozostałe dni) + dług.
+  buyout-multiplier: 1.5
+  # Po tylu dniach długu suweren może wypowiedzieć wasalowi wojnę bez kosztu i bez przerwy po pokoju.
+  debt-war-days: 3
+  # Ograniczenia wasala.
+  forbid-war-on-overlord: true
+  forbid-war-on-overlord-allies: true
+  forbid-alliance-with-overlord-enemies: true
+  # true = suweren może zaatakować własnego wasala tylko za zaległy trybut (debt-war-days).
+  overlord-war-only-for-debt: true
+  # Wasal dostaje powiadomienie, gdy jego suweren wchodzi w wojnę; auto-join = automatycznie dołącza do tej wojny.
+  notify-overlord-wars: true
+  auto-join-overlord-wars: false
+
+# ============================================================
+#  Unia personalna — dwa suwerenne kraje z jednym wspólnym władcą
+# ============================================================
+# Każdy kraj zachowuje swój teren, skarbiec, obywateli i prawa. Kraje unii są sprzymierzone i nie mogą ze sobą walczyć.
+# Wspólnym władcą zostaje władca kraju, który zaproponował unię; dotychczasowy władca partnera zostaje Doradcą (namiestnikiem).
+union:
+  enabled: true
+  # Unia gracza z krajem NPC (kraj NPC zostaje pod zarządem SI, wspólny władca jest tam tylko tytularny).
+  allow-npc: true
+  # true = Kraje od razu odrzuca unię w imieniu kraju NPC; false = odpowiada SI kraju NPC (Armia, UnionProposalEvent):
+  # tylko sojusznik o wysokiej opinii; monarcha jest tytularny — kraj NPC zachowuje skarbiec, ziemię, wojsko i zarząd SI.
+  npc-auto-refuse: false
+  proposal-expiry-seconds: 300
+  # Koszt zawarcia (md, ze skarbca kraju wspólnego władcy, przy przyjęciu).
+  form-cost: 2000
+  # Unię można zerwać komendą dopiero po tylu godzinach; zrywający płaci break-cost (md) ze swojego skarbca.
+  min-duration-hours: 72
+  break-cost: 1000
+  # Przerwa przed ponowną unią tych samych krajów (pamięć serwera; restart ją kasuje).
+  reform-cooldown-hours: 48
+  # Namiestnik (dawny władca partnera) może zerwać unię (secesja) — tak samo po min-duration-hours i za break-cost.
+  regent-can-secede: true
+  # Wojna wypowiedziana jednemu krajowi unii wciąga partnera jako obrońcę (o ile nie ma z agresorem sojuszu/wasalstwa).
+  defend-partner: true
+  # Wojna wypowiedziana PRZEZ kraj unii wciąga też partnera (atak).
+  join-offensive-wars: false
+  # Po końcu unii kraje zostają w sojuszu (false = relacja neutralna).
+  keep-alliance-after: true
+  # Hak handlowy dla innych pluginów (KrajeApi#getTradeBonus): premia między krajami unii (0.10 = +10%).
+  trade-bonus: 0.10
+
+# ============================================================
+#  Ambasady graczy — jeden chunk na ziemi innego kraju
+# ============================================================
+# Chunk zostaje terenem gospodarza (mapa, limit), ale budować mogą na nim tylko członkowie kraju-gościa.
+# Gospodarz nie może go porzucić; ambasada zamyka się przy wojnie, utracie chunka, rozwiązaniu kraju albo wydaleniu.
+embassy:
+  enabled: true
+  # Relacje, w których wolno otworzyć ambasadę (NEUTRAL, ALLIANCE; WAR nigdy).
+  allowed-relations: [NEUTRAL, ALLIANCE]
+  # Limity: ambasady jednego kraju za granicą / ambasady goszczone przez jeden kraj (0 = bez limitu).
+  max-per-country: 3
+  max-hosted: 5
+  # Czy chunk stolicy gospodarza może być ambasadą.
+  allow-capital: false
+  # Opłata (md) ze skarbca gościa do skarbca gospodarza przy otwarciu.
+  open-cost: 300
+  request-expiry-seconds: 300
+  # Wydalenie (/kraj ambasada wydal): ambasada zamyka się po tylu godzinach (0 = od razu).
+  expel-notice-hours: 24
+  # Ranga potrzebna do otwierania/zamykania ambasad (RULER, ADVISOR, CITIZEN) i do teleportu.
+  min-rank: RULER
+  tp-min-rank: CITIZEN
+  # true = Kraje decyduje sam (przyjmuje przy relacjach z npc-accept-relations). false = odpowiada SI kraju NPC (Armia,
+  # EmbassyRequestEvent) po ok. 1 s według osobowości, opinii i nastawienia; bez Armii prośba wygasa po request-expiry-seconds.
+  npc-auto-decide: false
+  npc-accept-relations: [ALLIANCE]
+  # Hak handlowy (KrajeApi#getTradeBonus): premia, gdy istnieje ambasada w którąkolwiek stronę.
+  trade-bonus: 0.05
+  # Wspólne projekty innych pluginów (np. droga do innego kraju, KrajeApi#canStartJointProject):
+  # unia zawsze; poza tym min. jakość relacji (NEUTRAL, VASSALAGE, ALLIANCE) + ambasada.
+  joint-projects:
+    min-relation: NEUTRAL
+    # true = budujący musi mieć własną ambasadę u celu; false = wystarczy ambasada w którąkolwiek stronę.
+    require-own-embassy: false
+
+# Tytuły zależne od epoki (plugin Postep): w wyświetlaniu (tablista, komunikaty, /kraj info, mapa, czat) początek
+# nazwy kraju jest zamieniany według epoki, np. w Nowoczesności "Królestwo_Mazowsza" → "Rzeczpospolita_Mazowsza".
+# Prawdziwa nazwa (komendy, podpowiedzi, API, pliki) się nie zmienia. Zamiany są kumulowane: kraj w epoce 4 próbuje
+# listy 4, potem 3, 2, 1; wygrywa pierwszy pasujący początek (bez rozróżniania wielkości liter, po nim koniec, spacja
+# albo _). Epoki: 1 Średniowiecze, 2 Renesans, 3 Epoka przemysłowa, 4 Nowoczesność. Bez Postep nic się nie zmienia.
+era-titles:
+  enabled: true
+  # true = tylko kraje NPC (gracze sami wybrali nazwy swoich krajów)
+  npc-only: true
+  replacements:
+    "3":
+      Cesarstwo: "Imperium"
+    "4":
+      Królestwo: "Rzeczpospolita"
+      Księstwo: "Republika"
+      Wielkie Księstwo: "Republika"
+      Hrabstwo: "Republika"
+      Margrabstwo: "Republika"
+      Cesarstwo: "Federacja"
+      Imperium: "Federacja"
+      Kaganat: "Republika"
+      Chanat: "Republika"
+
+tablist:
+  enabled: true
+  # Styl tablisty:
+  #   extended – rozbudowana (domyślnie): nagłówek i stopka z list linii w sekcji "extended" poniżej, AFK, epoka,
+  #              saldo, pora roku, nowości i wskazówki. Stary config bez tego klucza też dostaje ten styl.
+  #   classic  – dawny wygląd: klucze format / no-country-format / header / footer / footer-map-line / refresh-ticks.
+  style: extended
+  # Grupowanie po kraju i randze (Player#setPlayerListOrder). Dotyczy obu stylów.
+  sort: true
+
+  # ---- styl classic (dawny) ----
+  # Nazwa gracza w tabie. Placeholdery: <country> <color>...</color> <player> <rank> <rank_icon> <afk>
+  # oraz z pluginem Postep: <era_icon> (kolorowa ikona epoki kraju ze spacją, np. "⚜ ") i <era> (plakietka, np. "⚜ Renesans").
+  # Bez Postep oba są puste. Gdy format aktywnego stylu zawiera <era> albo <era_icon>, Postep sam przestaje dopisywać ikonę.
+  format: "<rank_icon><era_icon><color>[<country>]</color> <white><player>"
+  # Gracz bez kraju. Pusty tekst = sam nick bez tagu.
+  no-country-format: "<gray>[Dzicz]</gray> <white><player>"
+  # Placeholdery nagłówka i stopki: <online> <max> <player> <country> <map_url> <map_link>
+  header: "<gold><bold>MEDIVALRPG</bold></gold><newline><gray>Kraje świata</gray>"
+  footer: "<gray>Graczy: <white><online>/<max></white> • Twój kraj: <country></gray>"
+  # Dopisywane do stopki, tylko gdy ustawiono map-url.
+  footer-map-line: "<newline><gray>Mapa: <aqua><underlined><map_link></underlined></aqua></gray>"
+  # Odświeżanie licznika graczy (ticki; 100 = 5 s). Zmiany krajów odświeżają tab od razu.
+  refresh-ticks: 100
+
+  # ---- styl extended (rozbudowany) ----
+  extended:
+    # Co ile ticków przeliczać tablistę (20 = 1 s; min. 20). Pakiety idą tylko, gdy treść gracza się zmieniła.
+    refresh-ticks: 40
+    # Ile sekund trzymać w pamięci dane z innych pluginów (saldo, epoka, pora roku, nazwa kraju).
+    cache-seconds: 5
+    # Nazwa gracza na liście. Placeholdery: <afk> <rank_icon> <rank> <era_icon> <era> <color>...</color> <country> <player>
+    name-format: "<afk><rank_icon><era_icon><color>[<country>]</color> <white><player>"
+    no-country-name-format: "<afk><gray>[Dzicz]</gray> <white><player>"
+    # Znacznik AFK (wstawiany w <afk>) i czas bez ruchu/obrotu/czatu/komendy/interakcji. 0 = bez wykrywania AFK.
+    afk-tag: "<gray>[AFK]</gray> "
+    afk-seconds: 300
+    # Linie nagłówka i stopki (MiniMessage). Placeholdery:
+    #   <player> <online> <max> <afk_count> <ping> <tps> <date> <game_time> <game_day>
+    #   <season> <season_icon> <season_day> <season_days>   (pora roku z pluginu Ludnosc)
+    #   <country> <rank> <rank_icon> <era> <era_icon>       (kraj gracza; epoka z pluginu Postep)
+    #   <balance>                                           (saldo konta gracza w Skarbcu)
+    #   <news>                                              (tytuł ostatniej nowości z pluginu Nowosci)
+    #   <tip>                                               (rotująca wskazówka z listy "tips")
+    #   <map_link> <map_url> <panel_link> <panel_url>
+    # Linia, której dane są niedostępne (np. brak Ludnosc → brak pory roku), znika. Fragment w [[ ... ]] jest
+    # opcjonalny: znika sam, a reszta linii zostaje. Pusta linia "" zostaje (odstęp).
+    header:
+      - ""
+      - "<gradient:#F2D16B:#B8860B><bold>⚜ MEDIVALRPG ⚜</bold></gradient>"
+      - "<gray>Graczy: <white><online></white><dark_gray>/</dark_gray><white><max></white>[[ <dark_gray>(AFK: <afk_count>)</dark_gray>]] <dark_gray>•</dark_gray> Ping: <ping> <dark_gray>•</dark_gray> TPS: <tps></gray>"
+      - "<gray><date>[[ <dark_gray>•</dark_gray> <season_icon> <white><season></white> <dark_gray>(dzień <season_day>/<season_days>)</dark_gray>]]</gray>"
+      - "[[<gray>Panel: <aqua><panel_link></aqua></gray>]][[ <dark_gray>•</dark_gray> <gray>Mapa: <aqua><map_link></aqua></gray>]]"
+      - ""
+    footer:
+      - ""
+      - "<gray>Kraj: <country>[[ <dark_gray>•</dark_gray> <rank_icon><white><rank></white>]][[ <dark_gray>•</dark_gray> Epoka: <era>]]</gray>"
+      - "<gray>Saldo: <gold><balance></gold></gray>"
+      - "<dark_gray>Nowość:</dark_gray> <white><news></white> <dark_gray>(/nowosci)</dark_gray>"
+      - "<yellow>✦</yellow> <gray><tip></gray>"
+      - ""
+    # Link do panelu WWW (pusty = linia/fragment znika). Link do mapy to map-url (wyżej).
+    panel-url: "https://panel.example.workers.dev/"
+    # Data w nagłówku (<date>): strefa czasowa i wzorzec Javy (DateTimeFormatter, polskie nazwy miesięcy).
+    time-zone: "Europe/Warsaw"
+    date-format: "d MMMM yyyy"
+    # Ikony pór roku (<season_icon>), klucze jak w pluginie Ludnosc.
+    season-icons:
+      wiosna: "<green>✿</green>"
+      lato: "<yellow>☀</yellow>"
+      jesien: "<gold>❦</gold>"
+      zima: "<aqua>❄</aqua>"
+    # Ostatnia nowość z pluginu Nowosci (<news>) i jej maksymalna długość w znakach.
+    news: true
+    news-max-length: 48
+    # Wskazówki (<tip>) zmieniają się co tip-seconds; wszyscy gracze widzą tę samą. Pusta lista = linia znika.
+    tip-seconds: 60
+    tips:
+      - "Wpisz <white>/menu</white>, aby zobaczyć wszystkie funkcje serwera."
+      - "Załóż kraj albo dołącz do istniejącego: <white>/kraj</white>."
+      - "Rozmawiaj tylko z rodakami na czacie kraju: <white>/kc</white>."
+      - "Sojusznicy mają własny czat: <white>/ks</white>."
+      - "Mapa świata z granicami krajów: <white>/mapa</white>."
+      - "Co nowego na serwerze? <white>/nowosci</white>."
+      - "Postęp kraju do kolejnej epoki sprawdzisz w <white>/postep</white>."
+
+chat:
+  enabled: true
+  # Czat ogólny. Placeholdery: <country_tag> <player> <message> <rank_icon> <rank>
+  # Treść wiadomości gracza NIE jest parsowana jako MiniMessage.
+  format: "<rank_icon><country_tag> <player><gray>:</gray> <white><message>"
+  # Tag kraju (z hoverem i kliknięciem). Placeholdery: <country> <color>...</color>
+  country-tag: "<color>[<country>]</color>"
+  no-country-tag: "<gray>[Dzicz]</gray>"
+  # Hover na tagu. Placeholdery: <country> <color> <ruler> <members> <area>
+  tag-hover: "<color><bold><country></bold></color><newline><gray>Władca: <white><ruler></white><newline>Obywatele: <white><members></white><newline>Powierzchnia: <white><area></white><newline><dark_gray>Kliknij, aby zobaczyć informacje</dark_gray></gray>"
+  tag-click-command: "/kraj info <country>"
+  # Czat krajowy (/kc, /kraj czat). Placeholdery: <country> <color> <player> <message> <rank_icon> <rank>
+  country-format: "<color>[Kraj]</color> <rank_icon><white><player></white><gray>:</gray> <green><message>"
+  # Czat sojuszu (/ks).
+  ally-format: "<dark_aqua>[Sojusz]</dark_aqua> <color>[<country>]</color> <rank_icon><white><player></white><gray>:</gray> <aqua><message>"
+  # Prefiks kopii dla adminów z /kraj admin spy i konsoli.
+  spy-prefix: "<dark_gray>[Podgląd]</dark_gray> "
+  log-to-console: true
+
+# Ikony rang (czat i tablista). Pusty tekst = bez ikony.
+rank-icons:
+  RULER: "<gold>♛</gold> "
+  ADVISOR: "<yellow>✦</yellow> "
+  CITIZEN: ""
+
+# Chorągwie krajów: własny obrazek flagi wgrywany w panelu WWW, moderowany przez administrację, pokazywany jako
+# animowany model BetterModel nad stolicą i przy ambasadach (oraz przez most dla Armii: statki, dowódcy).
+flags:
+  enabled: true
+  # Najniższa ranga, która wgrywa, wycofuje, przywraca flagę i stawia chorągiew stolicy: ADVISOR albo RULER.
+  upload-rank: ADVISOR
+  # UUID moderatorów (zatwierdzają flagi w panelu i w grze); admini panelu i uprawnienie kraje.flagi.moderuj też.
+  moderators:
+    - ff923cf7-f43c-37b8-85a3-77cbac357c9c
+  upload-cooldown-seconds: 60
+  history-size: 20
+  image:
+    max-kb: 160
+    max-source-pixels: 4194304
+    max-source-side: 4096
+    min-width: 16
+    min-height: 10
+    # Tekstura w grze ma 64×40 pikseli; kolory ogranicza kwantyzacja (median cut).
+    max-colors: 32
+  pack:
+    # Zatwierdzone flagi trafiają do paczki zasobów zbiorczo: najwyżej jedna przebudowa na tyle minut.
+    min-interval-minutes: 15
+    debounce-seconds: 60
+    force-min-interval-seconds: 60
+    # Po przebudowie nowe modele pokazują się z opóźnieniem (gracze pobierają paczkę od Interakcji).
+    switch-delay-seconds: 20
+    model-prefix: kraje_flaga_
+    default-model: kraje_flaga_domyslna
+  banners:
+    capital: true
+    embassy: true
+    view-distance: 96
+  # Ikona flagi w popupie kraju na mapie squaremap (plik w web/kraje-flagi/).
+  map-icons: true
+  # Sztandary w grze z zatwierdzonej flagi (albo z domyślnej w kolorze kraju). Zamawia ranga upload-rank.
+  # Opłata: materiały z ekwipunku gracza + kwota ze skarbca kraju; kwota przechodzi do world:payments
+  # (zamknięta pula — nic nie powstaje ani nie znika). Limit liczony na kraj i dzień (strefa time-zone).
+  standards:
+    enabled: true
+    time-zone: Europe/Warsaw
+    # A: zwykły sztandar vanilla z przybliżonym wzorem flagi (kolor tła + do 6 wzorów z krosna), /kraj flaga sztandar.
+    banner:
+      enabled: true
+      treasury-cost: 100        # md (1 zł)
+      materials: ["WOOL:6", "STICK:1"]   # WOOL = wełna w dowolnym kolorze
+      daily-limit: 8
+    # B: przedmiot „Sztandar kraju” z dokładnym obrazkiem flagi (model z paczki zasobów), /kraj flaga przedmiot.
+    item:
+      enabled: true
+      treasury-cost: 500        # md (5 zł)
+      materials: ["WOOL:6", "STICK:2"]
+      daily-limit: 4
+    placed:
+      # Postawione przedmioty B (wyświetlacz + niewidzialny uchwyt, bez kolizji) na chunk.
+      max-per-chunk: 4
+
+messages:
+  prefix: "<gold>[Kraje]</gold> "
+  # --- chorągwie krajów (<text> = treść po polsku z pluginu) ---
+  flag-notice: "<prefix><gold>⚑</gold> <yellow><text>"
+  flag-ok: "<prefix><green><text>"
+  flag-error: "<prefix><red><text>"
+  flag-line: "<prefix><gray><text>"
+  wilderness-name: "<dark_green>Dzicz</dark_green>"
+
+  # --- ogólne ---
+  players-only: "<prefix><red>Tę komendę może wykonać tylko gracz."
+  no-permission: "<prefix><red>Nie masz uprawnień."
+  unknown-subcommand: "<prefix><red>Nieznana komenda <white><sub></white>. Wpisz <yellow>/kraj pomoc</yellow>."
+  not-in-country: "<prefix><red>Nie należysz do żadnego kraju."
+  already-in-country: "<prefix><red>Należysz już do kraju. Najpierw go opuść."
+  rank-required: "<prefix><red>Potrzebujesz rangi <white><rank></white>, aby to zrobić."
+  country-not-found: "<prefix><red>Nie ma kraju o nazwie <white><name></white>."
+  member-not-found: "<prefix><red>Gracz <white><player></white> nie jest członkiem twojego kraju."
+  player-not-found: "<prefix><red>Nie znaleziono gracza <white><player></white>."
+  cannot-target-self: "<prefix><red>Nie możesz tego zrobić samemu sobie."
+  cannot-target-own-country: "<prefix><red>To twój własny kraj."
+  no-pending-confirmation: "<prefix><red>Brak oczekującego potwierdzenia albo minął czas. Wpisz komendę ponownie."
+  world-blocked: "<prefix><red>W tym świecie nie można zakładać krajów ani zajmować terenu."
+  protection-denied: "<red>Ten teren należy do kraju <color><country></color>."
+
+  # --- pomoc (/kraj, /kraj pomoc [strona]) ---
+  # Jedna strona = jeden dział. Linia: składnia + krótki opis; najechanie pokazuje pełny opis i wymaganą rangę,
+  # kliknięcie wpisuje komendę do czatu. Brakujące klucze biorą się z domyślnego configu w jarze.
+  # help-header: <category> <page> <pages>; help-line: <syntax> <short>; help-hover: <syntax> <description> <rank>
+  help-header: "<gold><bold>Kraje</bold></gold> <gray>— pomoc:</gray> <white><category></white> <dark_gray>(strona <page>/<pages>)</dark_gray>"
+  help-line: "<yellow><syntax></yellow> <dark_gray>—</dark_gray> <gray><short></gray>"
+  help-hover: "<yellow><syntax></yellow><newline><white><description></white><newline><newline><gray>Wymaga: <gold><rank></gold></gray><newline><dark_gray>Kliknij, aby wpisać komendę.</dark_gray>"
+  # help-nav: <prev> <next>
+  help-nav: "<prev> <dark_gray>|</dark_gray> <next>"
+  help-prev: "<yellow>« poprzednia</yellow>"
+  help-prev-disabled: "<dark_gray>« poprzednia</dark_gray>"
+  help-next: "<yellow>następna »</yellow>"
+  help-next-disabled: "<dark_gray>następna »</dark_gray>"
+  # Hover na przyciskach i działach. Placeholdery: <category> <page>
+  help-page-hover: "<gray>Strona <page>: <white><category></white>"
+  # help-tabs: <tabs> (lista działów, kliknięcie przechodzi do strony; domyślny czat ma 320 px szerokości)
+  help-tabs: "<tabs>"
+  help-tab: "<gray><category></gray>"
+  help-tab-current: "<gold><category></gold>"
+  help-tab-separator: "<dark_gray> · </dark_gray>"
+  help-categories:
+    teren: "Teren"
+    ludzie: "Ludzie"
+    wyglad: "Wygląd"
+    dyplomacja: "Dyplomacja"
+    skarbiec: "Skarbiec"
+    informacje: "Informacje"
+    czat: "Czat"
+    admin: "Admin"
+  # short: krótki opis w linii, description: pełny opis (hover), rank: kto może użyć (hover, „Wymaga: ...”).
+  help-entries:
+    zaloz:
+      short: "załóż kraj"
+      description: "Zakłada nowy kraj. Chunk, na którym stoisz, zostaje stolicą i punktem spawnu. Nazwa: 3–24 znaki (litery, cyfry, _ i -), bez spacji. Trzeba zachować odstęp od granic innych krajów. Ze Skarbcem kosztuje (domyślnie 5 zł, z konta albo z monet)."
+      rank: "gracz bez kraju"
+    zajmij:
+      short: "zajmij chunk, na którym stoisz"
+      description: "Dołącza bieżący chunk do terytorium kraju. Musi przylegać bokiem do waszego terenu. Limit terenu rośnie z liczbą członków (i obywateli NPC). Ze Skarbcem opłata ze skarbca kraju rośnie z wielkością kraju."
+      rank: "Doradca+"
+    porzuc:
+      short: "oddaj chunk, na którym stoisz"
+      description: "Usuwa bieżący chunk z terytorium kraju. Nie można porzucić stolicy ani przeciąć terytorium na dwie części."
+      rank: "Doradca+"
+    stolica:
+      short: "przenieś stolicę tutaj"
+      description: "Przenosi stolicę i punkt spawnu kraju na chunk, na którym stoisz (musi należeć do twojego kraju)."
+      rank: "Władca"
+    spawn:
+      short: "teleport do stolicy"
+      description: "Teleportuje cię do spawnu stolicy po krótkim odliczaniu. Ruch anuluje teleport."
+      rank: "członek kraju"
+    zapros:
+      short: "zaproś gracza do kraju"
+      description: "Wysyła graczowi bez kraju zaproszenie z klikalnym przyciskiem [Dołącz]. Zaproszenie wygasa po kilku minutach."
+      rank: "Doradca+"
+    dolacz:
+      short: "dołącz do kraju z zaproszenia"
+      description: "Dołącza do kraju, z którego masz ważne zaproszenie — także zaproszenie od zwycięzcy, gdy twój kraj upadł (ważne 24 h, czeka na ciebie również po wyjściu z gry)."
+      rank: "gracz bez kraju"
+    odrzuc:
+      short: "odrzuć zaproszenie do kraju"
+      description: "Odrzuca zaproszenie do wskazanego kraju (zwykłe albo po upadku twojego kraju). Jego władze dostaną informację."
+      rank: "gracz bez kraju"
+    opusc:
+      short: "opuść swój kraj"
+      description: "Opuszczasz kraj. Władca musi najpierw przekazać władzę albo rozwiązać kraj."
+      rank: "członek kraju"
+    wyrzuc:
+      short: "wyrzuć członka"
+      description: "Wyrzuca członka kraju o niższej randze niż twoja."
+      rank: "Doradca+"
+    awansuj:
+      short: "nadaj rangę Doradcy"
+      description: "Nadaje Obywatelowi rangę Doradcy (zajmowanie terenu, zaproszenia, wyrzucanie, opis)."
+      rank: "Władca"
+    degraduj:
+      short: "odbierz rangę Doradcy"
+      description: "Odbiera Doradcy rangę, zostaje Obywatelem."
+      rank: "Władca"
+    przekaz:
+      short: "przekaż władzę"
+      description: "Przekazuje władzę nad krajem innemu członkowi. Wymaga potwierdzenia: kliknij [Potwierdź] albo dopisz „potwierdz”. Dawny władca zostaje Doradcą."
+      rank: "Władca"
+    rozwiaz:
+      short: "rozwiąż kraj"
+      description: "Rozwiązuje kraj na zawsze: teren wraca do dziczy, członkowie tracą kraj, a skarbiec trafia do władcy (albo według configu: do członków lub przepada). Wymaga potwierdzenia (/kraj rozwiaz potwierdz)."
+      rank: "Władca"
+    kolor:
+      short: "zmień kolor kraju"
+      description: "Ustawia kolor kraju na mapie, w tabliście i na czacie. Podaj #RRGGBB (np. #E53935) albo nazwę: czerwony, niebieski, zloty..."
+      rank: "Władca"
+    opis:
+      short: "ustaw opis kraju"
+      description: "Ustawia opis widoczny w /kraj info i na mapie WWW. „/kraj opis -” czyści opis."
+      rank: "Doradca+"
+    flaga:
+      short: "chorągiew kraju — stan i pomoc"
+      description: "Pokazuje flagę kraju (domyślna w kolorze kraju albo własna), flagę czekającą na zatwierdzenie i powód ostatniego odrzucenia. Własny obrazek (PNG/JPG) wgrywa się w panelu WWW (/panel → Chorągiew kraju); trafia do gry dopiero po akceptacji administracji i przebudowie paczki zasobów."
+      rank: "członek (zarządzanie: Doradca+)"
+    flaga-postaw:
+      short: "postaw chorągiew stolicy tutaj"
+      description: "Przenosi animowaną chorągiew stolicy w miejsce, w którym stoisz (na ziemi własnego kraju). /kraj flaga auto przywraca miejsce automatyczne: przy dzwonie wioski, przy punkcie spawnu albo w środku stolicy."
+      rank: "Doradca+"
+    flaga-domyslna:
+      short: "wróć do domyślnej flagi"
+      description: "Przywraca domyślną chorągiew w kolorze kraju (od razu w grze). Wcześniej zatwierdzone flagi zostają w historii."
+      rank: "Doradca+"
+    flaga-sztandar:
+      short: "sztandar z wzorem flagi (barwniki)"
+      description: "Wydaje zwykły sztandar z wzorem możliwie bliskim flagi kraju (kolor tła i do 6 wzorów z krosna, dobranych automatycznie z zatwierdzonego obrazka; bez obrazka — z koloru kraju). Można go postawić, przybić do tarczy i dać wojsku. Opłata: materiały z ekwipunku i kwota ze skarbca kraju; dzienny limit na kraj. /kraj flaga sztandar podglad pokazuje wzór bez wydawania."
+      rank: "Doradca+"
+    flaga-przedmiot:
+      short: "przedmiot „Sztandar kraju” z obrazkiem"
+      description: "Wydaje przedmiot „Sztandar kraju” z dokładnym zatwierdzonym obrazkiem flagi (model z paczki zasobów). Trzymasz go w ręce, PPM na bloku stawia go jako dekorację (nie blokuje przejścia, zostaje po restarcie), Shift + PPM zabiera. Opłata: materiały i kwota ze skarbca kraju; dzienny limit na kraj."
+      rank: "Doradca+"
+    flaga-historia:
+      short: "historia flag i przywracanie"
+      description: "Lista wgranych, zatwierdzonych, odrzuconych i przywróconych flag. Kliknięcie [Przywróć] wraca do wcześniej zatwierdzonej flagi bez ponownej moderacji (/kraj flaga przywroc <id>)."
+      rank: "Doradca+"
+    sojusz:
+      short: "zaproponuj lub przyjmij sojusz"
+      description: "Wysyła propozycję sojuszu. Gdy druga strona wpisze to samo, sojusz zostaje zawarty. Nie można sprzymierzyć się z wrogiem."
+      rank: "Władca"
+    wojna:
+      short: "wypowiedz wojnę"
+      description: "Wypowiada wojnę (zrywa ewentualny sojusz). Ogłoszenie widzi cały serwer. Ze Skarbcem kosztuje (skarbiec kraju). Po pokoju ponowna wojna z tym samym krajem dopiero po przerwie."
+      rank: "Władca"
+    pokoj:
+      short: "zaproponuj lub przyjmij pokój"
+      description: "Wysyła propozycję pokoju krajowi, z którym toczycie wojnę. Pokój zapada, gdy obie strony go zaproponują (kraj NPC odpowiada sam). Wojna musi trwać minimalny czas (domyślnie 2 h)."
+      rank: "Władca"
+    zerwij:
+      short: "zerwij sojusz"
+      description: "Zrywa sojusz, relacja wraca do neutralnej."
+      rank: "Władca"
+    kapitulacja:
+      short: "skapituluj przed wrogiem"
+      description: "W czasie wojny oferuje wrogowi kapitulację: po przyjęciu wojna od razu się kończy, a wasz kraj zostaje jego wasalem na podaną liczbę dni (domyślnie 7). Wasal płaci codziennie trybut (25% podatków, min. 20 md), nie może walczyć z suwerenem ani jego sojusznikami i nie może sprzymierzyć się z jego wrogami."
+      rank: "Władca"
+    kapitulacja-przyjmij:
+      short: "przyjmij kapitulację (albo: odrzuc)"
+      description: "Przyjmuje ofertę kapitulacji wroga — zostaje on waszym wasalem i płaci trybut. „/kraj kapitulacja odrzuc <kraj>” odrzuca ofertę (wojna trwa dalej). Przyciski są też w samej wiadomości z ofertą."
+      rank: "Władca"
+    wasale:
+      short: "suweren i wasale"
+      description: "Pokazuje suwerena twojego kraju (do kiedy, trybut, dług, koszt wykupu) i listę waszych wasali. Z nazwą: dowolny kraj."
+      rank: "każdy"
+    wykup:
+      short: "wykup się z wasalstwa"
+      description: "Kończy wasalstwo przed czasem: skarbiec płaci suwerenowi mnożnik × pozostały trybut (dzienny trybut × pozostałe dni) plus dług. Wymaga potwierdzenia i Skarbca."
+      rank: "Władca (wasal)"
+    zwolnij:
+      short: "zwolnij wasala"
+      description: "Zwalnia wasala przed czasem (jego dług przepada)."
+      rank: "Władca (suweren)"
+    unia-zaproponuj:
+      short: "zaproponuj unię personalną"
+      description: "Proponuje unię personalną: zostajesz wspólnym władcą obu krajów, a dotychczasowy władca drugiego kraju jego namiestnikiem (Doradcą). Każdy kraj zachowuje teren, skarbiec, obywateli i prawa; kraje są sprzymierzone. Wasal nie może zawrzeć unii. Zerwanie: <yellow>/kraj unia zerwij</yellow> (po minimalnym czasie, płatne). Rządzenie drugim krajem: <yellow>/kraj unia rzadz</yellow>."
+      rank: "Władca"
+    unia-przyjmij:
+      short: "przyjmij unię (albo: odrzuc)"
+      description: "Przyjmuje propozycję unii personalnej — władca tamtego kraju zostanie także waszym władcą, a ty namiestnikiem. Odrzucenie: <yellow>/kraj unia odrzuc \\<kraj></yellow>."
+      rank: "Władca"
+    unia-info:
+      short: "unia personalna kraju"
+      description: "Pokazuje unię: kraje, wspólnego władcę, namiestnika i od kiedy można ją zerwać. Także <yellow>/kraj unia zerwij</yellow> (wspólny władca albo namiestnik) i <yellow>/kraj unia rzadz</yellow> (wspólny władca przełącza, którym krajem rządzi komendami)."
+      rank: "każdy"
+    ambasada-otworz:
+      short: "poproś o ambasadę tutaj"
+      description: "Stań na ziemi innego kraju (pokój albo sojusz) i poproś o ambasadę na tym chunku. Władca gospodarza musi się zgodzić; opłata trafia do jego skarbca. Na chunku ambasady budują tylko twoi rodacy. Zamknięcie: <yellow>/kraj ambasada zamknij \\<kraj></yellow>."
+      rank: "Władca"
+    ambasada-lista:
+      short: "ambasady kraju"
+      description: "Ambasady twojego kraju za granicą i ambasady u was, z przyciskami teleportu i wydalenia. Gospodarz wydala ambasadę komendą <yellow>/kraj ambasada wydal \\<kraj></yellow> (z okresem wypowiedzenia); wojna zamyka ambasady od razu."
+      rank: "każdy"
+    ambasada-tp:
+      short: "teleport do ambasady"
+      description: "Teleport do punktu dyplomaty w waszej ambasadzie w danym kraju (odliczanie jak przy /kraj spawn)."
+      rank: "członek"
+    oblezenie:
+      short: "oblegaj chunk wroga"
+      description: "Rozpoczyna oblężenie chunka, na którym stoisz: kraj wroga (wojna), chunk przylega do waszego terenu. Postęp rośnie, gdy w chunku jest więcej atakujących (gracze i żołnierze) niż obrońców, maleje przy przewadze obrońców. Zdobyty chunk przechodzi do was. Jedno oblężenie na kraj, max 30 min, kosztuje (Skarbiec)."
+      rank: "Doradca+"
+    desant:
+      short: "zdobądź przyczółek morski"
+      description: "Stań na nadbrzeżnym chunku wroga podczas wojny po przybyciu własnym statkiem. Rozpoczyna płatne oblężenie bez wymogu wspólnej granicy. Wygrana daje trwały przyczółek, z którego można dalej zajmować ziemię. Limit i dopłata są w konfiguracji. Obowiązują normalna obrona, ochrona stolicy i jedno oblężenie na kraj."
+      rank: "Doradca+"
+    oblezenia:
+      short: "trwające oblężenia"
+      description: "Lista wszystkich trwających oblężeń z postępem i pozostałym czasem."
+      rank: "każdy"
+    skarbiec:
+      short: "stan skarbca kraju"
+      description: "Stan skarbca, podatek, dzienne utrzymanie, koszt następnego chunka i ostatnie operacje. Wymaga pluginu Skarbiec."
+      rank: "członek kraju"
+    wplac:
+      short: "wpłać do skarbca"
+      description: "Wpłaca kwotę do skarbca kraju: z konta bankowego, a gdy go brak — z monet w ekwipunku. Dopisz „konto” albo „monety”, aby wybrać źródło. Kwota: 150 (miedziaki), 3zl, 2sr."
+      rank: "członek kraju"
+    wyplac:
+      short: "wypłać ze skarbca"
+      description: "Przelewa kwotę ze skarbca kraju na twoje konto bankowe."
+      rank: "Władca"
+    podatek:
+      short: "podatek od obywateli"
+      description: "Bez kwoty: obecny podatek i dłużnicy. Z kwotą: ustawia dzienny podatek od każdego obywatela-gracza, pobierany z konta bankowego o stałej godzinie (0 = brak). Kto nie zapłaci, ma dług; po kilku dniach zaległości można go wyrzucić."
+      rank: "Władca (ustawianie)"
+    info:
+      short: "informacje o kraju"
+      description: "Władca, doradcy, obywatele, powierzchnia i limit terenu, stolica, sojusze, wojny, data założenia, a jeśli są: skarbiec i podatki, ludność, żołnierze i oblężenia. Bez nazwy: twój kraj albo kraj, na którego terenie stoisz."
+      rank: "każdy"
+    lista:
+      short: "ranking krajów"
+      description: "Lista krajów od największego terytorium, po 10 na stronę."
+      rank: "każdy"
+    mapa:
+      short: "mapa okolicy w czacie"
+      description: "Mapa 11×11 chunków wokół ciebie w kolorach krajów. Najedź na kratkę, aby zobaczyć, do kogo należy."
+      rank: "każdy"
+    mapa-www:
+      short: "link do mapy świata"
+      description: "Wysyła klikalny link do mapy świata w przeglądarce (alias /mapaswiata)."
+      rank: "każdy"
+    pomoc:
+      short: "ta pomoc"
+      description: "Pokazuje listę komend. Podaj numer strony albo nazwę działu, np. /kraj pomoc dyplomacja."
+      rank: "każdy"
+    czat:
+      short: "przełącz czat krajowy"
+      description: "Włącza lub wyłącza tryb czatu krajowego: twoje wiadomości widzą tylko członkowie kraju."
+      rank: "członek kraju"
+    kc:
+      short: "wiadomość do swojego kraju"
+      description: "Wysyła jedną wiadomość na czacie krajowym, bez przełączania trybu."
+      rank: "członek kraju"
+    ks:
+      short: "wiadomość do sojuszu"
+      description: "Wysyła wiadomość do własnego kraju i wszystkich sojuszników."
+      rank: "członek kraju"
+    admin-usun:
+      short: "usuń kraj"
+      description: "Usuwa wskazany kraj i powiadamia jego członków."
+      rank: "admin (kraje.admin)"
+    admin-usun-przywroc:
+      short: "usuń kraj i przywróć teren"
+      description: "Usuwa kraj (jak /kraj admin usun — Ludnosc i Armia sprzątają swoje dane), a po chwili generuje od nowa z ziarna świata wszystkie jego chunki: oryginalny teren wraca, WSZYSTKO zbudowane tam (budynki, skrzynie z zawartością, byty) przepada. Najpierw podgląd i [Przywróć teren]. Spawn (ziemia neutralna) nigdy nie jest regenerowany. Wymaga WorldEdit."
+      rank: "admin (kraje.admin)"
+    admin-wladca:
+      short: "ustaw władcę"
+      description: "Ustawia władcę kraju. Gracz nie może należeć do innego kraju; jeśli nie jest członkiem, zostaje dodany."
+      rank: "admin (kraje.admin)"
+    admin-zajmij:
+      short: "zajmij chunk dla kraju"
+      description: "Zajmuje bieżący chunk dla dowolnego kraju (także NPC) bez limitu, kosztu, przylegania i blokady światów."
+      rank: "admin (kraje.admin)"
+    admin-zajmij-promien:
+      short: "zajmij kwadrat chunków"
+      description: "Zajmuje wszystkie wolne chunki w kwadracie o promieniu n (0–16, czyli do 33×33) wokół ciebie. Cudze kraje i ziemia neutralna są pomijane. Powyżej 16 chunków: podgląd (liczby, powody pominięć, cząsteczki na granicach) i [Wykonaj]; wykonanie porcjami po 32 chunki na tick."
+      rank: "admin (kraje.admin)"
+    admin-zajmij-zaznaczenie:
+      short: "zajmij zaznaczenie WorldEdit"
+      description: "Zajmuje wolne chunki dotknięte twoim zaznaczeniem WorldEdit (//wand, //pos1, //pos2) w bieżącym świecie, maks. 4096 chunków. Pomija cudze kraje i ziemię neutralną. Wymaga WorldEdit."
+      rank: "admin (kraje.admin)"
+    admin-porzuc-obszar:
+      short: "porzuć teren kraju"
+      description: "Zwalnia chunki wskazanego kraju: bieżący, w kwadracie o promieniu n albo z zaznaczenia WorldEdit. Stolica nigdy nie jest porzucana. Gdy teren rozpadłby się na części — ostrzeżenie i wymagane potwierdzenie."
+      rank: "admin (kraje.admin)"
+    admin-przylacz:
+      short: "poszerz kraj o pierścień"
+      description: "Poszerza kraj o 1 (albo podaną liczbę, maks. 16) pierścień wolnych chunków wokół obecnej granicy, razem z narożnikami. Cudze kraje i ziemia neutralna są pomijane. Działa w twoim świecie (albo w świecie stolicy) i z konsoli."
+      rank: "admin (kraje.admin)"
+    admin-przywroc:
+      short: "przywróć oryginalny teren kraju"
+      description: "Generuje od nowa z ziarna świata chunki kraju — wszystkie albo tylko w kwadracie o promieniu n wokół ciebie / w zaznaczeniu WorldEdit (tylko chunki tego kraju). Kraj zostaje. Wszystko w tych chunkach przepada: budynki graczy, skrzynie, NPC, manekiny, stojaki, zwierzęta. Podgląd (liczba chunków, szacowany czas, obrys cząsteczkami) i [Przywróć teren]; potem porcjami w tle z postępem co 10 %. Gracze w regenerowanym chunku trafiają na powierzchnię. Spawn nigdy. Wymaga WorldEdit."
+      rank: "admin (kraje.admin)"
+    admin-przywroc-teren:
+      short: "przywróć dzicz (promien n / zaznaczenie)"
+      description: "Jak przywroc dla kraju, ale dla dziczy: chunki bez kraju w kwadracie o promieniu n wokół ciebie albo w zaznaczeniu WorldEdit. Chunki krajów i spawn są pomijane."
+      rank: "admin (kraje.admin)"
+    admin-przywroc-stop:
+      short: "zatrzymaj przywracanie terenu"
+      description: "Bezpiecznie zatrzymuje trwające przywracanie po bieżącej porcji. Już zregenerowane chunki zostają przywrócone, reszta bez zmian."
+      rank: "admin (kraje.admin)"
+    admin-tp:
+      short: "teleport do stolicy kraju"
+      description: "Natychmiast (bez odliczania) teleportuje cię do punktu spawnu stolicy dowolnego kraju — gracza albo NPC. Gdy punkt jest niebezpieczny (lawa, woda, brak podłoża, zasypany), wybiera najbliższy bezpieczny blok w promieniu 8."
+      rank: "admin (kraje.admin)"
+    admin-porzuc:
+      short: "zwolnij bieżący chunk"
+      description: "Zwalnia bieżący chunk dowolnego kraju (bez sprawdzania spójności; stolicy nie można)."
+      rank: "admin (kraje.admin)"
+    admin-bypass:
+      short: "omijanie ochrony terenu"
+      description: "Przełącza omijanie ochrony terenu krajów."
+      rank: "admin (kraje.admin)"
+    admin-spy:
+      short: "podgląd czatów krajowych"
+      description: "Przełącza podgląd czatów krajowych i sojuszniczych."
+      rank: "admin (kraje.admin)"
+    admin-reload:
+      short: "przeładuj config"
+      description: "Przeładowuje config, komunikaty, warstwę mapy i tablistę. Dane krajów zostają w pamięci."
+      rank: "admin (kraje.admin)"
+    admin-tick:
+      short: "dzienne rozliczenie teraz"
+      description: "Natychmiast wykonuje dzienne rozliczenie wszystkich krajów (podatki, utrzymanie, bankructwa). Nie przesuwa godziny zwykłego rozliczenia."
+      rank: "admin (kraje.admin)"
+    admin-oblezenie:
+      short: "zakończ oblężenie tutaj"
+      description: "Kończy bez zdobycia oblężenie chunka, na którym stoisz."
+      rank: "admin (kraje.admin)"
+    admin-flaga:
+      short: "moderacja flag krajów"
+      description: "Kolejka flag do zatwierdzenia (/kraj flaga admin kolejka), zatwierdzenie (zatwierdz <kraj>), odrzucenie z powodem (odrzuc <kraj> <powód>), stan paczki (status) i przebudowa paczki zasobów (przebuduj). Sztandar albo przedmiot dowolnego kraju bez opłaty: sztandar <kraj>, przedmiot <kraj>. Podgląd obrazków: panel WWW → Moderacja chorągwi."
+      rank: "moderator flag (kraje.flagi.moderuj)"
+
+  # --- podpowiedzi komend (dymek przy sugestii w kliencie, jedna linia) ---
+  # suggest-country: <country> <color> <ruler> <members> <area>
+  suggest-country: "<color><country></color> <dark_gray>•</dark_gray> <gray>władca <white><ruler></white> <dark_gray>•</dark_gray> <gray><area>"
+  # suggest-country-tp (/kraj admin tp): <country> <color> <ruler> <npc> (= npc-suffix albo pusto) <area>
+  suggest-country-tp: "<color><country></color><npc> <dark_gray>•</dark_gray> <gray>władca <white><ruler></white> <dark_gray>•</dark_gray> <gray><area>"
+  suggest-player-free: "<green>bez kraju"
+  # suggest-player-citizen: <country> <color> <rank>
+  suggest-player-citizen: "<gray><rank> <color><country></color>"
+  # suggest-member-*: <rank>
+  suggest-member-online: "<gray><rank> <dark_gray>•</dark_gray> <green>online"
+  suggest-member-offline: "<gray><rank> <dark_gray>•</dark_gray> <dark_gray>offline"
+  # suggest-color: <name> <color> <hex>; suggest-color-hex: <color> <hex>
+  suggest-color: "<color>■■■ <name></color> <dark_gray>(<hex>)"
+  suggest-color-hex: "<color>■■■ <hex></color> <gray>(albo dowolny #RRGGBB)"
+  suggest-description-clear: "<gray>wyczyść opis kraju"
+  suggest-list-page: "<gray>strona <page> z <pages>"
+  suggest-help-page: "<gray>strona <page>: <white><category>"
+  suggest-amount: "<gold><amount>"
+  suggest-source-account: "<gray>z konta bankowego"
+  suggest-source-coins: "<gray>z monet w ekwipunku"
+  suggest-tax-none: "<gray>bez podatku"
+  # suggest-days*: <days>
+  suggest-days: "<gray><days> dni wasalstwa"
+  suggest-days-default: "<gray><days> dni wasalstwa <dark_gray>(domyślnie)"
+  # suggest-area-*: /kraj admin zajmij|porzuc|przylacz
+  suggest-area-radius: "<gray>kwadrat chunków wokół ciebie <dark_gray>(promien 0–16)"
+  suggest-area-radius-release: "<gray>porzuć kwadrat chunków wokół ciebie"
+  suggest-area-selection: "<gray>chunki z zaznaczenia WorldEdit"
+  suggest-area-selection-release: "<gray>porzuć chunki z zaznaczenia WorldEdit"
+  # suggest-area-radius-value: <radius> <side> <chunks>
+  suggest-area-radius-value: "<gray><side>×<side> <dark_gray>•</dark_gray> <white><chunks>"
+  # suggest-area-rings: <rings>
+  suggest-area-rings: "<gray><rings> × pierścień wokół granicy"
+  suggest-area-confirm: "<gray>wykonaj (po podglądzie)"
+  # suggest-restore-* / suggest-delete-restore: /kraj admin przywroc, /kraj admin usun <kraj> przywroc
+  suggest-restore-radius: "<gray>tylko chunki kraju w kwadracie wokół ciebie"
+  suggest-restore-selection: "<gray>tylko chunki kraju z zaznaczenia WorldEdit"
+  suggest-restore-wild-radius: "<gray>dzicz w kwadracie chunków wokół ciebie"
+  suggest-restore-wild-selection: "<gray>dzicz z zaznaczenia WorldEdit"
+  suggest-restore-confirm: "<gray>cały teren kraju (po podglądzie)"
+  suggest-delete-restore: "<gray>usuń kraj i przywróć oryginalny teren (WorldEdit)"
+
+  # --- zakładanie i teren ---
+  usage-zaloz: "<prefix><red>Użycie: <yellow>/kraj zaloz \\<nazwa></yellow>"
+  name-length: "<prefix><red>Nazwa musi mieć od <min> do <max> znaków."
+  name-invalid: "<prefix><red>Nazwa może zawierać tylko litery, cyfry, _ i - (bez spacji i kolorów)."
+  name-taken: "<prefix><red>Kraj o nazwie <white><name></white> już istnieje."
+  chunk-claimed: "<prefix><red>Ten chunk należy do kraju <color><country></color>."
+  too-close: "<prefix><red>Jesteś za blisko granic innego kraju (wymagany odstęp: <distance> ch.)."
+  # Obszar chroniony (np. spawn serwera + bufor chunków): nie można tu zakładać krajów ani zajmować terenu. <area> = id obszaru
+  protected-area: "<prefix><red>To ziemia neutralna (<white><area></white>). Nie można jej zająć."
+  founded: "<prefix><green>Założono kraj <color><bold><country></bold></color>! Ten chunk jest twoją stolicą."
+  founded-broadcast: "<prefix><gray><white><player></white> założył nowy kraj: <color><bold><country></bold></color>!"
+  chunk-already-own: "<prefix><yellow>Ten chunk już należy do twojego kraju."
+  # Limit terenu. Placeholdery: <count> <limit> <base> <per_member> <members> <population> <cap>
+  claim-limit-full: "<prefix><red>Osiągnięto limit terenu: <white><count>/<limit></white> chunków.</red><newline><gray>Limit = <white><base></white> bazowo + <white><per_member></white> × <white><members></white> graczy + <white><population></white> z ludności<cap>. Więcej obywateli = większy limit."
+  claim-limit-cap: " (najwyżej <max>)"
+  claim-limit-cap-hit: " — <yellow>osiągnięto twardy limit <max></yellow>"
+  claim-paid: "<prefix><gray>Opłata ze skarbca: <gold><cost></gold> (zostało <gold><balance></gold>, następny chunk: <gold><next></gold>)."
+  unclaim-sieged: "<prefix><red>Nie można porzucić chunka, który jest oblegany."
+  capital-sieged: "<prefix><red>Nie można przenieść stolicy na oblegany chunk."
+  founded-paid: "<prefix><gray>Opłata za założenie: <gold><cost></gold>."
+  claim-not-adjacent: "<prefix><red>Chunk musi przylegać bokiem do terytorium twojego kraju."
+  claimed: "<prefix><green>Zajęto chunk dla <color><country></color>. Teren: <white><count>/<limit></white> (<area>)."
+  chunk-not-own: "<prefix><red>Ten chunk nie należy do twojego kraju."
+  chunk-not-claimed: "<prefix><red>Ten chunk nie należy do żadnego kraju."
+  cannot-unclaim-capital: "<prefix><red>Nie można porzucić stolicy. Najpierw przenieś ją: <yellow>/kraj stolica</yellow>."
+  unclaim-disconnects: "<prefix><red>Porzucenie tego chunka rozdzieliłoby terytorium kraju."
+  unclaimed: "<prefix><yellow>Porzucono chunk. Teren: <white><count>/<limit></white>."
+  capital-moved: "<prefix><green>Stolica <color><country></color> przeniesiona na <white><x>, <z></white>. Spawn ustawiony tutaj."
+
+  # --- spawn ---
+  spawn-disabled: "<prefix><red>Teleport do stolicy jest wyłączony."
+  spawn-unavailable: "<prefix><red>Spawn stolicy jest niedostępny (świat nie jest wczytany)."
+  spawn-warmup: "<prefix><gray>Teleport do stolicy za <white><seconds></white> s. Nie ruszaj się."
+  spawn-cancelled: "<prefix><red>Teleport anulowany — poruszyłeś się."
+  spawn-teleported: "<prefix><green>Witaj w stolicy <color><country></color>."
+
+  # --- członkowie ---
+  usage-zapros: "<prefix><red>Użycie: <yellow>/kraj zapros \\<gracz></yellow>"
+  target-in-country: "<prefix><red><white><player></white> należy już do kraju."
+  invite-sent: "<prefix><green>Zaproszono <white><player></white> do <color><country></color>."
+  invite-received: "<prefix><gray><white><player></white> zaprasza cię do kraju <color><bold><country></bold></color>. <join><green><bold>[Dołącz]</bold></green></join> <dark_gray>(ważne <minutes> min)</dark_gray>"
+  usage-dolacz: "<prefix><red>Użycie: <yellow>/kraj dolacz \\<kraj></yellow>"
+  no-invite: "<prefix><red>Nie masz ważnego zaproszenia do <color><country></color>."
+  joined: "<prefix><green>Dołączyłeś do kraju <color><bold><country></bold></color>!"
+  member-joined: "<prefix><green><white><player></white> dołączył do <color><country></color>."
+  ruler-cannot-leave: "<prefix><red>Władca nie może opuścić kraju. Przekaż władzę (<yellow>/kraj przekaz</yellow>) albo rozwiąż kraj."
+  left: "<prefix><yellow>Opuściłeś kraj <color><country></color>."
+  member-left: "<prefix><yellow><white><player></white> opuścił <color><country></color>."
+  usage-wyrzuc: "<prefix><red>Użycie: <yellow>/kraj wyrzuc \\<gracz></yellow>"
+  cannot-kick-higher: "<prefix><red>Nie możesz wyrzucić <white><player></white> — ma równą lub wyższą rangę."
+  kicked-target: "<prefix><red>Zostałeś wyrzucony z <color><country></color> przez <white><player></white>."
+  member-kicked: "<prefix><yellow><white><player></white> został wyrzucony z kraju przez <white><by></white>."
+  kicked-target-taxes: "<prefix><red>Zostałeś wyrzucony z <color><country></color> przez <white><player></white> za zaległe podatki (<debt>). Dług przepada."
+  member-kicked-taxes: "<prefix><yellow><white><player></white> został wyrzucony przez <white><by></white> za zaległe podatki (<debt>, <days> dni)."
+  npc-no-join: "<prefix><red><color><country></color> to kraj NPC — gracze nie mogą do niego dołączać."
+  usage-awansuj: "<prefix><red>Użycie: <yellow>/kraj awansuj \\<gracz></yellow>"
+  already-max-rank: "<prefix><red><white><player></white> jest już Doradcą (władzę przekazuje się przez <yellow>/kraj przekaz</yellow>)."
+  member-promoted: "<prefix><green><white><player></white> awansował na <white><rank></white>."
+  usage-degraduj: "<prefix><red>Użycie: <yellow>/kraj degraduj \\<gracz></yellow>"
+  already-min-rank: "<prefix><red><white><player></white> nie jest Doradcą."
+  member-demoted: "<prefix><yellow><white><player></white> został zdegradowany na <white><rank></white>."
+  usage-przekaz: "<prefix><red>Użycie: <yellow>/kraj przekaz \\<gracz></yellow>"
+  transfer-confirm: "<prefix><yellow>Czy na pewno przekazać władzę nad <color><country></color> graczowi <white><player></white>? <confirm><red><bold>[Potwierdź]</bold></red></confirm> <dark_gray>(albo /kraj przekaz <player> potwierdz, <seconds> s)</dark_gray>"
+  ruler-changed: "<prefix><gold><white><player></white> jest nowym władcą <color><country></color>!"
+  disband-confirm: "<prefix><red>Czy na pewno rozwiązać <color><country></color>? Tego nie da się cofnąć. <confirm><dark_red><bold>[Rozwiąż]</bold></dark_red></confirm> <dark_gray>(albo /kraj rozwiaz potwierdz, <seconds> s)</dark_gray>"
+  disbanded-broadcast: "<prefix><gray>Kraj <color><country></color> został rozwiązany."
+
+  # --- wygląd ---
+  usage-kolor: "<prefix><red>Użycie: <yellow>/kraj kolor \\<#RRGGBB|nazwa></yellow> (np. #E53935, czerwony, niebieski)"
+  invalid-color: "<prefix><red>Nieznany kolor <white><input></white>. Użyj #RRGGBB albo nazwy (czerwony, zielony...)."
+  color-changed: "<prefix><green>Nowy kolor kraju: <color>■■■ <country></color> <gray>(<hex>)</gray>"
+  usage-opis: "<prefix><red>Użycie: <yellow>/kraj opis \\<tekst></yellow> (<yellow>/kraj opis -</yellow> czyści opis)"
+  description-too-long: "<prefix><red>Opis może mieć najwyżej <max> znaków."
+  description-changed: "<prefix><green>Zmieniono opis kraju <color><country></color>."
+
+  # --- informacje ---
+  usage-info: "<prefix><red>Użycie: <yellow>/kraj info \\<kraj></yellow>"
+  info: |-
+    <dark_gray>━━━━━━━━━━━━━━━━━━━━━━━━━━━━</dark_gray>
+    <color><bold><country></bold></color><npc> <dark_gray>(<hex>)</dark_gray>
+    <gray><italic><description></italic></gray>
+    <gray>Władca: <gold><ruler></gold>
+    <gray>Doradcy: <white><advisors></white>
+    <gray>Obywatele: <white><citizens></white> <dark_gray>(członków razem: <members>)</dark_gray>
+    <gray>Powierzchnia: <white><area></white> <dark_gray>(limit <limit>)</dark_gray>
+    <gray>Stolica: <white><capital></white>
+    <gray>Sojusze: <allies>
+    <gray>Wojny: <wars>
+    <gray>Założony: <white><founded></white>
+    <extra>
+    <dark_gray>━━━━━━━━━━━━━━━━━━━━━━━━━━━━</dark_gray>
+  # Dodatkowe linie /kraj info (pokazywane tylko, gdy są dane; w <extra> albo pod starym szablonem bez <extra>).
+  info-npc: "<gray>Kraj NPC <dark_gray>(NPC)</dark_gray> — rządzi nim SI"
+  # Z pluginem Postep. <badge> = plakietka epoki, <progress> = postęp do następnej epoki (np. 52%), <era> = nazwa epoki
+  info-era: "<gray>Epoka: <badge> <dark_gray>•</dark_gray> <gray>do następnej epoki: <white><progress></white> <dark_gray>(/postep kraj <name>)</dark_gray>"
+  info-era-max: "<gray>Epoka: <badge> <dark_gray>• najwyższa epoka</dark_gray>"
+  # Gdy tytuł epoki zmienia wyświetlaną nazwę (era-titles). <name> = prawdziwa nazwa do komend
+  info-real-name: "<gray>Nazwa w komendach: <white><name></white>"
+  info-economy: "<gray>Podatek: <white><tax></white>/dzień • Utrzymanie: <white><upkeep></white>/dzień • Chunk: <white><claim_cost></white>"
+  info-treasury: "<gray>Skarbiec: <gold><balance></gold>"
+  info-bankrupt: "<red>⚠ Nie opłacono utrzymania od <days> dni (karencja: <grace>)!"
+  info-population: "<gray>Ludność: <white><population></white> • Mieszkania: <white><housing></white>"
+  info-army: "<gray>Żołnierze: <white><soldiers></white>"
+  # <overlord> (klikalna nazwa) <until>; <vassals> (klikalne nazwy)
+  info-vassal-of: "<gray>Wasal: <overlord> <dark_gray>(do <until>)</dark_gray>"
+  info-vassals: "<gray>Wasale: <vassals>"
+  # <partner> (klikalna nazwa) <monarch> <regent> <since>
+  info-union: "<gray>Unia personalna z <partner> <dark_gray>•</dark_gray> wspólny władca: <gold><monarch></gold> <dark_gray>(namiestnik: <regent>, od <since>)</dark_gray>"
+  # <countries> (klikalne nazwy)
+  info-embassies-abroad: "<gray>Ambasady za granicą: <countries>"
+  info-embassies-hosted: "<gray>Ambasady u nas: <countries>"
+  # <count> <limit> <base> <per_member> <members> <population> <cap>
+  info-limit: "<gray>Teren: <white><count>/<limit></white> chunków <dark_gray>(<base> + <per_member> × <members> graczy + <population> z ludności<cap>)</dark_gray>"
+  list-empty: "<prefix><gray>Nie ma jeszcze żadnych krajów."
+  list-header: "<gold><bold>Ranking krajów</bold></gold> <gray>(po powierzchni, strona <page>/<pages>, krajów: <count>)</gray>"
+  list-entry: "<gray><position>.</gray> <country> <dark_gray>—</dark_gray> <white><area></white> <dark_gray>•</dark_gray> <gray><members> czł. • władca <white><ruler></white></gray>"
+  map-header: "<gold><bold>Mapa okolicy</bold></gold> <gray>(chunk <x>, <z> • <world>, północ u góry)</gray>"
+  map-legend: "<gray>Legenda: <legend>"
+  # <you>...</you> = kolor kratki gracza (biały, na białym kraju jasnożółty), <wild>...</wild> = kolor dziczy, <symbol> = znak kratki (█).
+  map-you: "<gray><you><symbol></you> = ty <dark_gray>•</dark_gray> <wild><symbol></wild> = dzicz <dark_gray>•</dark_gray> najedź na kratkę, aby zobaczyć szczegóły</gray>"
+  map-link: "<gray>Pełna mapa: <link><aqua><underlined><url></underlined></aqua></link>"
+  map-link-missing: "<prefix><red>Mapa świata nie jest jeszcze dostępna.</red>"
+
+  # --- dyplomacja ---
+  usage-sojusz: "<prefix><red>Użycie: <yellow>/kraj sojusz \\<kraj></yellow>"
+  usage-wojna: "<prefix><red>Użycie: <yellow>/kraj wojna \\<kraj></yellow>"
+  usage-pokoj: "<prefix><red>Użycie: <yellow>/kraj pokoj \\<kraj></yellow>"
+  usage-zerwij: "<prefix><red>Użycie: <yellow>/kraj zerwij \\<kraj></yellow>"
+  already-allied: "<prefix><yellow>Jesteście już w sojuszu z <color><country></color>."
+  alliance-at-war: "<prefix><red>Jesteście w stanie wojny z <color><country></color>. Najpierw zawrzyjcie pokój."
+  alliance-proposed: "<prefix><green>Wysłano propozycję sojuszu do <color><country></color>."
+  alliance-proposal-received: "<prefix><aqua><color><country></color> proponuje sojusz. <accept><green><bold>[Przyjmij]</bold></green></accept>"
+  alliance-formed: "<prefix><aqua>Zawarto sojusz: <color_a><a></color_a> <gray>⚑</gray> <color_b><b></color_b>!"
+  not-allied: "<prefix><red>Nie jesteście w sojuszu z <color><country></color>."
+  alliance-broken: "<prefix><yellow>Zerwano sojusz z <color><country></color>."
+  already-at-war: "<prefix><red>Już toczycie wojnę z <color><country></color>."
+  war-declared: "<prefix><dark_red><bold>WOJNA!</bold></dark_red> <color_a><a></color_a> <red>wypowiada wojnę</red> <color_b><b></color_b>!"
+  not-at-war: "<prefix><red>Nie toczycie wojny z <color><country></color>."
+  peace-proposed: "<prefix><green>Wysłano propozycję pokoju do <color><country></color>."
+  peace-proposal-received: "<prefix><aqua><color><country></color> proponuje pokój. <accept><green><bold>[Przyjmij]</bold></green></accept>"
+  peace-made: "<prefix><green>Pokój! <color_a><a></color_a> i <color_b><b></color_b> zakończyli wojnę."
+  alliance-proposed-npc: "<prefix><green>Wysłano propozycję sojuszu do <color><country></color> <dark_gray>(NPC)</dark_gray>. Władca odpowie sam."
+  peace-proposed-npc: "<prefix><green>Wysłano propozycję pokoju do <color><country></color> <dark_gray>(NPC)</dark_gray>. Władca odpowie sam."
+  alliance-refused: "<prefix><red><color><country></color> odrzuca propozycję sojuszu."
+  peace-refused: "<prefix><red><color><country></color> odrzuca propozycję pokoju."
+  peace-too-early: "<prefix><red>Wojna z <color><country></color> trwa za krótko. Pokój będzie możliwy za <white><time></white>."
+  war-cooldown: "<prefix><red>Niedawno zawarliście pokój z <color><country></color>. Wojnę można wypowiedzieć za <white><time></white>."
+  war-paid: "<prefix><gray>Koszt wypowiedzenia wojny: <gold><cost></gold>. Pokój możliwy najwcześniej za <white><time></white>."
+  npc-founded-broadcast: "<prefix><gray>Powstało nowe państwo: <color><bold><country></bold></color> <dark_gray>(NPC)</dark_gray>, władca <white><ruler></white>."
+  npc-suffix: " <dark_gray>(NPC)</dark_gray>"
+
+  # --- oblężenia ---
+  siege-disabled: "<prefix><red>Oblężenia są wyłączone."
+  landing-disabled: "<prefix><red>Desanty są wyłączone."
+  landing-limit: "<prefix><red>Wykorzystaliście limit przyczółków. Połączcie istniejący przyczółek z lądem stolicy lub zrezygnujcie z niego."
+  landing-not-coastal: "<prefix><red>Desant wymaga suchego brzegu przy wodzie. Stań na nadbrzeżnym chunku; sąsiedni teren musi być załadowany."
+  landing-no-transport: "<prefix><red>Brak potwierdzonego desantu z waszego statku z graczami lub wojskiem w pobliżu tego brzegu."
+  landing-started: "<prefix><dark_red><bold>⚓ DESANT!</bold></dark_red> <color_a><a></color_a> <red>walczy o przyczółek</red> <color_b><b></color_b> <gray>przy <white><x>, <z></white> (do <minutes> min)."
+  landing-conquered: "<prefix><gold>⚓</gold> <color_a><a></color_a> <green>zdobywa trwały przyczółek</green> <color_b><b></color_b> <gray>przy <white><x>, <z></white>!"
+  landing-ended-limit: "<prefix><gray>Desant przy <white><x>, <z></white> przerwany: kraj atakujący wykorzystał limit przyczółków."
+  landing-ended-protected: "<prefix><gray>Desant przy <white><x>, <z></white> przerwany: teren jest teraz chroniony."
+  siege-not-enemy: "<prefix><red>Stań na chunku należącym do wrogiego kraju."
+  siege-own: "<prefix><red>To wasz własny teren."
+  siege-not-at-war: "<prefix><red>Nie toczycie wojny z <color><country></color>."
+  siege-already: "<prefix><red>Wasz kraj prowadzi już jedno oblężenie."
+  siege-chunk-busy: "<prefix><red>Ten chunk jest już oblegany."
+  siege-not-adjacent: "<prefix><red>Oblegany chunk musi przylegać do terytorium waszego kraju."
+  siege-splits: "<prefix><red>Zdobycie tego chunka rozcięłoby terytorium <color><country></color>. Oblegajcie chunki z brzegu."
+  siege-capital: "<prefix><red>Stolicę <color><country></color> można oblegać dopiero, gdy zostanie jej ostatnim chunkiem."
+  siege-paid: "<prefix><gray>Koszt oblężenia: <gold><cost></gold>."
+  # siege-started / -defender: <a> <color_a> <b> <color_b> <x> <z> <minutes>
+  siege-started: "<prefix><dark_red><bold>⚔ OBLĘŻENIE!</bold></dark_red> <color_a><a></color_a> <red>oblega</red> <color_b><b></color_b> <gray>przy <white><x>, <z></white> (do <minutes> min)."
+  siege-started-defender: "<prefix><red>Wasz teren przy <white><x>, <z></white> jest oblegany! Wejdźcie do chunka, aby go bronić."
+  # Pasek: <a> <b> <color_a> <color_b> <progress> <time> <attackers> <defenders> <state>
+  siege-bossbar: "<color_a><a></color_a> <gray>⚔</gray> <color_b><b></color_b> <dark_gray>|</dark_gray> <white><progress>%</white> <dark_gray>|</dark_gray> <state> <dark_gray>|</dark_gray> <gray><attackers> vs <defenders> • <time>"
+  siege-state-rising: "<red>atak</red>"
+  siege-state-falling: "<aqua>obrona</aqua>"
+  siege-state-standing: "<gray>brak walki</gray>"
+  siege-ended-lost: "<prefix><gray>Oblężenie przy <white><x>, <z></white> (<color_a><a></color_a> → <color_b><b></color_b>) przerwane: chunk zmienił właściciela."
+  siege-ended-peace: "<prefix><gray>Oblężenie przy <white><x>, <z></white> zakończone — koniec wojny <color_a><a></color_a> i <color_b><b></color_b>."
+  siege-ended-timeout: "<prefix><aqua><color_b><b></color_b> odparli oblężenie <color_a><a></color_a> przy <white><x>, <z></white>!"
+  siege-ended-split: "<prefix><gray>Oblężenie przy <white><x>, <z></white> przerwane: zdobycie rozcięłoby terytorium <color_b><b></color_b>."
+  siege-ended-admin: "<prefix><gray>Administrator zakończył oblężenie przy <white><x>, <z></white>."
+  siege-conquered: "<prefix><dark_red><bold>⚔</bold></dark_red> <color_a><a></color_a> <red>zdobywa chunk</red> <color_b><b></color_b> <gray>przy <white><x>, <z></white>!"
+  siege-razed: "<prefix><dark_red><bold>⚔</bold></dark_red> <color_a><a></color_a> <red>pustoszy chunk</red> <color_b><b></color_b> <gray>przy <white><x>, <z></white> (wraca do dziczy)."
+  siege-country-fell: "<prefix><dark_red><bold>Upadek!</bold></dark_red> <color_b><b></color_b> <red>straciło ostatnią ziemię i przestaje istnieć.</red>"
+  siege-capital-moved: "<prefix><red>Stolica <color><country></color> padła! Nowa stolica: <white><x>, <z></white>."
+  siege-list-empty: "<prefix><gray>Nie trwa żadne oblężenie."
+  siege-list-header: "<gold><bold>Oblężenia</bold></gold> <gray>(<count>)</gray>"
+  # <a> <b> <color_a> <color_b> <x> <z> <world> <progress> <time>
+  siege-list-entry: "<dark_red>⚔</dark_red> <color_a><a></color_a> <gray>→</gray> <color_b><b></color_b> <gray>przy <white><x>, <z></white> • <white><progress>%</white> • zostało <white><time></white>"
+
+  # --- łupy wojenne (Skarbiec) --- <a> <color_a> = zwycięzca, <b> <color_b> = pokonany, <amount>
+  loot-chunk-winner: "<prefix><gold>Łupy!</gold> <gray>Ze skarbca <color_b><b></color_b> do waszego skarbca trafia <gold>+<amount></gold>."
+  loot-chunk-loser: "<prefix><red><color_a><a></color_a> zrabował <gold><amount></gold> z waszego skarbca!"
+  loot-fall-winner: "<prefix><gold><bold>Wielkie łupy!</bold></gold> <gray>Skarbiec upadłego <color_b><b></color_b> oddaje wam <gold>+<amount></gold>."
+  loot-fall-loser: "<prefix><dark_red><color_a><a></color_a> zagarnia <gold><amount></gold> z waszego skarbca."
+  # Skarbiec kraju, który znika. <country> <color> <amount> (<player> = władca, <total> <count> przy podziale)
+  treasury-destroyed: "<prefix><gray>Skarbiec <color><country></color> przepada (<gold><amount></gold>)."
+  disband-treasury-ruler: "<prefix><gray>Skarbiec rozwiązanego kraju <color><country></color> (<gold><amount></gold>) trafia na konto władcy <white><player></white>."
+  treasury-share-received: "<prefix><green>Otrzymujesz <gold><amount></gold> — twoją część skarbca <color><country></color> (<total> na <count> os.)."
+
+  # --- obywatele upadłego kraju ---
+  # conquest-invite: <country> <color> <until> <join>...</join> <refuse>...</refuse>
+  conquest-invite: "<prefix><gray><color><bold><country></bold></color> zaprasza cię na obywatela po upadku twojego kraju.</gray> <join><green><bold>[Dołącz do <country>]</bold></green></join> <refuse><red><bold>[Odrzuć]</bold></red></refuse> <dark_gray>(ważne do <until>)</dark_gray>"
+  # conquest-invites-sent (do władcy zwycięzcy): <a> = zwycięzca, <b> = upadły kraj, <count> <hours>
+  conquest-invites-sent: "<prefix><green>Zaproszono <white><count></white> byłych obywateli <color_b><b></color_b> do <color_a><a></color_a> <gray>(ważne <hours> h, także dla graczy offline).</gray>"
+  usage-odrzuc: "<prefix><red>Użycie: <yellow>/kraj odrzuc \\<kraj></yellow>"
+  invite-refused: "<prefix><gray>Odrzucono zaproszenie do <color><country></color>."
+  invite-refused-notify: "<prefix><gray><white><player></white> odrzucił zaproszenie do <color><country></color>."
+
+  # --- kapitulacja ---
+  # Warunki: <days> <share> (procent) <min> <estimate> (trybut teraz, dziennie) <minutes> (ważność oferty)
+  usage-kapitulacja: "<prefix><red>Użycie: <yellow>/kraj kapitulacja \\<wróg> [dni]</yellow> albo <yellow>/kraj kapitulacja przyjmij|odrzuc \\<kraj></yellow>"
+  capitulation-disabled: "<prefix><red>Kapitulacje i wasalstwo są wyłączone."
+  capitulation-days-range: "<prefix><red>Wasalstwo może trwać od <white><min></white> do <white><max></white> dni."
+  capitulation-already-vassal: "<prefix><red><color><country></color> jest już wasalem — nie może skapitulować przed kolejnym krajem."
+  capitulation-sent: "<prefix><yellow>Wysłano ofertę kapitulacji do <color><country></color>: <white><days></white> dni wasalstwa, trybut <white><share>%</white> dziennych podatków (min. <white><min></white>, teraz ok. <white><estimate></white>/dzień). <dark_gray>(ważna <minutes> min)"
+  capitulation-sent-npc: "<prefix><yellow>Wysłano ofertę kapitulacji do <color><country></color> <dark_gray>(NPC)</dark_gray>: <white><days></white> dni wasalstwa, trybut <white><share>%</white> (min. <white><min></white>). Władca odpowie sam."
+  capitulation-received: "<prefix><gold><color><bold><country></bold></color> chce skapitulować!</gold> <gray>Wasalstwo na <white><days></white> dni, trybut <white><share>%</white> dziennych podatków (min. <white><min></white>, teraz ok. <white><estimate></white>/dzień).</gray> <accept><green><bold>[Przyjmij]</bold></green></accept> <refuse><red><bold>[Odrzuć]</bold></red></refuse> <dark_gray>(<minutes> min)"
+  capitulation-no-offer: "<prefix><red>Brak ważnej oferty kapitulacji od <color><country></color>."
+  capitulation-refused: "<prefix><red><color><country></color> odrzuca waszą kapitulację — wojna trwa dalej."
+  capitulation-refused-sent: "<prefix><gray>Odrzucono kapitulację <color><country></color>."
+  # <a> <color_a> = wasal, <b> <color_b> = suweren, warunki jak wyżej, <until>
+  capitulation-accepted-broadcast: "<prefix><gold><bold>Kapitulacja!</bold></gold> <color_a><a></color_a> <gray>poddaje się</gray> <color_b><b></color_b><gray>: koniec wojny, <color_a><a></color_a> zostaje wasalem na <white><days></white> dni (do <until>) i płaci trybut <white><share>%</white> podatków."
+
+  # --- wasalstwo --- <a> <color_a> = wasal, <b> <color_b> = suweren
+  vassal-ended-expired: "<prefix><green><color_a><a></color_a> <gray>odzyskuje niezależność — minął czas wasalstwa u</gray> <color_b><b></color_b><gray>.</gray>"
+  vassal-ended-bought: "<prefix><green><color_a><a></color_a> <gray>wykupuje się z wasalstwa u</gray> <color_b><b></color_b> <gray>za <gold><amount></gold>.</gray>"
+  vassal-ended-released: "<prefix><green><color_b><b></color_b> <gray>zwalnia</gray> <color_a><a></color_a> <gray>z wasalstwa.</gray>"
+  vassal-ended-war: "<prefix><dark_red><color_a><a></color_a> nie jest już wasalem <color_b><b></color_b> — między krajami wybuchła wojna."
+  vassal-ended-gone: "<prefix><gray>Wasalstwo <color_a><a></color_a> wobec <color_b><b></color_b> wygasło — jeden z krajów przestał istnieć."
+  vassal-war-overlord: "<prefix><red>Jesteście wasalem <color><country></color> — nie możecie wypowiedzieć wojny swojemu suwerenowi. Wykupcie się (<yellow>/kraj wykup</yellow>) albo poczekajcie do końca wasalstwa."
+  vassal-war-overlord-ally: "<prefix><red><color><country></color> jest sojusznikiem waszego suwerena (<white><overlord></white>) — jako wasal nie możecie wypowiedzieć mu wojny."
+  # <a> <b> = kraje, które chciały zawrzeć sojusz
+  vassal-alliance-overlord-enemy: "<prefix><red>Sojusz <color_a><a></color_a> i <color_b><b></color_b> jest niemożliwy: wasal nie może sprzymierzyć się z wrogiem swojego suwerena."
+  overlord-war-vassal-denied: "<prefix><red><color><country></color> jest waszym wasalem. Wojnę możecie mu wypowiedzieć dopiero, gdy zalega z trybutem co najmniej <white><days></white> dni (albo zwolnijcie go: <yellow>/kraj zwolnij</yellow>)."
+  # debt-war-declared: <a> = suweren, <b> = wasal, <debt> <days>
+  debt-war-declared: "<prefix><dark_red><color_a><a></color_a> karze wasala <color_b><b></color_b> za niezapłacony trybut (<debt>, <days> dni) — wojna bez kosztów!"
+  # vassal-overlord-war*: <a> = suweren, <b> = jego przeciwnik
+  vassal-overlord-war: "<prefix><yellow>Wasz suweren <color_a><a></color_a> jest w stanie wojny z <color_b><b></color_b>."
+  vassal-overlord-war-joined: "<prefix><red>Wasz suweren <color_a><a></color_a> jest w stanie wojny z <color_b><b></color_b> — jako wasal przystępujecie do wojny."
+  release-not-vassal: "<prefix><red><color><country></color> nie jest waszym wasalem."
+  usage-zwolnij: "<prefix><red>Użycie: <yellow>/kraj zwolnij \\<wasal></yellow>"
+  buyout-not-vassal: "<prefix><red>Wasz kraj nie jest wasalem."
+  # buyout-confirm: <country> = suweren, <cost> <daily> <days> <multiplier> <debt> <balance> <seconds>
+  buyout-confirm: "<prefix><yellow>Wykup z wasalstwa u <color><country></color> kosztuje <gold><cost></gold> <gray>(<multiplier> × <daily>/dzień × <days> dni + dług <debt>; w skarbcu: <balance>).</gray> <confirm><green><bold>[Wykup]</bold></green></confirm> <dark_gray>(albo /kraj wykup potwierdz, <seconds> s)"
+  # trybut: <country> = druga strona, <paid> <due> <debt> <days> <limit> (dni długu do wojny bez kosztów)
+  tribute-paid: "<prefix><gray>Trybut dla <color><country></color>: zapłacono <gold><paid></gold>."
+  tribute-unpaid: "<prefix><red>Brakuje pieniędzy na trybut dla <color><country></color>! Zapłacono <paid> z <due>, dług: <gold><debt></gold> (<days> dni). Po <limit> dniach suweren może wypowiedzieć wam wojnę bez kosztów."
+  tribute-received: "<prefix><gray>Trybut od wasala <color><country></color>: <gold>+<paid></gold>."
+  tribute-debt-overlord: "<prefix><yellow>Wasal <color><country></color> zalega z trybutem: <gold><debt></gold> (<days> dni)."
+  tribute-debt-war-allowed: "<prefix><red>Wasal <color><country></color> zalega z trybutem <days> dni (<debt>). Możecie wypowiedzieć mu wojnę bez kosztów i przerwy: <war><yellow><underlined>/kraj wojna <country></underlined></yellow></war>"
+  # /kraj wasale
+  vassals-header: "<gold><bold>Wasalstwo</bold></gold> <color><country></color>"
+  vassals-overlord: "<gray>Suweren: <overlord> <dark_gray>(do <until>, zostało <left>)</dark_gray>"
+  vassals-terms: "<gray>Trybut: <white><share>%</white> podatków, min. <white><min></white> • teraz ok. <white><estimate></white>/dzień • zapłacono <white><paid></white><debt>"
+  vassals-debt: " <dark_gray>•</dark_gray> <red>dług <debt> (<days> dni)</red>"
+  vassals-buyout: "<gray>Wykup teraz: <gold><cost></gold> <buyout><green>[Wykup]</green></buyout>"
+  vassals-no-overlord: "<gray>Suweren: <dark_gray>brak (kraj niezależny)"
+  vassals-none: "<gray>Wasale: <dark_gray>brak"
+  vassals-list-header: "<gray>Wasale (<count>):"
+  vassals-entry: "<gray>• <vassal> <dark_gray>(do <until>)</dark_gray> <gray>trybut ok. <white><estimate></white>/dzień<debt> <release>"
+  vassals-release-button: "<red>[Zwolnij]</red>"
+
+  # --- PvP ---
+  pvp-denied: "<red>Możesz walczyć tylko z graczami krajów, z którymi toczysz wojnę."
+  pvp-denied-friendly: "<red>Nie możesz ranić swoich ani sojuszników."
+
+  # --- skarbiec ---
+  economy-disabled: "<prefix><red>Ekonomia jest wyłączona (brak pluginu Skarbiec)."
+  invalid-amount: "<prefix><red>Nieprawidłowa kwota <white><input></white>. Przykłady: 150 (miedziaki), 3zl, 2sr."
+  treasury-insufficient: "<prefix><red>W skarbcu brakuje pieniędzy: potrzeba <gold><cost></gold>, jest <gold><balance></gold>. Wpłać: <yellow>/kraj wplac</yellow>."
+  player-insufficient: "<prefix><red>Nie masz <gold><cost></gold> na koncie ani w monetach."
+  deposit-insufficient: "<prefix><red>Nie masz <gold><amount></gold> (sprawdź konto i monety)."
+  usage-wplac: "<prefix><red>Użycie: <yellow>/kraj wplac \\<kwota> [konto|monety]</yellow>"
+  usage-wyplac: "<prefix><red>Użycie: <yellow>/kraj wyplac \\<kwota></yellow>"
+  deposited: "<prefix><green>Wpłacono <gold><amount></gold> z konta do skarbca <color><country></color>. Stan: <gold><balance></gold>."
+  deposited-coins: "<prefix><green>Wpłacono <gold><amount></gold> w monetach do skarbca <color><country></color>. Stan: <gold><balance></gold>."
+  deposited-notify: "<prefix><gray><white><player></white> wpłacił <gold><amount></gold> do skarbca."
+  withdrawn: "<prefix><green>Wypłacono <gold><amount></gold> ze skarbca <color><country></color> na twoje konto. Stan: <gold><balance></gold>."
+  # treasury-header: <country> <color> <balance> <tax> <taxpayers> <income> <upkeep> <claim_cost> <time>
+  treasury-header: |-
+    <dark_gray>━━━━━━━━━━━━━━━━━━━━━━━━━━━━</dark_gray>
+    <gold><bold>Skarbiec</bold></gold> <color><country></color>
+    <gray>Stan: <gold><balance></gold>
+    <gray>Podatek: <white><tax></white> × <white><taxpayers></white> obywateli = <green>+<income></green>/dzień
+    <gray>Utrzymanie terenu: <red>-<upkeep></red>/dzień <dark_gray>(rozliczenie o <time>)</dark_gray>
+    <gray>Następny chunk: <white><claim_cost></white>
+  treasury-log-header: "<gray>Ostatnie operacje:"
+  treasury-log-empty: "<dark_gray>Brak operacji."
+  # treasury-entry-*: <date> <op> <amount> <actor>
+  treasury-entry-plus: "<dark_gray><date></dark_gray> <gray><op></gray> <green>+<amount></green> <dark_gray><actor></dark_gray>"
+  treasury-entry-minus: "<dark_gray><date></dark_gray> <gray><op></gray> <red>-<amount></red> <dark_gray><actor></dark_gray>"
+  treasury-op:
+    deposit: "wpłata"
+    withdraw: "wypłata"
+    tax: "podatki"
+    upkeep: "utrzymanie"
+    claim: "zajęcie chunka"
+    war: "wypowiedzenie wojny"
+    siege: "oblężenie"
+    loot: "łupy wojenne"
+    tribute: "trybut"
+    buyout: "wykup z wasalstwa"
+    union: "unia personalna"
+    embassy: "ambasada"
+  # --- podatki ---
+  tax-info: "<prefix><gray>Podatek <color><country></color>: <gold><amount></gold>/dzień od obywatela-gracza (max <max>, pobór o <time>). Dłużnika można wyrzucić po <days> dniach."
+  tax-no-debtors: "<gray>Nikt nie zalega z podatkami."
+  tax-debtor: "<gray>• <white><player></white>: <red><debt></red> <dark_gray>(<days> dni)</dark_gray> <kick>"
+  tax-kick-button: "<red>[Wyrzuć]</red>"
+  tax-too-high: "<prefix><red>Podatek może wynosić najwyżej <gold><max></gold>."
+  tax-set: "<prefix><gold><white><player></white> ustalił podatek <gold><amount></gold> dziennie (pobór o <time> z konta bankowego)."
+  tax-cleared: "<prefix><green><white><player></white> zniósł podatek."
+  tax-paid: "<prefix><gray>Zapłacono podatek <gold><amount></gold> na rzecz <color><country></color>."
+  tax-unpaid: "<prefix><red>Brak pieniędzy na podatek <color><country></color>! Zapłacono <paid>, dług: <gold><debt></gold> (<days> dni)."
+  tax-debt-reminder: "<prefix><red>Zalegasz z podatkami dla <color><country></color>: <gold><debt></gold> (<days> dni). Wpłać pieniądze do banku."
+  # --- bankructwo ---
+  bankruptcy-warning: "<prefix><red>Skarbiec <color><country></color> nie pokrył utrzymania (<upkeep>)! Dzień <days>/<grace> — potem kraj zacznie tracić teren."
+  bankruptcy-lost: "<prefix><dark_red>Bankructwo! <color><country></color> traci <count> chunk(ów) najdalszych od stolicy. Utrzymanie: <upkeep>/dzień."
+
+  # --- czat ---
+  chat-disabled: "<prefix><red>Czat krajów jest wyłączony."
+  country-chat-on: "<prefix><green>Czat krajowy włączony — twoje wiadomości widzą tylko członkowie kraju."
+  country-chat-off: "<prefix><yellow>Czat krajowy wyłączony — piszesz na czacie ogólnym."
+  usage-kc: "<prefix><red>Użycie: <yellow>/kc \\<wiadomość></yellow>"
+  usage-ks: "<prefix><red>Użycie: <yellow>/ks \\<wiadomość></yellow>"
+
+  # --- granice ---
+  border-enter-title: "<color><bold><country></bold></color>"
+  border-enter-subtitle: "<gray>Wkraczasz do: <color><country></color></gray>"
+  border-enter-actionbar: "<gray>Wkraczasz do: <color><bold><country></bold></color>"
+  # Podtytuł przy wejściu do kraju (pusty = stary border-enter-subtitle). <ruler> <relation> <npc> <siege> <country> <color>
+  border-enter-details: "<gray>Władca: <white><ruler></white></gray><npc><relation><siege>"
+  border-actionbar-separator: " <dark_gray>•</dark_gray> "
+  border-relation-own: " <dark_gray>•</dark_gray> <gold>Twój kraj</gold>"
+  border-relation-war: " <dark_gray>•</dark_gray> <red>⚔ Jesteście w wojnie!</red>"
+  border-relation-ally: " <dark_gray>•</dark_gray> <green>⚑ Sojusznik</green>"
+  border-relation-overlord: " <dark_gray>•</dark_gray> <gold>♔ Wasz suweren</gold>"
+  border-relation-vassal: " <dark_gray>•</dark_gray> <yellow>Wasz wasal</yellow>"
+  border-relation-union: " <dark_gray>•</dark_gray> <gold>♛ Wasza unia personalna</gold>"
+  border-relation-neutral: ""
+  border-npc: " <dark_gray>(NPC)</dark_gray>"
+  border-siege: " <dark_gray>•</dark_gray> <red>⚔ Trwa oblężenie!</red>"
+  border-wild-title: "<dark_green><bold>Dzicz</bold></dark_green>"
+  border-wild-subtitle: "<gray>Opuszczasz: <color><country></color></gray>"
+  border-wild-actionbar: "<gray>Opuszczasz: <color><country></color> <dark_gray>•</dark_gray> <dark_green>Dzicz</dark_green>"
+
+  # --- admin ---
+  admin-help: |-
+    <gold><bold>Kraje — admin</bold></gold>
+    <yellow>/kraj admin usun \<kraj> [przywroc]</yellow> <gray>— usuń kraj (i przywróć teren)</gray>
+    <yellow>/kraj admin wladca \<kraj> \<gracz></yellow> <gray>— ustaw władcę</gray>
+    <yellow>/kraj admin zajmij \<kraj> [promien \<n>|zaznaczenie]</yellow> <gray>— zajmij chunk / obszar bez limitów</gray>
+    <yellow>/kraj admin porzuc \<kraj> [promien \<n>|zaznaczenie]</yellow> <gray>— porzuć teren kraju</gray>
+    <yellow>/kraj admin przylacz \<kraj> [pierścienie]</yellow> <gray>— poszerz kraj wokół granicy</gray>
+    <yellow>/kraj admin przywroc \<kraj>|teren [promien \<n>|zaznaczenie]</yellow> <gray>— przywróć oryginalny teren</gray>
+    <yellow>/kraj admin przywroc stop</yellow> <gray>— zatrzymaj przywracanie</gray>
+    <yellow>/kraj admin tp \<kraj></yellow> <gray>— teleport do stolicy kraju</gray>
+    <yellow>/kraj admin porzuc</yellow> <gray>— zwolnij bieżący chunk</gray>
+    <yellow>/kraj admin bypass</yellow> <gray>— omijanie ochrony</gray>
+    <yellow>/kraj admin spy</yellow> <gray>— podgląd czatów krajowych</gray>
+    <yellow>/kraj admin reload</yellow> <gray>— przeładuj config</gray>
+    <yellow>/kraj admin tick</yellow> <gray>— dzienne rozliczenie teraz</gray>
+    <yellow>/kraj admin oblezenie</yellow> <gray>— zakończ oblężenie tutaj</gray>
+  usage-admin-usun: "<prefix><red>Użycie: <yellow>/kraj admin usun \\<kraj> [przywroc [potwierdz]]</yellow>"
+  usage-admin-wladca: "<prefix><red>Użycie: <yellow>/kraj admin wladca \\<kraj> \\<gracz></yellow>"
+  usage-admin-zajmij: "<prefix><red>Użycie: <yellow>/kraj admin zajmij \\<kraj> [promien \\<n>|zaznaczenie]</yellow>"
+  usage-admin-porzuc: "<prefix><red>Użycie: <yellow>/kraj admin porzuc [\\<kraj> [promien \\<n>|zaznaczenie]]</yellow>"
+  usage-admin-przylacz: "<prefix><red>Użycie: <yellow>/kraj admin przylacz \\<kraj> [pierścienie 1–16]</yellow>"
+  usage-admin-tp: "<prefix><red>Użycie: <yellow>/kraj admin tp \\<kraj></yellow>"
+  admin-tp-searching: "<prefix><gray>Szukam bezpiecznego miejsca w stolicy <color><country></color>…"
+  admin-tp-done: "<prefix><green>Teleportowano do stolicy <color><country></color> <dark_gray>(<x>, <y>, <z>)</dark_gray>."
+  admin-tp-unsafe: "<prefix><red>Brak bezpiecznego miejsca w promieniu <radius> bl. od spawnu stolicy <color><country></color>."
+  admin-tp-failed: "<prefix><red>Teleport do stolicy <color><country></color> się nie powiódł."
+  admin-deleted: "<prefix><green>Usunięto kraj <color><country></color>."
+  admin-deleted-members: "<prefix><red>Administrator usunął kraj <color><country></color>."
+  admin-target-in-other-country: "<prefix><red><white><player></white> należy do kraju <color><country></color>."
+  admin-ruler-set: "<prefix><green><white><player></white> jest teraz władcą <color><country></color>."
+  admin-claimed: "<prefix><green>Zajęto chunk dla <color><country></color> (teren: <count>)."
+  admin-unclaimed: "<prefix><green>Zwolniono chunk kraju <color><country></color>."
+  # --- admin: obszary (zajmij/porzuc promien|zaznaczenie, przylacz) ---
+  admin-area-action-claim: "zajęcie"
+  admin-area-action-unclaim: "porzucenie"
+  admin-area-action-rings: "przyłączenie"
+  # admin-area-radius-range / admin-area-rings-range: <max>
+  admin-area-radius-range: "<prefix><red>Promień musi być liczbą od 0 do <max>."
+  admin-area-rings-range: "<prefix><red>Liczba pierścieni musi być od 1 do <max>."
+  admin-area-no-worldedit: "<prefix><red>Zaznaczenie wymaga pluginu WorldEdit."
+  admin-area-no-selection: "<prefix><red>Nie masz pełnego zaznaczenia WorldEdit w tym świecie (//wand, //pos1, //pos2)."
+  # admin-area-selection-too-large: <size> <max>
+  admin-area-selection-too-large: "<prefix><red>Zaznaczenie obejmuje <size> chunków (maks. <max>). Zmniejsz je."
+  admin-area-busy: "<prefix><red>Poprzednia operacja na terenie jeszcze trwa. Poczekaj na jej koniec."
+  admin-area-confirm-stale: "<prefix><yellow>Brak aktualnego podglądu tej komendy (wygasł albo dotyczył czegoś innego). Oto nowy:"
+  # admin-area-nothing: <country> <color> <action> <reasons>
+  admin-area-nothing: "<prefix><yellow>Nic do zrobienia (<action>) dla <color><country></color>. <gray>Pominięte: <reasons>."
+  # admin-area-preview: <country> <color> <action> <count> <area>
+  admin-area-preview: "<prefix><gold><bold>Podgląd</bold></gold> <yellow><action> dla <color><country></color>: <white><count></white> chunków <dark_gray>(<area>)</dark_gray>."
+  # admin-area-preview-skipped: <skipped> <reasons>
+  admin-area-preview-skipped: "<prefix><gray>Pominięte: <white><skipped></white> — <reasons>."
+  # admin-area-preview-split: <country> <color> <parts>
+  admin-area-preview-split: "<prefix><red><bold>Uwaga:</bold> po porzuceniu teren <color><country></color> rozpadnie się na <white><parts></white> części (stolica zostaje)."
+  # admin-area-preview-particles: <seconds>
+  admin-area-preview-particles: "<prefix><gray>Granice w pobliżu przez <seconds> s: <green>zielone</green>/<gold>pomarańczowe</gold> — zmiana, <red>czerwone</red> — pominięte."
+  # admin-area-preview-confirm: <confirm> (klik) <seconds> <command>
+  admin-area-preview-confirm: "<prefix><confirm><green><bold>[Wykonaj]</bold></green></confirm> <dark_gray>(albo dopisz potwierdz, <seconds> s)</dark_gray>"
+  admin-area-skip-separator: "<gray>, "
+  admin-area-skip-none: "brak"
+  # admin-area-skip-*: <count>; foreign: <count> <countries>
+  admin-area-skip-own: "<white><count></white> już należy do kraju"
+  admin-area-skip-foreign: "<white><count></white> cudzych <dark_gray>(<countries>)</dark_gray>"
+  admin-area-skip-protected: "<white><count></white> na ziemi neutralnej"
+  admin-area-skip-capital: "stolica (nigdy nie jest porzucana)"
+  admin-area-skip-not_own: "<white><count></white> poza krajem"
+  # admin-area-started: <country> <color> <action> <count> <seconds>
+  admin-area-started: "<prefix><gray>Wykonuję <action>: <white><count></white> chunków dla <color><country></color> porcjami (ok. <seconds> s)…"
+  # admin-area-done-* / admin-area-aborted: <country> <color> <count> <total>
+  admin-area-done-claim: "<prefix><green>Zajęto <white><count></white> chunków dla <color><country></color> (teren: <total>)."
+  admin-area-done-unclaim: "<prefix><green>Porzucono <white><count></white> chunków kraju <color><country></color> (teren: <total>)."
+  admin-area-done-rings: "<prefix><green>Przyłączono <white><count></white> chunków do <color><country></color> (teren: <total>)."
+  admin-area-aborted: "<prefix><red>Kraj <color><country></color> już nie istnieje — przerwano (wykonano <count>)."
+  # admin-area-changed-meanwhile: <count>
+  admin-area-changed-meanwhile: "<prefix><gray>W międzyczasie zmieniło się <count> chunków — te pominięto."
+  # --- admin: przywracanie terenu (/kraj admin przywroc, /kraj admin usun <kraj> przywroc) ---
+  usage-admin-przywroc: "<prefix><red>Użycie: <yellow>/kraj admin przywroc \\<kraj> [promien \\<n>|zaznaczenie]</yellow>, <yellow>/kraj admin przywroc teren promien \\<n>|zaznaczenie</yellow> albo <yellow>/kraj admin przywroc stop</yellow>"
+  admin-restore-no-worldedit: "<prefix><red>Przywracanie terenu wymaga pluginu WorldEdit (regeneracja z ziarna świata)."
+  # admin-restore-busy: <done> <total>
+  admin-restore-busy: "<prefix><red>Trwa już przywracanie terenu (<done>/<total> chunków). Poczekaj albo <yellow>/kraj admin przywroc stop</yellow>."
+  admin-restore-not-running: "<prefix><yellow>Nie trwa żadne przywracanie terenu."
+  # admin-restore-too-large: <count> <max>
+  admin-restore-too-large: "<prefix><red>To <count> chunków — maks. <max> naraz. Przywracaj po kawałku (promien / zaznaczenie)."
+  # admin-restore-target-*: wstawiane jako <target>
+  admin-restore-target-country: "terenu kraju <color><country></color>"
+  admin-restore-target-wild: "dziczy"
+  # admin-restore-nothing: <target>
+  admin-restore-nothing: "<prefix><yellow>Nic do przywrócenia (<target>)."
+  # admin-restore-preview: <target> <count> <area> <time> <worlds>
+  admin-restore-preview: "<prefix><gold><bold>Podgląd</bold></gold> <yellow>przywrócenia <target>: <white><count></white> chunków <dark_gray>(<area>, świat: <worlds>)</dark_gray>, szacowany czas <white><time></white>."
+  admin-restore-preview-warning: "<prefix><red><bold>UWAGA:</bold> te chunki zostaną wygenerowane od nowa z ziarna świata. WSZYSTKO w nich przepada bezpowrotnie — budynki graczy, skrzynie z zawartością, NPC, manekiny, zwierzęta. Kopii nie ma. Serwer będzie się przycinał na kilka sekund przy każdej porcji."
+  # admin-restore-preview-delete: <country> <color> <seconds>
+  admin-restore-preview-delete: "<prefix><red>Kraj <color><country></color> zostanie najpierw usunięty, a regeneracja ruszy po ok. <seconds> s (sprzątanie Ludnosc/Armia)."
+  # admin-restore-preview-alive: <country> <color>
+  admin-restore-preview-alive: "<prefix><gray>Kraj <color><country></color> zostaje (granice bez zmian). Wpisy innych pluginów (budynki Ludnosc, żołnierze Armii) zostają — do pełnego sprzątania użyj <yellow>/kraj admin usun \\<kraj> przywroc</yellow>."
+  # admin-restore-preview-particles: <seconds>
+  admin-restore-preview-particles: "<prefix><gray>Obrys regenerowanych chunków w pobliżu przez <seconds> s: <light_purple>fioletowy</light_purple>."
+  # admin-restore-preview-confirm: <confirm> (klik) <seconds> <command>
+  admin-restore-preview-confirm: "<prefix><confirm><red><bold>[Przywróć teren]</bold></red></confirm> <dark_gray>(albo dopisz potwierdz, <seconds> s)</dark_gray>"
+  # admin-restore-skip-*: <count>
+  admin-restore-skip-protected: "<prefix><gray>Pominięte: <white><count></white> chunków na ziemi neutralnej (spawn) — nigdy nie są regenerowane."
+  admin-restore-skip-claimed: "<prefix><gray>Pominięte: <white><count></white> chunków należących do krajów (użyj <yellow>/kraj admin przywroc \\<kraj></yellow>)."
+  admin-restore-skip-not_own: "<prefix><gray>Pominięte: <white><count></white> chunków spoza tego kraju."
+  admin-restore-skip-planned: "<prefix><gray>Pominięte już w planie: <white><count></white> chunków (ziemia neutralna / spoza obszaru)."
+  # admin-restore-started: <target> <count> <time>
+  admin-restore-started: "<prefix><gray>Przywracam <target>: <white><count></white> chunków porcjami w tle (ok. <time>). Zatrzymanie: <yellow>/kraj admin przywroc stop</yellow>."
+  # admin-restore-progress: <target> <percent> <done> <total> <time>
+  admin-restore-progress: "<prefix><gray>Przywracanie <target>: <white><percent>%</white> <dark_gray>(<done>/<total>, zostało ok. <time>)</dark_gray>"
+  # admin-restore-done: <target> <count> <total> <entities> <time>
+  admin-restore-done: "<prefix><green>Przywrócono <target>: <white><count></white>/<total> chunków w <time> <dark_gray>(usunięto bytów: <entities>)</dark_gray>."
+  # admin-restore-stopped: <target> <done> <total>
+  admin-restore-stopped: "<prefix><yellow>Zatrzymano przywracanie <target> po <white><done></white>/<total> chunkach. Reszta bez zmian."
+  # admin-restore-failed: <count>
+  admin-restore-failed: "<prefix><red>Nie udało się zregenerować <count> chunków — szczegóły w konsoli."
+  admin-restore-player-moved: "<prefix><gray>Teren pod tobą został przywrócony — przeniesiono cię na powierzchnię."
+  admin-bypass-on: "<prefix><gold>Omijanie ochrony WŁĄCZONE."
+  admin-bypass-off: "<prefix><gray>Omijanie ochrony wyłączone."
+  admin-spy-on: "<prefix><gold>Podgląd czatów krajowych WŁĄCZONY."
+  admin-spy-off: "<prefix><gray>Podgląd czatów krajowych wyłączony."
+  admin-reloaded: "<prefix><green>Przeładowano konfigurację."
+  admin-tick-done: "<prefix><green>Wykonano dzienne rozliczenie wszystkich krajów."
+  admin-no-siege: "<prefix><red>Na tym chunku nie trwa oblężenie."
+  admin-siege-stopped: "<prefix><green>Zakończono oblężenie."
+
+  # --- API (komunikaty w KrajeResult.message dla innych pluginów) ---
+  api-invalid-location: "<prefix>Nieprawidłowe miejsce albo świat."
+  api-country-not-found: "<prefix>Nie ma takiego kraju."
+  api-invalid-cause: "<prefix>Ta przyczyna (CONQUEST/BANKRUPTCY) jest zarezerwowana dla Kraje."
+  api-invalid-proposal: "<prefix>Można proponować tylko sojusz (ALLIANCE) albo pokój (NEUTRAL)."
+  api-not-npc: "<prefix>To nie jest kraj NPC."
+  api-invalid-name: "<prefix>Nieprawidłowe imię."
+  api-not-member: "<prefix>Gracz <player> nie jest członkiem tego kraju."
+  api-invalid-rank: "<prefix>Można nadać tylko rangę Doradca (ADVISOR) albo Obywatel (CITIZEN)."
+  api-cannot-change-ruler-rank: "<prefix>Rangi władcy nie można zmienić — władzę przekazuje się osobno."
+  api-cannot-kick-ruler: "<prefix>Nie można wyrzucić władcy kraju."
+  api-invite-offline: "<prefix>Gracz <player> musi być online, żeby otrzymać zaproszenie."
+  api-invalid-amount: "<prefix>Kwota musi być dodatnia."
+  api-invalid-tax: "<prefix>Podatek nie może być ujemny."
+  api-already-ruler: "<prefix><player> jest już władcą."
+  api-actor-admin: "administrator"
+  api-invalid-area-id: "<prefix>Id obszaru: 1–32 znaki a-z, 0-9, _ lub -."
+  api-invalid-area-world: "<prefix>Podaj nazwę świata obszaru."
+  api-invalid-area-buffer: "<prefix>Bufor obszaru musi wynosić od 0 do <max> chunków."
+  api-area-not-found: "<prefix>Nie ma obszaru chronionego <area>."
+
+  # --- unia personalna --- <a> <color_a> = kraj wspólnego władcy, <b> <color_b> = partner (chyba że opisano inaczej)
+  usage-unia: |-
+    <gold><bold>Unia personalna</bold></gold> <gray>— dwa kraje, jeden władca</gray>
+    <yellow>/kraj unia zaproponuj \<kraj></yellow> <gray>— zostań wspólnym władcą (Władca)</gray>
+    <yellow>/kraj unia przyjmij|odrzuc \<kraj></yellow> <gray>— odpowiedz na propozycję (Władca)</gray>
+    <yellow>/kraj unia info [kraj]</yellow> <gray>— kto z kim i od kiedy</gray>
+    <yellow>/kraj unia rzadz</yellow> <gray>— wspólny władca: rządź komendami drugim krajem</gray>
+    <yellow>/kraj unia zerwij</yellow> <gray>— zerwij unię (wspólny władca albo namiestnik)</gray>
+  union-disabled: "<prefix><red>Unie personalne są wyłączone."
+  union-npc-home: "<prefix><red>Wspólnym władcą może zostać tylko władca kraju gracza."
+  union-npc-refused: "<prefix><red><color><country></color> <dark_gray>(NPC)</dark_gray> odrzuca unię personalną."
+  union-already: "<prefix><red><color><country></color> jest już w unii personalnej."
+  union-at-war: "<prefix><red>Jesteście w wojnie z <color><country></color> — najpierw zawrzyjcie pokój."
+  union-vassal: "<prefix><red><color><country></color> jest wasalem — wasal nie może zawrzeć unii personalnej (najpierw wykup albo koniec wasalstwa)."
+  union-cooldown: "<prefix><red>Unia z <color><country></color> niedawno się skończyła. Nową można zawrzeć za <white><time></white>."
+  union-war-partner: "<prefix><red><color><country></color> jest w unii personalnej z wami — najpierw zerwij unię (<yellow>/kraj unia zerwij</yellow>)."
+  union-break-alliance: "<prefix><red>Sojusz z <color><country></color> wynika z unii personalnej — zerwij unię (<yellow>/kraj unia zerwij</yellow>)."
+  union-last-member: "<prefix><red><color><country></color> jest w unii personalnej i musi zachować co najmniej jednego zwykłego członka (przyszłego władcę po końcu unii)."
+  union-not-monarch: "<prefix><red>Tylko wspólny władca unii personalnej może przełączać kraje."
+  union-none: "<prefix><red><color><country></color> nie jest w unii personalnej."
+  union-break-denied: "<prefix><red>Unię może zerwać tylko wspólny władca albo namiestnik kraju-partnera."
+  union-too-early: "<prefix><red>Unię można zerwać dopiero za <white><time></white>."
+  union-no-proposal: "<prefix><red>Brak ważnej propozycji unii od <color><country></color>."
+  # <monarch> <minutes> <accept>...</accept> <refuse>...</refuse>
+  union-proposal-received: "<prefix><gold><color_a><bold><a></bold></color_a> proponuje unię personalną!</gold> <gray><white><monarch></white> zostałby także waszym władcą, a obecny władca — namiestnikiem. Kraje zachowają teren, skarbce i prawa.</gray> <accept><green><bold>[Przyjmij]</bold></green></accept> <refuse><red><bold>[Odrzuć]</bold></red></refuse> <dark_gray>(<minutes> min)"
+  union-proposed: "<prefix><yellow>Zaproponowano unię personalną krajowi <color><country></color>. <gray>Koszt przy przyjęciu: <gold><cost></gold>.</gray>"
+  union-proposed-npc: "<prefix><yellow>Zaproponowano unię personalną krajowi <color><country></color> <dark_gray>(NPC)</dark_gray>. Władca odpowie sam."
+  union-refused: "<prefix><red><color><country></color> odrzuca unię personalną."
+  union-refused-sent: "<prefix><gray>Odrzucono unię z <color><country></color>."
+  # <monarch> <regent>
+  union-formed-broadcast: "<prefix><gold><bold>Unia personalna!</bold></gold> <color_a><a></color_a> <gray>i</gray> <color_b><b></color_b> <gray>mają odtąd wspólnego władcę:</gray> <gold><monarch></gold><gray>. Namiestnik <color_b><b></color_b>: <white><regent></white>.</gray>"
+  union-dissolved-broken: "<prefix><yellow>Unia personalna <color_a><a></color_a> i <color_b><b></color_b> zerwana przez wspólnego władcę <white><monarch></white>."
+  union-dissolved-seceded: "<prefix><yellow><color_b><b></color_b> występuje z unii personalnej z <color_a><a></color_a> — namiestnik <white><regent></white> obejmuje władzę."
+  union-dissolved-ruler: "<prefix><yellow>Koniec unii personalnej <color_a><a></color_a> i <color_b><b></color_b> — <white><monarch></white> nie jest już władcą obu krajów."
+  union-dissolved-war: "<prefix><dark_red>Unia personalna <color_a><a></color_a> i <color_b><b></color_b> rozpadła się — między krajami wybuchła wojna."
+  union-dissolved-vassal: "<prefix><yellow>Unia personalna <color_a><a></color_a> i <color_b><b></color_b> wygasła — jeden z krajów został wasalem."
+  union-dissolved-gone: "<prefix><gray>Unia personalna <color_a><a></color_a> i <color_b><b></color_b> wygasła — jeden z krajów przestał istnieć."
+  union-dissolved-admin: "<prefix><gray>Unia personalna <color_a><a></color_a> i <color_b><b></color_b> została rozwiązana przez administrację."
+  union-new-ruler: "<prefix><gold>Nowy władca <color><country></color>: <white><player></white>."
+  union-partner-npc: "<prefix><gray><color><country></color> nie ma już członków-graczy i przechodzi pod zarząd NPC."
+  # <a> = partner w unii, którego zaatakowano, <b> = agresor
+  union-partner-defends: "<prefix><red>Wasz partner w unii <color_a><a></color_a> został zaatakowany przez <color_b><b></color_b> — przystępujecie do wojny jako obrońca."
+  # <a> = partner w unii, który wypowiedział wojnę, <b> = jego cel
+  union-partner-attacks: "<prefix><red>Wasz partner w unii <color_a><a></color_a> wypowiedział wojnę <color_b><b></color_b> — przystępujecie do wojny."
+  # <country> = drugi kraj unii, <cost> <seconds> <confirm>...</confirm>
+  union-break-confirm: "<prefix><yellow>Zerwać unię personalną z <color><country></color>? <gray>Koszt: <gold><cost></gold>.</gray> <confirm><red><bold>[Zerwij unię]</bold></red></confirm> <dark_gray>(albo /kraj unia zerwij potwierdz, <seconds> s)"
+  union-break-paid: "<prefix><gray>Zapłacono za zerwanie unii: <gold><cost></gold>."
+  union-info-none: "<prefix><gray><color><country></color> nie jest w unii personalnej."
+  union-info-how: "<gray>Zaproponuj unię: <yellow>/kraj unia zaproponuj \\<kraj></yellow> <dark_gray>(zostaniesz wspólnym władcą)"
+  # <home> <partner> (klikalne) <monarch> <regent> <since> <breakable> <defend>
+  union-info: |-
+    <gold><bold>Unia personalna</bold></gold> <home> <gray>+</gray> <partner>
+    <gray>Wspólny władca: <gold><monarch></gold> <dark_gray>•</dark_gray> namiestnik <partner>: <white><regent></white>
+    <gray>Od: <white><since></white> <dark_gray>•</dark_gray> <breakable>
+    <gray>Wspólna obrona przed agresorem: <white><defend></white>
+  union-info-breakable-now: "<gray>można ją zerwać (<yellow>/kraj unia zerwij</yellow>)"
+  union-info-breakable-at: "<gray>zerwanie możliwe za <white><time></white>"
+  union-info-acting-home: "<gray>Twoje komendy /kraj dotyczą teraz: <color><country></color>. <toggle><yellow>[Rządź drugim krajem]</yellow></toggle>"
+  union-info-acting-partner: "<gray>Twoje komendy /kraj dotyczą teraz: <color><country></color>. <toggle><yellow>[Wróć do swojego kraju]</yellow></toggle>"
+  union-acting-home: "<prefix><green>Twoje komendy /kraj znów dotyczą twojego kraju <color><country></color>."
+  union-acting-partner: "<prefix><gold>Rządzisz teraz <color><country></color> — komendy /kraj (zajmij, podatek, wojna, wyplac…) dotyczą tego kraju. Powrót: <yellow>/kraj unia rzadz</yellow>."
+
+  # --- ambasady --- <a> <color_a> = kraj-gość (właściciel ambasady), <b> <color_b> = gospodarz
+  usage-ambasada: |-
+    <gold><bold>Ambasady</bold></gold> <gray>— chunk twojego kraju na ziemi innego</gray>
+    <yellow>/kraj ambasada otworz \<kraj></yellow> <gray>— stań na jego ziemi i poproś o ambasadę</gray>
+    <yellow>/kraj ambasada przyjmij|odrzuc \<kraj></yellow> <gray>— odpowiedz na prośbę (Władca gospodarza)</gray>
+    <yellow>/kraj ambasada zamknij \<kraj></yellow> <gray>— zamknij własną ambasadę</gray>
+    <yellow>/kraj ambasada wydal \<kraj></yellow> <gray>— wydal ambasadę z twojego kraju (z wypowiedzeniem)</gray>
+    <yellow>/kraj ambasada lista [kraj]</yellow> <gray>— ambasady kraju</gray>
+    <yellow>/kraj ambasada tp \<kraj></yellow> <gray>— teleport do waszej ambasady</gray>
+  embassy-disabled: "<prefix><red>Ambasady są wyłączone."
+  embassy-not-host-land: "<prefix><red>Stań na ziemi kraju <color><country></color>, aby poprosić tam o ambasadę."
+  embassy-bad-relation: "<prefix><red>Ambasadę w <color><country></color> można otworzyć tylko w czasie pokoju albo sojuszu."
+  embassy-already-open: "<prefix><red>Macie już ambasadę w <color><country></color>."
+  embassy-limit-guest: "<prefix><red>Twój kraj ma już maksymalną liczbę ambasad (<white><max></white>)."
+  embassy-limit-host: "<prefix><red><color><country></color> gości już maksymalną liczbę ambasad (<white><max></white>)."
+  embassy-capital: "<prefix><red>Ambasada nie może stać na chunku stolicy."
+  embassy-chunk-taken: "<prefix><red>Na tym chunku stoi już inna ambasada."
+  embassy-sieged: "<prefix><red>Ten chunk jest oblegany."
+  embassy-protected: "<prefix><red>To obszar chroniony — tu nie można otworzyć ambasady."
+  embassy-npc-refused: "<prefix><red><color><country></color> <dark_gray>(NPC)</dark_gray> nie zgadza się na waszą ambasadę (potrzebne lepsze stosunki)."
+  # <x> <z> <minutes> <accept>...</accept> <refuse>...</refuse>
+  embassy-request-received: "<prefix><gold><color_a><bold><a></bold></color_a> prosi o ambasadę na waszej ziemi</gold> <gray>(chunk przy <white><x></white>, <white><z></white>; tylko ich obywatele będą tam budować).</gray> <accept><green><bold>[Przyjmij]</bold></green></accept> <refuse><red><bold>[Odrzuć]</bold></red></refuse> <dark_gray>(<minutes> min)"
+  embassy-requested: "<prefix><yellow>Wysłano prośbę o ambasadę do <color><country></color>. <gray>Opłata przy otwarciu: <gold><cost></gold>.</gray>"
+  embassy-requested-npc: "<prefix><yellow>Wysłano prośbę o ambasadę do <color><country></color> <dark_gray>(NPC)</dark_gray>. Władca odpowie sam."
+  embassy-no-request: "<prefix><red>Brak ważnej prośby o ambasadę od <color><country></color>."
+  embassy-refused: "<prefix><red><color><country></color> nie zgadza się na waszą ambasadę."
+  embassy-refused-sent: "<prefix><gray>Odrzucono prośbę <color><country></color> o ambasadę."
+  # <x> <z> <cost>
+  embassy-opened-guest: "<prefix><green>Otwarto ambasadę <color_a><a></color_a> w <color_b><b></color_b> <gray>(przy <x>, <z>). Teleport: <yellow>/kraj ambasada tp <b></yellow>"
+  embassy-opened-host: "<prefix><gray><color_a><a></color_a> otwiera ambasadę na waszej ziemi (przy <x>, <z>). Opłata dla skarbca: <gold><cost></gold>."
+  embassy-none: "<prefix><red>Nie macie ambasady w <color><country></color>."
+  embassy-none-hosted: "<prefix><red><color><country></color> nie ma ambasady w waszym kraju."
+  embassy-already-expelled: "<prefix><red>Ambasada <color><country></color> jest już wydalona (zamknięcie <white><until></white>)."
+  # <until> <time>
+  embassy-expel-notice: "<prefix><red><color_b><b></color_b> wydala ambasadę <color_a><a></color_a>! Zostanie zamknięta za <white><time></white> (<until>)."
+  embassy-expel-sent: "<prefix><yellow>Wydalono ambasadę <color_a><a></color_a>. Zamknięcie: <white><until></white>."
+  embassy-closed-closed: "<prefix><gray>Ambasada <color_a><a></color_a> w <color_b><b></color_b> została zamknięta."
+  embassy-closed-expelled: "<prefix><red>Ambasada <color_a><a></color_a> w <color_b><b></color_b> zamknięta — wydalenie."
+  embassy-closed-war: "<prefix><dark_red>Wojna! Ambasada <color_a><a></color_a> w <color_b><b></color_b> zamknięta."
+  embassy-closed-land: "<prefix><gray>Ambasada <color_a><a></color_a> w <color_b><b></color_b> zamknięta — chunk nie należy już do gospodarza."
+  embassy-closed-gone: "<prefix><gray>Ambasada <color_a><a></color_a> w <color_b><b></color_b> zamknięta — jeden z krajów przestał istnieć."
+  embassy-closed-admin: "<prefix><gray>Ambasada <color_a><a></color_a> w <color_b><b></color_b> zamknięta przez administrację."
+  embassy-list-header: "<gold><bold>Ambasady</bold></gold> <color><country></color>"
+  embassy-list-abroad: "<gray>Za granicą (<count>):"
+  embassy-list-abroad-none: "<gray>Za granicą: <dark_gray>brak"
+  embassy-list-hosted: "<gray>U nas (<count>):"
+  embassy-list-hosted-none: "<gray>U nas: <dark_gray>brak"
+  # <country> (klikalna nazwa) <x> <z> <world> <since> <expel> <buttons>
+  embassy-list-entry: "<gray>• <country> <dark_gray>(<x>, <z>, od <since>)</dark_gray><expel> <buttons>"
+  embassy-list-expelled: " <red>wydalona, zamknięcie <until></red>"
+  embassy-tp-button: "<aqua>[Teleport]</aqua>"
+  embassy-expel-button: "<red>[Wydal]</red>"
+  embassy-teleported: "<prefix><green>Jesteś w waszej ambasadzie w <color><country></color>."
+  unclaim-embassy: "<prefix><red>Na tym chunku stoi ambasada — najpierw ją wydal (<yellow>/kraj ambasada wydal</yellow>)."

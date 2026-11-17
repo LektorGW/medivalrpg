@@ -1,0 +1,1433 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+title: Pomoc MEDIVALRPG
+intro:
+- 'Kliknij kategorię albo komendę. Szukaj: `/pomoc szukaj <fraza>`.'
+categories:
+  start:
+    name: Start
+    summary: konto, menu, spawn i domy
+    emoji: 🧭
+    icon: COMPASS
+    color: green
+    description: 'Pierwsze kroki: konto, menu, poradnik, spawn i domy.'
+    guide:
+    - Załóż konto `/register <hasło> <hasło>`, a przy kolejnych wejściach wpisz `/login
+      <hasło>`.
+    - Otwórz menu `/menu` albo weź kompas Przewodnik do ręki i kliknij PPM.
+    - 'Przeczytaj Poradnik: `/menu poradnik`.'
+    - 'Nowy? Samouczek krok po kroku: `/samouczek`.'
+    - Dołącz do kraju `/kraj dolacz <kraj>` albo załóż własny `/kraj zaloz <nazwa>`.
+    - Zapisz dom `/ustawdom` i wracaj do niego przez `/dom`.
+    commands:
+    - command: /register <hasło> <hasło>
+      description: Rejestracja konta przy pierwszym wejściu (to samo hasło dwa razy)
+      keywords:
+      - rejestracja
+      - zarejestruj
+      - reg
+      - konto
+      - haslo
+    - command: /login <hasło>
+      description: Logowanie przy kolejnych wejściach
+      keywords:
+      - logowanie
+      - zaloguj
+      - l
+      - haslo
+      - sesja
+    - command: /zmienhaslo <stare> <nowe>
+      description: Zmiana hasła do konta (kończy też sesje w panelu WWW)
+      requires-plugin: Straznik
+      keywords:
+      - changepassword
+      - zmiana hasla
+      - haslo
+      - konto
+    - command: /wyloguj
+      description: Wylogowanie i wyjście z serwera (kończy sesję — kolejne wejście
+        wymaga hasła)
+      requires-plugin: Straznik
+      click: run
+      keywords:
+      - logout
+      - wyloguj
+      - sesja
+    - command: /menu
+      description: Główne menu ze wszystkimi funkcjami serwera
+      click: run
+      keywords:
+      - m
+      - gui
+    - command: /pomoc
+      description: 'Centrum pomocy: kategorie, poradniki i wyszukiwarka'
+      click: run
+    - command: /samouczek
+      description: 'Samouczek: 10 kroków od pierwszych monet do własnego kraju'
+      requires-command: samouczek
+      discord: false
+      click: run
+      keywords:
+      - samouczek
+      - tutorial
+      - poczatek
+      - od czego zaczac
+      - nowy gracz
+    - command: /samouczek ukryj
+      description: Wyłącza przypomnienie o samouczku po zalogowaniu
+      requires-command: samouczek ukryj
+      discord: false
+      click: run
+      keywords:
+      - nie pokazuj
+      - przypomnienie
+    - command: /samouczek przypominaj
+      description: Włącza z powrotem przypomnienie o samouczku po zalogowaniu
+      requires-command: samouczek przypominaj
+      discord: false
+      click: run
+    - command: /menu poradnik
+      description: 'Poradnik: spis rozdziałów (każdy rozdział to osobna książka)'
+      click: run
+      keywords:
+      - poradnik
+      - ksiazka
+      - rozdzial
+      - samouczek
+    - command: /menu poradnik <rozdział>
+      description: Wybrany rozdział, np. kraj, ekonomia, firmy, zaklady, kolej
+      insert: '/menu poradnik '
+    - command: /przewodnik daj
+      description: Nowy kompas Przewodnik, gdy go zgubisz
+      click: run
+      keywords:
+      - kompas
+    - command: /spawn
+      description: Teleport na spawn (odliczanie, nie ruszaj się)
+      click: run
+      keywords:
+      - sp
+    - command: /powrot
+      description: 'Raz po wejściu: powrót do ostatniej pozycji'
+      keywords:
+      - back
+    - command: /ustawdom [nazwa]
+      description: Zapisz dom w miejscu, w którym stoisz
+      keywords:
+      - home
+    - command: /dom [nazwa]
+      description: Teleport do domu
+      keywords:
+      - home
+    - command: /domy
+      description: Lista twoich domów (kliknij, aby się teleportować)
+      click: run
+    - command: /usundom <nazwa>
+      description: Usuń dom
+    - command: /mapa
+      description: Link do mapy świata z granicami krajów
+      click: run
+      requires-plugin: Kraje
+    - command: /panel
+      description: Jednorazowy link do panelu kraju w przeglądarce
+      click: run
+      requires-plugin: Panel
+      keywords:
+      - www
+      - strona
+      - przegladarka
+    - command: /panel wyloguj
+      description: Wyloguj wszystkie sesje panelu www
+      requires-plugin: Panel
+    - command: /discord polacz
+      description: Jednorazowy kod do powiązania konta Minecraft z Discordem (ważny
+        5 minut)
+      requires-plugin: DiscordBot
+      requires-command: discord polacz
+      click: run
+      keywords:
+      - discord
+      - polacz
+      - autorola
+      - konto
+    - command: /discord odlacz
+      description: Usuń powiązanie kont; zachowuje Whitelisted i dawne role, odbiera
+        tylko pozostałe role nadane przez bota
+      requires-plugin: DiscordBot
+      requires-command: discord odlacz
+      keywords:
+      - discord
+      - odlacz
+      - konto
+    - command: /discord status
+      description: Stan połączenia bota Discord
+      requires-plugin: DiscordBot
+      requires-command: discord status
+      click: run
+    - command: /discord pomoc
+      description: Pomoc powiązania konta z Discordem
+      requires-plugin: DiscordBot
+      requires-command: discord pomoc
+      click: run
+    - command: /discord admin przygotuj potwierdz
+      description: Utwórz brakujące role i kanały bota Discord (jawne polecenie administratora)
+      requires-plugin: DiscordBot
+      requires-command: discord admin przygotuj potwierdz
+      permission: discordbot.admin
+      discord: false
+    - command: /discord admin uklad podglad
+      description: Pełny podgląd porządkowania Discorda bez zmian
+      requires-plugin: DiscordBot
+      requires-command: discord admin uklad podglad
+      permission: discordbot.admin
+      discord: false
+      click: run
+    - command: /discord admin uklad zastosuj potwierdz
+      description: Utwórz i sprawdź nowy układ; stare kanały pozostają do osobnego
+        potwierdzenia, istniejące role są zachowane
+      requires-plugin: DiscordBot
+      requires-command: discord admin uklad zastosuj potwierdz
+      permission: discordbot.admin
+      discord: false
+    - command: /discord admin uklad usun-stare potwierdz <kod>
+      description: 'Osobny nieodwracalny etap: eksport do 1000 wiadomości i usunięcie
+        starych kanałów z wyjątkami'
+      requires-plugin: DiscordBot
+      requires-command: discord admin uklad usun-stare potwierdz
+      permission: discordbot.admin
+      discord: false
+    - command: /discord admin kronika
+      description: Stan kolejki kroniki wojen. Fakty po zdarzeniu, grupy co 5 min,
+        podsumowanie o 21:00.
+      permission: discordbot.admin
+      requires-plugin: DiscordBot
+      requires-command: discord admin kronika
+      discord: false
+    - command: /discord admin tresci odswiez
+      description: Sprawdź wiadomość server-info i opublikuj regulamin z plików plugins/DiscordBot/regulamin/*.md
+      permission: discordbot.admin
+      requires-plugin: DiscordBot
+      requires-command: discord admin tresci odswiez
+      discord: false
+      click: run
+    - command: /discord admin synchronizuj
+      description: Ponownie nadaj role Discorda według powiązań kont i krajów
+      permission: discordbot.admin
+      requires-plugin: DiscordBot
+      requires-command: discord admin synchronizuj
+      discord: false
+      click: run
+  kraj:
+    discord-page-2:
+      name: Kraj — flagi i sztandary
+      description: Chorągwie kraju, sztandary vanilla i przedmioty z własnym obrazkiem.
+    name: Kraj
+    summary: zakładanie, teren, obywatele i czat
+    emoji: 🏰
+    icon: RED_BANNER
+    color: yellow
+    description: Zakładanie kraju, teren, obywatele, wygląd i czat kraju.
+    requires-plugin: Kraje
+    guide:
+    - Stań na wybranym miejscu i wpisz `/kraj zaloz <nazwa>` — ten chunk zostanie
+      stolicą.
+    - 'Powiększaj teren: `/kraj zajmij` na chunku przylegającym do kraju.'
+    - Zapraszaj graczy `/kraj zapros <gracz>`, a zaufanym nadaj Doradcę `/kraj awansuj
+      <gracz>`.
+    - 'Rozmawiaj tylko z obywatelami: `/kc <wiadomość>`.'
+    commands:
+    - command: /kraj zaloz <nazwa>
+      description: Załóż kraj; chunk pod tobą zostaje stolicą
+      rank: bez kraju
+    - command: /kraj zajmij
+      description: Zajmij chunk, na którym stoisz
+      rank: Doradca+
+      keywords:
+      - teren
+      - claim
+    - command: /kraj porzuc
+      description: Oddaj chunk, na którym stoisz
+      rank: Doradca+
+    - command: /kraj stolica
+      description: Przenieś stolicę na ten chunk
+      rank: Władca
+    - command: /kraj spawn
+      description: Teleport do stolicy kraju
+      rank: obywatel
+    - command: /kraj zapros <gracz>
+      description: Zaproś gracza do kraju
+      rank: Doradca+
+    - command: /kraj dolacz <kraj>
+      description: Dołącz do kraju z zaproszenia
+      rank: bez kraju
+    - command: /kraj odrzuc <kraj>
+      description: Odrzuć zaproszenie do kraju
+    - command: /kraj opusc
+      description: Opuść swój kraj
+    - command: /kraj wyrzuc <gracz>
+      description: Wyrzuć obywatela
+      rank: Doradca+
+    - command: /kraj awansuj <gracz>
+      description: Nadaj rangę Doradcy
+      rank: Władca
+    - command: /kraj degraduj <gracz>
+      description: Odbierz rangę Doradcy
+      rank: Władca
+    - command: /kraj przekaz <gracz>
+      description: Przekaż władzę innemu obywatelowi
+      rank: Władca
+    - command: /kraj rozwiaz
+      description: Rozwiąż kraj
+      rank: Władca
+    - command: /kraj kolor <kolor>
+      description: Zmień kolor kraju na mapie i liście
+      rank: Władca
+    - command: /kraj opis <tekst>
+      description: Ustaw opis kraju
+      rank: Doradca+
+    - command: /kraj info [kraj]
+      description: Informacje o kraju
+    - command: /kraj lista [strona]
+      description: Ranking krajów
+    - command: /kraj mapa
+      description: Mapa okolicznych chunków na czacie
+      click: run
+    - command: /kraj czat
+      description: Przełącz czat na krajowy i z powrotem
+      click: run
+    - command: /kc <wiadomość>
+      description: Wiadomość do obywateli twojego kraju
+    - command: /ks <wiadomość>
+      description: Wiadomość do sojuszników
+    - command: /kraj pomoc [strona]
+      description: Pełna pomoc Kraju z opisami
+    - command: /kraj flaga
+      discord-page: 2
+      description: 'Chorągiew kraju: stan, oczekujące zgłoszenie i link do wgrania
+        obrazka w panelu'
+      requires-command: kraj flaga
+      keywords:
+      - choragiew
+      - flaga
+      - sztandar
+      - herb
+    - command: /kraj flaga postaw|auto|historia|wycofaj
+      discord-page: 2
+      description: Postaw chorągiew tutaj albo nad stolicą, historia zgłoszeń, wycofanie
+        zgłoszenia
+      rank: Władca/Doradca
+      requires-command: kraj flaga
+    - command: /kraj flaga sztandar [podglad]
+      discord-page: 2
+      description: Sztandar z wzorem flagi kraju (barwniki) — do postawienia, na tarczę
+        i dla wojska; opłata i limit dzienny
+      rank: Władca/Doradca
+      requires-command: kraj flaga sztandar
+      keywords:
+      - sztandar
+      - tarcza
+      - wzor
+      - flaga
+    - command: /kraj flaga przedmiot
+      discord-page: 2
+      description: Przedmiot „Sztandar kraju” z dokładnym obrazkiem flagi — w ręce
+        i do postawienia (Shift+PPM zabiera)
+      rank: Władca/Doradca
+      requires-command: kraj flaga przedmiot
+      keywords:
+      - sztandar
+      - flaga
+      - dekoracja
+  dyplomacja:
+    name: Dyplomacja i wojna
+    summary: sojusze, wojny, oblężenia i wasale
+    emoji: 🛡️
+    icon: SHIELD
+    color: red
+    description: Sojusze, wojny, oblężenia, wasale, unie, ambasady i rozmowy z władcami
+      NPC.
+    requires-plugin: Kraje
+    guide:
+    - 'Sojusz i pokój proponuje Władca: `/kraj sojusz <kraj>`, `/kraj pokoj <kraj>`.'
+    - Podczas wojny stań na chunku wroga przy granicy i wpisz `/kraj oblezenie`.
+    - 'Z władcą NPC porozmawiasz, stojąc obok niego: `/wladca rozmowa`.'
+    commands:
+    - command: /kraj sojusz <kraj>
+      description: Zaproponuj lub przyjmij sojusz
+      rank: Władca
+    - command: /kraj pokoj <kraj>
+      description: Zaproponuj lub przyjmij pokój
+      rank: Władca
+    - command: /kraj wojna <kraj>
+      description: Wypowiedz wojnę
+      rank: Władca
+    - command: /kraj zerwij <kraj>
+      description: Zerwij sojusz
+      rank: Władca
+    - command: /kraj oblezenie
+      description: Rozpocznij oblężenie chunka wroga
+      rank: Doradca+
+    - command: /kraj oblezenia
+      description: Trwające oblężenia
+      click: run
+    - command: /kraj desant
+      description: Zdobądź przyczółek z morza
+      rank: Doradca+
+    - command: /kraj kapitulacja <wróg> [dni]
+      description: Skapituluj i zostań wasalem
+      rank: Władca
+    - command: /kraj kapitulacja przyjmij <kraj>
+      description: Przyjmij kapitulację wroga
+      rank: Władca
+    - command: /kraj kapitulacja odrzuc <kraj>
+      description: Odrzuć kapitulację wroga
+      rank: Władca
+    - command: /kraj wasale [kraj]
+      description: Suweren i wasale kraju
+    - command: /kraj wykup
+      description: Wykup się z wasalstwa
+      rank: Władca
+    - command: /kraj zwolnij <wasal>
+      description: Zwolnij wasala
+      rank: Władca
+    - command: /kraj unia zaproponuj <kraj>
+      description: Zaproponuj unię personalną
+      rank: Władca
+    - command: /kraj unia przyjmij <kraj>
+      description: Przyjmij unię personalną
+      rank: Władca
+    - command: /kraj unia odrzuc <kraj>
+      description: Odrzuć propozycję unii
+      rank: Władca
+    - command: /kraj unia rzadz
+      description: Wybierz, którym krajem unii rządzisz
+      rank: wspólny władca
+      discord: false
+    - command: /kraj unia zerwij [potwierdz]
+      description: Zerwij unię (z potwierdzeniem)
+      rank: wspólny władca
+    - command: /kraj unia info [kraj]
+      description: Unia personalna kraju
+    - command: /kraj ambasada otworz <kraj>
+      description: Poproś o ambasadę w tym miejscu
+      rank: Władca
+    - command: /kraj ambasada przyjmij|odrzuc <kraj>
+      description: Odpowiedz na prośbę o ambasadę
+      rank: Władca
+    - command: /kraj ambasada zamknij|wydal <kraj>
+      description: Zamknij naszą albo wydal obcą ambasadę
+      rank: Władca
+      discord: false
+    - command: /kraj ambasada lista [kraj]
+      description: Ambasady kraju
+    - command: /kraj ambasada tp <kraj>
+      description: Teleport do ambasady
+      rank: obywatel
+    - command: /wladca rozmowa
+      description: Rozmowa z władcą NPC stojącym obok
+      requires-plugin: Wladcy
+      keywords:
+      - npc
+      - krol
+    - command: /wladca koniec
+      description: Zakończ rozmowę z władcą
+      requires-plugin: Wladcy
+    - command: /wladca pomoc [strona]
+      description: Pomoc rozmów z władcami
+      requires-plugin: Wladcy
+  ekonomia:
+    name: Ekonomia
+    summary: monety, bank, handel, sklepy i podatki
+    emoji: 💰
+    icon: GOLD_INGOT
+    color: gold
+    description: Monety, bank, przelewy, handel, sklepy oraz skarbiec i podatki kraju.
+    requires-plugin: Skarbiec
+    guide:
+    - 'Monety: miedziak (1 md), srebrnik (10 md) i złota korona (100 md). 1 zł = 10
+      sr = 100 md.'
+    - Bankier NPC (PPM) przyjmuje i wypłaca monety, kupiec NPC skupuje i sprzedaje
+      towary.
+    - 'Kupcy: ogólny, kowal, spożywczy, budowlany. Oferta zmienia się z każdą dostawą
+      (co 12 h): `/skarbiec kupcy`.'
+    - 'Stan konta: `/saldo`; przelew: `/zaplac <gracz> <kwota>`; bezpieczna wymiana:
+      `/handel <gracz>`.'
+    - 'Sklep: skrzynia z tabliczką [Sklep] / Sprzedam lub Kupię / ilość / cena.'
+    commands:
+    - command: /saldo
+      description: Stan konta w banku i sakiewki
+      click: run
+      keywords:
+      - konto
+      - pieniadze
+      - kasa
+    - command: /monety
+      description: Ile monet masz przy sobie
+      click: run
+      keywords:
+      - sakiewka
+    - command: /zaplac <gracz> <kwota>
+      description: Przelew bankowy do gracza
+      keywords:
+      - przelew
+      - pay
+    - command: /handel <gracz>
+      description: Bezpieczna wymiana z graczem obok
+      keywords:
+      - wymiana
+      - trade
+    - command: /skarbiec kupcy
+      description: 'Kupcy i dostawy: co mają, czego szukają, kiedy nowa dostawa'
+      requires-plugin: Skarbiec
+      click: run
+      keywords:
+      - kupiec
+      - dostawa
+      - towary
+      - oferta
+      - kowal
+    - command: /skarbiec sklepy
+      description: Lista twoich sklepów
+      click: run
+    - command: /skarbiec pomoc [strona]
+      description: Pełna pomoc pieniędzy i sklepów
+    - command: /kraj skarbiec
+      description: Stan i operacje skarbca kraju
+      rank: obywatel
+      requires-plugin: Kraje
+      click: run
+    - command: /kraj wplac <kwota> [konto|monety]
+      description: Wpłać do skarbca kraju
+      rank: obywatel
+      requires-plugin: Kraje
+    - command: /kraj wyplac <kwota>
+      description: Wypłać ze skarbca kraju
+      rank: Władca
+      requires-plugin: Kraje
+    - command: /kraj podatek [kwota]
+      description: Dzienny podatek od obywateli
+      rank: Władca ustawia
+      requires-plugin: Kraje
+  ludnosc:
+    name: Ludność i budowa
+    summary: obywatele, budynki, praca i magazyny
+    emoji: 👥
+    icon: BRICKS
+    color: gold
+    description: Obywatele, budynki, praca, kopalnie i magazyny.
+    requires-plugin: Ludnosc
+    discord-page-2:
+      name: Ludność — praca, zakłady i obywatele
+      description: Zakłady i łańcuchy produkcji, spichlerz, praca, magazyny, kopalnie,
+        obywatele i nastrój.
+      guide:
+      - 'Wioska sama wytwarza szkło, cegły, wełnę i sztabki w zakładach: `/ludnosc
+        zaklady`.'
+      - 'Pełna skrzynia wstrzymuje pracę – zbuduj magazyn: `/ludnosc magazyn`.'
+    guide:
+    - Wieśniacy na ziemi kraju zostają obywatelami — potrzebują łóżek i jedzenia.
+    - 'Zbuduj dom: `/ludnosc buduj <typ>`, potem `/ludnosc buduj potwierdz`.'
+    - 'Pełna skrzynia wstrzymuje pracę – zbuduj magazyn: `/ludnosc magazyn`.'
+    - 'Spójrz na wieśniaka i sprawdź jego kartę: `/ludnosc obywatel`.'
+    commands:
+    - command: /ludnosc info [kraj]
+      description: Ludność, jedzenie, podatki
+    - command: /ludnosc budynki [kraj]
+      description: Budynki i place budowy
+    - command: /ludnosc typy
+      description: "Budynki: co dają i koszt"
+      click: run
+    - command: /ludnosc buduj <typ>
+      description: Chata, produkcja, zapasy lub koszary — wybierz miejsce
+      rank: Doradca+
+    - command: /ludnosc buduj obroc|potwierdz|anuluj
+      description: Obróć plan, zleć budowę lub porzuć podgląd
+      rank: Doradca+
+    - command: /ludnosc buduj anuluj [id|potwierdz]
+      description: 'Bez argumentu: porzuć podgląd (albo lista placów z id). Plac: id
+        albo potwierdz (stoisz na nim); zwrot 100%, gdy prace się nie zaczęły'
+      rank: Doradca+
+    - command: /ludnosc buduj wariant
+      description: Inny wygląd planowanego budynku
+      click: run
+      keywords:
+      - szachulec
+      - strzecha
+    - command: /ludnosc budowy
+      description: 'Place budowy: etap, budowniczowie, braki'
+      click: run
+    - command: /ludnosc gospodarka
+      description: Przepływ materiałów do budów
+      click: run
+    - command: /ludnosc zaklady
+      discord-page: 2
+      description: 'Zakłady: huta szkła, cegielnia, owczarnia, kuźnia — paliwo, wydobycie,
+        braki'
+      click: run
+      keywords:
+      - szklo
+      - cegly
+      - welna
+      - siano
+      - lancuch
+      - huta
+      - cegielnia
+      - owczarnia
+      - kuznia
+    - command: /ludnosc kopia
+      description: 'Kopie budowli graczy: jak to działa'
+      click: run
+      keywords:
+      - szablon
+      - schemat
+    - command: /ludnosc kopia pos1|pos2|zaznaczenie|wyczysc
+      description: Zaznacz budowlę do skopiowania
+    - command: /ludnosc kopia zapisz <nazwa> [przód]
+      description: Zapisz budowlę jako szablon kraju
+      rank: Doradca+
+    - command: /ludnosc kopia lista
+      description: Kopie budowli twojego kraju
+      click: run
+    - command: /ludnosc kopia info|buduj|usun <nazwa>
+      description: Koszt kopii, budowa albo usunięcie
+      rank: Doradca+ (buduj, usun)
+    - command: /ludnosc kopia nazwa <stara> <nowa>
+      description: Zmień nazwę kopii
+      rank: Doradca+
+    - command: /ludnosc kolejka
+      description: Kolejka budów kraju
+      rank: Doradca+
+    - command: /ludnosc kolejka anuluj|wyzej|nizej|pokaz <nr>
+      description: Usuń, przesuń lub pokaż budowę
+      rank: Doradca+
+    - command: /ludnosc plan [krolestwo]
+      description: Plan miasta albo mapa królestwa
+    - command: /ludnosc napraw <id|wszystko>
+      description: Napraw uszkodzony budynek
+      rank: Doradca+
+    - command: /ludnosc modernizuj <id|wszystko>
+      description: Budynek w stylu epoki
+      rank: Doradca+
+    - command: /ludnosc przebuduj
+      description: Drogi w stylu epoki
+      rank: Doradca+
+    - command: /ludnosc spichlerz
+      discord-page: 2
+      description: Stan spichlerza
+      click: run
+    - command: /ludnosc spichlerz oznacz|usun
+      discord-page: 2
+      description: Wybierz skrzynię spichlerza
+      discord: false
+      rank: Doradca+
+    - command: /ludnosc pora
+      discord-page: 2
+      description: Pora roku i plony
+      click: run
+      keywords:
+      - sezon
+      - zima
+      - lato
+    - command: /pory
+      discord-page: 2
+      description: Pora roku na świecie i jak teraz wygląda (kolory, śnieg, liście)
+      requires-plugin: Pory
+      click: run
+      keywords:
+      - pory
+      - pora roku
+      - zima
+      - jesien
+      - snieg
+      - liscie
+    - command: /ludnosc budynek zglos <typ> [nazwa]
+      discord-page: 2
+      description: Nadaj funkcję budynkowi postawionemu przez graczy (najpierw /ludnosc
+        kopia pos1 i pos2)
+      requires-plugin: Ludnosc
+      requires-command: ludnosc budynek
+      rank: Doradca+
+      insert: '/ludnosc budynek zglos '
+      keywords:
+      - budynek
+      - zglos
+      - wlasny budynek
+      - mieszkanie
+      - karczma
+      - koszary
+    - command: /ludnosc budynek typy
+      discord-page: 2
+      description: Typy do zgłoszenia, wymagane bloki i czy twój kraj może
+      requires-plugin: Ludnosc
+      requires-command: ludnosc budynek
+      click: run
+      keywords:
+      - typy budynkow
+      - wymagania
+    - command: /ludnosc budynek info
+      discord-page: 2
+      description: Co to za budynek, w którym stoisz, i czy działa
+      requires-plugin: Ludnosc
+      requires-command: ludnosc budynek
+      click: run
+      keywords:
+      - budynek info
+      - czy dziala
+    - command: /ludnosc budynek usun
+      discord-page: 2
+      description: Wyrejestruj zgłoszony budynek (bloki zostają)
+      requires-plugin: Ludnosc
+      requires-command: ludnosc budynek
+      rank: Doradca+
+      insert: /ludnosc budynek usun
+      keywords:
+      - wyrejestruj
+      - usun budynek
+    - command: /ludnosc praca [kraj]
+      discord-page: 2
+      description: Kto i gdzie pracuje
+    - command: /ludnosc magazyn [status]
+      discord-page: 2
+      description: Magazyny, skrzynie miejsc pracy i surowce
+    - command: /ludnosc magazyn powiaz [id] [id_magazynu]
+      discord-page: 2
+      description: Powiąż skrzynię, na którą patrzysz
+      rank: Doradca+
+    - command: /ludnosc magazyn domyslny
+      discord-page: 2
+      description: Domyślny magazyn kraju
+      rank: Doradca+
+    - command: /ludnosc kopalnia
+      discord-page: 2
+      description: Kopalnie kraju
+      click: run
+    - command: /ludnosc kopalnia rozbuduj [id]
+      discord-page: 2
+      description: Rozbuduj kopalnię
+      discord: false
+      rank: Doradca+
+    - command: /ludnosc podziemia
+      discord-page: 2
+      description: Podziemia budynków
+      click: run
+    - command: /ludnosc podziemia kop [id]
+      discord-page: 2
+      description: Dokop podziemia
+      discord: false
+      rank: Doradca+
+    - command: /ludnosc obywatel [imię]
+      discord-page: 2
+      description: 'Karta obywatela: dom, praca, pensja, rodzina, wiek'
+      keywords:
+      - wiesniak
+      - rodzina
+      - starosc
+    - command: /ludnosc obywatele [kraj]
+      discord-page: 2
+      description: Bezdomni, bezrobotni, oszczędności, rodziny
+    - command: /ludnosc obywatele chatki wl|wyl
+      discord-page: 2
+      description: Obywatele sami budują chaty z oszczędności
+      rank: Doradca+
+      keywords:
+      - chata
+      - chatka
+    - command: /ludnosc obywatele chatki limit <0-20>
+      discord-page: 2
+      description: Ile chat obywatele budują naraz
+      rank: Doradca+
+    - command: /zycie
+      discord-page: 2
+      description: 'Nastrój kraju: pożary i festyny'
+      click: run
+      requires-plugin: Zycie
+      keywords:
+      - nastroj
+      - miasto
+    - command: /zycie kraj <kraj>
+      discord-page: 2
+      description: Nastrój innego kraju
+      requires-plugin: Zycie
+    - command: /zycie pomoc [strona]
+      discord-page: 2
+      description: Pełna pomoc nastroju i życia miasta
+      requires-plugin: Zycie
+    - command: /ludnosc pomoc [strona]
+      discord-page: 2
+      description: Pełna pomoc ludności i budowy
+      discord: false
+  armia:
+    name: Armia i flota
+    summary: rekrutacja, rozkazy, machiny i statki
+    emoji: ⚔️
+    icon: IRON_SWORD
+    color: red
+    description: Rekrutacja, rozkazy, najemnicy, machiny i statki.
+    requires-plugin: Armia
+    guide:
+    - 'Rekrutacja wymaga koszar, obywateli i pieniędzy w skarbcu: `/armia rekrutuj
+      <typ> [ilość]`.'
+    - 'Dowodź: `/armia zamna|stoj|wroc` albo buławą `/armia bulawa`.'
+    commands:
+    - command: /armia rekrutuj <typ> [ilość]
+      description: Zrekrutuj żołnierzy
+      rank: Doradca+
+      keywords:
+      - wojsko
+      - zolnierze
+    - command: /armia lista [strona]
+      description: Żołnierze twojego kraju
+    - command: /armia info [kraj]
+      description: Armia kraju
+    - command: /armia zamna|stoj|wroc
+      description: Za mną, stój, wracajcie na posterunki
+      rank: Doradca+
+    - command: /armia atakuj
+      description: Atakujcie wskazany cel
+      rank: Doradca+
+    - command: /armia straz [promień]
+      description: Pilnujcie tego miejsca
+      rank: Doradca+
+    - command: /armia patrol dodaj|start|wyczysc
+      description: Trasa patrolu
+      rank: Doradca+
+    - command: /armia bulawa
+      description: Buława dowódcy
+      rank: Doradca+
+    - command: /armia ostrzal
+      description: Salwa machin w blok
+      rank: Doradca+
+    - command: /armia taranuj
+      description: Taran na bramę lub mur obleganego chunka (patrz na cel)
+      rank: Doradca+
+      requires-command: armia taranuj
+      keywords:
+      - taran
+      - brama
+      - mur
+      - oblezenie
+      - machina
+    - command: /armia amunicja <kamien|kula|kartacz>
+      description: Pociski machin
+      rank: Doradca+
+    - command: /armia przezbroj [typ] [ilość]
+      description: Broń nowej epoki
+      rank: Doradca+
+    - command: /armia rozpusc potwierdz
+      description: Rozpuść oddział
+      rank: Doradca+
+    - command: /armia najmij <typ> [ilość]
+      description: Wynajmij najemników
+      rank: Doradca+
+    - command: /armia najemnicy
+      description: Kontrakty najemników
+      click: run
+    - command: /armia przedluz [id|wszystkich]
+      description: Przedłuż kontrakty
+      rank: Doradca+
+    - command: /armia zwolnij-najemnikow
+      description: Zwolnij najemników
+      rank: Doradca+
+    - command: /armia trybut przyjmij|odrzuc <kraj>
+      description: Odpowiedz na żądanie trybutu
+      rank: Władca
+    - command: /armia flota lista
+      description: Statki, transport i desanty
+      click: run
+    - command: /armia flota zbuduj <typ>
+      description: Transportowiec lub karawela
+      rank: Doradca+
+    - command: /armia flota wejdz|zejdz
+      description: Wejdź na pokład lub zejdź na brzeg
+    - command: /armia flota steruj
+      description: Ster statku (Shift zwalnia)
+      rank: Doradca+
+    - command: /armia flota zaladuj|desant
+      description: Załaduj oddział lub wysadź desant
+      rank: Doradca+
+    - command: /armia flota salwa
+      description: Salwa karaweli we wrogi statek
+      rank: Doradca+
+    - command: /armia flota usun potwierdz
+      description: Usuń najbliższy pusty statek (bez zwrotu)
+      rank: Władca
+    - command: /armia pomoc [strona]
+      description: Pełna pomoc armii
+      keywords:
+      - wojsko
+  epoki:
+    name: Postęp i epoki
+    summary: badania, odkrycia i awans do Renesansu
+    emoji: 🔭
+    icon: EXPERIENCE_BOTTLE
+    color: aqua
+    description: Punkty badań, odkrycia i awans kraju do kolejnej epoki (maksymalnie
+      Renesans).
+    requires-plugin: Postep
+    guide:
+    - Każdy kraj zaczyna w Średniowieczu; najwyższa epoka na serwerze to Renesans.
+    - 'Wybierz cel badań: `/postep odkryj <odkrycie>`, a przyspiesz je `/postep inwestuj
+      <kwota>`.'
+    - 'Gdy spełnisz wymagania, Władca ogłasza nową epokę: `/postep awansuj`.'
+    commands:
+    - command: /postep
+      description: Postęp i epoka twojego kraju
+      click: run
+      keywords:
+      - epoka
+    - command: /postep drzewko
+      description: Drzewko odkryć
+      click: run
+    - command: /postep odkrycia
+      description: Odkrycia dostępne teraz
+      click: run
+    - command: /postep epoki
+      description: Epoki i ich wymagania
+      click: run
+    - command: /postep ranking [strona]
+      description: Ranking krajów
+    - command: /postep kraj <kraj>
+      description: Postęp innego kraju
+    - command: /postep odkryj <odkrycie>
+      description: Odkryj albo ustaw cel badań
+      rank: Doradca+
+    - command: /postep cel [wyczysc]
+      description: Obecny cel badań
+    - command: /postep inwestuj <kwota>
+      description: Zamień pieniądze ze skarbca na punkty badań
+      rank: Doradca+
+    - command: /postep awansuj
+      description: Ogłoś nową epokę kraju
+      rank: Władca
+    - command: /postep pomoc [strona]
+      description: Pełna pomoc Postępu
+  kolej:
+    name: Kolej
+    summary: parowozy i przejazdy od startu
+    emoji: 🚂
+    icon: POWERED_RAIL
+    color: gold
+    description: Parowozy i przejazdy królewskiego przewoźnika. Kolej działa od startu,
+      w każdej epoce.
+    requires-plugin: Kolej
+    guide:
+    - Kolej parowa jest dostępna od początku gry, niezależnie od epoki kraju.
+    - Sprawdź odjazdy `/kolej odjazdy` i składy `/kolej panel`. Brak połączeń oznacza,
+      że linia jest jeszcze w budowie.
+    - Wsiadasz `/kolej wejdz <pociag>` (albo kliknięciem w panelu), wysiadasz `/kolej
+      zejdz`.
+    commands:
+    - command: /kolej panel
+      description: Składy w okienku; kliknięcie = wejście do pociągu
+      click: run
+    - command: /kolej odjazdy [stacja]
+      description: Najbliższe odjazdy
+      keywords:
+      - rozklad
+      - pociag
+    - command: /kolej wejdz <pociag>
+      description: Wsiądź do składu
+    - command: /kolej zejdz
+      description: Wysiądź ze składu
+      click: run
+    - command: /kolej pociag lista
+      description: Lista składów
+      click: run
+    - command: /kolej pociag info <id>
+      description: 'Stan składu: ciśnienie, węgiel, woda'
+    - command: /kolej firma info
+      description: Konto i pociągi przewoźnika
+      click: run
+    - command: /kolej firma wplac <md>
+      description: Zasil konto przewoźnika ze swojego konta
+    - command: /kolej zgoda tak|nie
+      description: Zgoda kraju na infrastrukturę kolei
+      rank: Władca
+    - command: /kolej prowadz <pociag>
+      description: Prowadź przydzielony skład
+      rank: maszynista
+      permission: kolej.maszynista
+    - command: /kolej ster <pociag> <0..100>
+      description: Ustaw regulator parowozu
+      rank: maszynista
+      permission: kolej.maszynista
+    - command: /kolej hamulec <pociag> <0..100>
+      description: Ustaw hamulec składu
+      rank: maszynista
+      permission: kolej.maszynista
+    - command: /kolej jedz <pociag> <stacja>
+      description: Ruszaj do stacji (maszynista przy sterze)
+      rank: maszynista
+      permission: kolej.maszynista
+    - command: /kolej pomoc
+      description: Pełna pomoc Kolei
+      click: run
+  handel:
+    name: Handel, szlaki i zlecenia
+    summary: karawany, konwoje, zlecenia i reputacja
+    emoji: 🐎
+    icon: CHEST_MINECART
+    color: dark_green
+    description: Karawany i konwoje morskie, zlecenia władców NPC i reputacja u krajów.
+    guide:
+    - Tablicę zleceń kraju, na którego terenie stoisz, otworzysz `/zlecenia`.
+    - 'Przyjmij zlecenie `/zlecenia przyjmij <numer>`, zbierz towar i oddaj `/zlecenia
+      oddaj`. Rośnie reputacja: `/reputacja`.'
+    - 'Karawany przewożą prawdziwe skrzynie towaru. Trasy i przewozy: `/szlaki lista`.'
+    commands:
+    - command: /zlecenia
+      description: Twoje zlecenia i tablica kraju, na którym stoisz
+      click: run
+      requires-plugin: Wladcy
+    - command: /zlecenia kraj <kraj>
+      description: Tablica zleceń wybranego kraju NPC
+      requires-plugin: Wladcy
+    - command: /zlecenia przyjmij <numer>
+      description: Przyjmij zlecenie
+      requires-plugin: Wladcy
+    - command: /zlecenia oddaj [numer]
+      description: Oddaj gotowe zlecenia
+      requires-plugin: Wladcy
+    - command: /zlecenia porzuc [numer]
+      description: Porzuć zlecenie
+      requires-plugin: Wladcy
+    - command: /zlecenia odrzuc <numer>
+      description: Odrzuć proponowane zlecenie
+      requires-plugin: Wladcy
+    - command: /reputacja [kraj]
+      description: Twoja reputacja u krajów (od Wroga do Bohatera)
+      requires-plugin: Wladcy
+    - command: /reputacja pomoc
+      description: Pomoc reputacji
+      click: run
+      requires-plugin: Wladcy
+    - command: /zlecenia pomoc [strona]
+      description: Pełna pomoc zleceń
+      requires-plugin: Wladcy
+    - command: /szlaki
+      description: Pomoc karawan i konwojów
+      click: run
+      requires-plugin: Szlaki
+    - command: /szlaki lista
+      description: Trasy i aktywne przewozy
+      click: run
+      requires-plugin: Szlaki
+      keywords:
+      - karawana
+      - konwoj
+    - command: /szlaki trasa <id>
+      description: Szczegóły trasy
+      requires-plugin: Szlaki
+    - command: /szlaki info <przewóz>
+      description: Stan przewozu
+      requires-plugin: Szlaki
+    - command: /szlaki napad <przewóz>
+      description: Atak na konwój wroga z bliska
+      rank: wojna
+      requires-plugin: Szlaki
+    - command: /szlaki przejmij <przewóz>
+      description: Zabierz ładunek unieruchomionego konwoju
+      rank: wojna
+      requires-plugin: Szlaki
+    - command: /szlaki napraw <przewóz>
+      description: Obroń i napraw konwój swojego kraju
+      rank: obywatel
+      requires-plugin: Szlaki
+  turnieje:
+    name: Turnieje
+    summary: zapisy, pojedynki i ranking
+    emoji: 🏆
+    icon: GOLDEN_SWORD
+    color: gold
+    description: Turnieje rycerskie, pojedynki, ranking i widownia areny.
+    requires-plugin: Turnieje
+    guide:
+    - Sprawdź najbliższy turniej `/turniej info` i zapisz się `/turniej zapisz`.
+    - 'Wyzwij gracza na pojedynek: `/turniej wyzwij <gracz>`.'
+    commands:
+    - command: /turniej info
+      description: Trwający i najbliższy turniej
+      click: run
+    - command: /turniej zapisz
+      description: Zapisz się na otwarty turniej
+    - command: /turniej wypisz
+      description: Wypisz się lub wycofaj z turnieju
+    - command: /turniej ranking [strona]
+      description: Ranking zwycięstw i tytułów
+    - command: /turniej ogladaj [arena]
+      description: Widownia areny i powrót
+    - command: /turniej wyzwij <gracz>
+      description: Wyzwanie na pojedynek
+    - command: /turniej przyjmij
+      description: Przyjmij wyzwanie
+    - command: /turniej odrzuc
+      description: Odrzuć wyzwanie
+    - command: /turniej zorganizuj <arena> <pula> [wpisowe] [minuty]
+      description: Turniej kraju z pulą ze skarbca
+      rank: Władca
+    - command: /turniej pomoc [strona]
+      description: Pełna pomoc Turniejów
+  postac:
+    name: Postać i towarzystwo
+    summary: interakcje, emotki i czat głosowy
+    emoji: 🎭
+    icon: POPPY
+    color: light_purple
+    description: Interakcje z graczami, pozy, tańce, emotki i czat głosowy.
+    discord-page-2:
+      name: Postać — ceremonie
+      description: Uścisk dłoni, toast, ukłon dworski, pasowanie na rycerza, lenno
+        i koronacja.
+    guide:
+    - Podejdź do gracza i kliknij go Shift + PPM pustą ręką — otworzy się menu interakcji.
+    - 'Czat głosowy działa w przeglądarce, bez modów: `/glos` i kliknij link.'
+    commands:
+    - command: /przytul <gracz>
+      description: Przytul gracza (za jego zgodą)
+      requires-plugin: Interakcje
+    - command: /pocaluj <gracz>
+      description: Całus (za zgodą)
+      requires-plugin: Interakcje
+    - command: /trzymaj <gracz>
+      description: Trzymanie za rękę (za zgodą)
+      requires-plugin: Interakcje
+    - command: /pusc
+      description: Puść trzymaną dłoń
+      click: run
+      requires-plugin: Interakcje
+    - command: /poglaszcz <gracz>
+      description: Pogłaszcz po głowie
+      requires-plugin: Interakcje
+    - command: /piatka <gracz>
+      description: Przybij piątkę
+      requires-plugin: Interakcje
+    - command: /lisc <gracz>
+      description: Policzek bez obrażeń
+      requires-plugin: Interakcje
+    - command: /pomachaj [gracz]
+      description: Pomachaj komuś lub wszystkim
+      requires-plugin: Interakcje
+    - command: /uklon [gracz]
+      description: Ukłoń się
+      requires-plugin: Interakcje
+    - command: /uscisk <gracz>
+      description: Uścisk dłoni (za zgodą)
+      requires-plugin: Interakcje
+      requires-command: uscisk
+      discord-page: 2
+    - command: /toast <gracz>
+      description: Wspólny toast kuflami (za zgodą)
+      requires-plugin: Interakcje
+      requires-command: toast
+      discord-page: 2
+      keywords:
+      - kufel
+      - piwo
+      - wznies
+    - command: /reweranse <gracz>
+      description: 'Wzajemny ukłon dworski: reweranse i dyg (za zgodą)'
+      requires-plugin: Interakcje
+      requires-command: reweranse
+      discord-page: 2
+      keywords:
+      - dworski
+      - dyg
+    - command: /pasuj <gracz>
+      description: Pasowanie na rycerza; od władcy kraju tytuł Sir/Pani (za zgodą)
+      requires-plugin: Interakcje
+      requires-command: pasuj
+      discord-page: 2
+      keywords:
+      - rycerz
+      - pasowanie
+      - tytul
+    - command: /lenno <gracz>
+      description: Przysięga lenna przed seniorem — sama ceremonia, bez zmiany relacji
+        (za zgodą)
+      requires-plugin: Interakcje
+      requires-command: lenno
+      discord-page: 2
+      keywords:
+      - wasal
+      - przysiega
+    - command: /koronuj [gracz]
+      description: 'Koronacja władcy kraju (bez gracza: koronujesz siebie); obecni
+        się kłaniają'
+      requires-plugin: Interakcje
+      requires-command: koronuj
+      discord-page: 2
+      keywords:
+      - korona
+      - wladca
+      - koronacja
+    - command: /interakcje tytul [sir|pani|ukryj|pokaz]
+      description: Twój tytuł rycerski przed nickiem na czacie
+      requires-plugin: Interakcje
+      requires-command: interakcje tytul
+      discord-page: 2
+    - command: /usiadz
+      description: Usiądź (kucnięcie = wstań)
+      click: run
+      requires-plugin: Interakcje
+    - command: /poloz
+      description: Połóż się
+      click: run
+      requires-plugin: Interakcje
+    - command: /taniec [1-3|stop]
+      description: 'Taniec: 1 ludowy, 2 dworski, 3 biesiadny'
+      requires-plugin: Interakcje
+    - command: /emotka <nazwa> [gracz]
+      description: Emotka, np. klaskanie, salut, poklon, kufel
+      requires-plugin: Interakcje
+    - command: /interakcje wlacz|wylacz
+      description: Zezwól lub zabroń interakcji z tobą
+      requires-plugin: Interakcje
+    - command: /interakcje blokuj <gracz>
+      description: 'Zablokuj interakcje od gracza (też: odblokuj)'
+      requires-plugin: Interakcje
+    - command: /interakcje pakiet
+      description: Wyślij jeszcze raz paczkę zasobów
+      click: run
+      requires-plugin: Interakcje
+    - command: /interakcje odblokuj <gracz>
+      description: Odblokuj gracza
+      requires-plugin: Interakcje
+    - command: /interakcje akceptuj|odmow [id]
+      description: Zgoda albo odmowa na prośbę o interakcję
+      requires-plugin: Interakcje
+    - command: /interakcje lista
+      description: Lista interakcji (klik wpisuje komendę)
+      click: run
+      requires-plugin: Interakcje
+    - command: /interakcje pomoc
+      description: Pomoc interakcji
+      click: run
+      requires-plugin: Interakcje
+    - command: /glos
+      description: Link do czatu głosowego w przeglądarce
+      click: run
+      requires-plugin: Glos
+      keywords:
+      - voice
+      - mikrofon
+    - command: /glos szept|normalnie|krzyk
+      description: Zasięg twojego głosu
+      requires-plugin: Glos
+    - command: /glos rozlacz
+      description: Rozłącz czat głosowy
+      click: run
+      requires-plugin: Glos
+    - command: /glos pasek [wlacz|wylacz]
+      description: Pasek głosu nad paskiem przedmiotów
+      requires-plugin: Glos
+    - command: /glos wskaznik [wlacz|wylacz]
+      description: Ikonki mówienia nad graczami
+      requires-plugin: Glos
+  nowosci:
+    name: Nowości
+    summary: zmiany na serwerze
+    emoji: 📜
+    icon: WRITABLE_BOOK
+    color: aqua
+    description: Zmiany na serwerze; ogłaszamy je też na Discordzie.
+    requires-plugin: Nowosci
+    guide:
+    - 'Wszystkie zmiany zebrane w książce: `/nowosci`.'
+    commands:
+    - command: /nowosci
+      description: Książka ze wszystkimi nowościami
+      click: run
+      keywords:
+      - zmiany
+      - changelog
+    - command: /nowosci czat [strona]
+      description: Nowości na czacie, strona po stronie
+    - command: /nowosci przeczytane
+      description: Nie pokazuj obecnych nowości po zalogowaniu
+      click: run
+    - command: /nowosci pomoc
+      description: Pomoc Nowości
+      click: run
+  firmy:
+    name: Firmy
+    summary: cechy, kompanie i manufaktury graczy
+    emoji: ⚒️
+    icon: GOLDEN_HELMET
+    color: gold
+    description: 'Firmy graczy: wspólne konto w Skarbcu, udziały, pensje, sklepy i
+      magazyny firmy.'
+    requires-plugin: Firmy
+    discord-page-2:
+      name: Firmy — kontrakty, kredyty i zarząd
+      description: Kontrakty z depozytem, zlecenia hurtowe, kredyty, udziały, pensje,
+        dywidendy, herb i likwidacja.
+    guide:
+    - Stań na ziemi kraju, który ma być siedzibą, i wpisz `/firma zaloz <typ> <nazwa>`
+      (cech, kompania albo manufaktura). Kosztuje 25 zł opłaty dla kraju i 25 zł kapitału.
+    - W kraju gracza zgodę daje Władca albo Doradca (do 72 h, odrzucony wniosek zwraca
+      pieniądze); w kraju NPC zgoda jest od razu.
+    - Zaproś ludzi `/firma zapros <gracz> <wspolnik|czeladnik>`, wpłacaj `/firma wplac
+      <kwota>`, a zyski dziel `/firma dywidenda <kwota>` według udziałów.
+    - 'Postaw zwykły [Sklep] na ziemi kraju siedziby i wpisz `/firma sklep`, patrząc
+      na niego: utarg trafia do firmy, kraj pobiera podatek od przychodu.'
+    commands:
+    - command: /firma
+      description: 'Okno twojej firmy: konto, ludzie, sklepy, magazyn, księga'
+      click: run
+      keywords:
+      - kompania
+      - cech
+      - manufaktura
+      - firma
+    - command: /firma zaloz <typ> <nazwa>
+      description: Załóż firmę na ziemi kraju siedziby (25 zł opłaty + 25 zł kapitału)
+      insert: '/firma zaloz '
+      keywords:
+      - zalozenie
+      - nowa firma
+    - command: /firma start
+      requires-command: firma start
+      description: Czy mogę założyć firmę? Warunki i zrzutki
+      click: run
+      keywords:
+      - jak zaczac
+      - warunki
+    - command: /firma zlecenia
+      requires-command: firma zlecenia
+      description: Tablica zleceń (hurt NPC, kontrakty), najbliższe pierwsze
+      click: run
+      keywords:
+      - tablica
+      - zlecenia
+      - dostawy
+    - command: /firma zrzutka
+      requires-command: firma zrzutka
+      description: Zrzutki na firmy; wycofaj = zwrot wkładu
+      click: run
+      keywords:
+      - zrzutka
+      - wspolnicy
+    - command: /firma zrzutka zaloz|dolacz <...>
+      requires-command: firma zrzutka
+      description: 'Wspólna firma: zaloz typ wkład nazwa / dolacz id kwota'
+      insert: '/firma zrzutka '
+    - command: /firma info [firma]
+      description: 'Karta firmy: herb, kraj, typ, ludzie, obrót'
+    - command: /firma ranking [obrot|majatek|ludzie|kontrakty]
+      description: Ranking firm
+    - command: /firma wplac <kwota>
+      description: Wpłata z twojego konta na konto firmy
+    - command: /firma dywidenda <kwota>
+      discord-page: 2
+      description: 'Mistrz: wypłata dla udziałowców według udziałów (duża czeka 24
+        h)'
+      rank: mistrz
+    - command: /firma pensja <gracz> <kwota>
+      discord-page: 2
+      description: 'Mistrz: pensja dzienna (do 50 zł)'
+      rank: mistrz
+    - command: /firma zapros <gracz> <wspolnik|czeladnik>
+      discord-page: 2
+      description: 'Mistrz: zaproszenie do firmy (min. 5 h gry i konto starsze niż
+        3 dni)'
+      rank: mistrz
+    - command: /firma przyjmij
+      discord-page: 2
+      description: Przyjmij zaproszenie do firmy
+      click: run
+    - command: /firma udzialy <gracz> <procent>
+      discord-page: 2
+      description: Przekaż udziały — druga strona musi przyjąć, zapłatę rozliczacie
+        przelewem
+    - command: /firma sklep
+      description: 'Patrząc na własny [Sklep]: sklep firmy (utarg na konto firmy)'
+    - command: /firma magazyn
+      description: 'Patrząc na skrzynię: magazyn firmy z dziennikiem wyjęć'
+    - command: /firma ksiega [strona]
+      description: 'Księga firmy: wpływy, pensje, dywidendy, podatek'
+    - command: /firma herb|kolor|siedziba|awans
+      discord-page: 2
+      description: 'Mistrz: sztandar z ręki, barwa, przeniesienie siedziby, awans
+        na Dom handlowy'
+      rank: mistrz
+    - command: /firma likwiduj
+      discord-page: 2
+      description: Głos za likwidacją (potrzeba ponad 50 % udziałów)
+    - command: /firma kraj
+      description: 'Władca/Doradca: firmy i wnioski w kraju, podatek od przychodu
+        firm (0–20 %)'
+      rank: Władca/Doradca
+    - command: /firma pomoc
+      discord-page: 2
+      description: Pomoc firm
+      click: run
+    - command: /firma kontrakt lista
+      requires-command: firma kontrakt
+      discord-page: 2
+      description: 'Kontrakty z zapłatą w depozycie: tablica ofert i kontrakty twojej
+        firmy'
+      click: run
+      keywords:
+      - zlecenie
+      - umowa
+      - depozyt
+      - wadium
+    - command: /firma kontrakt zamow <firma|wszyscy> <przedmiot> <ilość> <cena> <godziny>
+        [wadium]
+      requires-command: firma kontrakt
+      discord-page: 2
+      description: 'Patrząc na skrzynię odbiorczą: zamów towar (zapłata od razu w
+        depozycie)'
+    - command: /firma kontrakt usluga <firma|wszyscy> <cena> <godziny> <wadium> <opis>
+      requires-command: firma kontrakt
+      discord-page: 2
+      description: Zamów usługę (np. budowę); wykonanie potwierdzasz ty
+    - command: /firma kontrakt przyjmij|oddaj|potwierdz|odwolaj|spor <id>
+      requires-command: firma kontrakt
+      discord-page: 2
+      description: 'Przebieg kontraktu: przyjęcie, oddanie towaru przy skrzyni, potwierdzenie,
+        odwołanie, spór'
+    - command: /firma hurt
+      requires-command: firma hurt
+      discord-page: 2
+      description: Zlecenia hurtowe władców NPC dla firm (zapłata na konto firmy)
+      click: run
+      keywords:
+      - hurt
+      - npc
+      - władca
+    - command: /firma kredyt
+      requires-command: firma kredyt
+      discord-page: 2
+      description: 'Kredyty firm: limit, oferty i spłata (do 10 % za 7–30 dni, spłata
+        z przychodów)'
+      click: run
+      keywords:
+      - pozyczka
+      - kredyt
+      - odsetki
+    - command: /firma kredyt oferuj <firma> <kwota> <procent> <dni>
+      requires-command: firma kredyt
+      discord-page: 2
+      description: Pożycz firmie własne pieniądze (czekają w depozycie, aż firma przyjmie)
+    - command: /firma kredyt skarb <kwota> <procent> <dni> <cel>
+      requires-command: firma kredyt
+      discord-page: 2
+      description: 'Mistrz: wniosek o kredyt Skarbu Świata (decyzja właściciela serwera)'
+      rank: mistrz
+    - command: /firma warsztat
+      requires-command: firma warsztat
+      description: 'Warsztaty cechu i manufaktury: przepisy, robotnicy, stan'
+      click: run
+      keywords:
+      - manufaktura
+      - warsztat
+      - robotnik
+      - produkcja
+    - command: /firma warsztat zaloz <przepis>
+      requires-command: firma warsztat
+      description: 'Patrząc na stanowisko na ziemi siedziby: nowy warsztat (potem
+        skrzynie wejścia i wyjścia)'
+    - command: /firma robotnik zatrudnij|zwolnij <warsztat>
+      requires-command: firma robotnik
+      description: Obywatel kraju siedziby pracuje w warsztacie za 3 zł dziennie dla
+        obywateli

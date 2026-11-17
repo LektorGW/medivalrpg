@@ -1,0 +1,45 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+firma:
+  nazwa: Królewska Kolej
+  strefa-czasu: Europe/Warsaw
+  # Puste = rola kolej.admin. Na MEDIVALRPG konfiguracja wdrożenia wskazuje wyłącznie właściciela.
+  manager-uuids: []
+  max-pociagow: 12
+  max-wagonow: 6
+  dzienny-zold: 100
+koszty:
+  pociag: 20000
+  wagon: 2000
+  stacja: 3000
+  baza: 50000
+  blok-budowy: 1
+  wegiel-kg: 1
+  woda-100l: 1
+  naprawa: 200
+  zatrudnienie: 500
+budowa:
+  bloki-na-tick: 8
+  max-blokow: 200000
+  max-dlugosc: 1024
+  max-badanych-kolumn: 180000
+  # Styl NOWYCH projektów /kolej tor planuj (i wniosków z panelu): realistyczny | klasyczny.
+  # Nie zmienia przyjętych zleceń, ukończonej bazy ani zatwierdzonego planu głównej linii.
+  # realistyczny: podkłady, tłuczeń, rowy, stopnie przekopów, skarpy nasypów, murowane wiadukty, słupki co 100 m,
+  # nachylenie do 4% i rzadsze załamania kierunku. Pojedynczy projekt: /kolej tor planuj <od> <do> klasyczny.
+  styl-toru: realistyczny
+zgody:
+  # Prywatny przewoźnik jest niezależny od sojuszy i obywatelstwa zarządcy.
+  # Władcy NPC przyjmują jawny wniosek handlowy /kolej zgoda <kraj-NPC>.
+  npc-przyjmuja-wnioski: true
+  # Odpowiedź władcy NPC liczy AI Armii (opinia, osobowość, wojny). Bez Armii: zgoda jak dotąd.
+  # Opłata trafia do skarbca kraju-gospodarza; płaci firma (/kolej zgoda <kraj> firma) albo budżet budowy sieci
+  # z rezerwy Skarbu Świata (/kolej zgoda <kraj> budzet), zawsze w granicach zatwierdzonego limitu. Raz na kraj i płatnika.
+  npc-oplata-bazowa: 500
+  # Po odmowie kolejny wniosek do tego samego kraju po tylu minutach.
+  npc-ponow-minuty: 60
+  # przewoznik = prywatny przewoźnik bez kraju (decyzja użytkownika: sojusz niepotrzebny);
+  # kraj-wlasciciela = wniosek w imieniu kraju właściciela firmy, wymaga też Kraje.canStartJointProject.
+  npc-wnioskodawca: przewoznik
+modele:
+  wymagaj-bettermodel: true
+  instaluj: true

@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "glos-mc",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-19",
+
+  // Strona klienta (public/). /ws i /plugin zawsze idą najpierw do kodu Workera,
+  // nawet gdyby kiedyś w public/ pojawił się plik o takiej nazwie.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/ws", "/plugin"]
+  },
+
+  "durable_objects": {
+    "bindings": [{ "name": "VOICE_ROOM", "class_name": "VoiceRoom" }]
+  },
+
+  // new_sqlite_classes jest wymagane na darmowym planie.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["VoiceRoom"] }],
+
+  "observability": { "enabled": true }
+
+  // Sekrety (nie w tym pliku!):
+  //   PLUGIN_SECRET        — wymagany, `npx wrangler secret put PLUGIN_SECRET`
+  //   TURN_KEY_ID          — opcjonalny (Cloudflare Realtime TURN)
+  //   TURN_KEY_API_TOKEN   — opcjonalny
+  // Lokalnie: plik .dev.vars
+}

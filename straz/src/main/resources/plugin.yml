@@ -1,0 +1,15 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Straz
+version: '${version}'
+main: pl.medivalrpg.straz.StrazPlugin
+api-version: '26.3'
+description: Straż MEDIVALRPG — codzienny raport dla właściciela, natychmiastowe alerty i nocna kopia danych pluginów.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# Tylko odczyt: dane zbiera przez API z ServicesManager (null-safe) i z plików danych innych pluginów.
+softdepend: [Skarbiec, Kraje, Ludnosc, Armia, Kolej, Zycie, Postep, Wladcy, Panel, Menu, Nowosci, Interakcje, Szlaki, Turnieje]
+# Komenda /straz jest rejestrowana przez Paper Brigadier (LifecycleEvents.COMMANDS).
+permissions:
+  straz.admin:
+    description: Raport nadzoru, alerty i kopie danych (/straz)
+    default: op

@@ -1,0 +1,106 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Pory — wizualne pory roku MEDIVALRPG.
+#
+# Pora roku pochodzi WYŁĄCZNIE z zegara Ludnosc (/ludnosc admin pora ustaw). Ten plugin niczego nie liczy sam:
+# zmienia tylko to, co widzi klient. Świat na serwerze (biomy w regionach, bloki, uprawy, moby) zostaje bez zmian.
+#
+#  - biomy: gracz dostaje w pakietach chunków sezonowe warianty biomów z datapacka „medival-pory-roku”
+#    (kolory trawy, liści, wody, nieba; zimą niska temperatura, więc zamiast deszczu pada śnieg),
+#  - śnieg: zimą klient widzi cienką warstwę śniegu na wierzchu terenu, liściach i dachach. To bloki tylko
+#    po stronie klienta — serwer ich nie ma, nic nie trzeba sprzątać, wiosna zabiera je przez odświeżenie,
+#  - liście: jesienią w pobliżu drzew spadają kolorowe liście (cząsteczki widoczne tylko dla gracza).
+
+enabled: true
+
+# Pora, gdy Ludnosc nie działa albo ma wyłączone pory roku (lato = zwykły wygląd świata).
+fallback-season: lato
+# Co ile sekund sprawdzać zegar Ludnosc (zmiana pory/dnia).
+poll-seconds: 5
+
+# Światy, których dotyczy śnieg i liście. Pusta lista = wszystkie światy typu NORMAL (overworld).
+# Biomy są podmieniane w każdym świecie, ale warianty mają tylko biomy powierzchni overworldu.
+worlds: []
+
+biomes:
+  enabled: true
+
+# Odświeżanie widoku po zmianie pory: kolory biomów wysyłane są małym pakietem (bez bloków i światła).
+refresh:
+  # Ile chunków jednego gracza na tick (najbliższe najpierw).
+  chunks-per-tick-per-player: 6
+  # Limit chunków na tick dla wszystkich graczy razem.
+  max-chunks-per-tick: 48
+  # Ile chunków w jednym pakiecie biomów.
+  chunks-per-packet: 6
+
+snow:
+  enabled: true
+  # Budżet czasu głównego wątku na liczenie śniegu (ms na tick). Nadmiar czeka w kolejce.
+  budget-ms-per-tick: 2.0
+  # Maksymalna liczba chunków w kolejce (przy przepełnieniu najstarsze zadania są pomijane).
+  max-queue: 20000
+  # Pokrycie śniegiem (0..1) w kolejnych dniach pory; ostatnia wartość obowiązuje do końca pory.
+  # Śnieg leży tylko w biomach z opadami (nie na pustyni, sawannie, w badlands), na pełnych blokach i liściach.
+  coverage:
+    zima: [0.45, 0.75, 1.0, 1.0, 1.0, 0.9, 0.7]
+    wiosna: [0.3, 0.12, 0.0]
+  # Trawa, bielica i grzybnia pod śniegiem pokazują ośnieżone boki (jak w zimowych biomach).
+  snowy-ground: true
+  # Bloki, na których nigdy nie kładziemy śniegu (żeby nie zasłaniać klikania). Bloki z danymi (skrzynie,
+  # piece, beczki, tabliczki…) są pomijane zawsze.
+  deny-blocks:
+    - crafting_table
+    - fletching_table
+    - smithing_table
+    - cartography_table
+    - loom
+    - note_block
+    - tnt
+    - target
+    - redstone_lamp
+    - pumpkin
+    - carved_pumpkin
+    - jack_o_lantern
+    - melon
+    - hay_block
+    - barrier
+
+leaves:
+  enabled: true
+  # Co ile ticków losować miejsca pod liśćmi (20 ticków = 1 s).
+  interval-ticks: 10
+  # Ile losowych miejsc sprawdzić na gracza.
+  samples-per-player: 10
+  # Promień poszukiwań wokół gracza (bloki).
+  radius: 14
+
+messages:
+  prefix: "<dark_green>[Pory]</dark_green> "
+  info-header: "<gold>━━ Pora roku: <season> ━━"
+  info-day: "<gray>Dzień <white><day></white> z <white><days></white>. Następna pora: <white><next></white> za <white><left></white>."
+  info-source-ludnosc: "<dark_gray>Zegar: Ludnosc (wspólny dla całego serwera)."
+  info-source-fallback: "<dark_gray>Zegar Ludnosc niedostępny — świat wygląda jak <season>."
+  info-preview: "<yellow>Masz włączony podgląd pory: <season></yellow> <gray>(/pory admin podglad wylacz)"
+  info-look:
+    wiosna: "<green>Świeża, jasna zieleń trawy i liści. Resztki śniegu topnieją w pierwszych dniach."
+    lato: "<dark_green>Zwykły, letni wygląd świata."
+    jesien: "<gold>Złote, pomarańczowe i rdzawe liście, pożółkła trawa, spadające liście w lasach."
+    zima: "<aqua>Mróz: szronowa trawa, nagie, brunatne korony, śnieg zamiast deszczu i biała warstwa na ziemi."
+  info-tip: "<dark_gray>Kolory zmieniają się automatycznie, nie trzeba nic instalować."
+  preview-set: "Podgląd pory <season> tylko dla ciebie. Odświeżam widok…"
+  preview-off: "Podgląd wyłączony — wracasz do pory serwera (<season>)."
+  preview-unknown: "<red>Nieznana pora. Wpisz: wiosna, lato, jesien, zima albo wylacz."
+  refresh-own: "Odświeżam twój widok (<chunks> chunków)."
+  reloaded: "Przeładowano konfigurację Pory."
+  players-only: "<red>Tylko dla gracza w grze."
+  status-header: "<gold>━━ Pory — stan ━━"
+  datapack-missing: "<red>Brak sezonowych biomów (datapack medival-pory-roku nie jest wczytany) — kolory biomów wyłączone."
+  help:
+    - "<gold>━━ Pory roku — pomoc ━━"
+    - "<yellow>/pory</yellow> <gray>— jaka jest pora roku i jak teraz wygląda świat"
+    - "<yellow>/pory pomoc</yellow> <gray>— ta pomoc"
+  help-admin:
+    - "<yellow>/pory admin podglad <wiosna|lato|jesien|zima|wylacz></yellow> <gray>— podgląd pory tylko dla ciebie"
+    - "<yellow>/pory admin odswiez</yellow> <gray>— odśwież własny widok"
+    - "<yellow>/pory admin status</yellow> <gray>— liczniki i kolejki"
+    - "<yellow>/pory admin reload</yellow> <gray>— przeładuj config.yml"

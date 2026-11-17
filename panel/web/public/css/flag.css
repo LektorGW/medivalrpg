@@ -1,0 +1,265 @@
+/* Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl */
+/* Panel — chorągwie krajów: pikselowe podglądy flag, kolejka moderacji, statusy. */
+
+.flag-img {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  aspect-ratio: 64 / 40;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: repeating-conic-gradient(var(--track) 0 25%, transparent 0 50%) 0 0 / 16px 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.flag-img.flag-lg {
+  width: 320px;
+  max-width: 100%;
+  height: auto;
+}
+.flag-img.flag-sm {
+  width: 96px;
+  height: auto;
+  box-shadow: none;
+}
+.flag-blank {
+  background: var(--c, #8a7350);
+}
+.flag-blank.flag-lg {
+  height: 200px;
+  max-height: calc((100vw - 64px) * 0.625);
+}
+.flag-blank.flag-sm {
+  height: 60px;
+}
+
+.flag-country {
+  margin: 4px 0;
+}
+.flag-grid .card {
+  min-width: 0;
+}
+.flag-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.flag-hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Wzór A: zwykły sztandar z barwników obok zatwierdzonej flagi (Kraje 463b65a5+); opis pod sztandarem. */
+.flag-banner {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  flex: 0 1 140px;
+  min-width: 0;
+  max-width: 200px;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+.flag-banner-img {
+  display: block;
+  width: 80px;
+  height: 160px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  background: repeating-conic-gradient(var(--track) 0 25%, transparent 0 50%) 0 0 / 16px 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.flag-banner figcaption p,
+.flag-banner-off p {
+  margin: 4px 0 0;
+}
+.flag-banner-off {
+  padding: 8px 10px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 6px;
+}
+.flag-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flag-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.flag-status .ic {
+  width: 16px;
+  height: 16px;
+}
+.flag-status-ok {
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+.flag-status-warn {
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+.flag-status-err {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+.flag-status-info {
+  color: var(--muted);
+  background: var(--track);
+}
+.flag-history .flag-status {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+}
+
+.flag-moderation-note {
+  margin-bottom: 14px;
+}
+.flag-file {
+  padding: 8px;
+}
+.flag-upload-out {
+  margin-top: 12px;
+}
+.flag-compare {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0 12px;
+}
+.flag-fig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+.flag-fig figcaption {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.flag-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+.flag-frame-src img {
+  display: block;
+  max-width: min(256px, 100%);
+  max-height: 200px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.flag-frame-new .flag-img {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.flag-arrow {
+  font-size: 1.6rem;
+  color: var(--gold);
+}
+.flag-compare .flag-img.flag-lg {
+  width: 256px;
+}
+
+.flag-reason {
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+.flag-reason-input {
+  resize: vertical;
+  min-height: 72px;
+}
+.flag-reason-error {
+  margin-top: 8px;
+}
+.flag-restore {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.flag-restore .flag-img.flag-lg {
+  width: 192px;
+}
+.flag-note {
+  margin-top: 16px;
+}
+
+/* moderacja */
+.flag-mod-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+.flag-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.flag-mod-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.flag-mod-side .facts {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.flag-mod-side .facts dd {
+  text-align: right;
+}
+.flag-queue-item {
+  border-left: 5px solid var(--c, var(--gold));
+}
+.flag-queue-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+}
+.flag-queue-item .form-actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .flag-mod-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .flag-compare .flag-img.flag-lg {
+    width: 100%;
+  }
+  .flag-arrow {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+  .flag-compare {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

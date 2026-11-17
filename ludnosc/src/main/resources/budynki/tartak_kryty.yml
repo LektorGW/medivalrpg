@@ -1,0 +1,173 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: tartak_kryty
+variant-of: tartak
+name: '<#B8860B>Tartak kryty</#B8860B>'
+description: 'Drwal ścina drzewa w promieniu 28 bloków na ziemi kraju, sadzi sadzonki i składa kłody do skrzyni tartaku; podatki +5%. Potrzebuje lasu w zasięgu. Kryta hala tartaku na kamiennych stopach.'
+function: sawmill
+beds: 0
+cost: 3000
+tier: 1
+category: economy
+zone: forest
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': 'coarse_dirt'
+  'B': '@base'
+  'C': '@floor'
+  'D': '@frame[axis=y]'
+  'E': 'spruce_stairs[facing=west,half=top]'
+  'F': 'spruce_stairs[facing=east,half=top]'
+  'G': '@wall'
+  'H': '@frame[axis=x]'
+  'I': '@frame[axis=z]'
+  'J': '@roof_stairs[facing=north,half=bottom]'
+  'K': '@roof_stairs[facing=south,half=bottom]'
+  'L': '@roof_slab[type=bottom]'
+  'M': '@window'
+  'N': 'stonecutter[facing=south]'
+  'O': 'stripped_spruce_log[axis=x]'
+  'P': 'spruce_log[axis=x]'
+  'Q': 'oak_log[axis=x]'
+  'R': 'spruce_planks'
+  'S': 'spruce_slab[type=bottom]'
+  'T': 'birch_log[axis=x]'
+  'U': 'grindstone[face=floor,facing=east]'
+  'V': 'chest[facing=north]'
+  'W': 'barrel[facing=up]'
+  'X': 'crafting_table'
+  'Y': 'lantern[hanging=true]'
+  'Z': '@fence'
+  'a': 'lantern[hanging=false]'
+  'b': 'spruce_log[axis=z]'
+  'c': 'oak_log[axis=z]'
+layers:
+  # y=0
+  - |
+    ___________
+    _BBBBBBBBB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BACCCCCAB_
+    _BACCCCCAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BBBBBBBBB_
+    ___________
+  # y=1
+  - |
+    ...........
+    .BGGGBGGGB.
+    ..PPP.RRR..
+    ..QQQ.....c
+    .B...B..XB.
+    b..OONOO...
+    b..........
+    ..UVW.TTT..
+    .B...B...B.
+    .Z.......Z.
+  # y=2
+  - |
+    ...........
+    .DGGGDGGGD.
+    ..PPP.SSS..
+    ...........
+    .D...D...D.
+    ...........
+    ...........
+    .......T...
+    .D...D...D.
+    .a.......a.
+  # y=3
+  - |
+    ...........
+    .DGGGDGGGD.
+    ...P.......
+    ...........
+    .D...D...D.
+    ...........
+    ...........
+    ...........
+    .D...D...D.
+    ...........
+  # y=4
+  - |
+    ...........
+    .DGGGDGGGD.
+    ...........
+    ...........
+    .D...D...D.
+    ...Y...Y...
+    ...........
+    ...........
+    .DE.FDE.FD.
+    ...........
+  # y=5
+  - |
+    KKKKKKKKKKK
+    .DHHHHHHHD.
+    .I.......I.
+    .I.......I.
+    .I.......I.
+    .I.......I.
+    .I.......I.
+    .I.......I.
+    .DHHHHHHHD.
+    JJJJJJJJJJJ
+  # y=6
+  - |
+    ...........
+    KKKKKKKKKKK
+    .G.......G.
+    .G.......G.
+    .G.......G.
+    .G.......G.
+    .G.......G.
+    .G.......G.
+    JJJJJJJJJJJ
+    ...........
+  # y=7
+  - |
+    ...........
+    ...........
+    KKKKKKKKKKK
+    .G.......G.
+    .M.......M.
+    .M.......M.
+    .G.......G.
+    JJJJJJJJJJJ
+    ...........
+    ...........
+  # y=8
+  - |
+    ...........
+    ...........
+    ...........
+    KKKKKKKKKKK
+    .G...Y...G.
+    .G.......G.
+    JJJJJJJJJJJ
+    ...........
+    ...........
+    ...........
+  # y=9
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    LLLLLLLLLLL
+    LLLLLLLLLLL
+    ...........
+    ...........
+    ...........
+    ...........

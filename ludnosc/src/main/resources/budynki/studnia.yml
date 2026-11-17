@@ -1,0 +1,115 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: studnia
+name: '<#5AA0E6>Studnia</#5AA0E6>'
+description: 'Poprawia nastrój mieszkańców, jest miejscem wieczornych spotkań i źródłem wody dla ekip gaszących pożary. Nie potrzebuje pracowników. Kamienna studnia z daszkiem.'
+function: well
+beds: 0
+cost: 800
+tier: 0
+category: infrastructure
+zone: center
+max-per-country: 3
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 4
+palette:
+  'C': 'cobblestone'
+  'F': 'spruce_fence'
+  'M': 'mossy_cobblestone'
+  'S': 'stone_bricks'
+  'c': 'iron_chain[axis=y]'
+  'h': 'spruce_slab[type=bottom]'
+  'k': 'spruce_planks'
+  'l': 'lantern[hanging=true]'
+  'n': 'spruce_stairs[facing=north,half=bottom]'
+  's': 'spruce_stairs[facing=south,half=bottom]'
+  '~': 'water[level=0]'
+layers:
+  # y=0
+  - |
+    CCCCC
+    CCCCC
+    CCCCC
+    CCCCC
+    CCCCC
+  # y=1
+  - |
+    CCMCC
+    C~~~C
+    C~~~C
+    C~~~C
+    CCCCC
+  # y=2
+  - |
+    CCCCC
+    M~~~C
+    C~~~C
+    C~~~C
+    CCCCC
+  # y=3
+  - |
+    CCCMC
+    C~~~C
+    C~~~C
+    C~~~M
+    CCCCC
+  # y=4
+  - |
+    CCCCC
+    C~~~C
+    C~~~C
+    C~~~C
+    CMCCC
+  # y=5
+  - |
+    SSSSS
+    S...S
+    S...S
+    S...S
+    SSSSS
+  # y=6
+  - |
+    F...F
+    .....
+    .....
+    .....
+    F...F
+  # y=7
+  - |
+    F...F
+    .....
+    .....
+    .....
+    F...F
+  # y=8
+  - |
+    sssss
+    .....
+    ..l..
+    .....
+    nnnnn
+  # y=9
+  - |
+    .....
+    sssss
+    ..c..
+    nnnnn
+    .....
+  # y=10
+  - |
+    .....
+    .....
+    kkkkk
+    .....
+    .....
+  # y=11
+  - |
+    .....
+    .....
+    hhhhh
+    .....
+    .....

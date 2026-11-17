@@ -1,0 +1,128 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Fragment do ręcznego scalenia z Menu/menus.yml (menu kolej-infrastruktura); NIE jest automatycznie instalowany.
+# Dotyczy przygotowanej, nieaktywnej wersji Kolei ze stylem toru „realistyczny”.
+# Uprawnienia sprawdza Kolej (zarządca przewoźnika); widoczność przycisku ich nie zastępuje.
+menus:
+  kolej-infrastruktura:
+    items:
+      tor-realistyczny:
+        material: GRAVEL
+        name: '<gold>Zaplanuj tor realistyczny: od do'
+        lore:
+          - '<gray>Podkłady, tłuczeń, rowy odwadniające, skarpy nasypów,'
+          - '<gray>stopnie przekopów, murowane wiadukty i słupki co 100 m.'
+          - '<gray>Nachylenie do 4%, rzadsze załamania kierunku.'
+          - '<gray>Dopisz stacje na czacie, np. „stacjaA stacjaB realistyczny”.'
+          - '<dark_gray>/kolej tor planuj <od> <do> realistyczny'
+        action: 'suggest:/kolej tor planuj '
+        requires-plugin: Kolej
+        permission: kolej.admin
+      tor-klasyczny:
+        material: RAIL
+        name: '<yellow>Zaplanuj tor klasyczny: od do'
+        lore:
+          - '<gray>Dotychczasowy prosty układ toru i traktu.'
+          - '<gray>Użyj, gdy styl realistyczny nie znajdzie przebiegu.'
+          - '<gray>Dopisz stacje na czacie, np. „stacjaA stacjaB klasyczny”.'
+          - '<dark_gray>/kolej tor planuj <od> <do> klasyczny'
+        action: 'suggest:/kolej tor planuj '
+        requires-plugin: Kolej
+        permission: kolej.admin
+      siec-status:
+        material: COMPASS
+        name: '<gold>Stan budowy sieci (import głównej linii)'
+        lore:
+          - '<dark_gray>/kolej siec status'
+        action: 'command:kolej siec status'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      siec-ponow:
+        material: CLOCK
+        name: '<yellow>Ponów wycenę wstrzymanej części sieci'
+        lore:
+          - '<gray>Tylko po błędzie wyceny przed płatnością,'
+          - '<gray>najwyżej 3 razy na część. Nie pobiera opłaty ponownie.'
+          - '<dark_gray>/kolej siec ponow'
+        action: 'command:kolej siec ponow'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      zgoda-npc:
+        material: WRITABLE_BOOK
+        name: '<gold>Wniosek o zgodę władcy NPC'
+        lore:
+          - '<gray>Władca kraju NPC odpowiada według swojej AI:'
+          - '<gray>zgoda, zgoda za opłatą do skarbca kraju albo odmowa.'
+          - '<gray>Płaci firma (firma) albo budżet budowy sieci (budzet),'
+          - '<gray>zawsze w granicach limitu. Po odmowie ponów po 60 min.'
+          - '<dark_gray>/kolej zgoda <kraj-NPC> [firma|budzet]'
+        action: 'suggest:/kolej zgoda '
+        requires-plugin: Kolej
+        permission: kolej.admin
+      # --- Uruchomienie linii i postęp budowy (kod przygotowany 2026-10-29, nieaktywny do wdrożenia jara) ---
+      siec-postep:
+        material: MAP
+        name: '<gold>Postęp budowy sieci'
+        lore:
+          - '<gray>Części ukończone (DONE), opłacone roboty w md,'
+          - '<gray>bieżąca część i stan odbioru fizycznego.'
+          - '<dark_gray>/kolej siec postep'
+        action: 'command:kolej siec postep'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      siec-wstrzymaj:
+        material: BARRIER
+        name: '<red>Wstrzymaj budowę sieci'
+        lore:
+          - '<gray>Trwała pauza importu, wyceny, płatności i robotników.'
+          - '<gray>Obowiązuje także po restarcie.'
+          - '<dark_gray>/kolej siec wstrzymaj'
+        action: 'command:kolej siec wstrzymaj'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      siec-wznow:
+        material: LIME_DYE
+        name: '<gold>Wznów budowę sieci'
+        lore:
+          - '<gray>Zapisuje zgodę startu aktualnego planu i zdejmuje pauzę.'
+          - '<gray>Nie kasuje błędów wyceny ani blokad finansowych.'
+          - '<dark_gray>/kolej siec wznow'
+        action: 'suggest:/kolej siec wznow'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      uruchom-sprawdz:
+        material: SPYGLASS
+        name: '<gold>Sprawdź uruchomienie linii (bez zmian)'
+        lore:
+          - '<gray>Odbiór torów, beczki wody/węgla, modele, tablice,'
+          - '<gray>koszt składów i załóg z konta przewoźnika.'
+          - '<gray>Niczego nie kupuje ani nie zmienia.'
+          - '<dark_gray>/kolej uruchom glowna'
+        action: 'command:kolej uruchom glowna'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      uruchom-potwierdz:
+        material: BELL
+        name: '<red>Uruchom linię (płatne)'
+        lore:
+          - '<gray>Kupuje parowóz i wagony, zatrudnia maszynistę i palacza,'
+          - '<gray>ustawia rozkład, bilet i tablice, rejestruje magazyny.'
+          - '<gray>Tylko po DONE wszystkich części i odbiorze torów.'
+          - '<dark_gray>/kolej uruchom glowna potwierdz'
+        action: 'suggest:/kolej uruchom glowna potwierdz'
+        requires-plugin: Kolej
+        permission: kolej.admin
+      npc-palacz:
+        material: IRON_SHOVEL
+        name: '<gold>Palacz NPC'
+        lore:
+          - '<gray>Zatrudnij i przydziel palacza do parowozu;'
+          - '<gray>dzienny żołd z konta przewoźnika.'
+          - '<dark_gray>/kolej npc palacz zatrudnij <imie>'
+          - '<dark_gray>/kolej npc palacz przydziel <id> <pociag>'
+        action: 'suggest:/kolej npc palacz '
+        requires-plugin: Kolej
+        permission: kolej.admin
+# Pomoc dla graczy (menu/src/main/resources/pomoc.yml, kategoria kolej) — do scalenia przez Menu, `discord: false` do aktywacji:
+# guide:
+#   - "Bilet kupujesz przy wsiadaniu (`/kolej wejdz <pociag>`): cena linii przechodzi z Twojego konta do przewoźnika."
+#   - "Na peronach stoją tablice odjazdów; ten sam rozkład pokazuje `/kolej odjazdy [stacja]` (także powroty ze spawnu)."

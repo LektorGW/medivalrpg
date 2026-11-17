@@ -1,0 +1,64 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: pole
+name: '<#9ACD32>Pole uprawne</#9ACD32>'
+description: 'Rolnicy (2 miejsca pracy) zbierają i od razu obsiewają pszenicę, marchew i ziemniaki; plony karmią ludność. Nie ma własnej skrzyni — plony trafiają do spichlerza albo magazynu; zimą prawie nie rodzi. Ogrodzone pole z kanałem wody.'
+function: farm
+beds: 0
+cost: 600
+tier: 0
+category: farm
+zone: farm
+max-per-country: 0
+foundation: none
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': 'coarse_dirt'
+  'B': 'farmland[moisture=7]'
+  'C': 'water[level=0]'
+  'D': 'wheat[age=7]'
+  'E': 'carrots[age=7]'
+  'F': 'potatoes[age=7]'
+  'G': 'beetroots[age=3]'
+  'H': 'spruce_fence'
+  'I': 'spruce_fence_gate[facing=south,open=false,in_wall=false,powered=false]'
+  'J': 'lantern[hanging=false]'
+  'K': 'composter'
+layers:
+  # y=0
+  - |
+    AAAAAAAAA
+    ABBBCBBBA
+    ABBBCBBBA
+    ABBBCBBBA
+    ABBBCBBBA
+    ABBBCBBBA
+    ABBBCBBBA
+    ABBBCBBBA
+    AAAAAAAAA
+  # y=1
+  - |
+    HHHHKHHHH
+    HDDD.EFGH
+    HDDD.EFGH
+    HDDD.EFGH
+    HDDD.EFGH
+    HDDD.EFGH
+    HDDD.EFGH
+    HDDD.EFGH
+    HHHHIHHHH
+  # y=2
+  - |
+    J.......J
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+    J.......J

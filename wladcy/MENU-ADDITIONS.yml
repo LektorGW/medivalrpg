@@ -1,0 +1,179 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# ============================================================
+#  PROPOZYCJA dla menu/src/main/resources/menus.yml (plugin Menu) — zlecenia władców i reputacja (plugin Wladcy).
+#  Nie jest wczytywana przez żaden plugin; koordynator przenosi ją ręcznie do menus.yml (format jak tam).
+#
+#  1) Nowe podmenu „wladcy” (zlecenia, reputacja, rozmowa, pomoc).
+#  2) W menu „swiat” istniejący przycisk „wladcy” otwiera to podmenu (zamiast od razu /wladca rozmowa).
+#  3) W menu „pomoc” dodatkowy przycisk „zlecenia” (pomoc /zlecenia).
+#  4) W menu „admin” przycisk „zlecenia-odswiez”.
+#  5) Nowa sekcja Poradnika „zlecenia” (books.poradnik.sections) — wstawić tuż po sekcji „wladcy”.
+# ============================================================
+
+menus:
+
+  # ---------------------------------------------------------------- (1) nowe podmenu: Władcy, zlecenia i reputacja
+  wladcy:
+    title: "<gold>♛ Władcy i zlecenia"
+    rows: 3
+    border: ORANGE_STAINED_GLASS_PANE
+    requires-plugin: Wladcy
+    permission: wladcy.use
+    auto-slots: [10-16]
+    items:
+      zlecenia:
+        material: WRITABLE_BOOK
+        name: "<gold>✎ Zlecenia władców"
+        lore:
+          - "<gray>Twoje zlecenia w toku i tablica"
+          - "<gray>kraju NPC, na którego ziemi stoisz."
+          - "<gray>Dostawy, surowce i przewóz ładunku"
+          - "<gray>za monety ze skarbca władcy."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– lista na czacie"
+          - "<dark_gray>/zlecenia"
+        requires-plugin: Wladcy
+        permission: wladcy.use
+        action: "command:zlecenia"
+      oddaj:
+        material: CHEST
+        name: "<green>✔ Oddaj zlecenia"
+        lore:
+          - "<gray>Oddaje gotowe zlecenia tam, gdzie stoisz:"
+          - "<gray>w stolicy kraju albo przy władcy."
+          - "<gray>Towar zostanie zabrany z ekwipunku,"
+          - "<gray>nagroda trafi na twoje konto."
+          - ""
+          - "<dark_gray>/zlecenia oddaj"
+        requires-plugin: Wladcy
+        permission: wladcy.use
+        action: "command:zlecenia oddaj"
+      reputacja:
+        material: GOLDEN_HELMET
+        name: "<yellow>⚜ Reputacja"
+        lore:
+          - "<gray>Jak widzą cię kraje NPC:"
+          - "<dark_red>Wróg</dark_red> <gray>·</gray> <red>Nieufny</red> <gray>·</gray> <gray>Obcy</gray> <gray>·</gray> <green>Znajomy</green>"
+          - "<aqua>Przyjaciel</aqua> <gray>·</gray> <gold>Bohater</gold>"
+          - "<gray>Wyższa reputacja = lepsze zlecenia,"
+          - "<gray>wyższe nagrody i łaskawszy władca."
+          - ""
+          - "<dark_gray>/reputacja"
+        requires-plugin: Wladcy
+        permission: wladcy.use
+        action: "command:reputacja"
+      rozmowa:
+        material: PLAYER_HEAD
+        name: "<gold>Porozmawiaj z władcą"
+        lore:
+          - "<gray>Stań najwyżej 6 bloków od władcy"
+          - "<gray>kraju NPC. Możesz poprosić go"
+          - "<gray>o zlecenie albo oddać towar."
+          - ""
+          - "<dark_gray>/wladca rozmowa"
+        requires-plugin: Wladcy
+        permission: wladcy.use
+        action: "command:wladca rozmowa"
+      tablica:
+        material: OAK_HANGING_SIGN
+        name: "<white>Tablica innego kraju"
+        lore:
+          - "<gray>Podgląd zleceń wybranego kraju NPC."
+          - "<gray>Wpisz nazwę kraju po komendzie."
+          - ""
+          - "<dark_gray>/zlecenia kraj <kraj>"
+        requires-plugin: Wladcy
+        permission: wladcy.use
+        action: "suggest:/zlecenia kraj "
+      pomoc:
+        material: BOOK
+        name: "<yellow>❓ Pomoc: zlecenia"
+        lore:
+          - "<gray>Wszystkie komendy zleceń i reputacji"
+          - "<gray>(najedź = opis, kliknij = wpisz)."
+          - ""
+          - "<dark_gray>/zlecenia pomoc"
+        requires-plugin: Wladcy
+        action: "command:zlecenia pomoc"
+      wstecz:
+        slot: 22
+        material: ARROW
+        name: "<yellow>« Wróć"
+        action: "menu:swiat"
+
+  # ---------------------------------------------------------------- (2) menu „swiat”: zmiana istniejącego przycisku
+  swiat:
+    items:
+      wladcy:
+        material: PLAYER_HEAD
+        name: "<gold>Władcy, zlecenia i reputacja"
+        lore:
+          - "<gray>Rozmowa z władcą kraju NPC,"
+          - "<gray>jego zlecenia za monety"
+          - "<gray>i twoja reputacja u krajów."
+          - ""
+          - "<gold>Kliknij, aby otworzyć"
+        requires-plugin: Wladcy
+        permission: wladcy.use
+        action: "menu:wladcy"
+
+  # ---------------------------------------------------------------- (3) menu „pomoc”: nowy przycisk
+  pomoc:
+    items:
+      zlecenia:
+        material: WRITABLE_BOOK
+        name: "<gold>Zlecenia i reputacja"
+        lore:
+          - "<dark_gray>/zlecenia pomoc"
+        requires-plugin: Wladcy
+        action: "command:zlecenia pomoc"
+
+  # ---------------------------------------------------------------- (4) menu „admin”: nowy przycisk
+  admin:
+    items:
+      zlecenia-odswiez:
+        material: WRITABLE_BOOK
+        name: "<gold>Nowe tablice zleceń"
+        lore:
+          - "<gray>Losuje nowe oferty wszystkich krajów NPC."
+          - "<gray>Zlecenia w toku zostają."
+          - "<dark_gray>/zlecenia admin odswiez"
+        requires-plugin: Wladcy
+        permission: wladcy.admin
+        action: "command:zlecenia admin odswiez"
+
+# ---------------------------------------------------------------- (5) Poradnik: nowa sekcja po „wladcy”
+books:
+  poradnik:
+    sections:
+      zlecenia:
+        title: "<dark_green>Zlecenia i reputacja</dark_green>"
+        requires-plugin: Wladcy
+        text:
+          - "Władcy krajów NPC płacą za pomoc. Stań na ziemi kraju NPC i wpisz <dark_aqua>/zlecenia</dark_aqua>."
+          - ""
+          - "Zobaczysz tablicę dnia z przyciskami <green>[Przyjmij]</green> i <red>[Odrzuć]</red>. Tablica odnawia się o północy."
+          - "---"
+          - "<bold>Rodzaje</bold>"
+          - "<#c8a165>Dostawa</#c8a165> – przynieś towar dla dworu."
+          - "<#7fb069>Surowce</#7fb069> – przynieś to, czego krajowi brakuje (pilne płacą więcej)."
+          - "<#6fa8dc>Transport</#6fa8dc> – zawieź zapieczętowany ładunek do stolicy innego kraju na czas."
+          - "---"
+          - "<bold>Oddawanie</bold>"
+          - "Idź do stolicy kraju (albo do władcy) i wpisz <dark_aqua>/zlecenia oddaj</dark_aqua>."
+          - ""
+          - "Towar zostanie zabrany z ekwipunku, a nagroda trafi na twoje konto w banku."
+          - ""
+          - "Nagroda jest odkładana ze skarbca władcy już przy przyjęciu – na pewno ją dostaniesz."
+          - "---"
+          - "<bold>Reputacja</bold>"
+          - "Każdy kraj ocenia cię osobno: <dark_red>Wróg</dark_red>, <red>Nieufny</red>, Obcy, <dark_green>Znajomy</dark_green>, <dark_aqua>Przyjaciel</dark_aqua>, <gold>Bohater</gold>."
+          - ""
+          - "Rośnie za wykonane zlecenia i zapłacony trybut, spada za porzucone i spóźnione."
+          - "---"
+          - "Wyższa reputacja = więcej zleceń, wyższe nagrody i hojniejsze dary. Wróg nie dostaje nic."
+          - ""
+          - "Władca w rozmowie też wie, kim jesteś – i tak cię traktuje."
+          - ""
+          - "Sprawdź: <dark_aqua>/reputacja</dark_aqua>"
+          - "Pomoc: <dark_aqua>/zlecenia pomoc</dark_aqua>"

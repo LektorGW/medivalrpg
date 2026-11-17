@@ -1,0 +1,117 @@
+# ============================================================
+#  Głos – proximity voice chat (serwerowa część)
+# ============================================================
+
+# Adres Workera Cloudflare (bez końcowego ukośnika), np. https://glos-mc.xxx.workers.dev
+# Plugin łączy się z wss://<adres>/plugin. Puste = czat głosowy wyłączony.
+worker-url: ""
+
+# Sekret współdzielony z Workerem (Worker secret PLUGIN_SECRET).
+# Gdy pusty, plugin przy starcie wygeneruje losowy (48 znaków) i zapisze go tutaj.
+plugin-secret: ""
+
+# Zasięgi głosu w blokach dla trybów: szept / normalnie / krzyk.
+ranges:
+  whisper: 6
+  normal: 24
+  shout: 48
+
+# Kucanie daje tymczasowo szept (tylko gdy bazowy tryb to "normalnie"; krzyk wygrywa z kucaniem).
+sneak-whisper: true
+
+# Pasek nad hotbarem z trybem głosu (co ~1 s, tylko dla graczy podłączonych do głosu).
+actionbar: true
+
+# Po ilu sekundach rozłączyć przeglądarkę gracza, którego nie ma na serwerze
+# (np. wyszedł, gdy plugin nie był połączony z Workerem, albo nie wrócił po restarcie). 0 = nigdy.
+offline-kick-seconds: 60
+
+# Wskaźnik „kto mówi” nad głową gracza (TextDisplay, niewidoczny dla samego mówiącego).
+indicator:
+  enabled: true
+  # passenger = TextDisplay jako pasażer gracza (płynny ruch).
+  #   UWAGA: Paper blokuje teleport gracza z pasażerem do INNEGO świata (np. /spawn w innym świecie),
+  #   dopóki gracz mówi. Jeśli to przeszkadza, ustaw "follow".
+  # follow = TextDisplay przesuwany teleportem co tick (bez ograniczeń teleportu).
+  attach: passenger
+  # Przesunięcie w górę (bloki) ponad czubek głowy, żeby nie nachodził na nametag.
+  height: 0.8
+  # Tło ARGB (#AARRGGBB). #00000000 = przezroczyste.
+  background: "#40000000"
+  # Nie pokazuj wskaźnika graczom niewidzialnym (mikstura / setInvisible).
+  hide-when-invisible: true
+  text:
+    whisper: "<gray>♪ <i>szept</i></gray>"
+    normal: "<green>♪ ♫ ♪</green>"
+    shout: "<red><b>♫ KRZYK ♫</b></red>"
+
+# Powody rozłączenia pokazywane w przeglądarce (zwykły tekst).
+kick-reasons:
+  quit: "Wyszedłeś z serwera"
+  command: "Rozłączono komendą /glos rozlacz"
+  offline: "Nie ma cię na serwerze. Wejdź do gry i wpisz /glos."
+
+# Logowanie wiadomości wymienianych z Workerem (diagnostyka).
+debug: false
+
+# Komunikaty (MiniMessage). <prefix> wstawia prefiks. Pusty komunikat = nie wysyłaj.
+messages:
+  prefix: "<gold>[Głos]</gold>"
+  mode-names:
+    whisper: "szept"
+    normal: "normalnie"
+    shout: "krzyk"
+
+  link: "<prefix> <link><green><u>Kliknij tutaj, aby dołączyć do czatu głosowego</u></green></link>\n<gray>Link otworzy się w przeglądarce. Jest jednorazowy, ważny 15 minut – nie udostępniaj go nikomu.</gray>"
+  link-hover: "<yellow>Otwórz czat głosowy w przeglądarce</yellow>\n<gray>Zezwól stronie na dostęp do mikrofonu.</gray>"
+  unavailable: "<prefix> <red>Czat głosowy jest chwilowo niedostępny. Spróbuj ponownie za chwilę.</red>"
+  players-only: "<prefix> <red>Tej komendy może użyć tylko gracz.</red>"
+
+  mode-changed: "<prefix> <yellow>Tryb głosu:</yellow> <white><mode></white> <gray>(<range> bl.)</gray>"
+  mode-changed-browser: "<prefix> <yellow>Tryb głosu zmieniony w przeglądarce:</yellow> <white><mode></white> <gray>(<range> bl.)</gray>"
+
+  client-connected: "<prefix> <green>Połączono z czatem głosowym.</green> <gray>Tryb zmienisz komendami /glos szept | normalnie | krzyk.</gray>"
+  client-disconnected: "<prefix> <gray>Rozłączono z czatem głosowym.</gray>"
+  disconnected-command: "<prefix> <gray>Rozłączono cię z czatem głosowym.</gray>"
+  not-connected: "<prefix> <gray>Nie byłeś połączony z czatem głosowym. Aktywne linki zostały unieważnione.</gray>"
+
+  muted-permanent: "<prefix> <red>Zostałeś wyciszony na czacie głosowym przez administrację.</red>"
+  muted-temporary: "<prefix> <red>Zostałeś wyciszony na czacie głosowym przez administrację na <time>.</red>"
+  muted-reminder: "<prefix> <red>Jesteś wyciszony przez administrację – inni cię nie słyszą.</red>"
+  unmuted: "<prefix> <green>Administracja zdjęła twoje wyciszenie na czacie głosowym.</green>"
+  unmuted-expired: "<prefix> <green>Twoje wyciszenie na czacie głosowym wygasło.</green>"
+
+  mute-done: "<prefix> <yellow>Wyciszono <white><player></white> (<time>).</yellow>"
+  unmute-done: "<prefix> <yellow>Zdjęto wyciszenie z <white><player></white>.</yellow>"
+  unmute-not-muted: "<prefix> <gray><player> nie jest wyciszony.</gray>"
+  time-permanent: "na stałe"
+  invalid-time: "<prefix> <red>Niepoprawny czas: <time>. Przykłady: 10m, 2h, 1d, 1h30m.</red>"
+  player-not-found: "<prefix> <red>Nie znaleziono gracza <player>.</red>"
+  usage-mute: "<prefix> <gray>Użycie: /glos mute <gracz> [czas, np. 10m/2h/1d]</gray>"
+  usage-unmute: "<prefix> <gray>Użycie: /glos unmute <gracz></gray>"
+  reloaded: "<prefix> <green>Przeładowano konfigurację.</green>"
+
+  list-worker-online: "<prefix> <gray>Połączenie z serwerem głosu:</gray> <green>aktywne</green>"
+  list-worker-offline: "<prefix> <gray>Połączenie z serwerem głosu:</gray> <red>brak</red>"
+  list-empty: "<prefix> <gray>Nikt nie jest podłączony do czatu głosowego.</gray>"
+  list-header: "<prefix> <yellow>Podłączeni do głosu (<count>):</yellow>"
+  list-entry: "<dark_gray>-</dark_gray> <white><player></white> <gray><mode> (<range> bl.)</gray><speaking><muted>"
+  list-entry-offline: "<dark_gray>-</dark_gray> <gray><player> (poza serwerem)</gray>"
+  list-speaking: " <green>● mówi</green>"
+  list-muted: " <red>[wyciszony]</red>"
+
+  help: "<prefix> <yellow>Czat głosowy:</yellow>\n<gold>/glos</gold> <gray>– link do czatu głosowego</gray>\n<gold>/glos szept | normalnie | krzyk</gold> <gray>– tryb głosu</gray>\n<gold>/glos rozlacz</gold> <gray>– rozłącz z czatem głosowym</gray>"
+  help-prefs: "<gold>/glos pasek [wlacz|wylacz]</gold> <gray>– pasek głosu nad hotbarem</gray>\n<gold>/glos wskaznik [wlacz|wylacz]</gold> <gray>– ikonki mówienia nad innymi graczami</gray>"
+  help-admin: "<gold>/glos mute <gracz> [czas]</gold> <gray>– wycisz</gray>\n<gold>/glos unmute <gracz></gold> <gray>– zdejmij wyciszenie</gray>\n<gold>/glos lista</gold> <gray>– kto jest podłączony</gray>\n<gold>/glos reload</gold> <gray>– przeładuj config</gray>"
+
+  actionbar: "<gold>♫</gold> <yellow>Głos:</yellow> <white><mode></white> <gray>(<range> bl.)</gray><underwater>"
+  actionbar-speaking: "<green>♫</green> <yellow>Głos:</yellow> <white><mode></white> <gray>(<range> bl.)</gray> <green><b>● MÓWISZ</b></green><underwater>"
+  actionbar-underwater: " <aqua>(pod wodą)</aqua>"
+  actionbar-muted: "<red>✖ Wyciszony przez administrację</red>"
+
+  # Preferencje gracza (/glos pasek, /glos wskaznik) – zapisywane w plugins/Glos/prefs.json.
+  actionbar-on: "<prefix> <green>Pasek głosu nad hotbarem włączony.</green>"
+  actionbar-off: "<prefix> <gray>Pasek głosu nad hotbarem wyłączony. Włączysz go komendą /glos pasek.</gray>"
+  actionbar-server-disabled: "<prefix> <gray>Pasek głosu jest wyłączony na tym serwerze.</gray>"
+  indicators-on: "<prefix> <green>Ikonki mówienia nad innymi graczami włączone.</green>"
+  indicators-off: "<prefix> <gray>Ikonki mówienia nad innymi graczami ukryte. Przywrócisz je komendą /glos wskaznik.</gray>"

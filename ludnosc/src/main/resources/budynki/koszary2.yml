@@ -1,0 +1,202 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: koszary2
+name: '<#8B2500>Koszary rozbudowane</#8B2500>'
+description: 'Każda prycza podnosi limit żołnierzy kraju o 1 (12 prycz = +12); rekruci stawiają się przy koszarach, a żołnierze stojący w pobliżu powoli się leczą. Prycze nie liczą się jako mieszkania. Dwupiętrowe kamienne koszary ze zbrojownią i blankami.'
+function: barracks
+beds: 12
+cost: 14000
+tier: 3
+category: military
+zone: outer
+max-per-country: 2
+requires:
+  population: 30
+  treasury: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'polished_andesite'
+  'C': 'spruce_planks'
+  'D': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'E': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'F': 'wall_torch[facing=south]'
+  'G': '{kolor}_wall_banner[facing=south]'
+  'H': 'iron_bars'
+  'I': 'red_bed[facing=north,part=head]'
+  'J': 'red_bed[facing=north,part=foot]'
+  'K': 'brown_bed[facing=north,part=head]'
+  'L': 'brown_bed[facing=north,part=foot]'
+  'M': 'smithing_table'
+  'N': 'grindstone[face=floor,facing=west]'
+  'O': 'anvil[facing=east]'
+  'P': 'barrel[facing=up]'
+  'Q': 'chest[facing=east]'
+  'R': 'lantern[hanging=true]'
+  'S': 'ladder[facing=north]'
+  'T': 'blue_bed[facing=north,part=head]'
+  'U': 'blue_bed[facing=north,part=foot]'
+  'V': 'crafting_table'
+  'W': 'lantern[hanging=false]'
+layers:
+  # y=0
+  - |
+    _______________
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _AAAAAAAAAAAAA_
+    _______________
+  # y=1
+  - |
+    ...............
+    .BAAAAAAAAAAAB.
+    .AI.K.I.K.I.KA.
+    .AJ.L.J.L.J.LA.
+    .A...........A.
+    .AM.........NA.
+    .AO.........PA.
+    .AQ.........PA.
+    .A..........SA.
+    .BAAAAADAAAAAB.
+    ...............
+  # y=2
+  - |
+    ...............
+    .BAHAHAAAHAHAB.
+    .A...........A.
+    .H...........H.
+    .A...........A.
+    .H...........H.
+    .A...........A.
+    .H...........H.
+    .A..........SA.
+    .BAHAHAEAHAHAB.
+    ......F.F......
+  # y=3
+  - |
+    ...............
+    .BAAAAAAAAAAAB.
+    .A...........A.
+    .A...........A.
+    .A...........A.
+    .A.....R.....A.
+    .A...........A.
+    .A..R.....R..A.
+    .A..........SA.
+    .BAAAAAAAAAAAB.
+    .......G.......
+  # y=4
+  - |
+    ...............
+    .BAAAAAAAAAAAB.
+    .ACCCCCCCCCCCA.
+    .ACCCCCCCCCCCA.
+    .ACCCCCCCCCCCA.
+    .ACCCCCCCCCCCA.
+    .ACCCCCCCCCCCA.
+    .ACCCCCCCCCCCA.
+    .ACCCCCCCCCCSA.
+    .BAAAAAAAAAAAB.
+    ...............
+  # y=5
+  - |
+    ...............
+    .BAAAAAAAAAAAB.
+    .AT.K.T.K.T.KA.
+    .AU.L.U.L.U.LA.
+    .A...........A.
+    .A...........A.
+    .A....V......A.
+    .A.Q.........A.
+    .A..........SA.
+    .BAAAAAAAAAAAB.
+    ...............
+  # y=6
+  - |
+    ...............
+    .BAHAHAAAHAHAB.
+    .A...........A.
+    .H...........H.
+    .A...........A.
+    .H...........H.
+    .A...........A.
+    .H...........H.
+    .A..........SA.
+    .BAHAHAAAHAHAB.
+    ...............
+  # y=7
+  - |
+    ...............
+    .BAAAAAAAAAAAB.
+    .A...........A.
+    .A...........A.
+    .A...........A.
+    .A...........A.
+    .A...........A.
+    .A...........A.
+    .A..........SA.
+    .BAAAAAAAAAAAB.
+    ...............
+  # y=8
+  - |
+    ...............
+    .BAAAAAAAAAAAB.
+    .A...........A.
+    .A...........A.
+    .A...........A.
+    .A.....R.....A.
+    .A...........A.
+    .A.R.........A.
+    .A..........SA.
+    .BAAAAAAAAAAAB.
+    ...............
+  # y=9
+  - |
+    ...............
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAAAA.
+    .AAAAAAAAAAASA.
+    .AAAAAAAAAAAAA.
+    ...............
+  # y=10
+  - |
+    ...............
+    .A.A.A.A.A.A.A.
+    ...............
+    .A...........A.
+    ...............
+    .A...........A.
+    ...............
+    .A...........A.
+    ...............
+    .A.A.A.A.A.A.A.
+    ...............
+  # y=11
+  - |
+    ...............
+    .W...........W.
+    ...............
+    ...............
+    ...............
+    ...............
+    ...............
+    ...............
+    ...............
+    .W...........W.
+    ...............

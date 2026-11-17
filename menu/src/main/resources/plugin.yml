@@ -1,0 +1,42 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Menu
+version: '${version}'
+main: pl.medivalrpg.menu.MenuPlugin
+api-version: '26.3'
+description: Główne menu serwera MEDIVALRPG (/menu), kompas „Przewodnik”, poradnik, /spawn i domy graczy.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# Wszystkie integracje są luźne (komendy wykonywane jako gracz); softdepend tylko ustala kolejność ładowania.
+softdepend: [Straznik, nLogin, Kraje, Interakcje, Glos, Skarbiec, Armia, Ludnosc, Postep, Wladcy, Kolej, Szlaki, Turnieje, Panel, Zycie, Nowosci, WorldEdit, WorldGuard]
+# Komendy /menu (aliasy /m, /przewodnik), /pomoc, /samouczek [ukryj|przypominaj], /spawn (/sp), /powrot (/back), /ustawspawn [zbuduj|cofnij],
+# /dom, /ustawdom, /usundom i /domy
+# są rejestrowane przez Paper Brigadier (LifecycleEvents.COMMANDS).
+permissions:
+  menu.use:
+    description: Otwieranie menu (/menu) i poradnika
+    default: true
+  menu.guide:
+    description: Odbieranie kompasu Przewodnik (/przewodnik daj)
+    default: true
+  menu.spawn:
+    description: Teleport na spawn (/spawn, /sp) i powrót do ostatniej pozycji (/powrot, /back)
+    default: true
+  menu.spawn.bypass:
+    description: /spawn bez odliczania, cooldownu, combat tagu i blokady oblężenia
+    default: op
+  menu.homes:
+    description: Domy graczy (/dom, /ustawdom, /usundom, /domy)
+    default: true
+  menu.homes.unlimited:
+    description: Brak limitu domów (inaczej homes.max albo menu.homes.<n>)
+    default: op
+  menu.homes.bypass:
+    description: /dom bez odliczania, cooldownu i blokad; dom także na terenie obcego kraju
+    default: op
+  menu.admin:
+    description: /menu reload, /ustawspawn (też zbuduj/cofnij) i otwieranie dowolnego menu z pominięciem warunków
+    default: op
+    children:
+      menu.use: true
+      menu.guide: true
+      menu.spawn: true

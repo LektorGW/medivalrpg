@@ -1,0 +1,242 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: wieza_okragla
+variant-of: wieza
+name: '<#7F8C8D>Okrągła baszta</#7F8C8D>'
+description: 'Budowla obronna: posterunek dla strażników; nie daje premii do podatków ani wzrostu. Okrągła baszta ze strzelnicami i stożkowym dachem.'
+function: tower
+beds: 0
+cost: 5000
+tier: 1
+category: defense
+zone: border
+max-per-country: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': '@base'
+  'B': '@floor'
+  'C': 'stone_bricks'
+  'D': 'ladder[facing=south]'
+  'E': 'iron_bars'
+  'F': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'G': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'H': 'wall_torch[facing=south]'
+  'I': 'spruce_stairs[facing=east,half=top]'
+  'J': 'spruce_stairs[facing=south,half=top]'
+  'K': 'spruce_stairs[facing=north,half=top]'
+  'L': 'spruce_stairs[facing=west,half=top]'
+  'M': 'spruce_trapdoor[facing=south,half=top,open=false]'
+  'N': '@fence'
+  'O': '@frame[axis=y]'
+  'P': '@roof_stairs[facing=east,half=bottom]'
+  'Q': '@roof_stairs[facing=south,half=bottom]'
+  'R': '@roof_stairs[facing=north,half=bottom]'
+  'S': '@roof_stairs[facing=west,half=bottom]'
+  'T': '@roof_block'
+  'U': 'lantern[hanging=true]'
+  'V': 'barrel[facing=up]'
+  'W': 'chest[facing=east]'
+layers:
+  # y=0
+  - |
+    _________
+    ___AAA___
+    __AABAA__
+    _AABBBAA_
+    _ABBBBBA_
+    _AABBBAA_
+    __AABAA__
+    ___AAA___
+    _________
+  # y=1
+  - |
+    .........
+    ...AAA...
+    ..AA.AA..
+    .AA.D.AA.
+    .A.W.V.A.
+    .AA...AA.
+    ..AA.AA..
+    ...AFA...
+    .........
+  # y=2
+  - |
+    .........
+    ...AAA...
+    ..AA.AA..
+    .AA.D.AA.
+    .A.....A.
+    .AA...AA.
+    ..AA.AA..
+    ...AGA...
+    ...H.H...
+  # y=3
+  - |
+    .........
+    ...AEA...
+    ..AA.AA..
+    .AA.D.AA.
+    .E.....E.
+    .AA...AA.
+    ..AA.AA..
+    ...AAA...
+    .........
+  # y=4
+  - |
+    .........
+    ...CCC...
+    ..CC.CC..
+    .CC.D.CC.
+    .C.....C.
+    .CC...CC.
+    ..CC.CC..
+    ...CCC...
+    .........
+  # y=5
+  - |
+    .........
+    ...AAA...
+    ..AABAA..
+    .AABDBAA.
+    .ABBBBBA.
+    .AABBBAA.
+    ..AABAA..
+    ...AAA...
+    .........
+  # y=6
+  - |
+    .........
+    ...AAA...
+    ..AA.AA..
+    .AA.D.AA.
+    .A...V.A.
+    .AA...AA.
+    ..AA.AA..
+    ...AAA...
+    .........
+  # y=7
+  - |
+    .........
+    ...AEA...
+    ..AA.AA..
+    .AA.D.AA.
+    .E.....E.
+    .AA...AA.
+    ..AA.AA..
+    ...AAA...
+    .........
+  # y=8
+  - |
+    .........
+    ...CCC...
+    ..CC.CC..
+    .CC.D.CC.
+    .C.....C.
+    .CC...CC.
+    ..CC.CC..
+    ...CCC...
+    .........
+  # y=9
+  - |
+    .........
+    ...AAA...
+    ..AA.AA..
+    .AA.D.AA.
+    .A.U...A.
+    .AA...AA.
+    ..AA.AA..
+    ...AAA...
+    .........
+  # y=10
+  - |
+    ....J....
+    ..JAAAJ..
+    .IAA.AAL.
+    .AA.D.AA.
+    IA.....AL
+    .AA...AA.
+    .IAA.AAL.
+    ..KAAAK..
+    ....K....
+  # y=11
+  - |
+    ....B....
+    ..BBBBB..
+    .BBBBBBB.
+    .BBBMBBB.
+    BBBBBBBBB
+    .BBBBBBB.
+    .BBBBBBB.
+    ..BBBBB..
+    ....B....
+  # y=12
+  - |
+    ....O....
+    .ONNNNNO.
+    .N.....N.
+    .N.....N.
+    ON.....NO
+    .N.....N.
+    .N.....N.
+    .ONNNNNO.
+    ....O....
+  # y=13
+  - |
+    ....O....
+    .O.....O.
+    .........
+    .........
+    O.......O
+    ....U....
+    .........
+    .O.....O.
+    ....O....
+  # y=14
+  - |
+    ....Q....
+    ..Q...Q..
+    .P.....S.
+    .........
+    P.......S
+    .........
+    .P.....S.
+    ..R...R..
+    ....R....
+  # y=15
+  - |
+    .........
+    ...QQQ...
+    ..Q...Q..
+    .P.....S.
+    .P.....S.
+    .P.....S.
+    ..R...R..
+    ...RRR...
+    .........
+  # y=16
+  - |
+    .........
+    .........
+    ...QQQ...
+    ..P...S..
+    ..P.T.S..
+    ..P...S..
+    ...RRR...
+    .........
+    .........
+  # y=17
+  - |
+    .........
+    .........
+    .........
+    ...QQQ...
+    ...PNS...
+    ...RRR...
+    .........
+    .........
+    .........

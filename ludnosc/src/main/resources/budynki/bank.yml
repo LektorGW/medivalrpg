@@ -1,0 +1,165 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: bank
+name: '<#DAA520>Bank</#DAA520>'
+description: 'Podatki +10% i punkty badań (Postęp). Bank z kolumnowym portykiem i skarbcem.'
+function: bank
+beds: 0
+cost: 25000
+tier: 3
+category: economy
+zone: center
+max-per-country: 1
+requires:
+  population: 35
+  treasury: 60000
+  era: 2
+  discovery: bankowosc
+foundation: fill
+foundation-block: polished_andesite
+ground-layer: 0
+palette:
+  'A': 'polished_andesite'
+  'B': 'smooth_sandstone'
+  'C': 'quartz_pillar[axis=y]'
+  'D': 'glass_pane'
+  'E': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'G': 'wall_torch[facing=south]'
+  'H': 'smooth_quartz'
+  'I': 'lantern[hanging=true]'
+  'J': 'iron_bars'
+  'K': 'dark_oak_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]'
+  'L': 'gold_block'
+  'M': 'chest[facing=south,type=single,waterlogged=false]'
+  'N': 'barrel[facing=up,open=false]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+    AAAAAAAAAAAAA
+  # y=1
+  - |
+    CAAAAAAAAAAAC
+    A.LLM.N.MLL.A
+    A...........A
+    A...........A
+    A...........A
+    A.HHHHKHHHH.A
+    A...........A
+    A...........A
+    A...........A
+    CAAAAAEAAAAAC
+    .............
+    .C..C...C..C.
+  # y=2
+  - |
+    CBDBDBDBDBDBC
+    B...........B
+    D...........D
+    B...........B
+    D...........D
+    B.JJJJ.JJJJ.B
+    D...........D
+    B...........B
+    B...........B
+    CBDBDBFBDBDBC
+    .............
+    .C..C...C..C.
+  # y=3
+  - |
+    CBBBBBBBBBBBC
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    CBBBBBBBBBBBC
+    .....G.......
+    .C..C...C..C.
+  # y=4
+  - |
+    CBBBBBBBBBBBC
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    CBBBBBBBBBBBC
+    .............
+    .C..C...C..C.
+  # y=5
+  - |
+    CBBBBBBBBBBBC
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    CBBBBBBBBBBBC
+    .............
+    .C..C...C..C.
+  # y=6
+  - |
+    CBBBBBBBBBBBC
+    B...........B
+    B..I...I....B
+    B...........B
+    B...........B
+    B...........B
+    B..I...I....B
+    B...........B
+    B...........B
+    CBBBBBBBBBBBC
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+  # y=7
+  - |
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    HHHHHHHHHHHHH
+    .............
+    .............
+  # y=8
+  - |
+    BBBBBBBBBBBBB
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    B...........B
+    BBBBBBBBBBBBB
+    .............
+    .............

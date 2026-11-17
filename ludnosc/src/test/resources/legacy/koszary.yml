@@ -1,0 +1,170 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: koszary
+name: '<#B04A3A>Koszary</#B04A3A>'
+description: 'Kamienne koszary z 6 pryczami dla żołnierzy (nie liczą się jako mieszkania).'
+function: barracks
+beds: 6
+cost: 6000
+tier: 1
+category: military
+zone: outer
+max-per-country: 3
+requires:
+  population: 10
+  treasury: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'smithing_table'
+  'C': 'cobblestone'
+  'D': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'red_bed[facing=north,part=foot]'
+  'G': 'grindstone[face=floor,facing=east]'
+  'H': 'red_bed[facing=north,part=head]'
+  'I': 'iron_bars'
+  'L': 'stripped_spruce_log[axis=y]'
+  'N': 'red_wall_banner[facing=south]'
+  'P': 'spruce_planks'
+  'Q': 'chest[facing=south]'
+  'R': 'barrel[facing=up]'
+  'S': 'stone_bricks'
+  'W': 'fletching_table'
+  'X': 'stripped_spruce_log[axis=x]'
+  'Y': 'cracked_stone_bricks'
+  'Z': 'stripped_spruce_log[axis=z]'
+  'd': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'h': 'dark_oak_slab[type=bottom]'
+  'k': 'dark_oak_planks'
+  'l': 'lantern[hanging=true]'
+  'm': 'mossy_stone_bricks'
+  'n': 'dark_oak_stairs[facing=north,half=bottom]'
+  's': 'dark_oak_stairs[facing=south,half=bottom]'
+  't': 'wall_torch[facing=south]'
+  'u': 'wall_torch[facing=north]'
+layers:
+  # y=0
+  - |
+    _____________
+    _SSSSSSSSSSS_
+    _SPPPPPPPPPS_
+    _SPPPPPPPPPS_
+    _SPPPPPPPPPS_
+    _SPPPPPPPPPS_
+    _SPPPPPPPPPS_
+    _SSSSSSSSSSS_
+    _____________
+  # y=1
+  - |
+    .............
+    .CSSSSmSmSYC.
+    .SHHQHWHQHHm.
+    .YFF.F.F.FFS.
+    .m.........S.
+    .SR.......RS.
+    .SG.......AS.
+    .CYmSSDSSSSC.
+    .............
+  # y=2
+  - |
+    .............
+    .CSSSSSSSSSC.
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    .S.........Y.
+    .S.........S.
+    .CSISSdSSISC.
+    .............
+  # y=3
+  - |
+    .............
+    .CSIYSISSISC.
+    .S.........S.
+    .I.........I.
+    .S.........S.
+    .I.........I.
+    .S..u...u..S.
+    .CSISSSSSISC.
+    .....t.t.....
+  # y=4
+  - |
+    .............
+    .CSSSSSSSSSC.
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    .CSSSSSYSSSC.
+    ......N......
+  # y=5
+  - |
+    sssssssssssss
+    .LXXXXXXXXXL.
+    .Z.........Z.
+    .Z.........Z.
+    .Z.........Z.
+    .Z.........Z.
+    .Z.........Z.
+    .LXXXXXXXXXL.
+    nnnnnnnnnnnnn
+  # y=6
+  - |
+    .............
+    sssssssssssss
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    nnnnnnnnnnnnn
+    .............
+  # y=7
+  - |
+    .............
+    .............
+    sssssssssssss
+    .S.........S.
+    .S.........S.
+    .S.........S.
+    nnnnnnnnnnnnn
+    .............
+    .............
+  # y=8
+  - |
+    .............
+    .............
+    .............
+    sssssssssssss
+    .S.l..l..l.S.
+    nnnnnnnnnnnnn
+    .............
+    .............
+    .............
+  # y=9
+  - |
+    .............
+    .............
+    .............
+    .............
+    kkkkkkkkkkkkk
+    .............
+    .............
+    .............
+    .............
+  # y=10
+  - |
+    .............
+    .............
+    .............
+    .............
+    hhhhhhhhhhhhh
+    .............
+    .............
+    .............
+    .............

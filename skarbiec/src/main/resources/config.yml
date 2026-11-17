@@ -1,0 +1,819 @@
+# Skarbiec — ekonomia MEDIVALRPG
+# © 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+# Kwoty: liczba = miedziaki albo tekst, np. "1 zł 5 sr" (1 sr = 10 md, 1 zł = 100 md).
+
+world-economy:
+  # Włączyć dopiero po migracji sald i pełnym spisie fizycznych monet.
+  # Stała pula: 1 000 000 zł; właściciel: WorldSteward. Brak automatycznych dopłat.
+  enabled: false
+  # Domknięcie puli obywateli NPC (world:households).
+  labor-share:
+    # Udział „robocizny” w płatnościach za budowy, naprawy, modernizacje, drogi, wyrównanie terenu, rozbudowę kopalni
+    # i chaty opłacane przez obywateli (powody z prefiksami poniżej). Ten % płatności to wynagrodzenie obywateli NPC:
+    # najpierw jest ZALEGŁOŚCIĄ płatnika (pieniądze zostają w world:payments), zwroty `Ludnosc: zwrot…` ją zmniejszają
+    # (zwrot 100 % z kolejki kasuje ją całą), a po `settle-after-hours` przechodzi jednym przelewem do world:households.
+    # Zwrot nigdy nie jest blokowany: gdy world:payments nie wystarcza, brakująca część wraca z world:households.
+    # 0 = wyłączone. Pieniądze tylko przechodzą między pulami świata; suma 100 000 000 md bez zmian.
+    percent: 60
+    # Najwyżej tyle dziennie trafia do obywateli (md); 0 = bez limitu. ~3000 pokrywa ~2500 md/dzień drenażu z zapasem.
+    daily-cap: 3000
+    # Gdy pula obywateli ma już tyle (md), nic nie przechodzi. 0 = bez celu.
+    target-balance: 400000
+    settle-after-hours: 24
+    prefixes:
+      - "Ludnosc: budowa "
+      - "Ludnosc: drogi"
+      - "Ludnosc: naprawa "
+      - "Ludnosc: modernizacja "
+      - "Ludnosc: wyrównanie terenu"
+      - "Ludnosc: rozbudowa kopalni"
+      - "Ludnosc: obywatele opłacają budowę chaty"
+    refund-prefixes:
+      - "Ludnosc: zwrot"
+  grants:
+    # Jednorazowe zasilenia wdrożeniowe z rezerwy (obywatele NPC 312 600 md, kupcy 50 000 md).
+    # false (zalecane): wykonuje je właściciel komendą /skarbswiata wdrozenie albo w panelu po sprawdzeniu bilansu.
+    # true: wykonują się raz przy starcie. Każde ma własny klucz jednorazowości (plik bank/grants.json + wpis w księdze).
+    auto-on-start: false
+
+storage:
+  # Co ile sekund migawka kont (accounts.json). Każda operacja i tak trafia od razu do dziennika (journal.log).
+  snapshot-interval-seconds: 60
+  # Wymuszaj zapis dziennika na dysk (fsync) po każdej paczce operacji — odporność na awarię zasilania.
+  fsync: true
+  # Ile dni trzymać dzienne pliki logów transakcji (bank/logs/).
+  log-keep-days: 90
+  # Strefa czasu dla „dnia” (limity kupca, rotacja logów). Puste = strefa serwera.
+  timezone: "Europe/Warsaw"
+
+coins:
+  # Poświata (glint) na monetach — łatwiej odróżnić je od zwykłych bryłek.
+  glint: true
+  copper:
+    name: "<#c47a3a>Miedziak"
+    lore:
+      - "<gray>Moneta Skarbca"
+      - "<dark_gray>Wartość: 1 md"
+  silver:
+    name: "<#d8dde3>Srebrnik"
+    lore:
+      - "<gray>Moneta Skarbca"
+      - "<dark_gray>Wartość: 10 md (1 sr)"
+  gold:
+    name: "<gold>Złota korona"
+    lore:
+      - "<gray>Moneta Skarbca"
+      - "<dark_gray>Wartość: 100 md (1 zł)"
+
+bank:
+  # Trzy przyciski szybkiej wypłaty u bankiera.
+  quick-withdraw: ["1 sr", "1 zł", "10 zł"]
+  # Czas na wpisanie „innej kwoty” na czacie.
+  chat-input-timeout-seconds: 30
+
+pay:
+  # /zaplac: anywhere = wszędzie, banker = tylko w pobliżu bankiera NPC.
+  mode: anywhere
+  banker-radius: 8
+  min-amount: 1
+
+merchant:
+  # Zapłata za skup: coins = monety do ekwipunku, account = na konto bankowe. Zakupy u kupca tak samo.
+  payout: coins
+  # Maksymalny zarobek jednego gracza u kupców dziennie (anty-farma). 0 = bez limitu.
+  daily-limit: "500 zł"
+  # Spadek ceny przy dużej podaży: co `step` sztuk danego towaru sprzedanych dziś przez WSZYSTKICH graczy
+  # cena skupu spada o `drop-percent` %, najniżej do `min-percent` % ceny bazowej. Reset o północy.
+  supply:
+    enabled: true
+    step: 256
+    drop-percent: 5
+    min-percent: 40
+  # Zmienna oferta: co `period-hours` kupiec zmienia ceny skupu o ±`price-swing-percent` % i wybiera `featured`
+  # towarów, których szuka (+`featured-bonus-percent` % ceny, limit sztuk × `featured-limit-multiplier`, błysk w GUI).
+  # Wszyscy kupcy mają tę samą ofertę. Cena skupu nigdy nie dorównuje cenie sprzedaży (brak zysku na odsprzedaży).
+  rotation:
+    enabled: true
+    period-hours: 3
+    price-swing-percent: 15
+    featured: 6
+    featured-bonus-percent: 40
+    featured-limit-multiplier: 2
+  # Rynek dynamiczny: kupiec ma prawdziwy magazyn i budżet (konto world:merchant w zamkniętym obiegu).
+  # - Zapas: czego ma dużo, kupuje i sprzedaje taniej; czego brakuje, płaci więcej i drożej sprzedaje.
+  #   Mnożnik = (cel / zapas)^elasticity, w granicach min-percent..max-percent % ceny bazowej z cennika.
+  #   Cel zapasu = target-bundles partii (albo `target-stock` przy towarze w cenniku).
+  # - Budżet: mnożnik ceny SKUPU = (budżet / budget.target)^budget.elasticity, w granicach budget.min..max-percent %.
+  #   Mniej pieniędzy = niższe ceny i proporcjonalnie mniejsze limity sztuk; pusty budżet = kupiec nie skupuje.
+  # - Sprzedaje wyłącznie to, co ma w magazynie. Cena sprzedaży jest zawsze o spread-percent % wyższa niż cena skupu.
+  # - Ceny są płynne: zapas odniesienia dochodzi do rzeczywistego z połowicznym czasem smoothing-hours,
+  #   skup liczy się od większego, sprzedaż od mniejszego z nich (szybki zrzut ani wykup nie dają zysku).
+  # - Nadwyżkę ponad cel kupiec wywozi: surplus-decay-percent-per-day % nadwyżki dziennie (przedmioty znikają, pieniądze nie).
+  # - Przedmioty NIE powstają z powietrza. Wyjątek tylko jawnie: `restock-per-day: N` przy towarze w cenniku
+  #   oznacza, że kupiec sam dostarcza N sztuk dziennie, do poziomu celu (domyślnie żaden towar tego nie ma).
+  market:
+    enabled: true
+    target-bundles: 32
+    elasticity: 0.5
+    min-percent: 50
+    max-percent: 175
+    spread-percent: 25
+    smoothing-hours: 6
+    surplus-decay-percent-per-day: 10
+    low-stock-percent: 50
+    high-stock-percent: 150
+    history-hours: 168
+    budget:
+      target: "500 zł"
+      elasticity: 0.5
+      min-percent: 30
+      max-percent: 125
+  # Dostawy: pełny katalog jest duży, ale w danym okresie każdy typ kupca handluje tylko częścią. Towary stałe
+  # (`core: true` w cenniku albo `core:` typu) są zawsze, reszta jego kategorii rotuje co `period-hours` godzin
+  # (pierwsza dostawa dnia o `start-hour` czasu storage.timezone). Wybór jest deterministyczny (typ, numer okresu,
+  # pora roku) — po restarcie ten sam. Towary z `seasons:` pojawiają się tylko w swojej porze roku z Ludnosc
+  # (bez Ludnosc nie ma ich wcale) w osobnych miejscach `seasonal`. `featured` towarów z oferty typu kupiec szuka
+  # (premia z `rotation.featured-bonus-percent`, limit × `rotation.featured-limit-multiplier`); wahania cen ±
+  # `rotation.price-swing-percent` nadal co `rotation.period-hours`. Zapas towaru spoza oferty czeka w magazynie
+  # (bez wywozu nadwyżki) i wraca razem z towarem. enabled: false = każdy typ handluje całym swoim katalogiem.
+  # Wszystkie typy mają WSPÓLNY magazyn, budżet world:merchant i dzienne limity sztuk/zarobku.
+  default-type: ogolny
+  assortment:
+    enabled: true
+    period-hours: 12
+    start-hour: 6
+    featured: 4
+    preview: true
+  # Typy kupców (NPC: /skarbiec npc stworz kupiec ["nazwa"] [skin] [typ], zmiana: /skarbiec npc typ <id|najblizszy> <typ>).
+  # categories: kategorie z cennika ("*" = wszystkie), core: dodatkowe towary zawsze w ofercie,
+  # rotating: towary z dostawy naraz, seasonal: miejsca na towary sezonowe. Kupcy bez typu dostają default-type.
+  types:
+    ogolny:
+      name: "<green>Kupiec ogólny"
+      icon: WHEAT
+      categories: ["*"]
+      core: []
+      rotating: 20
+      seasonal: 2
+    spozywczy:
+      name: "<gold>Kupiec spożywczy"
+      icon: BREAD
+      categories: [plody, przyprawy, ziola, zywnosc, ryby, nasiona]
+      core: [BEETROOT, WHEAT_SEEDS, EGG, COOKED_BEEF, COD]
+      rotating: 16
+      seasonal: 3
+    budowlany:
+      name: "<aqua>Rzemieślnik budowlany"
+      icon: BRICKS
+      categories: [drewno, kamien, budulec, wyroby, barwniki, tekstylia, zwierzece]
+      core: [OAK_PLANKS, STONE_BRICKS, SAND, GLASS, BRICKS, CLAY_BALL, WHITE_WOOL]
+      rotating: 18
+      seasonal: 1
+    kowal:
+      name: "<gray>Kowal"
+      icon: IRON_AXE
+      categories: [paliwo, kruszce, narzedzia, bron, zbroja, jezdziectwo]
+      core: [RAW_IRON, COPPER_INGOT, GOLD_INGOT, IRON_PICKAXE, IRON_SWORD, ARROW]
+      rotating: 12
+      seasonal: 0
+  # Cennik (pełny katalog). amount = sztuk w partii (jedno kliknięcie), buy = ile kupiec PŁACI za partię,
+  # sell = ile kupiec BIERZE za partię (0/brak = nie sprzedaje), daily-limit = sztuk na gracza dziennie (0 = bez),
+  # category = kategoria (typy kupców), core: true = zawsze w ofercie, seasons = pora roku Ludnosc (wiosna|lato|jesien|zima).
+  # Skupowane są tylko zwykłe przedmioty (bez nazw, zaklęć, uszkodzeń). sell nigdy nie jest niższe od buy.
+  offers:
+    # --- płody rolne
+    - {item: WHEAT, category: plody, amount: 16, buy: 5, sell: 10, daily-limit: 2048, core: true}
+    - {item: HAY_BLOCK, category: plody, amount: 4, buy: 10, sell: 20, daily-limit: 256}
+    - {item: CARROT, category: plody, amount: 16, buy: 4, sell: 8, daily-limit: 2048, core: true}
+    - {item: POTATO, category: plody, amount: 16, buy: 4, sell: 8, daily-limit: 2048, core: true}
+    - {item: BEETROOT, category: plody, amount: 16, buy: 4, sell: 8, daily-limit: 1024}
+    - {item: PUMPKIN, category: plody, amount: 4, buy: 4, sell: 8, daily-limit: 512}
+    - {item: MELON_SLICE, category: plody, amount: 32, buy: 4, daily-limit: 2048}
+    - {item: SUGAR_CANE, category: plody, amount: 16, buy: 4, sell: 8, daily-limit: 1024}
+    - {item: APPLE, category: plody, amount: 4, buy: 4, sell: 8, daily-limit: 256}
+    - {item: EGG, category: plody, amount: 16, buy: 4, daily-limit: 512}
+    - {item: HONEY_BOTTLE, category: plody, amount: 1, buy: 4, sell: 8, daily-limit: 64}
+    - {item: MELON, category: plody, amount: 4, buy: 6, sell: 12, daily-limit: 256, seasons: [lato]}
+    - {item: SWEET_BERRIES, category: plody, amount: 16, buy: 4, sell: 8, daily-limit: 512, seasons: [lato, jesien]}
+    - {item: BROWN_MUSHROOM, category: plody, amount: 8, buy: 4, sell: 8, daily-limit: 256, seasons: [jesien]}
+    - {item: RED_MUSHROOM, category: plody, amount: 8, buy: 4, sell: 8, daily-limit: 256, seasons: [jesien]}
+    - {item: HONEYCOMB, category: plody, amount: 4, buy: 6, sell: 12, daily-limit: 128, seasons: [wiosna, lato]}
+    # --- przyprawy
+    - {item: SUGAR, category: przyprawy, amount: 16, buy: 5, sell: 10, daily-limit: 512}
+    - {item: COCOA_BEANS, category: przyprawy, amount: 8, buy: 6, sell: 12, daily-limit: 256}
+    # --- zioła
+    - {item: POPPY, category: ziola, amount: 8, buy: 2, sell: 5, daily-limit: 256, seasons: [wiosna, lato]}
+    - {item: DANDELION, category: ziola, amount: 8, buy: 2, sell: 5, daily-limit: 256, seasons: [wiosna, lato]}
+    - {item: CORNFLOWER, category: ziola, amount: 8, buy: 2, sell: 5, daily-limit: 256, seasons: [wiosna, lato]}
+    # --- żywność
+    - {item: BREAD, category: zywnosc, amount: 4, buy: 8, sell: 14, daily-limit: 512, core: true}
+    - {item: COOKED_BEEF, category: zywnosc, amount: 4, buy: 9, sell: 16, daily-limit: 256}
+    - {item: COOKED_PORKCHOP, category: zywnosc, amount: 4, buy: 9, sell: 16, daily-limit: 256}
+    - {item: COOKED_MUTTON, category: zywnosc, amount: 4, buy: 8, sell: 14, daily-limit: 256}
+    - {item: COOKED_CHICKEN, category: zywnosc, amount: 4, buy: 6, sell: 12, daily-limit: 256}
+    - {item: BEEF, category: zywnosc, amount: 4, buy: 5, sell: 10, daily-limit: 256}
+    - {item: PORKCHOP, category: zywnosc, amount: 4, buy: 5, sell: 10, daily-limit: 256}
+    - {item: MUTTON, category: zywnosc, amount: 4, buy: 4, sell: 9, daily-limit: 256}
+    - {item: CHICKEN, category: zywnosc, amount: 4, buy: 3, sell: 7, daily-limit: 256}
+    - {item: RABBIT, category: zywnosc, amount: 4, buy: 3, sell: 7, daily-limit: 128, seasons: [jesien, zima]}
+    - {item: COOKED_RABBIT, category: zywnosc, amount: 4, buy: 6, sell: 12, daily-limit: 128}
+    - {item: BAKED_POTATO, category: zywnosc, amount: 8, buy: 3, sell: 7, daily-limit: 512}
+    - {item: PUMPKIN_PIE, category: zywnosc, amount: 4, buy: 6, sell: 12, daily-limit: 128, seasons: [jesien, zima]}
+    - {item: COOKIE, category: zywnosc, amount: 16, buy: 4, sell: 8, daily-limit: 256}
+    - {item: MUSHROOM_STEW, category: zywnosc, amount: 1, buy: 2, sell: 5, daily-limit: 64}
+    - {item: BEETROOT_SOUP, category: zywnosc, amount: 1, buy: 2, sell: 5, daily-limit: 64}
+    - {item: RABBIT_STEW, category: zywnosc, amount: 1, buy: 4, sell: 9, daily-limit: 32, seasons: [zima]}
+    # --- ryby
+    - {item: COD, category: ryby, amount: 4, buy: 5, sell: 10, daily-limit: 512}
+    - {item: SALMON, category: ryby, amount: 4, buy: 6, sell: 12, daily-limit: 512}
+    - {item: COOKED_COD, category: ryby, amount: 4, buy: 8, sell: 14, daily-limit: 256}
+    - {item: COOKED_SALMON, category: ryby, amount: 4, buy: 9, sell: 16, daily-limit: 256}
+    # --- nasiona i sadzonki
+    - {item: WHEAT_SEEDS, category: nasiona, amount: 16, buy: 1, sell: 4, daily-limit: 1024}
+    - {item: BEETROOT_SEEDS, category: nasiona, amount: 16, buy: 1, sell: 4, daily-limit: 512}
+    - {item: PUMPKIN_SEEDS, category: nasiona, amount: 8, buy: 2, sell: 5, daily-limit: 128}
+    - {item: MELON_SEEDS, category: nasiona, amount: 8, buy: 2, sell: 5, daily-limit: 128}
+    - {item: OAK_SAPLING, category: nasiona, amount: 4, buy: 2, sell: 5, daily-limit: 128}
+    - {item: SPRUCE_SAPLING, category: nasiona, amount: 4, buy: 2, sell: 5, daily-limit: 128}
+    - {item: BIRCH_SAPLING, category: nasiona, amount: 4, buy: 2, sell: 5, daily-limit: 128}
+    - {item: DARK_OAK_SAPLING, category: nasiona, amount: 4, buy: 2, sell: 5, daily-limit: 128}
+    - {item: JUNGLE_SAPLING, category: nasiona, amount: 4, buy: 2, sell: 5, daily-limit: 128}
+    - {item: ACACIA_SAPLING, category: nasiona, amount: 4, buy: 2, sell: 5, daily-limit: 128}
+    - {item: BONE_MEAL, category: nasiona, amount: 16, buy: 2, sell: 4, daily-limit: 256}
+    # --- skóry i surowce zwierzęce
+    - {item: LEATHER, category: zwierzece, amount: 4, buy: 10, sell: 20, daily-limit: 256}
+    - {item: RABBIT_HIDE, category: zwierzece, amount: 4, buy: 4, daily-limit: 128}
+    - {item: FEATHER, category: zwierzece, amount: 8, buy: 4, sell: 8, daily-limit: 512}
+    - {item: STRING, category: zwierzece, amount: 8, buy: 5, sell: 10, daily-limit: 512}
+    - {item: BONE, category: zwierzece, amount: 8, buy: 3, daily-limit: 512}
+    - {item: FLINT, category: zwierzece, amount: 8, buy: 4, sell: 8, daily-limit: 256}
+    - {item: GUNPOWDER, category: zwierzece, amount: 4, buy: 8, daily-limit: 256}
+    # --- wełna
+    - {item: WHITE_WOOL, category: tekstylia, amount: 8, buy: 8, sell: 14, daily-limit: 512}
+    - {item: RED_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    - {item: BLUE_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    - {item: YELLOW_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    - {item: GREEN_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    - {item: BLACK_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    - {item: BROWN_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    - {item: GRAY_WOOL, category: tekstylia, amount: 8, buy: 9, sell: 16, daily-limit: 256}
+    # --- barwniki
+    - {item: WHITE_DYE, category: barwniki, amount: 8, buy: 1, sell: 4, daily-limit: 256}
+    - {item: BLACK_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: RED_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: YELLOW_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: BLUE_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: GREEN_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: BROWN_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: ORANGE_DYE, category: barwniki, amount: 8, buy: 3, sell: 6, daily-limit: 256}
+    - {item: INK_SAC, category: barwniki, amount: 8, buy: 4, sell: 8, daily-limit: 256}
+    # --- drewno
+    - {item: OAK_LOG, category: drewno, amount: 16, buy: 8, sell: 16, daily-limit: 1024, core: true}
+    - {item: SPRUCE_LOG, category: drewno, amount: 16, buy: 8, sell: 16, daily-limit: 1024, core: true}
+    - {item: BIRCH_LOG, category: drewno, amount: 16, buy: 8, sell: 16, daily-limit: 1024, core: true}
+    - {item: DARK_OAK_LOG, category: drewno, amount: 16, buy: 9, sell: 18, daily-limit: 1024}
+    - {item: JUNGLE_LOG, category: drewno, amount: 16, buy: 8, sell: 16, daily-limit: 512}
+    - {item: ACACIA_LOG, category: drewno, amount: 16, buy: 8, sell: 16, daily-limit: 512}
+    - {item: OAK_PLANKS, category: drewno, amount: 32, buy: 3, sell: 6, daily-limit: 1024}
+    - {item: SPRUCE_PLANKS, category: drewno, amount: 32, buy: 3, sell: 6, daily-limit: 1024}
+    - {item: BIRCH_PLANKS, category: drewno, amount: 32, buy: 3, sell: 6, daily-limit: 1024}
+    - {item: DARK_OAK_PLANKS, category: drewno, amount: 32, buy: 3, sell: 7, daily-limit: 1024}
+    - {item: STICK, category: drewno, amount: 32, buy: 2, sell: 4, daily-limit: 512}
+    # --- kamień
+    - {item: COBBLESTONE, category: kamien, amount: 64, buy: 5, sell: 12, daily-limit: 2048, core: true}
+    - {item: STONE_BRICKS, category: kamien, amount: 16, buy: 5, sell: 12, daily-limit: 1024}
+    - {item: STONE, category: kamien, amount: 32, buy: 5, sell: 12, daily-limit: 1024}
+    - {item: SMOOTH_STONE, category: kamien, amount: 16, buy: 4, sell: 8, daily-limit: 512}
+    - {item: MOSSY_COBBLESTONE, category: kamien, amount: 16, buy: 2, sell: 6, daily-limit: 256}
+    - {item: ANDESITE, category: kamien, amount: 32, buy: 3, sell: 7, daily-limit: 512}
+    - {item: DIORITE, category: kamien, amount: 32, buy: 3, sell: 7, daily-limit: 512}
+    - {item: GRANITE, category: kamien, amount: 32, buy: 3, sell: 7, daily-limit: 512}
+    - {item: COBBLED_DEEPSLATE, category: kamien, amount: 64, buy: 5, sell: 12, daily-limit: 1024}
+    - {item: SANDSTONE, category: kamien, amount: 16, buy: 3, sell: 7, daily-limit: 512}
+    # --- budulec (piasek, glina, cegła, szkło)
+    - {item: SAND, category: budulec, amount: 32, buy: 3, sell: 8, daily-limit: 1024}
+    - {item: RED_SAND, category: budulec, amount: 32, buy: 3, sell: 8, daily-limit: 256}
+    - {item: GRAVEL, category: budulec, amount: 32, buy: 3, sell: 7, daily-limit: 512}
+    - {item: CLAY_BALL, category: budulec, amount: 16, buy: 4, sell: 8, daily-limit: 512}
+    - {item: CLAY, category: budulec, amount: 4, buy: 3, sell: 7, daily-limit: 256}
+    - {item: BRICK, category: budulec, amount: 16, buy: 5, sell: 10, daily-limit: 512}
+    - {item: BRICKS, category: budulec, amount: 8, buy: 9, sell: 18, daily-limit: 512}
+    - {item: TERRACOTTA, category: budulec, amount: 16, buy: 5, sell: 10, daily-limit: 512}
+    - {item: GLASS, category: budulec, amount: 16, buy: 3, sell: 8, daily-limit: 512}
+    - {item: GLASS_PANE, category: budulec, amount: 32, buy: 3, sell: 7, daily-limit: 256}
+    - {item: ICE, category: budulec, amount: 8, buy: 4, sell: 8, daily-limit: 128, seasons: [zima]}
+    # --- wyroby rzemieślnicze
+    - {item: TORCH, category: wyroby, amount: 16, buy: 4, sell: 10, daily-limit: 512, core: true}
+    - {item: CANDLE, category: wyroby, amount: 4, buy: 6, sell: 12, daily-limit: 128}
+    - {item: LANTERN, category: wyroby, amount: 1, buy: 7, sell: 14, daily-limit: 64}
+    - {item: BARREL, category: wyroby, amount: 1, buy: 1, sell: 3, daily-limit: 64}
+    - {item: CHEST, category: wyroby, amount: 1, buy: 1, sell: 3, daily-limit: 64}
+    - {item: LADDER, category: wyroby, amount: 16, buy: 2, sell: 5, daily-limit: 256}
+    - {item: BOWL, category: wyroby, amount: 8, buy: 1, sell: 3, daily-limit: 128}
+    - {item: GLASS_BOTTLE, category: wyroby, amount: 8, buy: 2, sell: 5, daily-limit: 256}
+    - {item: FLOWER_POT, category: wyroby, amount: 4, buy: 3, sell: 6, daily-limit: 64}
+    - {item: PAPER, category: wyroby, amount: 16, buy: 4, sell: 8, daily-limit: 512}
+    - {item: BOOK, category: wyroby, amount: 1, buy: 4, sell: 8, daily-limit: 64}
+    - {item: WRITABLE_BOOK, category: wyroby, amount: 1, buy: 5, sell: 10, daily-limit: 32}
+    - {item: NAME_TAG, category: wyroby, amount: 1, buy: 1, sell: 300, daily-limit: 8}
+    # --- paliwo
+    - {item: COAL, category: paliwo, amount: 8, buy: 10, sell: 20, daily-limit: 512, core: true}
+    - {item: CHARCOAL, category: paliwo, amount: 8, buy: 6, sell: 14, daily-limit: 512, core: true}
+    # --- kruszce
+    - {item: COPPER_INGOT, category: kruszce, amount: 4, buy: 5, sell: 10, daily-limit: 512}
+    - {item: IRON_INGOT, category: kruszce, amount: 1, buy: 8, sell: 15, daily-limit: 256, core: true}
+    - {item: GOLD_INGOT, category: kruszce, amount: 1, buy: 25, sell: 45, daily-limit: 64}
+    - {item: LAPIS_LAZULI, category: kruszce, amount: 8, buy: 6, daily-limit: 256}
+    - {item: EMERALD, category: kruszce, amount: 1, buy: 31, sell: 60, daily-limit: 32}
+    - {item: DIAMOND, category: kruszce, amount: 1, buy: 100, sell: 200, daily-limit: 16}
+    - {item: RAW_IRON, category: kruszce, amount: 1, buy: 5, sell: 11, daily-limit: 256}
+    - {item: RAW_COPPER, category: kruszce, amount: 4, buy: 3, sell: 7, daily-limit: 512}
+    - {item: RAW_GOLD, category: kruszce, amount: 1, buy: 15, sell: 32, daily-limit: 64}
+    # --- narzędzia
+    - {item: IRON_PICKAXE, category: narzedzia, amount: 1, buy: 26, sell: 52, daily-limit: 8}
+    - {item: IRON_AXE, category: narzedzia, amount: 1, buy: 26, sell: 52, daily-limit: 8}
+    - {item: IRON_SHOVEL, category: narzedzia, amount: 1, buy: 9, sell: 18, daily-limit: 8}
+    - {item: IRON_HOE, category: narzedzia, amount: 1, buy: 17, sell: 34, daily-limit: 8}
+    - {item: SHEARS, category: narzedzia, amount: 1, buy: 17, sell: 34, daily-limit: 8}
+    - {item: BUCKET, category: narzedzia, amount: 1, buy: 26, sell: 52, daily-limit: 16}
+    - {item: FLINT_AND_STEEL, category: narzedzia, amount: 1, buy: 9, sell: 18, daily-limit: 8}
+    - {item: FISHING_ROD, category: narzedzia, amount: 1, buy: 2, sell: 5, daily-limit: 8}
+    - {item: IRON_BARS, category: narzedzia, amount: 16, buy: 40, sell: 80, daily-limit: 64}
+    # --- broń
+    - {item: IRON_SWORD, category: bron, amount: 1, buy: 17, sell: 34, daily-limit: 8}
+    - {item: BOW, category: bron, amount: 1, buy: 3, sell: 7, daily-limit: 8}
+    - {item: CROSSBOW, category: bron, amount: 1, buy: 18, sell: 36, daily-limit: 8}
+    - {item: ARROW, category: bron, amount: 16, buy: 4, sell: 8, daily-limit: 256}
+    - {item: SHIELD, category: bron, amount: 1, buy: 10, sell: 20, daily-limit: 8}
+    # --- zbroja
+    - {item: IRON_HELMET, category: zbroja, amount: 1, buy: 42, sell: 84, daily-limit: 4}
+    - {item: IRON_CHESTPLATE, category: zbroja, amount: 1, buy: 68, sell: 136, daily-limit: 4}
+    - {item: IRON_LEGGINGS, category: zbroja, amount: 1, buy: 60, sell: 120, daily-limit: 4}
+    - {item: IRON_BOOTS, category: zbroja, amount: 1, buy: 34, sell: 68, daily-limit: 4}
+    - {item: LEATHER_HELMET, category: zbroja, amount: 1, buy: 13, sell: 26, daily-limit: 4}
+    - {item: LEATHER_CHESTPLATE, category: zbroja, amount: 1, buy: 21, sell: 42, daily-limit: 4}
+    - {item: LEATHER_LEGGINGS, category: zbroja, amount: 1, buy: 18, sell: 36, daily-limit: 4}
+    - {item: LEATHER_BOOTS, category: zbroja, amount: 1, buy: 11, sell: 22, daily-limit: 4}
+    - {item: CHAINMAIL_HELMET, category: zbroja, amount: 1, buy: 30, sell: 60, daily-limit: 2}
+    - {item: CHAINMAIL_CHESTPLATE, category: zbroja, amount: 1, buy: 50, sell: 100, daily-limit: 2}
+    - {item: CHAINMAIL_LEGGINGS, category: zbroja, amount: 1, buy: 45, sell: 90, daily-limit: 2}
+    - {item: CHAINMAIL_BOOTS, category: zbroja, amount: 1, buy: 25, sell: 50, daily-limit: 2}
+    # --- jeździectwo
+    - {item: SADDLE, category: jezdziectwo, amount: 1, buy: 20, sell: 250, daily-limit: 4}
+    - {item: LEATHER_HORSE_ARMOR, category: jezdziectwo, amount: 1, buy: 18, sell: 36, daily-limit: 4}
+    - {item: IRON_HORSE_ARMOR, category: jezdziectwo, amount: 1, buy: 40, sell: 80, daily-limit: 2}
+    - {item: LEAD, category: jezdziectwo, amount: 2, buy: 3, sell: 6, daily-limit: 64}
+
+shops:
+  enabled: true
+  # Maks. sklepów jednego gracza (skarbiec.admin bez limitu).
+  max-per-player: 10
+  max-price: "1000 zł"
+  # Maks. ilość w jednej transakcji (linia 3 tabliczki).
+  max-amount: 576
+  containers: [CHEST, TRAPPED_CHEST, BARREL]
+  # Gdzie wolno zakładać sklepy (wymaga pluginu Kraje; bez niego — wszędzie):
+  #   anywhere    — wszędzie
+  #   own-or-wild — na terenie własnego kraju albo w dziczy
+  #   own         — tylko na terenie własnego kraju
+  territory: own-or-wild
+  # Sklep „Kupię”: sprzedający dostaje zapłatę jako monety (coins) albo przelewem na konto (account).
+  # Pieniądze zawsze schodzą z konta bankowego właściciela sklepu.
+  buy-payout: coins
+
+trade:
+  # Maks. odległość graczy podczas /handel (bloki).
+  range: 10
+  countdown-seconds: 3
+  request-timeout-seconds: 60
+
+npc:
+  # NPC obracają głowę do najbliższego gracza.
+  look-at-players: true
+  look-radius: 6
+  default-name:
+    banker: "<gold>Bankier"
+    merchant: "<green>Kupiec"
+  # Domyślny skin (nick konta Mojang). Puste = losowy z 9 domyślnych skinów, stały dla danego NPC.
+  # Zmiana: /skarbiec npc skin <id|najblizszy> <nick|losowy>
+  default-skin:
+    banker: ""
+    merchant: ""
+  # Kramy kupców (modele BetterModel `skarbiec_kram_<typ>`, osobny dla każdego typu). Stawia admin:
+  # /skarbiec kram postaw|przesun|obroc|usun. Bez BetterModel kupcy działają bez kramów.
+  # Modele są tylko pakietowe (bez bytów w świecie i bez kolizji) — gracz swobodnie podchodzi i klika kupca.
+  stalls:
+    enabled: true
+    # Odległość (bloki), z której gracz widzi kram.
+    view-distance: 48
+    # Kopiuj modele do plugins/BetterModel/models przy starcie (podmienia tylko własne pliki skarbiec_kram_*).
+    install-models: true
+
+# Statystyki Skarbu Świata (panel, tylko WorldSteward).
+stats:
+  census:
+    # Spis monet: ile ms na tick wolno liczyć załadowane chunki (główny wątek).
+    live-ms-per-tick: 2.0
+    # Odczyt plików świata w tle: procent czasu pracy wątku (reszta to przerwy, żeby nie obciążać dysku i CPU).
+    disk-duty-percent: 40
+  trail:
+    # Log ruchów stosów monet (podniesienie, upuszczenie, skrzynie, lejki). Bez numerów seryjnych — monety dalej się stackują.
+    enabled: true
+    max-events-per-second: 200
+
+# Diagnostyka: loguj każde kliknięcie w NPC/hitbox (typ zdarzenia, stan anulowania, inne pluginy nasłuchujące).
+debug-npc-clicks: false
+
+messages:
+  prefix: "<gold>[Skarbiec]</gold> "
+  no-permission: "<prefix><red>Nie masz uprawnień."
+  players-only: "<prefix><red>Tylko dla graczy."
+  reloaded: "<prefix><green>Przeładowano konfigurację Skarbca."
+  unknown-player: "<prefix><red>Nie znam gracza <white><player></white>."
+  unknown-online-player: "<prefix><red>Gracz <white><player></white> nie jest na serwerze."
+  unknown-country: "<prefix><red>Nie ma kraju <white><name></white>."
+  invalid-account: "<prefix><red>Nieprawidłowe konto <white><account></white> (format: przestrzeń:id)."
+  invalid-amount: "<prefix><red>Nieprawidłowa kwota <white><input></white>. Przykłady: <white>150</white>, <white>3zł</white>, <white>1zł 5sr</white>."
+  account-country: "kraj <name>"
+  error:
+    transaction: "<prefix><red>Operacja odrzucona (<reason>)."
+    internal: "<prefix><red>Wystąpił błąd — szczegóły w konsoli."
+
+  usage-zaplac: "<prefix><gray>Użycie: <white>/zaplac <gracz> <kwota></white>, np. <white>/zaplac Jan 1zł 5sr</white>"
+  usage-handel: "<prefix><gray>Użycie: <white>/handel <gracz></white> — gracz musi stać obok ciebie."
+  usage-admin: "<prefix><gray>Użycie: <white>/skarbiec admin daj|zabierz|ustaw <gracz|konto|kraj:nazwa> <kwota></white>"
+  usage-admin-monety: "<prefix><gray>Użycie: <white>/skarbiec admin monety <gracz> <kwota></white>"
+  usage-npc: "<prefix><gray>Użycie: <white>/skarbiec npc stworz <kupiec|bankier> [\"nazwa\"] [skin] [typ]</white>, <white>typ <id|najblizszy> <typ kupca></white>, <white>usun [id]</white>, <white>skin <id|najblizszy> <nick|losowy></white>, <white>lista</white>"
+  usage-log: "<prefix><gray>Użycie: <white>/skarbiec log <gracz|konto> [strona]</white>"
+  usage-kram: "<prefix><gray>Kramy: <white>/skarbiec kram postaw [id|najblizszy]</white>, <white>przesun <id|najblizszy> <dx> <dy> <dz></white> (bloki, do 8), <white>obroc <id|najblizszy> <stopnie></white>, <white>usun [id|najblizszy]</white>"
+  suggest-stall-shift: "<gray>Przesunięcie w blokach: x y z"
+  suggest-stall-rotate: "<gray>Obrót w stopniach"
+
+  balance: "<prefix><gray>Konto bankowe: <gold><balance></gold> <dark_gray>|</dark_gray> W sakiewce: <yellow><coins></yellow>"
+  balance-other: "<prefix><gray>Konto <white><account></white>: <gold><balance></gold>"
+  coins: "<prefix><gray>W sakiewce masz <yellow><total></yellow>: <gold><n_gold> zł</gold>, <white><n_silver> sr</white>, <#c47a3a><n_copper> md</#c47a3a>."
+
+  pay:
+    need-banker: "<prefix><red>Przelew zlecisz tylko u bankiera (w promieniu <radius> bloków)."
+    self: "<prefix><red>Nie możesz przelać pieniędzy samemu sobie."
+    too-small: "<prefix><red>Najmniejszy przelew to <amount>."
+    sent: "<prefix><green>Przelano <gold><amount></gold> dla <white><player></white>. Saldo: <gold><balance></gold>."
+    received: "<prefix><green>Otrzymałeś przelew <gold><amount></gold> od <white><player></white>."
+    insufficient: "<prefix><red>Za mało pieniędzy na koncie (saldo: <balance>)."
+
+  bank:
+    no-coins: "<prefix><gray>Nie masz przy sobie żadnych monet."
+    deposited: "<prefix><green>Wpłacono <gold><amount></gold>. Saldo: <gold><balance></gold>."
+    withdrawn: "<prefix><green>Wypłacono <gold><amount></gold>. Saldo: <gold><balance></gold>."
+    insufficient: "<prefix><red>Za mało pieniędzy na koncie (saldo: <balance>)."
+    no-space: "<prefix><red>Zrób miejsce w ekwipunku na monety."
+    invalid-amount: "<prefix><red>Nieprawidłowa kwota <white><input></white>."
+    ask-amount: "<prefix><yellow>Wpisz na czacie kwotę do wypłaty (np. <white>2zł 5sr</white>) albo <white>anuluj</white>. Masz <timeout> s."
+    input-cancelled: "<prefix><gray>Anulowano."
+
+  merchant:
+    to-account: "na konto"
+    to-purse: "do sakiewki"
+    sold: "<prefix><green>Sprzedano <white><count>×</white> <item> za <gold><amount></gold> (<target>)."
+    sold-all: "<prefix><green>Sprzedano towary (<kinds> rodzajów) za <gold><amount></gold> (<target>)."
+    nothing-to-sell: "<prefix><gray>Nie masz nic, co kupiec by skupił."
+    not-enough-items: "<prefix><red>Kupiec skupuje <item> po <count> szt. — masz za mało."
+    item-limit: "<prefix><red>Kupiec nie przyjmie dziś więcej: <item>. Wróć jutro."
+    daily-limit: "<prefix><red>Osiągnąłeś dzienny limit zarobku u kupców (<amount>). Wróć jutro."
+    bought: "<prefix><green>Kupiono <white><count>×</white> <item> za <gold><amount></gold>."
+    cannot-afford: "<prefix><red>Nie stać cię — potrzeba <amount>."
+    no-space: "<prefix><red>Zrób miejsce w ekwipunku."
+    no-budget: "<prefix><red>Kupiec nie ma teraz pieniędzy na skup. Towar zostaje u ciebie — wróć, gdy sakiewka kupca się napełni."
+    out-of-stock: "<prefix><red>Kupiec nie ma na stanie: <item>."
+    not-in-offer: "<prefix><red>Tego kupca nie ma teraz w ofercie: <item>. Nowa dostawa za <white><hours> h <minutes> min</white>."
+  merchants:
+    header: "<prefix><gold>Kupcy i dostawy</gold> <gray>— nowa dostawa za <white><hours> h <minutes> min</white> <dark_gray>(cały katalog: <catalog> towarów)"
+    season: "<gray>  Pora roku: <white><season></white> <dark_gray>— kupcy mają też towary sezonowe"
+    line: "<yellow><type></yellow> <gray>— w ofercie <white><count></white> towarów (stałe <core>, z dostawy <delivery>) <dark_gray>· NPC: <npcs>"
+    featured: "<gray>   ★ szuka: <gold><items>"
+    fixed: "<prefix><gray>Kupcy mają stały cennik (<count> towarów), bez dostaw."
+
+  stall:
+    placed: "<prefix><green>Postawiono kram przy <name> <dark_gray>[<id>]</dark_gray>: <white><model></white> <dark_gray>(<where>)"
+    moved: "<prefix><green>Przesunięto kram <name> <dark_gray>[<id>]</dark_gray>: <dark_gray><where>"
+    rotated: "<prefix><green>Obrócono kram <name> <dark_gray>[<id>]</dark_gray>: <dark_gray><where>"
+    removed: "<prefix><green>Usunięto kram <name> <dark_gray>[<id>]</dark_gray>."
+    none: "<prefix><red>Ten kupiec nie ma kramu. Postaw: <white>/skarbiec kram postaw"
+    no-model: "<prefix><gold>Model <white><model></white> nie jest wczytany w BetterModel — kram pojawi się po jego wczytaniu (np. /bettermodel reload)."
+    status: "<prefix><gold>Kramy kupców</gold> <gray>— BetterModel aktywny, widocznych teraz: <white><shown>"
+    status-off: "<prefix><gold>Kramy kupców</gold> <gray>— BetterModel niedostępny: kupcy działają bez kramów."
+    line: "<dark_gray> [<id>]</dark_gray> <name> <gray>— <white><model></white> (<loaded>) <dark_gray><where>"
+    loaded-yes: "wczytany"
+    loaded-no: "brak modelu"
+  npc:
+    description-banker: "<gray>Bankier <dark_gray>(PPM)"
+    description-merchant: "<gray>Kupiec <dark_gray>(PPM)"
+    description-merchant-type: "<gray><type> <dark_gray>(PPM)"
+    merchant-type-changed: "<prefix><green>Kupiec <name> <dark_gray>[<id>]</dark_gray> jest teraz typu <white><type></white> <dark_gray>(<typeid>)</dark_gray>."
+    not-merchant: "<prefix><red>Ten NPC nie jest kupcem."
+    unknown-merchant-type: "<prefix><red>Nieznany typ kupca <white><type></white>. Dostępne: <white><types></white>."
+    bad-skin: "<prefix><red>Nieprawidłowy nick skina <white><skin></white> (3–16 znaków: litery, cyfry, _)."
+    created: "<prefix><green>Postawiono NPC (<type>) <name> <dark_gray>[<id>]</dark_gray>."
+    removed: "<prefix><green>Usunięto NPC <name> <dark_gray>[<id>]</dark_gray>."
+    not-found: "<prefix><red>Nie znaleziono NPC (stań obok niego albo podaj id z /skarbiec npc lista)."
+    none: "<prefix><gray>Brak NPC Skarbca."
+    list-header: "<prefix><gray>NPC Skarbca (<count>):"
+    list-line: "<dark_gray> [<id>]</dark_gray> <gray><type></gray> <name> <dark_gray>— <where>, skin: <skin></dark_gray>"
+    skin-changed: "<prefix><green>Skin NPC <name> <dark_gray>[<id>]</dark_gray>: <white><skin></white>."
+    skin-random: "losowy domyślny"
+
+  shop:
+    disabled: "<prefix><red>Sklepy graczy są wyłączone."
+    usage: "<prefix><gray>Tabliczka sklepu: <white>[Sklep]</white> / <white>Sprzedam</white> albo <white>Kupię</white> / <white>ilość</white> / <white>cena</white> (np. 1zł 5sr). Postaw ją na skrzyni z towarem."
+    need-container: "<prefix><red>Tabliczkę [Sklep] postaw na skrzyni lub beczce (albo na bloku nad nią)."
+    already-shop: "<prefix><red>Ta skrzynia jest już sklepem."
+    bad-amount: "<prefix><red>Trzecia linia: ilość od 1 do <max>."
+    bad-price: "<prefix><red>Czwarta linia: cena, np. <white>5sr</white> albo <white>1zł 5sr</white> (max <max>)."
+    need-item: "<prefix><red>Włóż towar do skrzyni (albo trzymaj go w ręce), żeby sklep wiedział, czym handlujesz."
+    no-coins-as-goods: "<prefix><red>Monetami nie handluje się w sklepie — do tego jest bank."
+    territory-foreign: "<prefix><red>Sklep możesz założyć tylko na terenie własnego kraju albo w dziczy."
+    territory-wild: "<prefix><red>Sklep możesz założyć tylko na terenie własnego kraju."
+    limit: "<prefix><red>Masz już maksymalną liczbę sklepów (<max>)."
+    type-sell: "sprzedajesz"
+    type-buy: "skupujesz"
+    created: "<prefix><green>Sklep założony: <type> <white><count>×</white> <item> za <gold><amount></gold>."
+    removed: "<prefix><yellow>Sklep usunięty."
+    protected: "<prefix><red>To sklep gracza <white><owner></white>."
+    broken: "<prefix><red>Ten sklep jest uszkodzony (brak skrzyni)."
+    owner-hint: "<prefix><gray>To twój sklep — otwórz skrzynię, żeby uzupełnić towar albo zabrać utarg w towarze."
+    info-sell: "<prefix><gray>Sklep <white><owner></white>: <green>sprzedaje</green> <white><count>×</white> <item> za <gold><amount></gold> <dark_gray>(na stanie: <stock>)</dark_gray>. PPM — kup."
+    info-buy: "<prefix><gray>Sklep <white><owner></white>: <dark_red>skupuje</dark_red> <white><count>×</white> <item> za <gold><amount></gold>. PPM — sprzedaj."
+    out-of-stock: "<prefix><red>Sklep <white><owner></white> nie ma już towaru."
+    owner-out-of-stock: "<prefix><yellow>Twój sklep (<item>) jest pusty — <white><player></white> chciał kupić."
+    no-space: "<prefix><red>Zrób miejsce w ekwipunku."
+    cannot-afford: "<prefix><red>Potrzeba <gold><amount></gold> w monetach — masz <yellow><coins></yellow>. Monety wypłacisz u bankiera."
+    bought: "<prefix><green>Kupiono <white><count>×</white> <item> za <gold><amount></gold> od <white><owner></white>."
+    owner-sold: "<prefix><green><white><player></white> kupił <white><count>×</white> <item> — <gold>+<amount></gold> na konto."
+    you-lack-items: "<prefix><red>Potrzebujesz <white><count>×</white> <item>."
+    chest-full: "<prefix><red>Skrzynia sklepu jest pełna."
+    owner-chest-full: "<prefix><yellow>Skrzynia twojego sklepu (<item>) jest pełna."
+    owner-broke: "<prefix><red>Właściciel sklepu nie ma pieniędzy na koncie."
+    owner-no-funds: "<prefix><yellow>Brak środków na koncie — twój sklep nie mógł kupić <item> od <white><player></white>."
+    sold: "<prefix><green>Sprzedano <white><count>×</white> <item> za <gold><amount></gold> (monety)."
+    sold-account: "<prefix><green>Sprzedano <white><count>×</white> <item> za <gold><amount></gold> (przelew na konto)."
+    owner-bought: "<prefix><green>Twój sklep kupił <white><count>×</white> <item> od <white><player></white> za <gold><amount></gold>."
+    # Sklepy firm (plugin Firmy): utarg trafia na konto firmy (minus podatek dla kraju siedziby), „Kupię” płaci z konta firmy.
+    firm-closed: "<prefix><red>Sklep firmy <white><owner></white> jest nieczynny: <reason>."
+    firm-protected: "<prefix><red>To sklep firmy <white><owner></white> — otwierają go tylko jej ludzie."
+    firm-hint: "<prefix><gray>To sklep twojej firmy — otwórz skrzynię, żeby uzupełnić towar. Utarg trafia na konto firmy."
+    firm-sold-tax: "<prefix><gray>Podatek dla kraju siedziby: <gold><amount></gold>."
+    none: "<prefix><gray>Nie masz sklepów. Postaw tabliczkę <white>[Sklep]</white> na skrzyni."
+    list-header: "<prefix><gray>Twoje sklepy (<count>):"
+    list-line-sell: "<green> Sprzedam</green> <white><count>×</white> <item> za <gold><amount></gold> <dark_gray>— <where>, stan: <stock></dark_gray>"
+    list-line-buy: "<dark_red> Kupię</dark_red> <white><count>×</white> <item> za <gold><amount></gold> <dark_gray>— <where></dark_gray>"
+    sign:
+      line1: "<dark_blue><bold>[Sklep]"
+      sell: "<dark_green>Sprzedam <count>"
+      buy: "<dark_red>Kupię <count>"
+      item: "<black><item>"
+      price: "<black><amount>"
+      back1: "<dark_gray>Właściciel:"
+      back2: "<black><owner>"
+      back-firm: "<dark_gray>Sklep firmy:"
+
+  trade:
+    self: "<prefix><red>Nie możesz handlować sam ze sobą."
+    busy: "<prefix><red>Ty albo <white><player></white> już handlujecie."
+    too-far: "<prefix><red><white><player></white> stoi za daleko (max <range> bloków)."
+    request-sent: "<prefix><gray>Wysłano propozycję handlu do <white><player></white>."
+    request-received: "<prefix><yellow><white><player></white> chce z tobą handlować. <green><b>[Kliknij, aby przyjąć]</b></green> <dark_gray>(<timeout> s)"
+    request-hover: "<gray>Otwórz handel z <white><player></white>"
+    started: "<prefix><gray>Handel z <white><player></white>. Połóż przedmioty po swojej stronie, ustaw monety i potwierdź."
+    changed: "<prefix><yellow>Oferta się zmieniła — potwierdźcie jeszcze raz."
+    coins-use-buttons: "<prefix><gray>Monety dodasz przyciskami po swojej stronie okna."
+    not-that-many-coins: "<prefix><red>Masz przy sobie tylko <coins> w monetach."
+    coins-missing: "<prefix><red>Ktoś nie ma już obiecanych monet — handel wstrzymany."
+    done: "<prefix><green>Handel z <white><player></white> zakończony."
+    cancelled: "<prefix><red>Handel anulowany."
+    cancelled-by: "<prefix><red>Handel anulował <white><player></white>."
+    closed-by: "<prefix><red>Handel anulowany — <white><player></white> zamknął okno."
+    cancelled-distance: "<prefix><red>Handel anulowany — oddaliliście się od siebie."
+    cancelled-quit: "<prefix><red>Handel anulowany — <white><player></white> wyszedł z gry."
+    cancelled-death: "<prefix><red>Handel anulowany — <white><player></white> zginął."
+
+  admin:
+    done: "<prefix><green><op>: <white><account></white> <gold><amount></gold> → saldo <gold><balance></gold>."
+    insufficient: "<prefix><red><white><account></white> ma tylko <balance>."
+    coins-given: "<prefix><green>Dano <white><player></white> monety: <gold><amount></gold>."
+    too-many-coins: "<prefix><red>Za dużo monet naraz (max 100 000 zł)."
+
+  log:
+    header: "<prefix><gray>Dziennik <white><account></white> <dark_gray>(strona <page>, saldo <balance>)</dark_gray>:"
+    empty: "<gray> Brak operacji."
+    line: "<dark_gray> <time></dark_gray> <white><sign><amount></white> <gray><other></gray> <dark_gray>— <reason> → <after> #<seq></dark_gray>"
+    audit-header: "<gray> Zdarzenia z monetami:"
+    audit-line: "<dark_gray>  <line></dark_gray>"
+
+  info: "<prefix><gray>Kont: <white><accounts></white>, w bankach: <gold><total></gold>, operacji: <white><seq></white>, sklepów: <white><shops></white>, NPC: <white><npcs></white>, pozycji w cenniku: <white><offers></white>."
+
+  gui:
+    close: "<red>Zamknij"
+    prev: "<yellow>« Poprzednia strona"
+    next: "<yellow>Następna strona »"
+    bank:
+      title: "<dark_green>Bank"
+      info-name: "<gold>Twoje konto"
+      info-lore:
+        - "<gray>Saldo: <gold><balance>"
+        - "<gray>W sakiewce: <yellow><coins>"
+      deposit-name: "<green>Wpłać wszystkie monety"
+      deposit-lore:
+        - "<gray>Wpłaca <yellow><coins></yellow> z ekwipunku"
+        - "<gray>na twoje konto."
+      withdraw-name: "<yellow>Wypłać <amount>"
+      withdraw-lore:
+        - "<gray>Saldo: <gold><balance>"
+      other-name: "<yellow>Wypłać inną kwotę"
+      other-lore:
+        - "<gray>Wpiszesz kwotę na czacie,"
+        - "<gray>np. <white>2zł 5sr</white>."
+    merchant:
+      title: "<dark_green>Kupiec <name>"
+      offer-buy: "<gray>Skup: <gold><amount></gold> za <white><count></white> szt."
+      offer-supply: "<red>  (cena niższa o <drop>% — duża podaż)"
+      offer-featured: "<gold><bold>★ Kupiec tego szuka!</bold></gold> <gray>lepsza cena, wyższy limit"
+      offer-core: "<dark_gray>Towar stały — zawsze w ofercie"
+      offer-delivery: "<aqua>Z dostawy</aqua> <gray>— w ofercie jeszcze <white><hours> h <minutes> min"
+      offer-seasonal: "<green>Towar sezonowy (<season>)</green> <gray>— jeszcze <white><hours> h <minutes> min"
+      offer-price-up: "<green>  ▲ <percent>% od zwykłej ceny"
+      offer-price-down: "<red>  ▼ <percent>% od zwykłej ceny"
+      offer-limit: "<gray>Dziś sprzedałeś: <white><sold></white>/<limit> szt."
+      offer-no-buy: "<dark_gray>Kupiec tego nie skupuje"
+      offer-sell: "<gray>Sprzedaż: <gold><amount></gold> za <white><count></white> szt."
+      offer-sold-out: "<dark_gray>Sprzedaż: brak towaru na stanie"
+      offer-no-budget: "<red>Kupiec nie ma pieniędzy na skup"
+      offer-trend-up: "<green>  ↑ cena rośnie (<percent>% w dobę)"
+      offer-trend-down: "<red>  ↓ cena spada (<percent>% w dobę)"
+      offer-trend-flat: "<gray>  → cena stabilna"
+      offer-stock-none: "<gray>Zapas kupca: <red>brak</red>"
+      offer-stock-low: "<gray>Zapas kupca: <gold>mało</gold> <dark_gray>(<stock> szt.)"
+      offer-stock-ok: "<gray>Zapas kupca: <white>w normie</white> <dark_gray>(<stock> szt.)"
+      offer-stock-high: "<gray>Zapas kupca: <green>dużo</green> <dark_gray>(<stock> szt.)"
+      offer-have: "<gray>Masz: <white><have></white> szt."
+      hint-sell:
+        - "<yellow>LPM</yellow> <gray>— sprzedaj <count> szt."
+        - "<yellow>Shift+LPM</yellow> <gray>— sprzedaj wszystkie"
+      hint-buy:
+        - "<yellow>PPM</yellow> <gray>— kup <count> szt."
+        - "<yellow>Shift+PPM</yellow> <gray>— kup stos"
+      sell-all-name: "<green>Sprzedaj wszystko z cennika"
+      sell-all-lore:
+        - "<gray>Sprzedaje wszystkie skupowane"
+        - "<gray>towary z twojego ekwipunku."
+      info-name: "<gold>Dzienny limit"
+      info-lore:
+        - "<gray>Zarobiono dziś: <gold><earned>"
+        - "<gray>Limit: <white><limit></white>, zostało: <green><left>"
+        - "<gray>Zapłata: <white><target>"
+      info-lore-unlimited:
+        - "<gray>Zarobiono dziś: <gold><earned>"
+      info-purse-empty:
+        - ""
+        - "<red>Kupiec nie ma pieniędzy na skup."
+      info-purse-low:
+        - ""
+        - "<gold>Sakiewka kupca jest chuda — niższe ceny i limity."
+      info-purse-ok:
+        - ""
+        - "<gray>Sakiewka kupca: w normie."
+      info-purse-rich:
+        - ""
+        - "<green>Kupiec ma pełną sakiewkę — płaci lepiej."
+      info-rotation:
+        - ""
+        - "<gray>Nowa oferta za: <white><hours> h <minutes> min"
+      info-type:
+        - "<yellow><type>"
+        - "<gray>W ofercie teraz: <white><count></white> towarów"
+        - ""
+      info-delivery:
+        - ""
+        - "<aqua>Nowa dostawa za: <white><hours> h <minutes> min"
+        - "<dark_gray>Zapas towaru spoza oferty czeka w magazynie."
+      preview-name: "<aqua>Następna dostawa"
+      preview-head:
+        - "<gray>Za <white><hours> h <minutes> min</white> kupiec przywiezie:"
+      preview-empty:
+        - "<gray>Tylko towary stałe."
+      preview-line: "<gray> • <white><item>"
+      preview-featured: "<gold> ★ <item> <gray>(będzie szukał)"
+      preview-more: "<dark_gray> …i <count> innych"
+      preview-core-featured: "<gold> ★ <gray>oraz <count> towarów stałych, których będzie szukał"
+    trade:
+      title: "<dark_gray>Handel: <first> ⇄ <second>"
+      head: "<white><player>"
+      plus: "<green>+ <amount>"
+      minus: "<red>- <amount>"
+      button-lore:
+        - "<dark_gray>Monety gracza <player>"
+      offer: "<gold>Monety: <amount>"
+      offer-lore:
+        - "<gray>Oferta monet gracza <white><player></white>."
+        - "<dark_gray>Pobierane z sakiewki przy finalizacji."
+      all-coins: "<yellow>Wszystkie moje monety"
+      clear-coins: "<yellow>Wyczyść monety"
+      confirmed: "<green>✔ <player> potwierdził"
+      not-confirmed: "<red>✘ <player> — kliknij, aby potwierdzić"
+      confirm-lore:
+        - "<gray>Każda zmiana oferty cofa potwierdzenia."
+      status-name: "<yellow>Handel"
+      status-lore:
+        - "<gray>Lewa strona — pierwszy gracz, prawa — drugi."
+        - "<gray>Połóż przedmioty w swoich 8 polach,"
+        - "<gray>ustaw monety i potwierdź. Zasięg: <range> bl."
+      countdown: "<gold>Finalizacja za <seconds> s…"
+      cancel: "<red>Anuluj handel"
+
+  suggest-player: "<gray>Saldo: <gold><balance>"
+  suggest-pay-player: "<gray>Przelew bankowy"
+  suggest-trade-player: "<gray>Odległość: <distance> bl."
+  suggest-amount: "<gold><amount>"
+  suggest-country-account: "<gray>Skarbiec kraju: kraj:<nazwa>"
+  suggest-npc-name: "<gray>Nazwa NPC (w cudzysłowie, może mieć spacje)"
+  suggest-skin: "<gray>Skin z nicku Mojang"
+  suggest-skin-random: "<gray>Losowy z 9 domyślnych skinów"
+  suggest-npc-nearest: "<gray>NPC najbliżej ciebie (do 5 bloków)"
+
+  help-header: "<gold>━━ Skarbiec — <category> <gray>(<page>/<pages>)</gray> ━━"
+  help-line: "<yellow><syntax></yellow> <dark_gray>—</dark_gray> <gray><short>"
+  help-hover: "<yellow><syntax></yellow><newline><gray><description>"
+  help-tabs: "<dark_gray>Strony: <tabs>"
+  help-tab: "<gray><category>"
+  help-tab-current: "<gold><u><category></u>"
+  help-tab-separator: "<dark_gray> | "
+  help-page-hover: "<gray>Pokaż: <white><category>"
+  help-categories:
+    bank: "Bank"
+    handel: "Handel"
+    sklepy: "Sklepy"
+    admin: "Admin"
+  help-entries:
+    saldo:
+      short: "stan konta i sakiewki"
+      description: "Pokazuje saldo konta bankowego i wartość monet w ekwipunku."
+    zaplac:
+      short: "przelew do gracza"
+      description: "Przelewa pieniądze z twojego konta na konto innego gracza (także offline). Kwota np. 150, 3zł, 1zł 5sr."
+    monety:
+      short: "ile masz monet"
+      description: "Pokazuje, ile miedziaków, srebrników i złotych koron nosisz przy sobie."
+    bankier:
+      short: "wpłaty i wypłaty monet"
+      description: "U bankiera wpłacisz wszystkie monety na konto albo wypłacisz kwotę w monetach."
+    kwoty:
+      short: "przelicznik monet"
+      description: "1 złota korona (zł) = 10 srebrników (sr) = 100 miedziaków (md). Reszta wydawana automatycznie."
+    handel:
+      short: "bezpieczna wymiana z graczem obok"
+      description: "Okno handlu 2×4 pola + monety. Obie strony potwierdzają, po 3 s następuje wymiana. Każda zmiana cofa potwierdzenia."
+    kupiec:
+      short: "skup i sprzedaż towarów"
+      description: "Kupiec skupuje i sprzedaje towary z magazynu. Typy: ogólny, kowal, spożywczy, budowlany. Towary stałe są zawsze, reszta zmienia się z każdą dostawą (okno pokazuje, co przyjdzie). Dzienny limit zarobku."
+    kupcy:
+      short: "kupcy, dostawy i czego szukają"
+      description: "Lista typów kupców: ile towarów mają teraz w ofercie, czego szukają (★ lepsza cena) i kiedy nowa dostawa."
+    sklep:
+      short: "tabliczka na skrzyni"
+      description: "Linia 1: [Sklep], 2: Sprzedam albo Kupię, 3: ilość, 4: cena. Towar — pierwszy przedmiot w skrzyni. Kupujący płaci monetami, utarg trafia na twoje konto."
+    sklepy:
+      short: "lista twoich sklepów"
+      description: "Pokazuje twoje sklepy, ich położenie i stan towaru."
+    admin-konto:
+      short: "zmiana salda"
+      description: "Konto: nick gracza, identyfikator (np. country:<uuid>) albo kraj:<nazwa>."
+    admin-monety:
+      short: "wydanie monet graczowi"
+      description: "Daje graczowi monety do ekwipunku (zapisywane w dzienniku zdarzeń)."
+    admin-kram:
+      short: "kram kupca (model BetterModel)"
+      description: "Stawia kram przy kupcu (model zależny od typu), przesuwa go o x y z bloków, obraca o stopnie albo usuwa. Kram nie ma kolizji i wraca po restarcie."
+    admin-npc-typ:
+      short: "zmień typ kupca"
+      description: "Ustawia typ kupca (ogólny, kowal, spożywczy, budowlany — merchant.types w configu). Kupcy bez typu są ogólni."
+    admin-npc:
+      short: "postaw bankiera/kupca"
+      description: "Stawia NPC (Mannequin) w twoim miejscu. Nazwę z polskimi znakami podaj w cudzysłowie, skin = nick Mojang."
+    admin-npc-usun:
+      short: "usuń NPC"
+      description: "Usuwa najbliższy NPC (do 5 bloków) albo NPC o podanym id."
+    admin-npc-skin:
+      short: "zmień skin NPC"
+      description: "Nick Mojang albo „losowy” (jeden z 9 domyślnych skinów, inny dla każdego NPC). najblizszy = NPC do 5 bloków."
+    admin-npc-lista:
+      short: "lista NPC"
+      description: "Pokazuje wszystkich bankierów i kupców."
+    admin-log:
+      short: "dziennik transakcji"
+      description: "Ostatnie operacje na koncie (po 10 na stronę) i zdarzenia z monetami."
+    admin-info:
+      short: "statystyki ekonomii"
+      description: "Liczba kont, pieniądze w bankach, sklepy, NPC."
+    admin-reload:
+      short: "przeładuj config"
+      description: "Wczytuje ponownie config.yml (ceny, komunikaty, wygląd monet)."

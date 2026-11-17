@@ -1,0 +1,202 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: arena
+name: '<#CD5C5C>Arena</#CD5C5C>'
+description: 'Podatki +4%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i lepszy nastrój (od renesansu). Amfiteatr z piaszczystą areną i trybunami.'
+function: arena
+beds: 0
+cost: 35000
+tier: 3
+category: civic
+zone: outer
+max-per-country: 1
+requires:
+  population: 35
+  treasury: 40000
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'sand'
+  'C': 'stone_brick_stairs[facing=north,half=bottom]'
+  'D': 'stone_brick_stairs[facing=south,half=bottom]'
+  'E': 'stone_brick_stairs[facing=west,half=bottom]'
+  'F': 'stone_brick_stairs[facing=east,half=bottom]'
+  'G': 'spruce_fence_gate[facing=south,open=false,in_wall=false,powered=false]'
+  'H': '{kolor}_wool'
+  'I': 'lantern[hanging=false]'
+  'J': 'hay_block[axis=y]'
+  'K': 'target[power=0]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAABBBBBBBBBBBBBAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+  # y=1
+  - |
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAAGAAAAAAAAAAA
+    AAAAA.............AAAAA
+    AAAAA.............AAAAA
+    AAAAA.............AAAAA
+    AAAAA.............AAAAA
+    AAAAA...J.....J...AAAAA
+    AAAAA.............AAAAA
+    AAAAA.............AAAAA
+    AAAAA.............AAAAA
+    AAAAA.............AAAAA
+    AAAAAAAAAAAGAAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+  # y=2
+  - |
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAACCCCCCC.CCCCCCCAAAA
+    AAAEI.............IFAAA
+    AAAE...............FAAA
+    AAAE...............FAAA
+    AAAE...............FAAA
+    AAAE...............FAAA
+    AAAE..........K....FAAA
+    AAAE...............FAAA
+    AAAE...............FAAA
+    AAAE...............FAAA
+    AAAE...............FAAA
+    AAAEI.............IFAAA
+    AAAADDDDDDD.DDDDDDDAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+  # y=3
+  - |
+    AAAAAAAAAAH.HAAAAAAAAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAACCCCCCCC.CCCCCCCCAAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAE.................FAA
+    AAADDDDDDDD.DDDDDDDDAAA
+    AAAAAAAAAAA.AAAAAAAAAAA
+    AAAAAAAAAAH.HAAAAAAAAAA
+  # y=4
+  - |
+    AAAAAAAAAAAAAAAAAAAAAAA
+    AACCCCCCCCCCCCCCCCCCCAA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AE...................FA
+    AADDDDDDDDDDDDDDDDDDDAA
+    AAAAAAAAAAAAAAAAAAAAAAA
+  # y=5
+  - |
+    AAAAAAAAAAAAAAAAAAAAAAA
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    A.....................A
+    AAAAAAAAAAAAAAAAAAAAAAA
+  # y=6
+  - |
+    A.A.A.A.A.A.A.A.A.A.A.A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.....................A
+    .......................
+    A.A.A.A.A.A.A.A.A.A.A.A
+  # y=7
+  - |
+    I.....................I
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    .......................
+    I.....................I

@@ -1,0 +1,486 @@
+# Postep — epoki i postęp państw (MEDIVALRPG)
+# © 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+# Każde państwo (graczy i NPC) rozwija się osobno: punkty badań → odkrycia (drzewko.yml) → kolejna epoka.
+# Pieniądze w miedziakach (1 sr = 10 md, 1 zł = 100 md).
+
+tick:
+  # Dzienne naliczenie punktów badań (czas serwera). Po restarcie zaległe dni są nadrabiane.
+  godzina: "06:00"
+  # Strefa czasowa, np. Europe/Warsaw; pusta = strefa serwera.
+  strefa: ""
+  max-nadrabianie: 7
+  # Co ile sekund przeliczać stan krajów (warunki awansu, mapa, tablista, postep.json).
+  odswiezanie-sekundy: 60
+
+awans:
+  # 1 = tylko średniowiecze, 2 = średniowiecze i renesans. Przemysł i nowoczesność są wyłączone.
+  # Istniejące kraje z późniejszej epoki wracają do limitu, zachowując historię i punkty.
+  maksymalna-epoka: 2
+  # false = kraj awansuje sam, gdy spełni warunki; true = kraj GRACZY czeka na /postep awansuj Władcy (NPC zawsze sami).
+  potwierdzenie-wladcy: false
+  ogloszenie: true
+  title: true
+  # wszyscy | kraj — kto widzi title i słyszy dźwięk
+  title-dla: wszyscy
+  dzwiek: "ui.toast.challenge_complete"
+  dzwiek-glosnosc: 1.0
+  dzwiek-ton: 1.0
+
+progi:
+  # Brak Ludnosc (nieznana ludność / poziom osady) → progi uznane za spełnione.
+  pomijaj-nieznane: true
+  # Do progu ludności każdy gracz-członek liczy się jak N mieszkańców.
+  gracz-jak-mieszkancy: 5
+  # Nazwy poziomów osady (Ludnosc: 1 = Osada … 5 = Stolica; 6 = Metropolia, gdy Ludnosc ją doda).
+  nazwy-poziomow: [Osada, Wieś, Miasteczko, Miasto, Stolica, Metropolia]
+  # Wagi paska postępu (odkrycia / czas w epoce / progi).
+  wagi:
+    odkrycia: 0.6
+    czas: 0.25
+    progi: 0.15
+  teksty:
+    odkrycie: "odkrycie: {name}"
+    czas: "czas w epoce: jeszcze {left}"
+    ludnosc: "ludność ≥ {need} (jest {have})"
+    poziom: "poziom osady ≥ {need} (jest {have})"
+
+# Epoki w kolejności. min-dni = minimalny czas W TEJ epoce przed następną;
+# min-ludnosc / min-poziom = progi WEJŚCIA do tej epoki; mnoznik-punktow = mnożnik dziennych punktów w tej epoce;
+# inwestycja-pkt-za-zlota = ile punktów daje pierwsza 1 zł zainwestowana danego dnia; inwestycja-max-dziennie = sufit punktów
+# z inwestycji na dzień (malejące przychody: F(T) = max × (1 − e^(−T × stawka / max))).
+epoki:
+  1:
+    nazwa: Średniowiecze
+    biernik: Średniowiecze
+    lata: "V–XV w."
+    kolor: "#B08D57"
+    ikona: "⚔"
+    ikona-gui: SHIELD
+    opis: Grody, zamki, cechy i klasztory.
+    min-dni: 21
+    min-ludnosc: 0
+    min-poziom: 0
+    mnoznik-punktow: 1.0
+    inwestycja-pkt-za-zlota: 4
+    inwestycja-max-dziennie: 20
+  2:
+    nazwa: Renesans
+    biernik: Renesans
+    lata: "XV–XVII w."
+    kolor: "#C9A227"
+    ikona: "⚜"
+    ikona-gui: SPYGLASS
+    opis: Druk, proch, wielkie odkrycia geograficzne i bankierzy.
+    min-dni: 21
+    min-ludnosc: 25
+    min-poziom: 2
+    mnoznik-punktow: 1.25
+    inwestycja-pkt-za-zlota: 5
+    inwestycja-max-dziennie: 35
+  3:
+    nazwa: Epoka przemysłowa
+    biernik: epokę przemysłową
+    lata: "XIX w."
+    kolor: "#8E9AAF"
+    ikona: "⚙"
+    ikona-gui: FURNACE
+    opis: Para, stal, kolej i elektryczność.
+    min-dni: 21
+    min-ludnosc: 60
+    min-poziom: 3
+    mnoznik-punktow: 1.5
+    inwestycja-pkt-za-zlota: 6
+    inwestycja-max-dziennie: 55
+  4:
+    nazwa: Nowoczesność
+    biernik: Nowoczesność
+    lata: "2026"
+    kolor: "#3FA7D6"
+    ikona: "⚡"
+    ikona-gui: REDSTONE_LAMP
+    opis: Beton, samochody, lotnictwo, komputery i internet.
+    min-dni: 0
+    min-ludnosc: 100
+    min-poziom: 4
+    mnoznik-punktow: 1.75
+    inwestycja-pkt-za-zlota: 7
+    inwestycja-max-dziennie: 80
+
+# Dzienne punkty badań:
+#   (baza + na-mieszkanca × ludność NPC + na-gracza × gracze + budynki) × (1 + modyfikatory%) × mnożnik epoki
+# Modyfikatory: pokój (brak wojen), sojusze, wojny (kara), wasal (kara), odkrycia z efektem "badania".
+punkty:
+  baza: 3
+  na-mieszkanca: 0.15
+  max-mieszkancow: 250
+  na-gracza: 2
+  max-graczy: 10
+  pokoj: 10
+  na-sojusz: 5
+  max-sojusze: 15
+  na-wojne: 15
+  max-wojny: 45
+  wasal: 10
+  min-mnoznik: 0.25
+  mnoznik-npc: 1.0
+  # Ile budynków jednego typu się liczy.
+  max-budynkow-typu: 3
+  # Typ budynku z Ludnosc → punkty/dzień. Dopasowanie: najdłuższy klucz zawarty w id typu (bez polskich znaków),
+  # więc "uniwersytet_renesansowy" liczy się jak "uniwersytet"; typy, które dopiero powstaną, działają od razu.
+  budynki:
+    biblioteka: 4
+    szkola: 3
+    akademia: 6
+    uniwersytet: 10
+    kosciol: 1
+    katedra: 3
+    klasztor: 2
+    ratusz: 2
+    port: 3
+    przystan: 2
+    targ: 2
+    palac: 2
+    zamek: 1
+    drukarnia: 5
+    obserwatorium: 6
+    bank: 2
+    laboratorium: 12
+    fabryka: 3
+    dworzec: 3
+    szpital: 3
+    biurowiec: 4
+    parlament: 4
+    galeria: 2
+    stadion: 1
+
+inwestycje:
+  # Minimalna ranga do /postep inwestuj: OBYWATEL | DORADCA | WLADCA
+  ranga: DORADCA
+  min-kwota: 10
+
+odkrywanie:
+  # Minimalna ranga do /postep odkryj i /postep cel wyczysc.
+  ranga: DORADCA
+  # true = kraje graczy bez celu badań wybierają cel same (jak NPC, osobowość neutralna).
+  gracze-auto-cel: false
+  # Kto słyszy o nowym odkryciu: kraj | wszyscy | brak
+  ogloszenie: kraj
+
+npc:
+  # Kraje NPC same wybierają odkrycia wg osobowości (Armia: agresja → wojsko, bogactwo → gospodarka,
+  # ekspansja → budownictwo, dyplomacja → dyplomacja/nauka) i inwestują część dochodu.
+  auto-wybor: true
+  auto-inwestycje: true
+  # % dochodu (Armia: przychody z 24 h; bez Armii: podatek NPC z Ludnosc) przy osobowości neutralnej;
+  # rośnie z bogactwem i dyplomacją, w wojnie × mnoznik-wojna. Armia może ustawić stały udział przez PostepApi.
+  udzial-bazowy: 12
+  udzial-max: 35
+  mnoznik-wojna: 0.4
+  rezerwa: 500
+  max-ze-skarbca: 0.2
+  # Nie inwestuj ponad ten ułamek dziennego sufitu punktów z inwestycji.
+  do-limitu: 0.85
+
+tablista:
+  # Dopisuje ikonę epoki do nazwy w tabliście (nazwę ustawia Kraje). Nowe Kraje mają własne <era>/<era_icon> w
+  # tablist.format – gdy format Kraje ich używa, Postep sam przestaje dopisywać ikonę (bez podwójnej ikony).
+  # Przy rozbudowanej tabliście Kraje (tablist.style: extended) sprawdzany jest tablist.extended.name-format.
+  # Z takim Kraje możesz ustawić false (wyłącza dopisywanie całkowicie).
+  dopisz-ikone: true
+  # <name> = nazwa z Kraje, <badge_icon> = kolorowa ikona, <badge> = ikona + nazwa epoki, <era> = nazwa epoki
+  format: "<name> <badge_icon>"
+  co-ile-sekund: 5
+
+mapa:
+  # Warstwa squaremap z ikoną epoki przy stolicy każdego kraju (popup: epoka, postęp, punkty, odkrycia).
+  warstwa: true
+  nazwa-warstwy: "Epoki"
+  ukryta-domyslnie: false
+  priorytet: 12
+  z-index: 260
+  rozmiar-ikony: 18
+  # Przesunięcie ikony względem środka chunka stolicy (żeby nie zasłaniała ikony stolicy z Kraje).
+  przesuniecie-x: 0
+  przesuniecie-z: -12
+  # postep.json dla panelu mapy i panelu www (domyślnie do katalogu web squaremap).
+  eksport-json: true
+  # Pusta = <squaremap>/web/postep.json (bez squaremap: plugins/Postep/postep.json).
+  sciezka-json: ""
+
+messages:
+  prefix: "<dark_gray>[<gold>Postęp</gold>]</dark_gray> "
+
+  # ---- awans i odkrycia
+  awans-czat: "<prefix><era_color><bold>✦</bold> <country> wkracza w <era_acc>! <icon> <bold>✦</bold></era_color>"
+  awans-title: "<era_color>✦ <country_name> wkracza w <era_acc>! ✦</era_color>"
+  awans-subtitle: "<gray><icon> <era> <dark_gray>(<years>)</dark_gray>"
+  awans-gotowy-wladca: "<prefix><gold>Twój kraj spełnia wszystkie warunki, by wkroczyć w <era_color><era_acc></era_color>!</gold> <click:run_command:'/postep awansuj'><hover:show_text:'<gray>Kliknij, aby ogłosić nową epokę'><green><bold>[Wkrocz w nową epokę]</bold></green></hover></click>"
+  awans-gotowy: "<prefix><gold>Twój kraj jest gotowy, by wkroczyć w <era_color><era_acc></era_color>.</gold> <gray>Władca musi to ogłosić: <white>/postep awansuj</white>."
+  odkrycie-kraj: "<prefix><green>Nowe odkrycie: <gold><bold><discovery></bold></gold>!</green> <gray><effect>"
+  odkrycie-wszyscy: "<prefix><country> <gray>dokonuje odkrycia: <gold><discovery></gold>."
+  npc-log-inwestycja: "Postęp: zainwestowano <amount> w badania (+<points> pkt)"
+  npc-log-cel: "Postęp: rozpoczęto badania — <discovery>"
+  npc-log-odkrycie: "Postęp: odkryto <discovery>"
+  npc-log-epoka: "Postęp: kraj wkroczył w epokę <era>"
+
+  # ---- błędy
+  error-internal: "<prefix><red>Wystąpił błąd — szczegóły w konsoli."
+  error-player-only: "<prefix><red>Tę komendę może wykonać tylko gracz."
+  error-no-country: "<prefix><red>Nie należysz do żadnego kraju."
+  error-rank: "<prefix><red>Potrzebujesz rangi co najmniej <white><rank></white>."
+  error-unknown-country: "<prefix><red>Nie ma kraju <white><name></white>."
+
+  # ---- /postep
+  status-no-country: "<prefix><gray>Nie należysz do kraju. Zobacz <click:run_command:'/postep epoki'><aqua>[Epoki]</aqua></click>, <click:run_command:'/postep ranking'><aqua>[Ranking]</aqua></click> albo <click:run_command:'/postep drzewko'><aqua>[Drzewko]</aqua></click>."
+  status-header: "<dark_gray>━━━━ <era_color><era_icon></era_color> <country> <dark_gray>—</dark_gray> <era_color><bold><era></bold></era_color> <gray>(<era_years>)</gray> <dark_gray>━━━━"
+  status-progress: "<gray>Postęp do epoki <next_color><next></next_color>: <bar> <white><percent>%</white>"
+  status-progress-max: "<gray>Ostatnia epoka osiągnięta — <era_color><bold><era></bold></era_color>. Badaj dalej, by zdobyć wszystkie odkrycia!"
+  status-points: "<gray>Punkty badań: <gold><bold><points></bold></gold> <dark_gray>(<green>+<daily>/dzień</green>, łącznie <total>, odkrycia <discoveries>/<all>)</dark_gray> <dark_gray>[ⓘ]</dark_gray>"
+  status-points-hover: "<gold>Dzienne punkty badań</gold><newline><gray>Baza: <white><base></white><newline><gray>Ludność (<citizens>): <white><population></white><newline><gray>Gracze (<player_count>): <white><players></white><newline><gray>Budynki: <white><buildings></white> <dark_gray>(<building_list>)</dark_gray><newline><gray>Dyplomacja: <white><diplomacy>%</white><newline><gray>Odkrycia: <white><research>%</white><newline><gray>Mnożnik epoki: <white>×<era_mult></white><newline><gray>Mnożnik łączny: <white>×<multiplier></white><newline><gold>Razem: <total>/dzień</gold><newline><dark_gray>Naliczane raz dziennie; inwestycje dochodzą od razu."
+  status-no-buildings: "brak"
+  status-invest: "<gray>Inwestycje dziś: <white><invested></white> → <gold>+<points></gold> <dark_gray>(sufit <cap> pkt, następna 1 zł ≈ +<next_gold>)</dark_gray> <click:suggest_command:'/postep inwestuj '><hover:show_text:'<gray>Zamień pieniądze ze skarbca na punkty badań'><green>[Inwestuj]</green></hover></click>"
+  status-invest-other: "<gray>Inwestycje dziś: <white><invested></white> → <gold>+<points></gold> pkt"
+  status-target: "<gray>Cel badań: <gold><target></gold> <dark_gray>(<cost> pkt, <eta>)</dark_gray> <click:run_command:'/postep cel wyczysc'><hover:show_text:'<gray>Anuluj cel badań'><red>[✖]</red></hover></click>"
+  status-target-other: "<gray>Badania: <gold><target></gold> <dark_gray>(<eta>)</dark_gray>"
+  status-target-none: "<gray>Cel badań: <dark_gray>brak</dark_gray> — <yellow>wybierz odkrycie poniżej</yellow>"
+  status-target-none-other: "<gray>Badania: <dark_gray>brak celu</dark_gray>"
+  status-ready: "<green>✔ Wszystkie warunki wejścia w <next_color><next_acc></next_color> spełnione!"
+  status-ready-pending: "<green>✔ Gotowe do wejścia w <next_color><next_acc></next_color>!</green> <click:run_command:'/postep awansuj'><hover:show_text:'<gray>Tylko Władca'><gold><bold>[Wkrocz]</bold></gold></hover></click>"
+  status-missing-header: "<gray>Do epoki <next_color><next></next_color> brakuje:"
+  status-missing-line: "<dark_gray>  • <red><text>"
+  status-available-header: "<gray>Dostępne odkrycia <dark_gray>(kliknij, <light_purple>★</light_purple> = wymagane do epoki)</dark_gray>:"
+  status-available-none: "<dark_gray>Brak dostępnych odkryć w tej epoce."
+  status-buttons: "<click:run_command:'/postep drzewko'><hover:show_text:'<gray>Całe drzewko odkryć'><aqua>[Drzewko]</aqua></hover></click> <click:run_command:'/postep ranking'><hover:show_text:'<gray>Ranking krajów'><aqua>[Ranking]</aqua></hover></click> <click:run_command:'/postep epoki'><hover:show_text:'<gray>Epoki i ich wymagania'><aqua>[Epoki]</aqua></hover></click> <click:run_command:'/postep pomoc'><hover:show_text:'<gray>Wszystkie komendy'><aqua>[Pomoc]</aqua></hover></click>"
+  chip: "<gold>[<name> <yellow><cost></yellow>]</gold>"
+  chip-required: "<gold>[<light_purple>★</light_purple><name> <yellow><cost></yellow>]</gold>"
+  eta-ready: "gotowe"
+  eta-never: "brak przyrostu punktów"
+  eta-days: "~{days} dni"
+  available-header: "<prefix><gray>Masz <gold><points></gold> pkt badań. Dostępne odkrycia:"
+
+  # ---- dymki odkryć
+  hover-title: "<gold><bold><name></bold></gold> <dark_gray>(<era_color><era></era_color>, <category>)</dark_gray>"
+  hover-description: "<gray><text>"
+  hover-effect: "<green>Efekt: <text>"
+  hover-cost: "<gray>Koszt: <yellow><cost> pkt"
+  hover-requires: "<gray>Wymaga: <list>"
+  hover-requires-none: "<gray>Wymaga: <dark_gray>nic"
+  hover-req-owned: "<green>✔ <name>"
+  hover-req-missing: "<red>✖ <name>"
+  hover-req-separator: "<dark_gray>, "
+  hover-required-for-era: "<light_purple>★ Wymagane do wejścia w <next_acc>"
+  hover-status-owned: "<green>✔ Odkryte"
+  hover-status-affordable: "<yellow>Kliknij, aby odkryć teraz!"
+  hover-status-available: "<yellow>Kliknij, aby ustawić jako cel badań <dark_gray>(brakuje <missing> pkt, <eta>)"
+  hover-status-locked: "<gray>Najpierw wymagane odkrycia — kliknij, by badać całą ścieżkę"
+  hover-status-era: "<dark_gray>Dostępne od epoki: <era>"
+  hover-is-target: "<aqua>◎ Obecny cel badań"
+
+  kategorie:
+    gospodarka: Gospodarka
+    nauka: Nauka
+    wojsko: Wojsko
+    budownictwo: Budownictwo
+    dyplomacja: Dyplomacja
+
+  # ---- odkrywanie, cel
+  discover-unknown: "<prefix><red>Nie ma odkrycia <white><id></white>. <gray>Zobacz <click:run_command:'/postep drzewko'><aqua>[Drzewko]</aqua></click>."
+  discover-owned: "<prefix><gray>Twój kraj zna już <gold><discovery></gold>."
+  discover-later-era: "<prefix><red><discovery></red> <gray>będzie dostępne dopiero w epoce <era_color><era></era_color>."
+  discover-unlocked: "<prefix><green>Odkryto <gold><bold><discovery></bold></gold>!</green> <gray><effect>"
+  discover-target: "<prefix><gray>Cel badań: <gold><discovery></gold> <dark_gray>(<path>)</dark_gray>. <gray>Brakuje <yellow><missing></yellow> pkt — <white><eta></white>. Odkrycie nastąpi samo, gdy uzbierasz punkty."
+  target-none: "<prefix><gray>Twój kraj nie ma celu badań."
+  target-info: "<prefix><gray>Cel badań: <gold><discovery></gold> <dark_gray>(<path>)</dark_gray> — koszt <yellow><cost></yellow> pkt, masz <gold><points></gold>, <white><eta></white>."
+  target-cleared: "<prefix><gray>Anulowano cel badań. Punkty zostają w puli."
+
+  # ---- inwestycje
+  invest-info: "<prefix><gray>Skarbiec: <gold><balance></gold>. Dziś zainwestowano <white><invested></white> → <gold>+<points></gold> pkt (sufit <cap>). Następna 1 zł ≈ <yellow>+<next_gold></yellow> pkt, 10 zł ≈ <yellow>+<next_ten></yellow>. <dark_gray>Ranga: <rank>+.</dark_gray> <click:suggest_command:'/postep inwestuj '><green>[Inwestuj]</green></click>"
+  invest-bad-amount: "<prefix><red>Niepoprawna kwota: <white><text></white> <gray>(np. 150, 3zl, 1zł 5sr)"
+  invest-failed: "<prefix><red>Inwestycja nieudana: <reason>"
+  invest-ok: "<prefix><green>Zainwestowano <gold><amount></gold> ze skarbca: <gold>+<points></gold> pkt badań</green> <gray>(masz <total>; następna 1 zł ≈ +<next_gold>)."
+  invest-ok-members: "<prefix><gray><white><player></white> zainwestował <gold><amount></gold> w badania: <gold>+<points></gold> pkt."
+  invest-err-country: "nieznany kraj"
+  invest-err-min: "minimalna kwota to <min>"
+  invest-err-cap: "dzisiejszy sufit punktów z inwestycji jest wyczerpany — spróbuj po dziennym naliczeniu"
+  invest-err-funds: "za mało pieniędzy w skarbcu (jest <balance>)"
+
+  advance-not-ready: "<prefix><red>Twój kraj nie spełnia jeszcze warunków nowej epoki."
+
+  # ---- ranking i epoki
+  ranking-header: "<dark_gray>━━━━ <gold>Ranking postępu</gold> <gray>(<page>/<pages>)</gray> ━━━━"
+  ranking-empty: "<gray>Brak krajów."
+  ranking-line: "<gray><pos>. <era_color><era_icon></era_color> <country><npc> <dark_gray>—</dark_gray> <era_color><era></era_color> <white><percent>%</white> <dark_gray>(<discoveries> odkryć, <points> pkt)"
+  ranking-npc: " <dark_gray>(NPC)"
+  ranking-hover: "<gray>Kliknij, aby zobaczyć postęp: <white><country>"
+  ranking-prev: "<aqua>[« Poprzednia]"
+  ranking-prev-disabled: "<dark_gray>[« Poprzednia]"
+  ranking-next: "<aqua>[Następna »]"
+  ranking-next-disabled: "<dark_gray>[Następna »]"
+  ranking-nav: "<prev> <next>"
+  epoki-header: "<dark_gray>━━━━ <gold>Epoki</gold> <gray>(najedź, by zobaczyć wymagania)</gray> ━━━━"
+  epoki-line: "<gray>  <era_color><era_icon> <era></era_color> <dark_gray>(<era_years>) — <description>"
+  epoki-line-current: "<green>▶ <era_color><bold><era_icon> <era></bold></era_color> <dark_gray>(<era_years>) — <description> <green>← twój kraj"
+  epoki-line-past: "<dark_gray>✔ <era_icon> <era> (<era_years>)"
+  epoki-hover: "<era_color><bold><era></bold></era_color> <gray>(<era_years>)<newline><gray><description><newline><gray>Wejście: ludność ≥ <white><min_pop></white>, poziom osady ≥ <white><min_tier></white><newline><gray>Minimalny czas w epoce: <white><min_days></white> dni<newline><gray>Wymagane do wyjścia: <white><required></white><newline><gray>Odkryć w epoce: <white><count></white>, mnożnik punktów ×<mult>"
+  tree-era: "<era_color><bold><era_icon> <era></bold></era_color> <dark_gray>(<era_years>)"
+  tree-line-owned: "<green>  ✔ <name> <dark_gray>(<id>)"
+  tree-line-available: "<gold>  ◆ <name> <yellow><cost></yellow> <dark_gray>(<id>)"
+  tree-line-locked: "<gray>  ✖ <name> <dark_gray><cost> (<id>)"
+
+  # ---- GUI drzewka
+  gui-title: "<dark_gray>Drzewko odkryć — <country>"
+  gui-title-none: "<dark_gray>Drzewko odkryć"
+  gui-era-name: "<era_color><bold><era_icon> <era></bold></era_color> <gray>(<era_years>)"
+  gui-era-description: "<gray><text>"
+  gui-era-lore-current: "<green>▶ Obecna epoka twojego kraju"
+  gui-era-lore-past: "<dark_green>✔ Epoka za wami"
+  gui-era-lore-future: "<dark_gray>Epoka przed wami"
+  gui-owned-name: "<green>✔ <name>"
+  gui-available-name: "<gold>◆ <name> <yellow>(<cost> pkt)"
+  gui-target-name: "<aqua>◎ <name> <yellow>(<cost> pkt)"
+  gui-locked-name: "<gray>✖ <name> <dark_gray>(<cost> pkt)"
+  gui-era-locked-name: "<dark_gray>✖ <name>"
+  gui-click-unlock: "<yellow>▶ Kliknij, aby odkryć teraz"
+  gui-click-target: "<yellow>▶ Kliknij, aby ustawić jako cel badań"
+  gui-click-path: "<yellow>▶ Kliknij, aby badać całą ścieżkę"
+  gui-status-name: "<gold>Stan: <country>"
+  gui-status-none: "<gray>Nie należysz do kraju"
+  gui-status-points: "<gray>Punkty: <gold><points></gold> <green>(+<daily>/dzień)"
+  gui-status-progress: "<gray>Do <next_color><next></next_color>: <bar> <white><percent>%"
+  gui-status-missing: "<dark_gray> • <red><text>"
+  gui-status-ready: "<green>✔ Gotowe do awansu!"
+  gui-status-max: "<gray>Ostatnia epoka osiągnięta"
+  gui-target-current: "<aqua>Cel badań: <gold><name>"
+  gui-target-lore: "<gray>Koszt ścieżki: <yellow><cost></yellow> pkt, <white><eta>"
+  gui-target-none: "<gray>Brak celu badań"
+  gui-target-none-lore: "<dark_gray>Kliknij dostępne odkrycie powyżej"
+  gui-invest-name: "<gold>Inwestuj w badania"
+  gui-invest-lore: "<gray>/postep inwestuj <kwota> <dark_gray>(1 zł ≈ +<next_gold> pkt)"
+  gui-ranking-name: "<gold>Ranking krajów"
+  gui-ranking-lore: "<gray>Kliknij, aby zobaczyć"
+  gui-close: "<red>Zamknij"
+
+  # ---- podpowiedzi (tab)
+  suggest-page: "<gray>Strona <page>"
+  suggest-country: "<country> <dark_gray>— <era_color><era_icon> <era></era_color> <white><percent>%"
+  suggest-discovery: "<gold><name></gold> <dark_gray>(<era>, <cost> pkt)</dark_gray> <status>"
+  suggest-status-none: ""
+  suggest-status-owned: "<green>✔ odkryte"
+  suggest-status-affordable: "<yellow>stać cię teraz"
+  suggest-status-available: "<gray>dostępne (cel badań)"
+  suggest-status-path: "<gray>najpierw wymagania"
+  suggest-status-era: "<dark_gray>późniejsza epoka"
+  suggest-amount: "<gold><amount></gold> <gray>≈ +<points> pkt badań"
+  suggest-era: "<era_color><era_icon> <era></era_color> <gray>(<era_years>)"
+  suggest-points: "<gray>Zmień pulę punktów o <white><value>"
+
+  # ---- admin
+  admin-usage-ustaw: "<prefix><gray>Użycie: <white>/postep admin ustaw <kraj> <epoka 1–4>"
+  admin-usage-punkty: "<prefix><gray>Użycie: <white>/postep admin punkty <kraj> <±liczba>"
+  admin-usage-odkryj: "<prefix><gray>Użycie: <white>/postep admin odkryj <kraj> <odkrycie>"
+  admin-usage-zabierz: "<prefix><gray>Użycie: <white>/postep admin zabierz <kraj> <odkrycie>"
+  admin-bad-era: "<prefix><red>Nieznana epoka: <white><text>"
+  admin-bad-number: "<prefix><red>Niepoprawna liczba: <white><text>"
+  admin-era-set: "<prefix><green>Ustawiono epokę <country>: <era_color><era></era_color> (wymagane odkrycia wcześniejszych epok dodane)."
+  admin-points: "<prefix><green>Punkty <country>: <white><delta></white> → <gold><points></gold>."
+  admin-granted: "<prefix><green>Nadano <country>: <gold><list></gold>."
+  admin-already: "<prefix><gray><country> zna już <gold><discovery></gold>."
+  admin-not-owned: "<prefix><red><country> nie ma odkrycia <white><id></white>."
+  admin-revoked: "<prefix><green>Zabrano <country>: <gold><list></gold>."
+  admin-tick: "<prefix><green>Wykonano dzienne naliczenie dla <count> krajów (harmonogram bez zmian)."
+  admin-info: "<prefix><gray>Kraje: <white><countries></white>, odkrycia: <white><discoveries></white>, epoki: <white><eras></white>. Ostatnie naliczenie: <white><last></white>, następne: <white><next></white>. Ludnosc: <white><ludnosc></white>, Armia: <white><armia></white>."
+  admin-reloaded: "<prefix><green>Przeładowano config.yml i drzewko.yml."
+  admin-reloaded-problems: "<prefix><yellow>Przeładowano z problemami (<count>):"
+
+  # ---- pomoc
+  help-header: "<dark_gray>━━━━ <gold>Postęp — pomoc</gold> <dark_gray>|</dark_gray> <category> <gray>(<page>/<pages>)</gray> <dark_gray>━━━━"
+  help-line: "<gray>» <white><syntax></white> <dark_gray>—</dark_gray> <gray><short>"
+  help-hover: "<gold><syntax></gold><newline><gray><description><newline><dark_gray>Ranga: <rank><newline><yellow>Kliknij, aby wpisać"
+  help-nav: "<prev> <next>"
+  help-prev: "<aqua>[« Poprzednia]"
+  help-prev-disabled: "<dark_gray>[« Poprzednia]"
+  help-next: "<aqua>[Następna »]"
+  help-next-disabled: "<dark_gray>[Następna »]"
+  help-page-hover: "<gray>Strona <page>: <category>"
+  help-tabs: "<gray>Działy: <tabs>"
+  help-tab: "<aqua><category>"
+  help-tab-current: "<gold><u><category></u>"
+  help-tab-separator: "<dark_gray> | "
+  help-categories:
+    informacje: "Informacje"
+    badania: "Badania"
+    admin: "<red>Admin"
+  help-entries:
+    status:
+      short: "stan twojego kraju"
+      description: "Epoka, punkty badań, pasek postępu, czego brakuje do następnej epoki i klikalne dostępne odkrycia."
+      rank: "każdy"
+    drzewko:
+      short: "drzewko odkryć (GUI)"
+      description: "Okno z epokami w rzędach: zdobyte (świecą), dostępne i zablokowane odkrycia. Kliknięcie dostępnego odkrycia = /postep odkryj."
+      rank: "każdy"
+    odkrycia:
+      short: "dostępne odkrycia"
+      description: "Lista odkryć, które twój kraj może teraz badać, z kosztami i dymkami."
+      rank: "członek kraju"
+    epoki:
+      short: "epoki i wymagania"
+      description: "Średniowiecze → Renesans → Epoka przemysłowa → Nowoczesność: progi ludności i osady, minimalny czas, wymagane odkrycia."
+      rank: "każdy"
+    ranking:
+      short: "ranking krajów"
+      description: "Kraje według epoki i postępu. Kliknij kraj, by zobaczyć szczegóły."
+      rank: "każdy"
+    kraj:
+      short: "postęp innego kraju"
+      description: "Epoka, postęp i braki dowolnego kraju (graczy albo NPC)."
+      rank: "każdy"
+    pomoc:
+      short: "ta pomoc"
+      description: "Interaktywna pomoc: najedź na komendę, kliknij, aby ją wpisać."
+      rank: "każdy"
+    odkryj:
+      short: "odkryj / ustaw cel badań"
+      description: "Gdy masz dość punktów — odkrycie od razu. Inaczej ustawia cel badań (także przez wymagane odkrycia); odkrycie nastąpi samo przy dziennym naliczeniu."
+      rank: "Doradca+"
+    cel:
+      short: "obecny cel badań"
+      description: "Pokazuje cel badań, koszt ścieżki i szacowany czas. <white>/postep cel wyczysc</white> anuluje cel."
+      rank: "członek kraju (anulowanie: Doradca+)"
+    inwestuj:
+      short: "pieniądze ze skarbca → punkty"
+      description: "Zamienia pieniądze ze skarbca kraju na punkty badań od razu. Malejące przychody: każda kolejna moneta danego dnia daje mniej, aż do dziennego sufitu."
+      rank: "Doradca+"
+    awansuj:
+      short: "ogłoś nową epokę"
+      description: "Gdy serwer wymaga potwierdzenia Władcy (awans.potwierdzenie-wladcy), ogłasza wejście w nową epokę po spełnieniu warunków."
+      rank: "Władca"
+    admin-ustaw:
+      short: "ustaw epokę kraju"
+      description: "Ustawia epokę (1–4 albo nazwa); dodaje wymagane odkrycia wcześniejszych epok, liczy czas od nowa, wywołuje EraAdvanceEvent."
+      rank: "admin"
+    admin-punkty:
+      short: "dodaj/odejmij punkty"
+      description: "Zmienia pulę punktów badań kraju, np. +500 albo -100."
+      rank: "admin"
+    admin-odkryj:
+      short: "nadaj odkrycie"
+      description: "Nadaje odkrycie za darmo (razem z brakującymi wymaganiami), niezależnie od epoki."
+      rank: "admin"
+    admin-zabierz:
+      short: "zabierz odkrycie"
+      description: "Zabiera odkrycie i wszystkie, które od niego zależą."
+      rank: "admin"
+    admin-tick:
+      short: "naliczenie teraz"
+      description: "Wykonuje dzienne naliczenie punktów (z inwestycjami NPC i awansami) teraz; harmonogram się nie zmienia."
+      rank: "admin"
+    admin-info:
+      short: "stan pluginu"
+      description: "Liczba krajów i odkryć, czas ostatniego i następnego naliczenia, integracje, ranking."
+      rank: "admin"
+    admin-przeladuj:
+      short: "przeładuj config i drzewko"
+      description: "Wczytuje ponownie config.yml i drzewko.yml (z walidacją: wymagania, cykle)."
+      rank: "admin"

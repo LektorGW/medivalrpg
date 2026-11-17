@@ -1,0 +1,165 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: biblioteka
+name: '<#6A5ACD>Biblioteka</#6A5ACD>'
+description: 'Podatki +2%, szansa na nowego osadnika +15% w każdym cyklu wzrostu i punkty badań (Postęp); praca dla bibliotekarzy i kartografów. Biblioteka z regałami i pulpitami.'
+function: library
+beds: 0
+cost: 9000
+tier: 2
+category: civic
+zone: inner
+max-per-country: 1
+requires:
+  population: 20
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': '@roof_block'
+  'J': '@roof_slab[type=bottom]'
+  'K': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'L': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'M': 'wall_torch[facing=south]'
+  'N': '@window'
+  'O': 'bookshelf'
+  'P': 'lectern[facing=south]'
+  'Q': 'oak_fence'
+  'R': '{kolor}_carpet'
+  'S': 'cartography_table'
+  'T': 'enchanting_table'
+  'U': 'lantern[hanging=true]'
+layers:
+  # y=0
+  - |
+    ___________
+    _BBBBBBBBB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BBBBBBBBB_
+    ___________
+  # y=1
+  - |
+    ...........
+    .DBBBBBBBD.
+    .BOOOOOOOB.
+    .BO.....OB.
+    .BO..P..OB.
+    .BO.Q.Q.OB.
+    .B.T...S.B.
+    .DBBBKBBBD.
+    ...........
+  # y=2
+  - |
+    ...........
+    .DCCCCCCCD.
+    .COOOOOOOC.
+    .N.......N.
+    .C.......C.
+    .N..R.R..N.
+    .C.......C.
+    .DCNCLCNCD.
+    ....M.M....
+  # y=3
+  - |
+    ...........
+    .DCCCCCCCD.
+    .COO.O.OOC.
+    .N.......N.
+    .C.......C.
+    .N.......N.
+    .C.......C.
+    .DCNCCCNCD.
+    ...........
+  # y=4
+  - |
+    ...........
+    .DCCCCCCCD.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .DCCCCCCCD.
+    ...........
+  # y=5
+  - |
+    HHHHHHHHHHH
+    .DEEEEEEED.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .DEEEEEEED.
+    GGGGGGGGGGG
+  # y=6
+  - |
+    ...........
+    HHHHHHHHHHH
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    GGGGGGGGGGG
+    ...........
+  # y=7
+  - |
+    ...........
+    ...........
+    HHHHHHHHHHH
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    GGGGGGGGGGG
+    ...........
+    ...........
+  # y=8
+  - |
+    ...........
+    ...........
+    ...........
+    HHHHHHHHHHH
+    .C...U...C.
+    GGGGGGGGGGG
+    ...........
+    ...........
+    ...........
+  # y=9
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    IIIIIIIIIII
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=10
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    JJJJJJJJJJJ
+    ...........
+    ...........
+    ...........
+    ...........

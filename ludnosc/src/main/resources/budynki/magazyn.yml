@@ -1,0 +1,227 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: magazyn
+name: '<#CD853F>Magazyn</#CD853F>'
+description: 'Skład kraju: tragarze znoszą tu urobek z pełnych skrzyń kopalni, tartaku, kamieniołomu i zakładów, a budowy biorą stąd materiały; pojemność spichlerza +300. Liczy się każda skrzynia i beczka w budynku — towar możesz wkładać sam. Magazyn z piwnicą pełną beczek.'
+function: warehouse
+beds: 0
+cost: 6000
+tier: 2
+category: food
+zone: outer
+max-per-country: 2
+requires:
+  population: 16
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 3
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': '@roof_block'
+  'J': '@roof_slab[type=bottom]'
+  'K': 'stone_bricks'
+  'L': 'stone'
+  'M': 'barrel[facing=up]'
+  'N': 'chest[facing=south]'
+  'O': 'lantern[hanging=true]'
+  'P': 'stone_brick_stairs[facing=south,half=bottom]'
+  'Q': '@fence'
+  'R': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'S': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'T': 'wall_torch[facing=south]'
+  'U': '@window'
+  'V': 'hay_block[axis=y]'
+layers:
+  # y=0
+  - |
+    ___________
+    _KKKKKKKKK_
+    _KLLLLLLLK_
+    _KLLLLLLLK_
+    _KLLLLLLLK_
+    _KLLLLLLLK_
+    _KLLLLLLLK_
+    _KLLLLLLLK_
+    _KLLLLLLLK_
+    _KKKKKKKKK_
+    ___________
+  # y=1
+  - |
+    ___________
+    _KKKKKKKKK_
+    _KMMNN.MMK_
+    _K.......K_
+    _KMM...MMK_
+    _K.......K_
+    _KMM.P.MMK_
+    _K...K...K_
+    _KMM.K.MMK_
+    _KKKKKKKKK_
+    ___________
+  # y=2
+  - |
+    ___________
+    _KKKKKKKKK_
+    _KM.....MK_
+    _K.......K_
+    _KM.....MK_
+    _K...O...K_
+    _KM.....MK_
+    _K...P...K_
+    _KM..K..MK_
+    _KKKKKKKKK_
+    ___________
+  # y=3
+  - |
+    ___________
+    _BBBBBBBBB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAA.AAAB_
+    _BAAA.AAAB_
+    _BAAAPAAAB_
+    _BBBBBBBBB_
+    ___________
+  # y=4
+  - |
+    ...........
+    .DBBBBBBBD.
+    .BMM.N.MMB.
+    .BVV...VVB.
+    .B.......B.
+    .B.......B.
+    .B..Q.Q..B.
+    .B..Q.Q..B.
+    .B.......B.
+    .DBBBRBBBD.
+    ...........
+  # y=5
+  - |
+    ...........
+    .DCCCCCCCD.
+    .C.......C.
+    .U.......U.
+    .C.......C.
+    .C.......C.
+    .U.......U.
+    .C.......C.
+    .C.......C.
+    .DCCCSCCCD.
+    ....T.T....
+  # y=6
+  - |
+    ...........
+    .DCCCCCCCD.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .DCCCCCCCD.
+    ...........
+  # y=7
+  - |
+    HHHHHHHHHHH
+    .DEEEEEEED.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .DEEEEEEED.
+    GGGGGGGGGGG
+  # y=8
+  - |
+    ...........
+    HHHHHHHHHHH
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    GGGGGGGGGGG
+    ...........
+  # y=9
+  - |
+    ...........
+    ...........
+    HHHHHHHHHHH
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    GGGGGGGGGGG
+    ...........
+    ...........
+  # y=10
+  - |
+    ...........
+    ...........
+    ...........
+    HHHHHHHHHHH
+    .C.......C.
+    .C.......C.
+    .C.......C.
+    GGGGGGGGGGG
+    ...........
+    ...........
+    ...........
+  # y=11
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    HHHHHHHHHHH
+    .C...O...C.
+    GGGGGGGGGGG
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=12
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    IIIIIIIIIII
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=13
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    JJJJJJJJJJJ
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........

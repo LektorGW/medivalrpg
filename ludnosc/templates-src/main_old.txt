@@ -1,0 +1,19 @@
+def main():
+    os.makedirs(OUT, exist_ok=True)
+    write('chata', chata(), {'id': 'chata', 'name': "'<#C8A165>Chata</#C8A165>'", 'description': "'Mała drewniana chata na kamiennej podmurówce. 2 łóżka.'",
+                             'function': 'housing', 'beds': 2, 'cost': 1500, 'foundation': 'fill', 'foundation-block': 'cobblestone', 'ground-layer': 0})
+    write('dom', dom(), {'id': 'dom', 'name': "'<#E0D3B8>Dom</#E0D3B8>'", 'description': "'Piętrowy dom z muru pruskiego. 4 łóżka na piętrze.'",
+                         'function': 'housing', 'beds': 4, 'cost': 4000, 'foundation': 'fill', 'foundation-block': 'cobblestone', 'ground-layer': 0})
+    write('spichlerz', spichlerz(), {'id': 'spichlerz', 'name': "'<#E6B35A>Spichlerz</#E6B35A>'", 'description': "'Drewniany spichlerz ze skrzyniami na zapasy. Zwiększa pojemność spichlerza kraju.'",
+                                     'function': 'granary', 'beds': 0, 'cost': 3000, 'foundation': 'fill', 'foundation-block': 'cobblestone', 'ground-layer': 0})
+    write('koszary', koszary(), {'id': 'koszary', 'name': "'<#B04A3A>Koszary</#B04A3A>'", 'description': "'Kamienne koszary z 6 pryczami dla żołnierzy (nie liczą się jako mieszkania).'",
+                                 'function': 'barracks', 'beds': 6, 'cost': 6000, 'foundation': 'fill', 'foundation-block': 'stone_bricks', 'ground-layer': 0})
+    write('kuznia', kuznia(), {'id': 'kuznia', 'name': "'<#9A9A9A>Kuźnia</#9A9A9A>'", 'description': "'Otwarta kuźnia z paleniskiem, kowadłem i kominem.'",
+                               'function': 'smithy', 'beds': 0, 'cost': 3500, 'foundation': 'fill', 'foundation-block': 'cobblestone', 'ground-layer': 0})
+    sb, g = studnia()
+    write('studnia', sb, {'id': 'studnia', 'name': "'<#5AA0E6>Studnia</#5AA0E6>'", 'description': "'Kamienna studnia z daszkiem.'",
+                          'function': 'well', 'beds': 0, 'cost': 800, 'foundation': 'fill', 'foundation-block': 'cobblestone', 'ground-layer': g})
+    write('wieza', wieza(), {'id': 'wieza', 'name': "'<#7F8C8D>Wieża strażnicza</#7F8C8D>'", 'description': "'Kamienna wieża z platformą obserwacyjną i blankami.'",
+                             'function': 'tower', 'beds': 0, 'cost': 5000, 'foundation': 'fill', 'foundation-block': 'stone_bricks', 'ground-layer': 0})
+
+main()

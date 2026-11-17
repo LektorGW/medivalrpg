@@ -1,0 +1,143 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: brama
+name: '<#6E6E6E>Brama miejska</#6E6E6E>'
+description: 'Przejście w murach miejskich; nie daje premii do podatków ani wzrostu. Brama z dwiema basztami i broną.'
+function: gate
+beds: 0
+cost: 8000
+tier: 2
+category: defense
+zone: border
+max-per-country: 4
+requires:
+  population: 20
+  treasury: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'spruce_planks'
+  'C': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'D': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'E': 'ladder[facing=south]'
+  'F': 'lantern[hanging=false]'
+  'G': 'wall_torch[facing=east]'
+  'H': 'wall_torch[facing=west]'
+  'I': 'cobblestone'
+  'J': 'iron_bars'
+  'K': '{kolor}_wall_banner[facing=north]'
+  'L': '{kolor}_wall_banner[facing=south]'
+layers:
+  # y=0
+  - |
+    _____III_____
+    AAAAAIIIAAAAA
+    AAAAAIIIAAAAA
+    AAAAAIIIAAAAA
+    AAAAAIIIAAAAA
+    AAAAAIIIAAAAA
+    _____III_____
+  # y=1
+  - |
+    .............
+    AAAAA...AAAAA
+    A.E.A...A.E.A
+    A...A...A...A
+    A...A...A...A
+    AACAA...AACAA
+    .............
+  # y=2
+  - |
+    .............
+    AAAAA...AAAAA
+    A.E.A...A.E.A
+    A...A...A...A
+    A...A...A...A
+    AADAA...AADAA
+    .............
+  # y=3
+  - |
+    .............
+    AAAAA...AAAAA
+    A.E.A...A.E.A
+    AG..AG.HA..HA
+    A...A...A...A
+    AAAAA...AAAAA
+    .............
+  # y=4
+  - |
+    .............
+    AA.AAJJJAA.AA
+    A.E.A...A.E.A
+    A...A...A...A
+    A...A...A...A
+    AAAAA...AAAAA
+    .............
+  # y=5
+  - |
+    .............
+    AAAAAAAAAAAAA
+    A.E.AAAAA.E.A
+    A...AAAAA...A
+    A...AAAAA...A
+    AAAAAAAAAAAAA
+    .............
+  # y=6
+  - |
+    ......K......
+    AAAAAAAAAAAAA
+    A.E.A...A.E.A
+    A...........A
+    A...A...A...A
+    AAAAAAAAAAAAA
+    ......L......
+  # y=7
+  - |
+    .............
+    AA.AAA.AAA.AA
+    A.E.A...A.E.A
+    A...........A
+    A...A...A...A
+    AAAAAAAAAAAAA
+    .............
+  # y=8
+  - |
+    .............
+    AAAAAAAAAAAAA
+    A.E.AAAAA.E.A
+    A...AAAAA...A
+    A...AAAAA...A
+    AAAAAAAAAAAAA
+    .............
+  # y=9
+  - |
+    .............
+    AAAAAA.AAAAAA
+    ABEBA...ABEBA
+    ABBBAA.AABBBA
+    ABBBA...ABBBA
+    AAAAAA.AAAAAA
+    .............
+  # y=10
+  - |
+    .............
+    A.A.A...A.A.A
+    .............
+    A...A...A...A
+    .............
+    A.A.A...A.A.A
+    .............
+  # y=11
+  - |
+    .............
+    F...F...F...F
+    .............
+    .............
+    .............
+    .............
+    .............

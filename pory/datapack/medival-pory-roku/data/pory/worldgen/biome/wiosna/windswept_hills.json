@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "minecraft:visual/sky_color": "#7da2ff"
+  },
+  "carvers": [],
+  "downfall": 0.3,
+  "effects": {
+    "foliage_color": "#6db15c",
+    "grass_color": "#8cc474",
+    "water_color": "#3f76e4"
+  },
+  "features": [],
+  "has_precipitation": true,
+  "temperature": 0.2
+}

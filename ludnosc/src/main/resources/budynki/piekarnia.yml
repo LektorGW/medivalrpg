@@ -1,0 +1,144 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: piekarnia
+name: '<#E3B778>Piekarnia</#E3B778>'
+description: 'Daje pracę rolnikom i rzeźnikom (piekarzom); sama nie zwiększa zapasu jedzenia. Piekarnia z ceglanym piecem i kominem.'
+function: bakery
+beds: 0
+cost: 3500
+tier: 1
+category: economy
+zone: inner
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'J': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'K': 'wall_torch[facing=south]'
+  'L': '@window'
+  'M': 'bricks'
+  'N': 'furnace[facing=south]'
+  'O': 'smoker[facing=south]'
+  'P': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'Q': 'barrel[facing=up]'
+  'R': 'hay_block[axis=y]'
+  'S': 'crafting_table'
+  'T': 'spruce_slab[type=top]'
+  'U': 'lantern[hanging=true]'
+layers:
+  # y=0
+  - |
+    _________
+    _BBBBBBB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BBBBBBB_
+    _________
+  # y=1
+  - |
+    .........
+    .DBBBBBD.
+    .BQ.NMMB.
+    .BR....B.
+    .B..TTTB.
+    .BS...QB.
+    .DBBIBBD.
+    .........
+  # y=2
+  - |
+    .........
+    .DCLCCCD.
+    .CQ..NOC.
+    .L.....L.
+    .L.....C.
+    .C.....C.
+    .DLCJCLD.
+    ...K.K...
+  # y=3
+  - |
+    .........
+    .DCCCCCD.
+    .C...MMC.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .DCCCCCD.
+    .........
+  # y=4
+  - |
+    HHHHHHHHH
+    .DEEEEMD.
+    .F.....F.
+    .F.....F.
+    .F.....F.
+    .F.....F.
+    .DEEEEED.
+    GGGGGGGGG
+  # y=5
+  - |
+    .........
+    HHHHHHMHH
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    GGGGGGGGG
+    .........
+  # y=6
+  - |
+    .........
+    ......M..
+    HHHHHHHHH
+    .C..U..C.
+    .C.....C.
+    GGGGGGGGG
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    ......M..
+    .........
+    HHHHHHHHH
+    GGGGGGGGG
+    .........
+    .........
+    .........
+  # y=8
+  - |
+    .........
+    ......M..
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=9
+  - |
+    .........
+    ......P..
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........

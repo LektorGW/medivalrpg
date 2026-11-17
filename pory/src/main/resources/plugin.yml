@@ -1,0 +1,18 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Pory
+version: '${version}'
+main: pl.medivalrpg.pory.PoryPlugin
+api-version: '26.3'
+description: Wizualne pory roku MEDIVALRPG (kolory biomów, śnieg, liście) zgodne z zegarem Ludnosc.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+softdepend: [Ludnosc]
+permissions:
+  pory.use:
+    description: Dostęp do /pory
+    default: true
+  pory.admin:
+    description: Komendy /pory admin (podgląd pory dla siebie, odświeżenie, status, reload)
+    default: op
+    children:
+      pory.use: true

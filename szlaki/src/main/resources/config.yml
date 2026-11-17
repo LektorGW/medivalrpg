@@ -1,0 +1,13 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Dodatkowi zarządcy firmy: UUID, niezależnie od operatora/uprawnienia.
+managers: []
+terrain:
+  world: world
+  center-x: 0
+  center-z: 0
+  radius: 2000
+limits:
+  routes: 64
+  active: 16
+messages:
+  prefix: '<gold>Szlaki</gold> <gray>»</gray> '

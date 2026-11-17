@@ -1,0 +1,26 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Turnieje
+version: '${version}'
+main: pl.medivalrpg.turnieje.TurniejePlugin
+api-version: '26.3'
+description: Turnieje rycerskie, kopijnicze, bitwy wszyscy na wszystkich i pojedynki na arenach serwera MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+softdepend: [Skarbiec, Kraje, WorldEdit, WorldGuard]
+permissions:
+  turnieje.use:
+    description: /turniej zapisz, wypisz, info, ranking, ogladaj, wyzwij, przyjmij, odrzuc, pomoc
+    default: true
+  turnieje.organize:
+    description: /turniej zorganizuj (dodatkowo ranga w kraju z organize.min-rank)
+    default: true
+  turnieje.bypass:
+    description: Budowanie na arenie, na której trwa turniej
+    default: op
+  turnieje.admin:
+    description: /turniej arena …, start, stop, reload; komendy dozwolone w trakcie turnieju
+    default: op
+    children:
+      turnieje.use: true
+      turnieje.organize: true
+      turnieje.bypass: true

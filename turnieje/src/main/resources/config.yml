@@ -1,0 +1,447 @@
+# ============================================================
+#  Turnieje — turnieje rycerskie, kopijnicze, bitwy i pojedynki
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Kwoty pieniędzy w configu są w miedziakach (1 sr = 10 md, 1 zł = 100 md).
+#  W komendach można pisać np. 5zl, 2sr, 150 (Skarbiec).
+#  /turniej reload wczytuje ten plik ponownie (trwające turnieje działają dalej).
+# ============================================================
+
+general:
+  # zestaw = ekwipunek gracza jest przechowany i zwrócony po turnieju, do walki dostaje zestaw z sekcji kit
+  # wlasny = walka we własnym ekwipunku; nic nie przepada (bez śmierci i dropów), ale zużyte strzały/trwałość to koszt
+  # Każda arena może to nadpisać: /turniej arena ekwipunek <arena> <zestaw|wlasny|domyslny>
+  default-gear: zestaw
+  # Pozwala walczyć przeciwnikom z tej samej walki także tam, gdzie PvP jest wyłączone (np. war-only w Kraje, WorldGuard)
+  force-pvp: true
+  min-participants: 2
+  max-participants: 32
+  # Komendy dozwolone dla uczestników w trakcie turnieju (bez ukośnika); /turniej zawsze działa
+  allowed-commands: [msg, tell, w, r, kc, ks, glos, login, l]
+  # true = areny zawsze chronione (bez sesji też); false = tylko gdy na arenie coś trwa
+  protect-arena-always: false
+  # /turniej ogladaj
+  spectate: true
+
+match:
+  # odliczanie 3…2…1 przed walką (bez obrażeń)
+  countdown-seconds: 5
+  # limit czasu walki 1 na 1; po nim wygrywa ten, kto zadał więcej obrażeń, potem kto ma więcej zdrowia
+  time-limit-seconds: 180
+  melee-time-limit-seconds: 300
+  # przerwa między walkami
+  intermission-seconds: 6
+  # fajerwerki i ogłoszenie zwycięzcy, potem wszyscy wracają na swoje miejsca
+  celebration-seconds: 10
+
+joust:
+  # Kopia na arenach "konno" (zbroja z sekcji kit, koń z siodłem od organizatora)
+  lance: IRON_SPEAR
+  fallback-lance: IRON_SWORD
+  # bazowa prędkość konia (atrybut movement_speed, 0.05–0.5)
+  horse-speed: 0.3
+
+kit:
+  helmet: IRON_HELMET
+  chestplate: IRON_CHESTPLATE
+  leggings: IRON_LEGGINGS
+  boots: IRON_BOOTS
+  offhand: SHIELD
+  # "MATERIAL" albo "MATERIAL:ilość"
+  items:
+    - IRON_SWORD
+    - BOW
+    - "ARROW:16"
+    - "BREAD:8"
+
+signups:
+  # ogłoszenia na czacie (minuty przed startem)
+  announce-minutes: [30, 15, 10, 5, 3, 1]
+  # tytuł na ekranie (minuty przed startem)
+  title-minutes: [5, 1]
+  # pasek bossa z odliczaniem dla wszystkich graczy (false = tylko zapisani)
+  bossbar-for-all: true
+
+weekly:
+  enabled: true
+  # dzień: poniedzialek … niedziela (albo MONDAY … SUNDAY)
+  day: sobota
+  time: "20:00"
+  # strefa czasowa, np. Europe/Warsaw; puste = strefa serwera
+  timezone: ""
+  # id areny; puste = pierwsza gotowa arena typu turniej/melee
+  arena: ""
+  # zapisy otwierają się tyle minut przed startem
+  signup-minutes: 30
+  name: "Wielki Turniej Rycerski"
+  # wpisowe w miedziakach (0 = bez); wpisowe powiększa pulę nagród
+  entry-fee: 0
+  prize:
+    # serwer = konto puli serwera (server-account), kraj = skarbiec kraju (country), brak = bez pieniędzy,
+    # mint = nowe pieniądze przy wypłacie — TYLKO gdy allow-mint: true
+    source: serwer
+    amount: 1000
+    country: ""
+    # konto Skarbca z pulą serwera; zasil je np. /skarbiec admin daj serwer:turnieje 50zl
+    server-account: "serwer:turnieje"
+    allow-mint: false
+
+prize:
+  # procent puli dla miejsc 1, 2, 3 (3. miejsce dzielą przegrani półfinałów); suma ≤ 100, reszta wraca do źródła
+  split: [60, 30, 10]
+  # co z udziałem miejsca, którego nikt nie zajął: zwrot (do źródła) | zwyciezca
+  unclaimed: zwrot
+
+organize:
+  enabled: true
+  # kto z kraju może zorganizować turniej: wladca | doradca | obywatel
+  min-rank: wladca
+  min-pool: 100
+  max-pool: 100000
+  max-entry-fee: 5000
+  min-minutes: 2
+  max-minutes: 60
+  default-minutes: 10
+  # przerwa między turniejami jednego kraju
+  cooldown-minutes: 120
+  # true = kraj może organizować także na arenach publicznych (bez właściciela)
+  allow-public-arenas: true
+
+duel:
+  enabled: true
+  request-seconds: 60
+  count-in-stats: true
+
+trophy:
+  enabled: true
+  material: GOLDEN_SWORD
+  name: "<gold><bold>Złoty Miecz Turniejowy</bold></gold>"
+  lore:
+    - "<gray>Zwycięzca: <yellow><player></yellow>"
+    - "<gray><title>"
+    - "<dark_gray>Arena <arena>, <date>"
+
+fireworks:
+  count: 6
+
+messages:
+  prefix: "<gold>[⚔ Turnieje]</gold> "
+  players-only: "<prefix><red>Tylko dla graczy."
+  reloaded: "<prefix><green>Wczytano config.yml Turniejów."
+  word-yes: "tak"
+  word-no: "nie"
+  money-none: "—"
+  organizer-server: "Serwer"
+  weekly-off: "cotygodniowy turniej wyłączony"
+  weekly-next: "<day> <time> (za <in>)"
+  invalid-amount: "<prefix><red>Niepoprawna kwota: <white><value></white>. Przykłady: 150, 5zl, 2sr."
+  player-offline: "<prefix><red>Gracz <white><player></white> nie jest online."
+  unknown-arena: "<prefix><red>Nie ma areny <white><arena></white>."
+  arena-not-ready: "<prefix><red>Arena <white><arena></white> nie jest gotowa (potrzebne min. 2 punkty startowe)."
+  arena-busy: "<prefix><red>Na arenie <white><arena></white> coś właśnie trwa."
+  arena-protected: "<prefix><red>Arena jest chroniona podczas turnieju."
+  tournament-busy: "<prefix><red>Inny turniej już trwa albo ma otwarte zapisy."
+  busy: "<prefix><red>Bierzesz już udział w turnieju lub pojedynku."
+  restored: "<prefix><gray>Przywrócono twój ekwipunek i miejsce sprzed turnieju."
+
+  type:
+    pojedynek: "<aqua>Pojedynek</aqua>"
+    turniej: "<gold>Turniej rycerski</gold>"
+    turniej-konno: "<gold>Turniej kopijniczy (konno)</gold>"
+    melee: "<red>Bitwa wszyscy na wszystkich</red>"
+  gear:
+    zestaw: "zestaw turniejowy"
+    wlasny: "własny ekwipunek"
+  gear-default: "domyślny z configu"
+  rank:
+    "1": "Obywatel"
+    "2": "Doradca"
+    "3": "Władca"
+  phase:
+    signups: "zapisy"
+    preparing: "przygotowanie"
+    intermission: "przerwa między walkami"
+    countdown: "odliczanie"
+    fighting: "walka"
+    celebration: "ogłoszenie zwycięzcy"
+    finished: "zakończony"
+    cancelled: "odwołany"
+  cause:
+    kill: "pokonany"
+    death: "zginął"
+    quit: "wyszedł z gry"
+    timeout: "przegrał na czas"
+    left: "wycofał się"
+  result:
+    kill: "<prefix><yellow><winner></yellow> <gray>pokonuje</gray> <white><loser></white><gray>!"
+    death: "<prefix><yellow><winner></yellow> <gray>wygrywa — <white><loser></white> poległ."
+    quit: "<prefix><yellow><winner></yellow> <gray>wygrywa walkowerem — <white><loser></white> opuścił grę."
+    timeout: "<prefix><gray>Koniec czasu! <yellow><winner></yellow> wygrywa na punkty z <white><loser></white>."
+    left: "<prefix><yellow><winner></yellow> <gray>wygrywa — <white><loser></white> wycofał się z turnieju."
+
+  # ---- ogłoszenia
+  announce-open: "<prefix><gold><bold><title></bold></gold> <gray>— zapisy otwarte!</gray>\n<gray>Arena: <white><arena></white> (<type>), organizator: <white><organizer></white>\n<gray>Start za <white><time></white>, pula: <gold><prize></gold>, wpisowe: <white><fee></white>\n<click:run_command:'/turniej zapisz'><hover:show_text:'<gray>Kliknij, aby się zapisać'><green><bold>[ZAPISZ SIĘ]</bold></green></hover></click> <click:run_command:'/turniej info'><hover:show_text:'<gray>Szczegóły turnieju'><yellow>[INFO]</yellow></hover></click>"
+  announce-reminder: "<prefix><gold><title></gold> <gray>startuje za <white><time></white> — zapisanych: <white><count></white>. <click:run_command:'/turniej zapisz'><hover:show_text:'<gray>Kliknij, aby się zapisać'><green>[ZAPISZ SIĘ]</green></hover></click>"
+  reminder-title: "<gold><title>"
+  reminder-subtitle: "<gray>start za <white><time></white> — <green>/turniej zapisz"
+  announce-begin: "<prefix><gold><bold><title></bold></gold> <gray>rozpoczęty! Uczestników: <white><count></white>. Oglądaj: <click:run_command:'/turniej ogladaj'><yellow>[OGLĄDAJ]</yellow></click>"
+  announce-cancel: "<prefix><red><title> odwołany: <white><reason></white>. Wpisowe i pula wracają do właścicieli."
+  reason-too-few: "za mało uczestników"
+  reason-admin: "decyzja administracji"
+  reason-world: "świat areny jest niedostępny"
+  reason-shutdown: "wyłączenie serwera"
+  reason-error: "błąd techniczny"
+  reason-duel-left: "uczestnik się wycofał"
+  start-missed: "<prefix><red>Nie mogłeś wziąć udziału w <white><title></white> (nieobecny lub zajęty). Zwrot wpisowego: <white><refund></white>."
+  bracket-header: "<gold>▌ Drabinka — runda <round>/<rounds>"
+  bracket-pair: " <yellow><a></yellow> <gray>vs</gray> <yellow><b></yellow>"
+  bracket-bye: " <yellow><a></yellow> <dark_gray>— wolny los, przechodzi dalej"
+  match-announce: "<prefix><gray>Runda <white><round>/<rounds></white>: <yellow><a></yellow> <red>⚔</red> <yellow><b></yellow>"
+  melee-announce: "<prefix><red><bold>Bitwa!</bold></red> <gray>Walczy <white><count></white> rycerzy — ostatni na nogach wygrywa."
+  melee-out: "<prefix><white><player></white> <gray>odpada (<cause>). Zostało: <white><left></white>."
+  countdown-title: "<gold><bold><n></bold></gold>"
+  countdown-subtitle: "<gray>przygotuj się"
+  fight-title: "<red><bold>Walcz!</bold></red>"
+  timeout-announce: "<prefix><gray>Koniec czasu walki — liczą się zadane obrażenia, potem zdrowie."
+  left-arena-warning: "<prefix><red>Nie opuszczaj areny! Wracasz na pozycję."
+  eliminated-you: "<prefix><gray>Odpadasz z <white><title></white>. Twój ekwipunek i miejsce zostały przywrócone."
+  won-match-you: "<prefix><green>Wygrana! Odpocznij na widowni i czekaj na kolejną walkę."
+  winner-broadcast: "<prefix><gold><bold>🏆 <player></bold></gold> <gray>wygrywa <white><title></white>! Nagroda: <gold><prize></gold>"
+  place-line: "<prefix><gray><place>. miejsce: <white><player></white> <dark_gray>(<prize>)"
+  winner-title: "<gold><bold><player></bold></gold>"
+  winner-subtitle: "<yellow>zwycięzca: <title>"
+  no-winner: "<prefix><gray><title> zakończony bez zwycięzcy."
+  prize-received: "<prefix><green>Otrzymujesz <gold><amount></gold> na konto bankowe za <white><title></white>."
+  refund-received: "<prefix><gray>Zwrot <white><amount></white> za <white><title></white>."
+  trophy-received: "<prefix><gold>Otrzymujesz trofeum zwycięzcy: <white><title></white>!"
+  duel-result: "<prefix><yellow><winner></yellow> <gray>wygrywa pojedynek z <white><loser></white>."
+
+  # ---- zapisy
+  no-open-tournament: "<prefix><gray>Teraz nie ma otwartych zapisów. Najbliższy turniej: <white><next></white>."
+  already-signed: "<prefix><gray>Już jesteś zapisany."
+  tournament-full: "<prefix><red>Brak miejsc (max <max>)."
+  insufficient-funds: "<prefix><red>Na koncie bankowym brakuje <white><amount></white> na wpisowe."
+  signed-up: "<prefix><green>Zapisano na <white><title></white>!</green> <gray>Start za <white><time></white>, zapisanych: <white><count></white>, wpisowe: <white><fee></white>. Wypisanie: <click:run_command:'/turniej wypisz'><yellow>/turniej wypisz</yellow></click>"
+  signed-out: "<prefix><gray>Wypisano z <white><title></white>. Zwrot wpisowego: <white><refund></white>."
+  signout-too-late: "<prefix><gray>Turniej się już kończy — poczekaj chwilę."
+  left-tournament: "<prefix><gray>Wycofałeś się z <white><title></white>."
+  not-signed: "<prefix><gray>Nie jesteś zapisany na żaden turniej."
+  command-blocked: "<prefix><red>W trakcie turnieju ta komenda jest zablokowana. Wycofanie: /turniej wypisz"
+  teleport-blocked: "<prefix><red>W trakcie turnieju nie można się teleportować."
+
+  # ---- organizacja przez kraj
+  organized-title: "Turniej <country>"
+  organize-disabled: "<prefix><red>Organizowanie turniejów jest wyłączone."
+  organize-unavailable: "<prefix><red>Do organizacji potrzebne są pluginy Kraje i Skarbiec."
+  organize-no-country: "<prefix><red>Musisz należeć do kraju."
+  organize-rank: "<prefix><red>Turniej może zorganizować ranga <white><rank></white> lub wyższa."
+  organize-cooldown: "<prefix><red>Twój kraj może zorganizować kolejny turniej za <white><time></white>."
+  organize-arena-type: "<prefix><red>Na tej arenie odbywają się tylko pojedynki. Wybierz arenę typu turniej lub melee."
+  organize-arena-owner: "<prefix><red>To nie jest arena twojego kraju."
+  organize-pool-range: "<prefix><red>Pula musi wynosić od <white><min></white> do <white><max></white>."
+  organize-fee-range: "<prefix><red>Wpisowe może wynosić najwyżej <white><max></white>."
+  organize-minutes-range: "<prefix><red>Start za <white><min></white>–<white><max></white> minut."
+  organize-treasury-funds: "<prefix><red>W skarbcu kraju brakuje <white><amount></white>."
+  organize-done: "<prefix><green>Zorganizowano <white><title></white>. Pula pobrana ze skarbca, start za <white><time></white>."
+
+  # ---- pojedynki
+  duel-title: "Pojedynek <a> vs <b>"
+  duel-disabled: "<prefix><red>Pojedynki są wyłączone."
+  duel-self: "<prefix><red>Nie możesz wyzwać samego siebie."
+  duel-target-busy: "<prefix><red><white><player></white> bierze już udział w turnieju lub pojedynku."
+  duel-no-arena: "<prefix><red>Brak wolnej areny pojedynków."
+  duel-sent: "<prefix><gray>Wyzwano <white><player></white> na pojedynek (ważne <seconds> s)."
+  duel-received: "<prefix><white><player></white> <gray>wyzywa cię na pojedynek! <click:run_command:'/turniej przyjmij'><green><bold>[PRZYJMIJ]</bold></green></click> <click:run_command:'/turniej odrzuc'><red>[ODRZUĆ]</red></click> <dark_gray>(<seconds> s)"
+  duel-none: "<prefix><gray>Nie masz ważnego wyzwania."
+  duel-expired: "<prefix><gray>Wyzwanie na pojedynek wygasło."
+  duel-declined: "<prefix><white><player></white> <gray>odrzuca wyzwanie."
+  duel-declined-you: "<prefix><gray>Odrzucono wyzwanie od <white><player></white>."
+  duel-accepted: "<prefix><green>Pojedynek z <white><player></white> na arenie <white><arena></white> — za chwilę start!"
+
+  # ---- widzowie
+  spectate-start: "<prefix><gray>Oglądasz arenę <white><arena></white>. Powrót: <click:run_command:'/turniej ogladaj'><yellow>/turniej ogladaj</yellow></click>"
+  spectate-stop: "<prefix><gray>Wracasz na swoje miejsce."
+  spectate-none: "<prefix><gray>Teraz nic się nie dzieje na arenach."
+  spectate-disabled: "<prefix><red>Oglądanie jest wyłączone."
+  spectate-participant: "<prefix><red>Jesteś uczestnikiem."
+  spectate-blocked: "<prefix><red>Widzowie nie wchodzą na arenę w trakcie walki."
+
+  # ---- informacje
+  info-none: "<prefix><gray>Teraz nie trwa żaden turniej. Najbliższy cotygodniowy: <white><next></white>."
+  info-duel: " <gray>• <white><title></white> <dark_gray>(arena <arena>)"
+  info-header: "<gold><bold>▌ <title></bold></gold>"
+  info-arena: " <gray>Arena: <white><arena></white> — <type>, <white><gear></white>"
+  info-organizer: " <gray>Organizator: <white><organizer></white>"
+  info-phase: " <gray>Etap: <white><phase></white>"
+  info-prize: " <gray>Pula: <gold><prize></gold>, wpisowe: <white><fee></white>, podział: <white><split></white>"
+  info-start: " <gray>Start za: <white><time></white>"
+  info-entrants: " <gray>Zapisani (<white><count></white>/<max>): <white><names></white>"
+  info-round: " <gray>Runda <white><round></white>/<rounds>"
+  info-match: "  <yellow><a></yellow> <gray>vs</gray> <yellow><b></yellow>"
+  info-match-live: "  <red>⚔</red> <yellow><a></yellow> <gray>vs</gray> <yellow><b></yellow> <dark_gray>(<time>)"
+  info-alive: " <gray>Na arenie: <white><names></white>"
+  info-next-weekly: " <dark_gray>Cotygodniowy turniej: <next>"
+
+  # ---- ranking
+  ranking-header: "<gold><bold>▌ Ranking turniejowy</bold></gold> <dark_gray>(<page>/<pages>)"
+  ranking-line: " <gray><pos>.</gray> <white><player></white> <gold>🏆 <titles></gold> <green><wins> W</green> <red><losses> P</red> <dark_gray>(<percent>%)"
+  ranking-empty: " <gray>Jeszcze nikt nie walczył."
+  ranking-you: " <yellow>Ty: <pos>. miejsce — 🏆 <titles>, <wins> W, <losses> P, turniejów: <tournaments>"
+  ranking-next: " <yellow>następna strona »</yellow> <dark_gray>(/turniej ranking <next>)"
+
+  # ---- pasek bossa
+  bossbar-signups: "<gold><title></gold> <gray>— start za <white><time></white> — zapisanych: <white><count></white> — <green>/turniej zapisz"
+  bossbar-duel-start: "<aqua><title></aqua>"
+  bossbar-intermission: "<gold><title></gold> <gray>— runda <round>/<rounds> — następna walka za <white><time></white>"
+  bossbar-fight: "<yellow><a></yellow> <red>⚔</red> <yellow><b></yellow> <gray>— <white><time></white>"
+  bossbar-melee: "<red>Bitwa</red> <gray>— na nogach: <white><count></white> — <white><time></white>"
+  bossbar-celebration: "<gold>🏆 <player></gold> <gray>— zwycięzca: <title>"
+
+  # ---- administracja aren
+  arena-corner-set: "<prefix><gray>Róg <white><n></white>: <white><x> <y> <z></white>."
+  arena-invalid-id: "<prefix><red>Nazwa areny: małe litery, cyfry, - i _ (max 24)."
+  arena-exists: "<prefix><red>Arena <white><arena></white> już istnieje."
+  arena-invalid-type: "<prefix><red>Typ areny: pojedynek, turniej albo melee."
+  arena-no-selection: "<prefix><red>Zaznacz obszar WorldEditem albo ustaw dwa rogi: /turniej arena rog 1 i /turniej arena rog 2."
+  arena-wrong-world: "<prefix><red>Oba rogi muszą być w tym samym świecie."
+  arena-too-big: "<prefix><red>Arena jest za duża (max <max> bloków)."
+  arena-created: "<prefix><green>Utworzono arenę <white><arena></white> (<type>, <size>). Teraz: /turniej arena spawn <arena> (min. 2×) i /turniej arena widownia <arena>."
+  arena-removed: "<prefix><gray>Usunięto arenę <white><arena></white>."
+  arena-list-empty: "<prefix><gray>Brak aren. /turniej arena stworz <nazwa> <typ>"
+  arena-list-header: "<gold>▌ Areny (<count>)"
+  arena-list-line: " <yellow><arena></yellow> <gray><type>, <world> <x> <z>, spawny: <white><spawns></white>, kraj: <white><country></white>, konno: <white><mounted></white>, ekwipunek: <white><gear></white> — <status>"
+  arena-public: "publiczna"
+  arena-status-ready: "<green>gotowa"
+  arena-status-busy: "<red>zajęta"
+  arena-status-incomplete: "<yellow>niekompletna"
+  arena-spawn-added: "<prefix><green>Dodano punkt startowy nr <white><n></white> areny <white><arena></white>."
+  arena-spawn-outside: "<prefix><red>Stań wewnątrz areny."
+  arena-spawn-cleared: "<prefix><gray>Usunięto punkty startowe areny <white><arena></white>."
+  arena-spectators-set: "<prefix><green>Widownia areny <white><arena></white> ustawiona (tu czekają też uczestnicy)."
+  arena-country-set: "<prefix><green>Arena <white><arena></white> należy teraz do kraju <white><country></white>."
+  arena-country-public: "<prefix><green>Arena <white><arena></white> jest publiczna."
+  arena-country-unknown: "<prefix><red>Nie ma kraju <white><country></white>."
+  arena-mounted-type: "<prefix><red>Walki konno tylko na arenie typu turniej."
+  arena-mounted-set: "<prefix><green>Arena <white><arena></white>, konno: <white><value></white>."
+  arena-gear-invalid: "<prefix><red>Tryb: zestaw, wlasny albo domyslny."
+  arena-gear-set: "<prefix><green>Arena <white><arena></white>, ekwipunek: <white><gear></white>."
+  start-now: "<prefix><green>Zapisy na <white><title></white> zamknięte — start!"
+  start-opened: "<prefix><green>Otwarto zapisy na <white><title></white>, start za <white><time></white>."
+  start-no-arena: "<prefix><red>Brak gotowej, wolnej areny typu turniej/melee."
+  stop-done: "<prefix><gray>Odwołano <white><title></white> (zwroty wykonane)."
+  stop-none: "<prefix><gray>Nic nie trwa."
+
+  tip:
+    pula: "<gray>Pula nagród ze skarbca kraju"
+    wpisowe: "<gray>Wpisowe od każdego uczestnika (powiększa pulę)"
+
+  # ---- pomoc (/turniej pomoc)
+  help-header: "<gold><bold>▌ <title></bold></gold> <gray>— <category> <dark_gray>(<page>/<pages>)"
+  help-line: " <yellow><syntax></yellow> <dark_gray>—</dark_gray> <gray><short>"
+  help-hover: "<yellow><syntax></yellow>\n<gray><description>\n<dark_gray>Dla: <rank>"
+  help-nav: " <prev>   <next>"
+  help-prev: "<yellow>« poprzednia"
+  help-prev-disabled: "<dark_gray>« poprzednia"
+  help-next: "<yellow>następna »"
+  help-next-disabled: "<dark_gray>następna »"
+  help-page-hover: "<gray>Strona <page>: <category>"
+  help-tabs: " <tabs>"
+  help-tab: "<gray><category>"
+  help-tab-current: "<gold><u><category></u>"
+  help-tab-separator: "<dark_gray> | "
+  help:
+    title: "Turnieje"
+    categories:
+      gracz: "Turnieje"
+      pojedynki: "Pojedynki"
+      wladca: "Dla władców"
+      admin: "Administracja"
+    entries:
+      zapisz:
+        short: "zapis na otwarty turniej"
+        description: "Zapisuje cię na turniej z otwartymi zapisami. Wpisowe (jeśli jest) pobierane jest z konta bankowego i powiększa pulę nagród."
+        rank: "każdy"
+      wypisz:
+        short: "wypisanie / wycofanie się"
+        description: "Przed startem: wypisanie ze zwrotem wpisowego. W trakcie turnieju: wycofanie się (przegrana) i powrót ekwipunku."
+        rank: "każdy"
+      info:
+        short: "trwający turniej i najbliższy termin"
+        description: "Arena, organizator, pula, zapisani, drabinka bieżącej rundy i termin cotygodniowego turnieju."
+        rank: "każdy"
+      ranking:
+        short: "ranking zwycięstw i tytułów"
+        description: "Kolejność: tytuły (wygrane turnieje), zwycięskie walki, mniej porażek."
+        rank: "każdy"
+      ogladaj:
+        short: "widownia areny / powrót"
+        description: "Przenosi na widownię areny, na której coś trwa. Ponowne użycie wraca na twoje poprzednie miejsce."
+        rank: "każdy"
+      pomoc:
+        short: "ta pomoc"
+        description: "Kliknij komendę, aby wpisać ją na czacie. Najedź, aby zobaczyć opis."
+        rank: "każdy"
+      wyzwij:
+        short: "wyzwanie na pojedynek"
+        description: "Wyzywa gracza na pojedynek 1 na 1 na wolnej arenie pojedynków. Bez nagród; liczy się do rankingu."
+        rank: "każdy"
+      przyjmij:
+        short: "przyjęcie wyzwania"
+        description: "Przyjmuje ostatnie wyzwanie na pojedynek."
+        rank: "każdy"
+      odrzuc:
+        short: "odrzucenie wyzwania"
+        description: "Odrzuca wyzwanie na pojedynek."
+        rank: "każdy"
+      zorganizuj:
+        short: "turniej kraju z pulą ze skarbca"
+        description: "Organizuje turniej na arenie twojego kraju (lub publicznej). Pula nagród jest pobierana ze skarbca kraju od razu i wraca, jeśli turniej zostanie odwołany. Przykład: /turniej zorganizuj arena1 20zl 1zl 10"
+        rank: "Władca (konfigurowalne)"
+      arena-rog:
+        short: "róg areny bez WorldEdita"
+        description: "Zapisuje róg 1 lub 2 w miejscu, w którym stoisz. Z WorldEditem wystarczy zaznaczenie."
+        rank: "administracja"
+      arena-stworz:
+        short: "nowa arena"
+        description: "Tworzy arenę z zaznaczenia WorldEdit albo z dwóch rogów. Typy: pojedynek, turniej (drabinka 1 na 1), melee (wszyscy na wszystkich)."
+        rank: "administracja"
+      arena-spawn:
+        short: "punkt startowy (min. 2)"
+        description: "Dodaje punkt startowy tam, gdzie stoisz (wewnątrz areny). Walki 1 na 1 używają dwóch pierwszych, bitwa — wszystkich po kolei."
+        rank: "administracja"
+      arena-widownia:
+        short: "miejsce widowni i oczekujących"
+        description: "Ustawia widownię: tu stoją widzowie i uczestnicy czekający na walkę. Najlepiej poza obszarem areny."
+        rank: "administracja"
+      arena-kraj:
+        short: "właściciel areny"
+        description: "Kraj-właściciel może organizować na niej turnieje. publiczna = bez właściciela."
+        rank: "administracja"
+      arena-konno:
+        short: "turniej kopijniczy"
+        description: "Na arenie typu turniej uczestnicy dostają konie z siodłem, a broń to kopia z joust.lance."
+        rank: "administracja"
+      arena-ekwipunek:
+        short: "zestaw lub własny ekwipunek"
+        description: "zestaw: ekwipunek przechowany i zwrócony, walka w zestawie z configu. wlasny: walka we własnym. domyslny: z configu."
+        rank: "administracja"
+      arena-lista:
+        short: "lista aren"
+        description: "Areny z typem, punktami startowymi, właścicielem i stanem."
+        rank: "administracja"
+      arena-usun:
+        short: "usunięcie areny"
+        description: "Usuwa arenę, na której nic nie trwa."
+        rank: "administracja"
+      start:
+        short: "start teraz / nowy turniej"
+        description: "Gdy trwają zapisy — zamyka je i startuje. W przeciwnym razie otwiera zapisy turnieju (nagroda jak w weekly) za podaną liczbę minut (domyślnie 5)."
+        rank: "administracja"
+      stop:
+        short: "odwołanie ze zwrotem"
+        description: "Odwołuje turniej (lub to, co trwa na arenie): zwrot wpisowego i puli, przywrócenie ekwipunku."
+        rank: "administracja"
+      reload:
+        short: "wczytanie configu"
+        description: "Wczytuje config.yml ponownie."
+        rank: "administracja"

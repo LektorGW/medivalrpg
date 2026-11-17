@@ -1,0 +1,30 @@
+{
+  "name": "panel-mc",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Maciej Kaczmarczyk (https://lektoro.pl)",
+  "license": "UNLICENSED",
+  "description": "Panel — zarządzanie państwami serwera MEDIVALRPG (Cloudflare Worker + Durable Object + SPA)",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check:dist": "wrangler deploy --dry-run --config dist/wrangler.jsonc --outdir .wrangler/dist-check",
+    "dev": "wrangler dev",
+    "check": "wrangler deploy --dry-run --outdir .wrangler/dry-run",
+    "test:unit": "node --test test/money.test.mjs test/plan.test.mjs test/plan-access.test.mjs test/health.test.mjs test/health-rpc.test.mjs test/railway-rpc.test.mjs test/railway-map.test.mjs test/world-stats.test.mjs test/world-stats-rpc.test.mjs test/economy.test.mjs test/flag.test.mjs test/firmy.test.mjs test/world-npc-bulk.test.mjs test/worker.test.mjs test/login.test.mjs",
+    "test:int": "node test/integration.mjs",
+    "test:e2e": "node test/browser-e2e.mjs",
+    "test": "npm run test:unit && npm run test:int && npm run test:e2e",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "puppeteer-core": "^25.16.0",
+    "wrangler": "^4.152.0",
+    "ws": "^8.22.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "workerd@1.20261019.1": true
+  }
+}

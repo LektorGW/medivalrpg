@@ -1,0 +1,177 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: piekarnia_szachulec
+variant-of: piekarnia
+name: '<#E3B778>Piekarnia szachulcowa</#E3B778>'
+description: 'Daje pracę rolnikom i rzeźnikom (piekarzom); sama nie zwiększa zapasu jedzenia. Piekarnia z muru pruskiego z okienkiem sprzedaży.'
+function: bakery
+beds: 0
+cost: 3500
+tier: 1
+category: economy
+zone: inner
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '0':
+    wall: mud_bricks
+  '1':
+    frame: dark_oak_log
+    wall: white_terracotta
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': '@roof_slab[type=bottom]'
+  'J': '@window'
+  'K': 'bricks'
+  'L': 'brick_slab[type=bottom]'
+  'M': 'furnace[facing=east]'
+  'N': 'brick_stairs[facing=west,half=bottom]'
+  'O': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'P': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'Q': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'R': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'S': 'spruce_slab[type=top]'
+  'T': 'white_wool'
+  'U': '{kolor}_wool'
+  'V': 'barrel[facing=up]'
+  'W': 'spruce_stairs[facing=north,half=bottom]'
+  'X': 'wall_torch[facing=south]'
+  'Y': 'spruce_trapdoor[facing=west,half=bottom,open=true]'
+  'Z': 'spruce_trapdoor[facing=east,half=top,open=false]'
+  'a': 'potted_orange_tulip'
+  'b': 'smoker[facing=west]'
+  'c': 'furnace[facing=west]'
+  'd': 'hay_block[axis=y]'
+  'e': 'crafting_table'
+  'f': 'chest[facing=south]'
+  'g': 'spruce_fence'
+  'h': 'spruce_pressure_plate'
+  'i': 'composter'
+  'j': 'lantern[hanging=true]'
+layers:
+  # y=0
+  - |
+    __________
+    _BBBBBBB__
+    _BAAAAABKK
+    _BAAAAABKK
+    _BAAAAABKK
+    _BAAAAAB__
+    _BBBBBBB__
+    _BBBBBBB__
+    __________
+  # y=1
+  - |
+    ..........
+    .DBBBBBD..
+    .BVVef.cKK
+    .Bd....bMK
+    ZB..gg.VKK
+    .BSS..iB..
+    .DBBBPBD..
+    ..V.W.....
+    ..........
+  # y=2
+  - |
+    ..........
+    .DCDJDCD..
+    .CV....CNL
+    YD.....DKL
+    aJ..hh.CNL
+    YD.....D..
+    .DJJCQCD..
+    .R..R.X...
+    ..........
+  # y=3
+  - |
+    ..........
+    .DCDCDCD..
+    .C.....C..
+    .D.....DK.
+    .C.....C..
+    .D.....D..
+    .DCDCDCD..
+    .TUTU.....
+    ..........
+  # y=4
+  - |
+    HHHHHHHHH.
+    .DEEEEED..
+    .F.....F..
+    .F.....FK.
+    .F.....F..
+    .F.....F..
+    .DEEEEED..
+    GGGGGGGGG.
+    ..........
+  # y=5
+  - |
+    ..........
+    HHHHHHHHH.
+    .C.....C..
+    .D.....DK.
+    .D.....D..
+    .C.....C..
+    GGGGGGGGG.
+    ..........
+    ..........
+  # y=6
+  - |
+    ..........
+    ..........
+    HHHHHHHHH.
+    .J..j..DK.
+    .D.....J..
+    GGGGGGGGG.
+    ..........
+    ..........
+    ..........
+  # y=7
+  - |
+    ..........
+    ..........
+    ..........
+    HHHHHHHHK.
+    GGGGGGGGG.
+    ..........
+    ..........
+    ..........
+    ..........
+  # y=8
+  - |
+    ..........
+    ..........
+    ..........
+    IIIIIIIIK.
+    IIIIIIIII.
+    ..........
+    ..........
+    ..........
+    ..........
+  # y=9
+  - |
+    ..........
+    ..........
+    ..........
+    ........O.
+    ..........
+    ..........
+    ..........
+    ..........
+    ..........

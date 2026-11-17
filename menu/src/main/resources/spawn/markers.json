@@ -1,0 +1,52 @@
+{
+  "size": [
+    69,
+    32,
+    69
+  ],
+  "noair_height": 31,
+  "offset": [
+    -34,
+    -5,
+    -34
+  ],
+  "data_version": 5023,
+  "markers": {
+    "spawn": {
+      "local": [
+        34,
+        5,
+        34
+      ],
+      "relative_to_paste_point": [
+        0,
+        0,
+        0
+      ]
+    },
+    "bankier": {
+      "local": [
+        20,
+        6,
+        12
+      ],
+      "relative_to_paste_point": [
+        -14,
+        1,
+        -22
+      ]
+    },
+    "kupiec": {
+      "local": [
+        56,
+        5,
+        29
+      ],
+      "relative_to_paste_point": [
+        22,
+        0,
+        -5
+      ]
+    }
+  }
+}

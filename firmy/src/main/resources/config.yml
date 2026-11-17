@@ -1,0 +1,178 @@
+# ============================================================
+#  Firmy — firmy graczy MEDIVALRPG
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#  Kwoty w miedziakach (md): 1 zł = 100 md. Pieniądze firm płyną wyłącznie przelewami między kontami Skarbca
+#  (zamknięta pula 100 000 000 md). Decyzje użytkownika z 2026-10-29: firmy/PROPOZYCJA.md.
+# ============================================================
+
+strefa-czasowa: Europe/Warsaw
+
+zalozenie:
+  # opłata rejestrowa (25 zł) trafia do skarbca kraju siedziby; kapitał (min. 25 zł) zostaje na koncie firmy
+  oplata: 2500
+  kapital-min: 2500
+  # wniosek w kraju gracza czeka na Władcę/Doradcę; po tym czasie zwrot całej kwoty
+  wniosek-godziny: 72
+  nazwa-min: 3
+  nazwa-max: 24
+  nazwa-zastrzezona-dni: 30
+  zakazane-slowa: [admin, serwer, moderator, skarb swiata, worldsteward, kolej krolewska, krolewski przewoznik]
+  # kraj NPC: zgoda automatyczna przy reputacji co najmniej „Obcy” (Wladcy, od -19) i bez wojny z krajem zakładającego
+  npc-min-reputacja: -19
+  # bez pluginu Wladcy reputacji nie da się sprawdzić: true = zgoda, false = odmowa
+  npc-bez-wladcow-zgoda: true
+  # zrzutka (wspólne założenie, PROPOZYCJA: udziały według wkładu założycieli): kilku graczy wpłaca razem opłatę + kapitał;
+  # po zebraniu kwoty wniosek idzie do kraju jak zwykły, bez kompletu w wniosek-godziny każdy dostaje swój wkład z powrotem
+  zrzutka:
+    wlaczona: true
+    min-wklad: 500
+    max-osob: 6
+
+ludzie:
+  max-firm-jako-mistrz: 1
+  max-czlonkostw: 3
+  # ochrona przed altami: co najmniej 5 h gry i konto starsze niż 3 dni
+  min-czas-gry-minuty: 300
+  min-wiek-konta-dni: 3
+  zaproszenie-minuty: 30
+  limit-osob:
+    cech: 12
+    kompania: 16
+    manufaktura: 16
+    dom_handlowy: 30
+
+podatek:
+  # podatek od przychodu (pobierany w chwili wpływu): Władca ustala 0–max, kraje NPC mają stałą stawkę
+  domyslny-procent: 5
+  max-procent: 20
+  npc-procent: 5
+
+pensje:
+  # pensja dzienna gracza najwyżej 50 zł; wypłata raz dziennie o tej godzinie (najpierw zaległości)
+  max-dziennie: 5000
+  godzina: 12
+
+wyplaty:
+  # dywidenda ponad 25 % salda albo ponad 200 zł dziennie czeka 24 h (wspólnicy dostają powiadomienie)
+  zwloka-godziny: 24
+  prog-procent-salda: 25
+  prog-dzienny: 20000
+
+niewyplacalnosc:
+  dni-do-statusu: 3
+  dni-do-likwidacji: 7
+
+uspienie:
+  dni: 30
+  likwidacja-dni: 60
+
+likwidacja:
+  dostep-bylego-mistrza-dni: 7
+
+sklepy:
+  limit:
+    cech: 6
+    kompania: 10
+    manufaktura: 8
+    dom_handlowy: 20
+
+magazyn:
+  limit-skrzyn:
+    cech: 6
+    kompania: 8
+    manufaktura: 8
+    dom_handlowy: 16
+  dziennik-wpisow: 300
+
+ksiega:
+  wpisow: 400
+
+dom-handlowy:
+  # awans cechu albo kompanii (/firma awans) przy przychodzie z 30 dni co najmniej 5 000 zł
+  obrot-30-dni: 500000
+
+manufaktura:
+  # epoka kraju siedziby wymagana dla manufaktury (Renesans)
+  epoka: 2
+  # ---- ETAP 3 (jar etapu 3): warsztaty i robotnicy NPC z Ludności
+  max-warsztatow: 4
+  robotnikow-na-warsztat: 2
+  # pensja dzienna robotnika (md) → konto obywateli kraju siedziby (ludnosc:obywatele_<kraj>); brak pieniędzy = robotnik wraca do kraju
+  pensja-robotnika: 300
+  # limit robotników firmy według przychodu z 30 dni (md)
+  limit-robotnikow:
+    obrot-30-dni: [0, 100000, 500000]
+    liczba: [2, 4, 8]
+  # czas pracy, gdy chunk warsztatu nie jest wczytany, nadrabiany po wczytaniu (najwyżej tyle minut, partii na takt 5 s)
+  nadrabianie-minut: 60
+  partii-na-takt: 16
+  zasieg-skrzyn: 6
+  # decyzja użytkownika 2026-10-31: cech może mieć 1 warsztat (robotnicy NPC jak w manufakturze) z przepisami średniowiecznymi
+  # już w epoce 1; pełna manufaktura (wszystkie przepisy, więcej warsztatów) nadal od Renesansu
+  cech:
+    wlaczone: true
+    max-warsztatow: 1
+    epoka: 1
+    przepisy: [chleb, deski_debowe, deski_swierkowe, deski_brzozowe, welna, wegiel_drzewny, cegly, wedzona_wolowina, wedzona_wieprzowina]
+  # przepisy w proporcjach vanilla; własne przepisy zastępują domyślne o tym samym id (domyślne: patrz README)
+  # przepisy:
+  #   chleb: {nazwa: Chleb, stanowisko: CRAFTING_TABLE, wejscie: {WHEAT: 3}, wyjscie: BREAD, ilosc: 1, sekundy: 30, paliwo: false, zawod: FARMER}
+
+# ============================================================ ETAP 2 (jar etapu 2; jar etapu 1 ignoruje te sekcje)
+kontrakty:
+  min-godzin: 1
+  max-godzin: 720
+  max-ilosc: 10000
+  # wadium (wpłaca wykonawca) najwyżej tyle procent zapłaty; przepada na rzecz zleceniodawcy, gdy termin minie
+  max-wadium-procent: 50
+  waznosc-oferty-godziny: 72
+  # usługa zgłoszona jako wykonana: bez potwierdzenia ani sporu zapłata zwalnia się po tym czasie
+  potwierdzenie-uslugi-godziny: 72
+  max-otwartych-na-firme: 10
+  zasieg-skrzyni: 6
+
+hurt:
+  # zlecenia hurtowe władców NPC dla firm: płaci skarbiec kraju NPC przez depozyt (w limitach jak zlecenia Wladcy)
+  wlaczone: true
+  na-kraj: 2
+  waznosc-ofert-godziny: 48
+  termin-godziny: 72
+  promien-stolicy-chunki: 2
+  reputacja: 6
+  # bez mostu Wladcy: własne limity Firm (procent skarbca NPC na zlecenie i dziennie)
+  procent-skarbca-na-zlecenie: 3
+  procent-skarbca-dziennie: 10
+  min-nagroda: 500
+  # decyzja użytkownika 2026-10-31: stawki za zlecenia hurtowe co najmniej ×5 (cena za sztukę = towary.*.cena × mnożnik);
+  # płaci nadal tylko skarbiec kraju NPC w limitach procentowych powyżej
+  mnoznik-stawek: 5
+  # dwory uzupełniają tablicę (do na-kraj otwartych zleceń) najwyżej co tyle minut, nie tylko raz na dobę
+  uzupelnianie-minut: 60
+  towary:
+    wheat: {min: 128, max: 512, cena: 4}
+    bread: {min: 64, max: 256, cena: 12}
+    leather: {min: 32, max: 128, cena: 25}
+    white_wool: {min: 64, max: 256, cena: 10}
+    iron_ingot: {min: 32, max: 128, cena: 45}
+    oak_planks: {min: 256, max: 1024, cena: 2}
+    cobblestone: {min: 256, max: 1024, cena: 1}
+    coal: {min: 64, max: 256, cena: 8}
+    arrow: {min: 128, max: 512, cena: 3}
+    cooked_beef: {min: 64, max: 192, cena: 14}
+
+kredyty:
+  # decyzja 2026-10-29: kredyty TAK, ale ograniczone
+  wlaczone: true
+  # limit = min(mnożnik × kapitał (saldo firmy), procent obrotu z 30 dni, limit kwotowy)
+  mnoznik-kapitalu: 2
+  procent-obrotu-30-dni: 50
+  limit-kwotowy: 500000
+  # odsetki najwyżej 10 % za CAŁY okres 7–30 dni; jeden aktywny kredyt na firmę
+  max-odsetki-procent: 10
+  min-dni: 7
+  max-dni: 30
+  # spłata automatyczna: taki procent każdego przychodu netto, reszta w terminie z salda
+  splata-z-przychodu-procent: 50
+  waznosc-oferty-godziny: 72
+  # kredyt niespłacony po terminie → likwidacja przymusowa (pożyczkodawca pierwszy po depozytach kontraktów)
+  dni-zwloki-do-likwidacji: 7

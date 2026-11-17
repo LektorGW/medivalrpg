@@ -1,0 +1,215 @@
+{
+ "copyright": "Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl",
+ "cases": [
+  {
+   "state": "minecraft:azalea_leaves[distance=1,persistent=false,waterlogged=false]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:azalea_leaves[distance=1,persistent=true,waterlogged=false]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:flowering_azalea_leaves[distance=3,persistent=false,waterlogged=true]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:jungle_leaves[distance=4,persistent=false,waterlogged=false]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:jungle_leaves[distance=4,persistent=true,waterlogged=false]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:mangrove_leaves[distance=1,persistent=false,waterlogged=true]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:cherry_leaves[distance=2,persistent=false,waterlogged=false]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:pale_oak_leaves[distance=2,persistent=false,waterlogged=false]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:oak_leaves[distance=6,persistent=true,waterlogged=false]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:jungle_log[axis=y]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:spruce_log[axis=x]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:stripped_jungle_log[axis=y]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:jungle_wood[axis=y]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:bubble_column[drag=true]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:bubble_column[drag=false]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:magma_block",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:azalea",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:flowering_azalea",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:mangrove_roots[waterlogged=true]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:moss_carpet",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:cave_vines[age=3,berries=false]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:deepslate_iron_ore",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:coal_ore",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:water[level=0]",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:air",
+   "tileEntity": false,
+   "expected": true
+  },
+  {
+   "state": "minecraft:oak_planks",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:cobblestone",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:mossy_cobblestone",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:stone_bricks",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:glass",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:white_wool",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:dirt_path",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:farmland[moisture=7]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:torch",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:lantern[hanging=false,waterlogged=false]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:chest[facing=north,type=single,waterlogged=false]",
+   "tileEntity": true,
+   "expected": false
+  },
+  {
+   "state": "minecraft:stone",
+   "tileEntity": true,
+   "expected": false
+  },
+  {
+   "state": "minecraft:pumpkin",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:hay_block[axis=y]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:obsidian",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "minecraft:oak_fence[east=false,north=false,south=false,waterlogged=false,west=false]",
+   "tileEntity": false,
+   "expected": false
+  },
+  {
+   "state": "not-a-state",
+   "tileEntity": false,
+   "expected": false
+  }
+ ]
+}

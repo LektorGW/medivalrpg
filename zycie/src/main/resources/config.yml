@@ -1,0 +1,589 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+# Zycie — codzienne życie i nastrój obywateli NPC (wieśniaków) państw MEDIVALRPG.
+# Czas w tickach Minecrafta: 0 = 6:00, 6000 = południe, 12000 = 18:00, 18000 = północ; 24000 = jeden dzień MC (~20 min).
+# Teksty: MiniMessage. Zmienne w tekstach wieśniaków: <imie> <zawod> <kraj> <wrog> <wladca> <gracz> <budynek>.
+
+# Światy, w których działa zachowanie wieśniaków (puste = wszystkie).
+swiaty: []
+
+# Pożary osad: zdarzenia ognia + ograniczony skan kontrolny, wyłącznie w załadowanych chunkach.
+# Mieszkańcy uciekają na własną, bezpieczną ziemię. Dorośli pobierają wodę ze studni/fontanny.
+# Jedno wiadro gasi jeden płomień; nie zmienia paliwa, lawy, ognisk ani cudzego kraju.
+pozary:
+  # Realna liczba sąsiednich, widocznych płomieni gaszonych jednym nabranym wiadrem (1–8).
+  plomieni-na-wiadro: 5
+  wlaczone: true
+  max-incydentow: 8
+  max-plomieni: 1024
+  skan-blokow-na-ture: 512
+  mieszkancow-na-ture: 12
+  ruchow-na-ture: 8
+  gaszacych-na-pozar: 3
+  promien-reakcji: 48
+  alarm-co-sekund: 30
+  cisza-przed-odbudowa-sekund: 20
+  ponowienie-odbudowy-sekund: 30
+  tekst-alarmu: "Pożar! Ratować mieszkańców!"
+
+# Ogłoszenia na czacie (festyn, protest).
+ogloszenia: true
+
+wydajnosc:
+  # Ilu obywateli (z listy Ludnosc, tylko załadowanych) sprawdzać na tick — rotacja po wszystkich.
+  obywatele-na-tick: 10
+  # Najwyżej tyle wywołań pathfindera (ruchów) na tick.
+  ruchy-na-tick: 4
+  # Co ile sekund odświeżać listę obywateli i budynków.
+  odswiez-liste-sekund: 30
+  # Wieśniak jest sterowany tylko, gdy w tym promieniu jest gracz (0 = zawsze, gdy załadowany).
+  zasieg-graczy: 64
+
+plan-dnia:
+  praca-od: 2000        # 8:00
+  poludnie-od: 6000     # 12:00 — część idzie na targ
+  poludnie-do: 8000     # 14:00
+  spotkanie-od: 9000    # 15:00 — vanilla: zebranie przy dzwonie (nie sterujemy)
+  wieczor-od: 10500     # 16:30 — karczma albo plac przy dzwonie
+  noc-od: 12500         # 18:30 — dom i łóżko (vanilla)
+  msza-do: 3000         # niedziela: msza od 6:00 do 9:00
+  dni-tygodnia: 7
+  # Który dzień tygodnia (numer dnia MC modulo dni-tygodnia) jest niedzielą.
+  niedziela: 6
+  udzial-targ: 0.3
+  udzial-karczma: 0.5
+  # Wieczorem pozostali (nie w karczmie) wracają do domu — łóżka przydzielonego przez Ludnosc (false = plac przy dzwonie).
+  wieczor-do-domu: true
+  udzial-msza: 0.8
+  udzial-protest: 0.6
+  udzial-swieto: 0.7
+
+ruch:
+  predkosc: 0.6
+  predkosc-ucieczki: 0.9
+  promien-dotarcia: 6
+  # Po dotarciu wieśniak chodzi swobodnie (vanilla) w tym promieniu.
+  smycz: 20
+  # Najczęściej co tyle ticków nowy ruch jednego wieśniaka (krótkie okna — vanilla Brain może nadpisać ścieżkę).
+  co-tickow: 60
+  # Dalsze cele osiągane krokami tej długości.
+  krok: 32
+  limit-porazek: 3
+  przerwa-po-porazkach: 1200
+  # Losowe (stałe dla wieśniaka) przesunięcie celu, żeby nie stali w jednym bloku.
+  rozrzut: 3
+  # Cele dalsze niż tyle bloków od wieśniaka są pomijane (np. odległe osady kraju).
+  max-dystans: 128
+
+# Typy (id szablonów Ludnosc) lub funkcje budynków dla miejsc planu dnia.
+miejsca:
+  targ: [targ, rynek]
+  karczma: [karczma, browar]
+  kosciol: [katedra, kosciol]
+  rynek: [rynek, targ, ratusz, studnia]
+  brama: [brama, mur, wieza]
+
+dymki:
+  czas-tickow: 70
+  zasieg: 12
+  # Szansa na dymek przy każdej wizycie rotacji (tylko gdy gracz jest w zasięgu).
+  szansa: 0.12
+  przerwa-sekund: 25
+  max-naraz: 30
+  # Tło ARGB (#AARRGGBB).
+  tlo: '#50000000'
+  wysokosc: 0.3
+  # Delikatne unoszenie się dymka (bloki).
+  unoszenie: 0.25
+  szerokosc-linii: 150
+
+rozmowy:
+  co-tickow: 100
+  szansa: 0.5
+  odleglosc: 3.5
+  przerwa-sekund: 90
+  odstep-tickow: 55
+
+reakcje:
+  promien: 5
+  co-tickow: 10
+  przerwa-gracz-sekund: 90
+  przerwa-wiesniak-sekund: 15
+  # Wróg: wieśniacy w tym promieniu też uciekają do domów.
+  alarm-promien: 12
+  alarm-max: 6
+  # Wołanie żołnierzy Armii (cel = wróg) — tylko gdy Armia jest na serwerze.
+  wezwij-straz: true
+  straz-promien: 24
+  straz-max: 4
+  # Ucieczka trwa (sekundy) — w tym czasie plan dnia nie steruje wieśniakiem.
+  ucieczka-sekund: 40
+
+nastroj:
+  przelicz-sekund: 180
+  # Czynnik "zarobki" z życia obywateli (Ludnosc): niewypłacone pensje obniżają nastrój, oszczędności go podnoszą.
+  zarobki:
+    kara-max: 12
+    premia-zamoznosc: 3
+    zamoznosc-od: 30
+  bazowy: 50
+  # Największa zmiana nastroju przy jednym przeliczeniu (nastrój zmienia się stopniowo).
+  max-zmiana: 6
+  jedzenie:
+    syci: 8
+    malo-zapasow: 6
+    glod-bazowo: 10
+    glod-za-dzien: 5
+    glod-max: 30
+  mieszkania:
+    przestronnie: 6
+    przestronnie-od: 1.15
+    bezdomnosc-bazowo: 5
+    bezdomnosc-skala: 30
+    bezdomnosc-za-dzien: 2
+    bezdomnosc-max: 25
+  podatki:
+    # Najwyższy podatek gracza w Kraje (/kraj podatek, config Kraje tax.max).
+    gracz-max: 100
+    # Do tej części maksimum gracze-obywatele nie narzekają.
+    gracz-bez-narzekan: 0.25
+    gracz-kara: 15
+    bez-podatku: 3
+    # Typowy dzienny podatek NPC na obywatela (md) — powyżej rośnie niezadowolenie.
+    npc-normalny: 5.0
+    npc-kara: 15
+    niskie: 4
+    max: 25
+    zmartwienie-od: -6
+  wojna:
+    za-wojne: 6
+    max: 18
+    za-oblezenie: 12
+    oblezenia-max: 30
+    pokoj: 4
+    wasal: 5
+  # Budynki komfortu: punkty od epoki „od-epoki”; od „oczekiwane-od” ich brak to zmartwienie.
+  komfort:
+    max: 22
+    oczekiwania-za-epoke: 3
+    budynki:
+      - {budynki: [karczma, browar], nazwa: karczma, punkty: 4, od-epoki: 1, oczekiwane-od: 1}
+      - {budynki: [kosciol, katedra], nazwa: kościół, punkty: 4, od-epoki: 1, oczekiwane-od: 1}
+      - {budynki: [rynek, targ], nazwa: rynek, punkty: 4, od-epoki: 1, oczekiwane-od: 2}
+      - {budynki: [laznia], nazwa: łaźnia, punkty: 4, od-epoki: 1, oczekiwane-od: 2}
+      - {budynki: [zielarnia, szpital], nazwa: szpital, punkty: 3, od-epoki: 1, oczekiwane-od: 3}
+      - {budynki: [ogrody, park], nazwa: park, punkty: 3, od-epoki: 2, oczekiwane-od: 4}
+      - {budynki: [studnia], nazwa: studnia, punkty: 2, od-epoki: 1, oczekiwane-od: 0}
+      - {budynki: [arena, stadion], nazwa: arena, punkty: 3, od-epoki: 2, oczekiwane-od: 0}
+      - {budynki: [biblioteka, akademia, szkola, uniwersytet], nazwa: szkoła, punkty: 2, od-epoki: 2, oczekiwane-od: 3}
+  mnoznik:
+    min: 0.6
+    max: 1.25
+    # Protest dodatkowo obniża wydajność (mnożnik × ta wartość, nie mniej niż min).
+    protest: 0.85
+
+protest:
+  ponizej: 20
+  po-tickach: 24000
+  koniec-od: 25
+  odejscia-ponizej: 10
+
+swieto:
+  czas-tickow: 24000
+  # Najmniejszy odstęp między automatycznymi festynami jednego kraju.
+  przerwa-tickow: 48000
+  premia: 12
+  # Ukończenie budynku z tej listy (wzrost ich liczby) = festyn.
+  wielkie-budynki: [palac, katedra, zamek]
+  taniec-promien: 16
+  fajerwerki:
+    od: 11500
+    do: 14500
+    co-tickow: 40
+    szansa: 0.7
+  muzyka:
+    co-tickow: 8
+    glosnosc: 1.2
+    dzwieki: [block.note_block.harp, block.note_block.flute, block.note_block.bell, block.note_block.guitar, block.note_block.bass]
+    # Wysokości (pitch) skali pentatonicznej.
+    tony: [0.5, 0.561, 0.63, 0.749, 0.841, 1.0, 1.122, 1.26, 1.498, 1.682, 2.0]
+
+# Tymczasowe modyfikatory nastroju po wydarzeniach: punkty i czas trwania w tickach MC.
+zdarzenia:
+  zwyciestwo: {punkty: 10, czas: 72000}
+  obrona: {punkty: 6, czas: 48000}
+  porazka: {punkty: -10, czas: 72000}
+  utrata_ziemi: {punkty: -6, czas: 48000}
+  pokoj_zawarty: {punkty: 5, czas: 48000}
+  wojna_wypowiedziana: {punkty: -4, czas: 24000}
+  awans_epoki: {punkty: 8, czas: 48000}
+  nowy_budynek: {punkty: 3, czas: 24000}
+  # /zycie admin nastroj <kraj> <±n>: tyle trwa zmiana admina.
+  admin: {punkty: 0, czas: 48000}
+
+oblezenie:
+  promien: 48
+  co-tickow: 40
+  dzwon-noca: true
+  dzwon-co-tickow: 200
+  pospolite-ruszenie: true
+  ruszenie-udzial: 0.3
+  ruszenie-max: 6
+  bronie: [IRON_HOE, IRON_AXE, WOODEN_HOE, STONE_AXE]
+
+# Nazwy wieśniaków z zawodem: „Jan, piekarz” (imię z Ludnosc). false = nie zmieniaj nazw.
+zawody-nazwy: true
+# Zawody miejskie. Pierwszy pasujący (kolejność!) wygrywa. nazwa: epoka → tytuł (brak epoki = najbliższa niższa).
+# budynki = miejsce pracy (typ/funkcja Ludnosc); wymaga-budynku = zawód istnieje tylko z takim budynkiem;
+# udzial = część wieśniaków tych profesji (stała dla wieśniaka).
+zawody:
+  - {id: piekarz, profesje: [farmer], budynki: [piekarnia, mlyn], wymaga-budynku: true, udzial: 0.35, nazwa: {1: piekarz, 3: piekarz, 4: piekarz}}
+  - {id: rolnik, profesje: [farmer], budynki: [pole, mlyn, spichlerz], nazwa: {1: rolnik, 3: robotnik rolny, 4: rolnik}}
+  - {id: karczmarz, profesje: [butcher], budynki: [karczma, browar], wymaga-budynku: true, udzial: 0.5, nazwa: {1: karczmarz, 3: oberżysta, 4: restaurator}}
+  - {id: rzeznik, profesje: [butcher], budynki: [targ, rynek], nazwa: {1: rzeźnik}}
+  - {id: kaplan, profesje: [cleric], budynki: [katedra, kosciol], nazwa: {1: kapłan, 2: proboszcz, 4: ksiądz}}
+  - {id: lekarz, profesje: [cleric], budynki: [zielarnia, szpital], wymaga-budynku: true, udzial: 0.4, od-epoki: 3, nazwa: {3: lekarz}}
+  - {id: nauczyciel, profesje: [librarian], budynki: [szkola, uniwersytet, biblioteka, akademia], od-epoki: 3, nazwa: {3: nauczyciel}}
+  - {id: bibliotekarz, profesje: [librarian], budynki: [biblioteka, szkola, akademia, uniwersytet], nazwa: {1: skryba, 2: bibliotekarz}}
+  - {id: urzednik, profesje: [cartographer], budynki: [ratusz, biurowiec, wiezowiec_biurowy], od-epoki: 3, nazwa: {3: urzędnik, 4: urzędnik}}
+  - {id: kartograf, profesje: [cartographer], budynki: [ratusz, biblioteka], nazwa: {1: kartograf}}
+  - {id: kupiec, profesje: [leatherworker, shepherd], budynki: [targ, rynek, magazyn], wymaga-budynku: true, udzial: 0.5, nazwa: {1: kupiec, 3: handlarz, 4: sprzedawca}}
+  - {id: garbarz, profesje: [leatherworker], budynki: [targ, rynek], nazwa: {1: garbarz, 3: robotnik}}
+  - {id: pasterz, profesje: [shepherd], budynki: [stajnia, pole], nazwa: {1: pasterz, 4: hodowca}}
+  - {id: robotnik, profesje: [armorer, weaponsmith, toolsmith, mason], budynki: [fabryka, kamieniolom, kopalnia], wymaga-budynku: true, udzial: 0.6, od-epoki: 3, nazwa: {3: robotnik, 4: technik}}
+  - {id: kowal, profesje: [armorer, weaponsmith, toolsmith], budynki: [kuznia], nazwa: {1: kowal, 3: ślusarz, 4: mechanik}}
+  - {id: kopacz, profesje: [mason], budynki: [kopalnia, kamieniolom], nazwa: {1: kopacz, 2: górnik}}
+  - {id: rybak, profesje: [fisherman], budynki: [przystan, latarnia], nazwa: {1: rybak}}
+  - {id: luczarz, profesje: [fletcher], budynki: [tartak, kuznia], nazwa: {1: łuczarz, 3: stolarz}}
+  - {id: straznik, profesje: [none, nitwit], budynki: [brama, wieza, mur, koszary], wymaga-budynku: true, udzial: 0.4, nazwa: {1: strażnik miejski, 3: policjant, 4: policjant}}
+  - {id: mieszczanin, profesje: [none], budynki: [targ, rynek], nazwa: {1: chłop, 2: mieszczanin, 4: mieszkaniec}}
+  - {id: prozniak, profesje: [nitwit], budynki: [karczma, rynek], nazwa: {1: próżniak, 4: bezrobotny}}
+
+# Zmartwienia (ZycieApi#concerns, /zycie) — zwykły tekst.
+zmartwienia:
+  glod: 'Głód od <dni> dni'
+  malo_jedzenia: 'Kończy się jedzenie w spichlerzu'
+  brak_lozek: 'Brakuje łóżek (<brak>)'
+  podatki: 'Za wysokie podatki'
+  wojna: 'Wojna z <wrog>'
+  oblezenie: 'Oblężenie — <wrog> u bram'
+  wasal: 'Płacimy trybut: <kraj>'
+  brak_wygod: 'Brakuje: <lista>'
+  zdarzenie_porazka: 'Przegrana wojna'
+  zdarzenie_utrata_ziemi: 'Utracone ziemie'
+  zdarzenie_wojna_wypowiedziana: 'Wybuchła nowa wojna'
+  zdarzenie_admin: 'Niepokój w kraju'
+  protest: 'Protest na rynku'
+  odejscia: 'Ludzie myślą o wyjeździe'
+  brak_wyplat: 'Skarbiec nie płaci pełnych pensji (<procent>% pracowników)'
+
+# Nazwy czynników nastroju w /zycie.
+czynniki:
+  jedzenie: Jedzenie
+  mieszkania: Mieszkania
+  podatki: Podatki
+  wojna: Wojna
+  pokoj: Pokój
+  oblezenie: Oblężenie
+  zaleznosc: Zależność (wasal)
+  komfort: Wygody
+  epoka: Oczekiwania epoki
+  zwyciestwo: Zwycięstwo
+  obrona: Udana obrona
+  porazka: Porażka
+  utrata_ziemi: Utracone ziemie
+  pokoj_zawarty: Zawarty pokój
+  wojna_wypowiedziana: Nowa wojna
+  awans_epoki: Nowa epoka
+  nowy_budynek: Nowy budynek
+  swieto: Festyn
+  admin: Wydarzenia
+  zarobki: Zarobki i oszczędności
+
+# Pule tekstów (dymki nad głowami). Warunki (wszystkie opcjonalne): pory, epoki, nastroj-od, nastroj-do, wojna,
+# oblezenie, glod, podatki, bezdomnosc, swieto, protest, zdarzenia, zawody, relacje, waga. Bardziej szczegółowe
+# reguły mają pierwszeństwo (waga × (1 + liczba warunków)).
+teksty:
+  dymki:
+    # --- zawsze
+    - teksty: ['Ech, roboty nie ubywa…', 'Ładna dziś pogoda.', 'Co tam słychać?', 'Hm…']
+    # --- pory dnia
+    - pory: [rano]
+      teksty: ['Dzień dobry!', 'Kogut już dawno piał.', 'Ziewam… jeszcze chwila.', 'Do roboty, do roboty…']
+    - pory: [praca]
+      teksty: ['Praca sama się nie zrobi.', 'Jeszcze trochę i przerwa.', 'Kto rano wstaje…']
+    - pory: [poludnie]
+      teksty: ['Czas na obiad!', 'Co dziś na targu?', 'Ale burczy w brzuchu.']
+    - pory: [wieczor]
+      teksty: ['Kufelek by się przydał.', 'Wreszcie fajrant!', 'Idę posiedzieć z sąsiadami.']
+    - pory: [spotkanie]
+      teksty: ['Słyszałeś najnowsze plotki?', 'Spotkajmy się przy dzwonie.']
+    - pory: [noc]
+      teksty: ['Czas spać…', 'Dobranoc.', 'Ciemno, trzeba do domu.']
+    - pory: [msza]
+      teksty: ['Na mszę, na mszę!', 'Niedziela — dzień święty.', 'Amen.', 'Chwała Panu.']
+    - pory: [msza]
+      epoki: [4]
+      teksty: ['Niedziela, w końcu wolne.', 'Idę do kościoła, a potem na kawę.']
+    # --- epoki (słownictwo i tematy)
+    - epoki: [1]
+      teksty: ['Niech Bóg ma króla w opiece!', 'Żyto w tym roku obrodziło.', 'Ponoć w lesie grasują zbóje.', 'Pan zamku znów zwołał wiec.', 'Kowal mówi, że idą ciężkie czasy.']
+    - epoki: [2]
+      teksty: ['Czytałeś nowe druki z Krakowa?', 'Kupcy przywieźli przyprawy zza morza!', 'Mówią, że Ziemia kręci się wokół Słońca…', 'Mój syn pójdzie na uniwersytet.']
+    - epoki: [3]
+      teksty: ['W fabryce znów 12 godzin…', 'Kolej dojechała aż do nas!', 'Ten dym z kominów nie daje oddychać.', 'Gazeta pisze o strajkach.', 'Lampy gazowe to cud techniki.']
+    - epoki: [4]
+      teksty: ['Widziałeś nowy wieżowiec?', 'Znowu korki na obwodnicy.', 'Zasięg tu słaby…', 'Zamówię coś na dowóz.', 'Ceny w sklepie znowu w górę!']
+    # --- nastrój
+    - nastroj-od: 75
+      teksty: ['Dobrze się tu żyje!', 'Niech żyje <wladca>!', 'Jestem dumny z <kraj>!']
+    - nastroj-od: 75
+      epoki: [1, 2]
+      teksty: ['Szczęść Boże naszemu panu!', 'Złote czasy dla <kraj>!']
+    - nastroj-do: 35
+      teksty: ['Coraz gorzej…', 'Nie wiem, jak przeżyjemy zimę.', 'Władza o nas nie dba.']
+    - nastroj-do: 20
+      teksty: ['Dość tego!', 'Trzeba coś z tym zrobić!', 'Długo tak nie wytrzymamy.']
+    # --- sprawy kraju
+    - glod: true
+      teksty: ['Chleba nie ma…', 'Dzieci płaczą z głodu.', 'Spichlerz pusty!']
+    - podatki: true
+      teksty: ['Znowu podatki w górę!', 'Poborca zabrał ostatni grosz.', 'Za co mam płacić?!']
+    - podatki: true
+      epoki: [3, 4]
+      teksty: ['Te podatki to rozbój w biały dzień!', 'Pół pensji idzie na podatki.']
+    - bezdomnosc: true
+      teksty: ['Śpię w stodole, bo nie ma łóżek.', 'Trzeba budować domy!']
+    - wojna: true
+      teksty: ['Znów wojna z <wrog>…', 'Oby nasi wygrali z <wrog>.', 'Synowie poszli na wojnę.']
+    - wojna: true
+      epoki: [1]
+      teksty: ['Niech Bóg chroni naszych rycerzy!', 'Rycerze <wrog> palą wsie…']
+    - wojna: true
+      epoki: [4]
+      teksty: ['W wiadomościach tylko o wojnie z <wrog>.', 'Ogłosili mobilizację…']
+    - oblezenie: true
+      teksty: ['Wróg pod murami!', 'Chowajcie dzieci!', 'Boże, ratuj!']
+    - swieto: true
+      teksty: ['Wiwat!', 'Hej, zabawa!', 'Niech żyje <kraj>!', 'Grać, muzykanci!']
+    - protest: true
+      teksty: ['Chleba!', 'Precz z podatkami!', 'Dość wyzysku!']
+    # --- wydarzenia
+    - zdarzenia: [nowy_budynek]
+      teksty: ['Widziałeś? Nowy budynek: <budynek>!', 'Miasto rośnie w oczach.']
+    - zdarzenia: [awans_epoki]
+      teksty: ['Nastały nowe czasy!', 'Świat się zmienia na naszych oczach.']
+    - zdarzenia: [zwyciestwo, obrona]
+      teksty: ['Zwyciężyliśmy!', 'Pokazaliśmy im!', 'Chwała naszym wojskom!']
+    - zdarzenia: [porazka, utrata_ziemi]
+      teksty: ['Straciliśmy ziemię…', 'Wstyd i hańba.', 'Co teraz z nami będzie?']
+    - zdarzenia: [pokoj_zawarty]
+      teksty: ['Nareszcie pokój!', 'Koniec wojny, dzięki Bogu.']
+    # --- zawody
+    - zawody: [piekarz]
+      teksty: ['Świeży chleb, prosto z pieca!', 'Mąka się kończy…']
+    - zawody: [kowal, robotnik]
+      teksty: ['Młot w dłoń!', 'Żelazo trzeba kuć, póki gorące.']
+    - zawody: [rolnik]
+      teksty: ['Byle nie padało na żniwa.', 'Ziemia dziś twarda.']
+    - zawody: [kaplan]
+      teksty: ['Niech będzie pochwalony.', 'Módlcie się, dzieci.']
+    - zawody: [karczmarz]
+      teksty: ['Piwo świeże, zapraszam!', 'Kto płaci za ten kufel?']
+    - zawody: [straznik]
+      teksty: ['Spokój ma być!', 'Mam cię na oku.']
+    - zawody: [kupiec]
+      teksty: ['Tanio sprzedam!', 'Najlepszy towar w okolicy!']
+    - zawody: [lekarz]
+      teksty: ['Proszę oddychać…', 'Myjcie ręce, ludzie!']
+    - zawody: [nauczyciel]
+      teksty: ['Dzieci, do lekcji!', 'Wiedza to potęga.']
+
+  # Reakcje na gracza (< 5 bl.). relacje: wladca, rodak, zwierzchnik, sojusznik, obcy, wrog.
+  reakcje:
+    - relacje: [wladca]
+      teksty: ['Witaj, panie!', 'Kłaniam się nisko, panie.', 'Niech żyje <wladca>!']
+    - relacje: [wladca]
+      epoki: [3, 4]
+      teksty: ['Dzień dobry, panie prezydencie!', 'Szacunek, szefie!']
+    - relacje: [rodak]
+      teksty: ['Dzień dobry, sąsiedzie!', 'Witaj, <gracz>!', 'Szczęść Boże!']
+    - relacje: [rodak]
+      epoki: [4]
+      teksty: ['Cześć, <gracz>!', 'Siema, sąsiedzie!']
+    - relacje: [zwierzchnik]
+      teksty: ['Witaj, wielmożny panie…', 'Trybut zapłacony, panie.']
+    - relacje: [sojusznik]
+      teksty: ['Witaj, przyjacielu!', 'Sojusznik zawsze mile widziany.']
+    - relacje: [obcy]
+      teksty: ['Czego tu szukasz?', 'Obcy… miej się na baczności.', 'Nie znam cię.']
+    - relacje: [obcy]
+      epoki: [4]
+      teksty: ['Pan tu nie mieszka, prawda?', 'Turysta?']
+  # Wróg w wojnie: wieśniak ucieka do domu.
+  alarm:
+    - teksty: ['Straż! Wróg!', 'Ratunku! Wróg w mieście!', 'Uciekajcie!']
+    - epoki: [3, 4]
+      teksty: ['Policja! Wróg!', 'Dzwońcie po wojsko!']
+  # Protest na rynku (nastrój < 20 przez > 1 dzień MC).
+  protest:
+    - teksty: ['Chleba!', 'Precz z podatkami!', 'Dość!', 'Chcemy pracy i chleba!']
+    - glod: true
+      teksty: ['Głodujemy!', 'Dajcie chleba!']
+    - podatki: true
+      teksty: ['Precz z poborcami!', 'Nie zapłacimy!']
+    - epoki: [3, 4]
+      teksty: ['Strajk!', 'Osiem godzin pracy!', 'Godne płace!']
+  # Festyn.
+  swieto:
+    - teksty: ['Wiwat!', 'Hej, hej, zabawa!', 'Niech żyje <kraj>!', 'Grajcie głośniej!', 'Tańczymy!']
+    - epoki: [1, 2]
+      teksty: ['Wiwat <wladca>!', 'Miodu i wina!']
+    - epoki: [4]
+      teksty: ['Ale impreza!', 'Ale pokaz fajerwerków!']
+  # Oblężenie: wieśniacy chowają się.
+  oblezenie:
+    - teksty: ['Do domów, szybko!', 'Zamykać drzwi!', 'Wróg u bram!']
+  # Pospolite ruszenie przy oblężeniu stolicy.
+  ruszenie:
+    - teksty: ['Bronić miasta!', 'Za <kraj>!', 'Nie oddamy ani piędzi!']
+
+# Rozmowy dwóch wieśniaków (kwestie na przemian: A, B, A…).
+rozmowy:
+  - kwestie: ['Słyszałeś najnowsze wieści?', 'Nie, a co?', 'Ponoć w karczmie była bijatyka!']
+  - kwestie: ['Jak plony?', 'Bywało lepiej.']
+  - kwestie: ['Ładny dzień.', 'Oby tak zostało.']
+  - pory: [rano]
+    kwestie: ['Dzień dobry, sąsiedzie!', 'Dzień dobry! Do roboty?', 'A jakże.']
+  - pory: [wieczor]
+    kwestie: ['Idziesz do karczmy?', 'Ano, kufelek dobrze zrobi.']
+  - epoki: [1]
+    kwestie: ['Pan nasz <wladca> zwołuje rycerstwo.', 'Znowu wojna?', 'Oby nie…']
+  - epoki: [2]
+    kwestie: ['Widziałeś te nowe kamienice?', 'Z attykami! Jak w Krakowie.', 'Bogato się robi.']
+  - epoki: [3]
+    kwestie: ['W fabryce znów 12 godzin…', 'A płacą grosze.', 'Mówią o strajku.']
+  - epoki: [3]
+    kwestie: ['Jechałeś już koleją?', 'Raz! Szybciej niż koń!']
+  - epoki: [4]
+    kwestie: ['Widziałeś nowy wieżowiec?', 'Ten szklany? Pięćdziesiąt pięter!', 'Ciekawe, ile kosztuje mieszkanie.']
+  - epoki: [4]
+    kwestie: ['Masz zasięg?', 'Jedna kreska.', 'Typowe.']
+  - wojna: true
+    kwestie: ['Wojna z <wrog> nie ustaje.', 'Mój brat poszedł do wojska.', 'Niech wróci cały.']
+  - podatki: true
+    kwestie: ['Znowu podatki w górę!', 'Skąd ja mam na to wziąć?', 'Coraz gorzej się żyje.']
+  - glod: true
+    kwestie: ['Masz trochę chleba?', 'Sam nie mam…']
+  - bezdomnosc: true
+    kwestie: ['Gdzie dziś śpisz?', 'W stodole, jak zawsze.', 'Trzeba budować domy!']
+  - nastroj-od: 75
+    kwestie: ['Dobrze nam się wiedzie!', 'Oby tak dalej!']
+  - nastroj-do: 30
+    kwestie: ['Długo tak nie pociągniemy.', 'Trzeba iść na rynek i powiedzieć im to w twarz!']
+  - swieto: true
+    kwestie: ['Zatańczysz?', 'Z przyjemnością!', 'Wiwat!']
+  - zdarzenia: [awans_epoki]
+    kwestie: ['Podobno nastały nowe czasy.', 'Wszystko się zmienia…', 'Byle na lepsze.']
+  - zdarzenia: [zwyciestwo]
+    kwestie: ['Słyszałeś? Wygraliśmy!', 'Chwała naszym!']
+
+messages:
+  prefix: '<#8FBC8F>[Życie]</#8FBC8F> '
+  error-internal: '<prefix><red>Wystąpił błąd — szczegóły w konsoli.</red>'
+  error-player-only: '<prefix><red>Tylko dla graczy.</red>'
+  error-no-country: '<prefix><red>Nie należysz do żadnego kraju.</red> <gray>Użyj <white>/zycie kraj <kraj></white>.</gray>'
+  error-unknown-country: '<prefix><red>Nie ma kraju <white><name></white>.</red>'
+  error-number: '<prefix><red>Podaj liczbę, np. <white>+10</white> albo <white>-15</white>.</red>'
+  # Widok nastroju: <country> <color> <mood> <bar> <label> <multiplier>
+  view-header: '<dark_gray>───</dark_gray> <color><bold><country></bold></color> <dark_gray>— nastrój obywateli ───</dark_gray>'
+  view-mood: '<gray>Nastrój:</gray> <bar> <white><mood>/100</white> <label>'
+  view-multiplier: '<gray>Wydajność (podatki, wzrost):</gray> <white>×<multiplier></white>'
+  view-population: '<gray>Ludność:</gray> <white><population></white> <gray>• łóżka:</gray> <white><housing></white>'
+  view-festival: '<gold>★ Trwa festyn!</gold> <gray>Obywatele świętują.</gray>'
+  view-protest: '<red>⚑ Protest na rynku!</red> <gray>Wydajność spada.</gray>'
+  view-exodus: '<dark_red>Obywatele zaczynają odchodzić!</dark_red>'
+  view-factors: '<gray>Czynniki:</gray>'
+  view-factor-plus: ' <green>+<value></green> <white><name></white>'
+  view-factor-minus: ' <red><value></red> <white><name></white>'
+  view-no-factors: ' <dark_gray>brak</dark_gray>'
+  view-concerns: '<gray>Zmartwienia:</gray>'
+  view-concern: ' <yellow>•</yellow> <white><text></white>'
+  view-no-concerns: ' <green>Ludzie są spokojni.</green>'
+  view-unknown: '<prefix><gray>Nastrój kraju <white><country></white> nie został jeszcze policzony.</gray>'
+  view-hint: '<dark_gray>Pomoc: <click:run_command:/zycie pomoc><white>/zycie pomoc</white></click></dark_gray>'
+  label-0: '<dark_red>wzburzeni</dark_red>'
+  label-20: '<red>niezadowoleni</red>'
+  label-40: '<yellow>spokojni</yellow>'
+  label-60: '<green>zadowoleni</green>'
+  label-80: '<gold>szczęśliwi</gold>'
+  bar-full: '<color>█</color>'
+  bar-empty: '<dark_gray>█</dark_gray>'
+  # Admin
+  admin-festival: '<prefix><gold>Festyn w <white><country></white> rozpoczęty!</gold>'
+  admin-mood: '<prefix><green>Nastrój <white><country></white>: zmiana <white><delta></white> (teraz <white><mood></white>/100).</green>'
+  admin-usage-nastroj: '<prefix><gray>Użycie: <white>/zycie admin nastroj <kraj> <±liczba></white></gray>'
+  admin-usage-swieto: '<prefix><gray>Użycie: <white>/zycie admin swieto <kraj></white></gray>'
+  admin-reloaded: '<prefix><green>Przeładowano konfigurację.</green>'
+  admin-reload-problems: '<prefix><yellow>Problemy w konfiguracji (<count>):</yellow>'
+  admin-problem: ' <yellow>•</yellow> <gray><text></gray>'
+  admin-info: |-
+    <prefix><gray>Obywatele w rotacji: <white><queue></white> • stan: <white><tracked></white> • dymki: <white><bubbles></white>
+    <gray>Ruchy (ostatnia minuta): <white><moves></white> • nieudane: <white><failed></white> • rozmowy: <white><talks></white>
+    <gray>Postep: <white><postep></white> • Armia: <white><armia></white> • Skarbiec: <white><skarbiec></white>
+  # Ogłoszenia
+  broadcast-festival: '<prefix><gold>★ W <color><country></color> rozpoczyna się festyn!</gold> <gray>(<reason>)</gray>'
+  broadcast-protest: '<prefix><red>⚑ Obywatele <color><country></color> protestują na rynku!</red>'
+  broadcast-protest-end: '<prefix><gray>Protest w <color><country></color> dobiegł końca.</gray>'
+  reason-admin: 'zarządzenie władz'
+  reason-victory: 'zwycięstwo'
+  reason-era: 'nowa epoka'
+  reason-building: 'ukończono: <building>'
+  suggest-country: '<color><country></color> <gray>— nastrój <white><mood></white>/100</gray>'
+  suggest-delta: '<gray>zmiana nastroju o <white><value></white></gray>'
+  # Pomoc
+  help-header: '<dark_gray>───</dark_gray> <#8FBC8F><bold>Życie</bold></#8FBC8F> <dark_gray>—</dark_gray> <white><category></white> <dark_gray>(<page>/<pages>) ───</dark_gray>'
+  help-line: ' <yellow><syntax></yellow> <dark_gray>—</dark_gray> <gray><short></gray>'
+  help-hover: '<yellow><syntax></yellow><newline><white><description></white><newline><newline><gray>Wymaga: <gold><rank></gold></gray><newline><dark_gray>Kliknij, aby wpisać komendę.</dark_gray>'
+  help-nav: ' <prev> <dark_gray>|</dark_gray> <next>'
+  help-prev: '<yellow>« poprzednia</yellow>'
+  help-prev-disabled: '<dark_gray>« poprzednia</dark_gray>'
+  help-next: '<yellow>następna »</yellow>'
+  help-next-disabled: '<dark_gray>następna »</dark_gray>'
+  help-tabs: ' <gray>Działy:</gray> <tabs>'
+  help-tab: '<gray><category></gray>'
+  help-tab-current: '<white><u><category></u></white>'
+  help-tab-separator: '<dark_gray> • </dark_gray>'
+  help-page-hover: '<gray>Strona <white><page></white>: <category></gray>'
+  help-categories:
+    informacje: 'Informacje'
+    admin: 'Administracja'
+  help-entries:
+    nastroj:
+      short: 'nastrój twojego kraju'
+      description: 'Pokazuje nastrój obywateli NPC twojego kraju, czynniki (jedzenie, mieszkania, podatki, wojna, wygody…) i ich zmartwienia.'
+      rank: 'obywatel kraju'
+    kraj:
+      short: 'nastrój innego kraju'
+      description: 'Nastrój, czynniki i zmartwienia obywateli dowolnego kraju.'
+      rank: 'każdy'
+    pomoc:
+      short: 'ta pomoc'
+      description: 'Interaktywna pomoc: najedź na komendę, by zobaczyć opis, kliknij, by ją wpisać.'
+      rank: 'każdy'
+    admin-swieto:
+      short: 'ogłoś festyn'
+      description: 'Rozpoczyna festyn na rynku stolicy kraju (fajerwerki wieczorem, muzyka, tańce, +nastrój) na jeden dzień MC.'
+      rank: 'administrator'
+    admin-nastroj:
+      short: 'zmień nastrój'
+      description: 'Dodaje tymczasowy modyfikator nastroju (np. +10 albo -15). Trwa zdarzenia.admin.czas ticków.'
+      rank: 'administrator'
+    admin-info:
+      short: 'statystyki'
+      description: 'Liczba śledzonych wieśniaków, dymków, ruchów pathfindera i stan integracji.'
+      rank: 'administrator'
+    admin-reload:
+      short: 'przeładuj config'
+      description: 'Wczytuje ponownie config.yml (teksty, plan dnia, wagi nastroju).'
+      rank: 'administrator'

@@ -1,0 +1,184 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: cegielnia
+name: '<#B5523B>Cegielnia</#B5523B>'
+description: 'Ceglarz kopie glinę w promieniu 24 bloków (do 24 dziennie) i wypala cegły oraz terakotę do skrzyni cegielni — dla budów. Potrzebuje gliny (także spod wody), paliwa (węgiel, węgiel drzewny albo kłody) i gracza w promieniu 96 bloków. Cegielnia z piecem komorowym i wiatą suszarni.'
+function: brickworks
+beds: 0
+cost: 3500
+tier: 1
+category: economy
+zone: shore
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@base'
+  'B': 'bricks'
+  'C': 'brick_stairs[facing=east,half=bottom]'
+  'D': 'brick_stairs[facing=west,half=bottom]'
+  'E': 'brick_slab[type=bottom]'
+  'F': 'furnace[facing=south]'
+  'G': 'brick_stairs[facing=west,half=top]'
+  'H': 'brick_stairs[facing=east,half=top]'
+  'I': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'J': 'coal_block'
+  'K': 'wall_torch[facing=south]'
+  'L': 'coarse_dirt'
+  'M': '@floor'
+  'N': '@frame[axis=y]'
+  'O': '@wall'
+  'P': '@frame[axis=x]'
+  'Q': '@frame[axis=z]'
+  'R': 'spruce_stairs[facing=north,half=top]'
+  'S': 'spruce_stairs[facing=south,half=top]'
+  'T': '@roof_stairs[facing=north,half=bottom]'
+  'U': '@roof_stairs[facing=south,half=bottom]'
+  'V': '@roof_block'
+  'W': '@roof_slab[type=bottom]'
+  'X': 'mud_bricks'
+  'Y': 'mud_brick_slab[type=bottom]'
+  'Z': 'crafting_table'
+  'a': 'chest[facing=east]'
+  'b': 'lantern[hanging=true]'
+  'c': '@fence'
+  'd': 'lantern[hanging=false]'
+  'e': 'clay'
+layers:
+  # y=0
+  - |
+    AAAAAALLLLLLL
+    ABBBBBLALALAL
+    ABBBBBLLMMMLL
+    ABBBBBLLMMMLL
+    ABBBBBLAMMMAL
+    ABBBBBLLMMMLL
+    ABBBBBLLMMMLL
+    AAAAAALALLLAL
+    AAAAAALLLLLLL
+    ________AAAAA
+    ________AAAAA
+  # y=1
+  - |
+    .............
+    .BBBBB.NONON.
+    BB...B..Z.E..
+    .B...B..XXX..
+    .B...B.N...N.
+    BB...B..YYY..
+    .BFBFB..a.c..
+    JJ.....N...N.
+    .............
+    ........OeeeO
+    ........OOOOO
+  # y=2
+  - |
+    .............
+    .BBBBB.NONON.
+    CB...B.......
+    .B...B..YYY..
+    .B...B.N...N.
+    CB...B.......
+    .BGBHB....d..
+    J......N...N.
+    .............
+    ..........e..
+    ............c
+  # y=3
+  - |
+    .............
+    .BBBBB.NONON.
+    .B...B.R...R.
+    .B...B.S...S.
+    .B...B.N...N.
+    .B...B.R...R.
+    .BBBBB.S...S.
+    ...K...N...N.
+    .............
+    .............
+    ............d
+  # y=4
+  - |
+    ......UUUUUUU
+    .CBBBD.NPPPN.
+    .CBBBD.Q...Q.
+    .CBBBD.Q...Q.
+    .CBBBD.Q...Q.
+    .CBBBD.Q...Q.
+    .CBBBD.Q...Q.
+    .......NPPPN.
+    ......TTTTTTT
+    .............
+    .............
+  # y=5
+  - |
+    .............
+    ..CBD.UUUUUUU
+    ..CBD..O...O.
+    ..CBD..O...O.
+    ..CBD..N...N.
+    ..CBD..O...O.
+    ..CBD..O...O.
+    ......TTTTTTT
+    .............
+    .............
+    .............
+  # y=6
+  - |
+    .............
+    ...E.........
+    ...B..UUUUUUU
+    ...E...O...O.
+    ...E...N...N.
+    ...E...O...O.
+    ...E..TTTTTTT
+    .............
+    .............
+    .............
+    .............
+  # y=7
+  - |
+    .............
+    .............
+    ...B.........
+    ......UUUUUUU
+    .......N.b.N.
+    ......TTTTTTT
+    .............
+    .............
+    .............
+    .............
+    .............
+  # y=8
+  - |
+    .............
+    .............
+    ...B.........
+    .............
+    ......VVVVVVV
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............
+  # y=9
+  - |
+    .............
+    .............
+    ...I.........
+    .............
+    ......WWWWWWW
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............

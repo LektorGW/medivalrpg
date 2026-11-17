@@ -1,0 +1,30 @@
+// Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "panel-mc",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-19",
+
+  // SPA z public/ (hash routing). /api/*, /login i /plugin zawsze idą najpierw do kodu Workera.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/login", "/plugin"]
+  },
+
+  "durable_objects": {
+    "bindings": [{ "name": "PANEL_HUB", "class_name": "PanelHub" }]
+  },
+
+  // new_sqlite_classes jest wymagane na darmowym planie.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["PanelHub"] }],
+
+  "observability": { "enabled": true }
+
+  // Sekrety (nie w tym pliku!):
+  //   PANEL_SECRET — wymagany, `npx wrangler secret put PANEL_SECRET` (ten sam w plugins/Panel/config.yml)
+  // Opcjonalne zmienne (tylko do testów, przez --var): RPC_TIMEOUT_MS, LINK_TTL_MS,
+  //   LOGIN_RL_MAX, LOGIN_RL_WINDOW_MS, RPC_RATE, RPC_BURST
+  // Lokalnie: plik .dev.vars
+}

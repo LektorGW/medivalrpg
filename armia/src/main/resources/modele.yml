@@ -1,0 +1,50 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Modele statków i machin oblężniczych Armii (BetterModel, softdepend).
+# Bez BetterModel albo przy "wlaczone: false" statki i machiny zostają w wyglądzie z bloków.
+# Model jest tylko wyglądem: pokład, kolizja, ster i zejścia statku działają tak samo w obu wariantach.
+wlaczone: true
+# Kopiuje armia_*.bbmodel do plugins/BetterModel/models (nasze stare wersje są aktualizowane,
+# pliki zmienione ręcznie zostają bez zmian).
+instaluj-modele: true
+# Jeśli po starcie BetterModel nie wczytał modeli Armii – jednorazowo przeładuj BetterModel.
+przeladuj-bettermodel: true
+
+statki:
+  # Model wysyłany graczom do tej odległości, chowany po przekroczeniu "zasieg-ukrycia".
+  zasieg-widocznosci: 96
+  zasieg-ukrycia: 112
+  # Najwięcej jednoczesnych modeli statków (globalny limit floty to 24).
+  limit-modeli: 24
+  # Fizyczna łódź (nośnik) jest niewidoczna pod modelem kadłuba.
+  ukryj-lodz: true
+  # Delikatne kołysanie na fali (pokład modelu zostaje w granicy 0,06 bloku od fizycznego pokładu).
+  kolysanie: true
+  # Żagle rozwijają się po tylu tickach ruchu, zwijają po tylu tickach postoju; kotwica opada na postoju.
+  zagle-rozwin-po-tickach: 5
+  zagle-zwin-po-tickach: 100
+  kotwica-po-tickach: 200
+
+machiny:
+  zasieg-widocznosci: 64
+  zasieg-ukrycia: 80
+  limit-modeli: 96
+  # Modele machin tylko przy graczach (zalecane). false = zawsze, np. do nagrań i testów.
+  tylko-przy-graczach: true
+  # Mała, niewidzialna kolizja rozstawionej machiny (stoi w miejscu). Znika przy ruchu, obrocie
+  # albo gdy w jej obrysie stoi gracz – można ją obejść i stanąć obok, nikt nie zostaje uwięziony.
+  kolizja: true
+  kolizja-po-tickach: 40
+  # Jednostka -> modele (wariant wybierany na stałe dla żołnierza).
+  # Dostępne: armia_trebusz, armia_katapulta, armia_taran, armia_armata.
+  modele:
+    katapulta: [armia_katapulta, armia_trebusz]
+    armata: [armia_armata]
+    artyleria: [armia_armata]
+    trebusz: [armia_trebusz]
+    taran: [armia_taran]
+
+flagi:
+  # Punkt podpięcia obrazka flagi kraju na banderze statku: model przedmiotu z paczki zasobów,
+  # np. "medivalrpg:flagi/{kraj}" ({kraj} = UUID kraju). Pusty = bandera w kolorze kraju.
+  # Pierwszeństwo ma dostawca FlagArt zarejestrowany w ServicesManager (inny plugin).
+  model-przedmiotu: ""

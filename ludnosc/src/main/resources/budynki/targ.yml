@@ -1,0 +1,104 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: targ
+name: '<#E8B04A>Targ</#E8B04A>'
+description: 'Podatki +10%, lepszy nastrój (mieszkańcy przychodzą tu w południe) i praca dla rzeźników i garbarzy. Brukowany plac ze straganami w barwach kraju.'
+function: market
+beds: 0
+cost: 5000
+tier: 2
+category: civic
+zone: center
+max-per-country: 1
+requires:
+  population: 16
+  treasury: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'cobblestone'
+  'C': 'polished_andesite'
+  'D': 'water[level=0]'
+  'E': 'stone_brick_slab[type=bottom]'
+  'F': 'hay_block[axis=y]'
+  'G': 'melon'
+  'H': 'pumpkin'
+  'I': 'barrel[facing=up]'
+  'J': 'spruce_fence'
+  'K': '{kolor}_wool'
+  'L': 'white_wool'
+  'M': 'lantern[hanging=true]'
+  'N': 'loom[facing=south]'
+  'O': 'light_gray_wool'
+  'P': 'yellow_wool'
+  'Q': 'anvil[facing=east]'
+  'R': 'grindstone[face=floor,facing=north]'
+  'S': 'water_cauldron[level=3]'
+  'T': 'composter'
+  'U': 'lantern[hanging=false]'
+layers:
+  # y=0
+  - |
+    ABABABCBABABA
+    BABABACABABAB
+    ABABABCBABABA
+    BABABACABABAB
+    ABABABCBABABA
+    BABABACABABAB
+    CCCCCCACCCCCC
+    BABABACABABAB
+    ABABABCBABABA
+    BABABACABABAB
+    ABABABCBABABA
+    BABABACABABAB
+    ABABABCBABABA
+  # y=1
+  - |
+    .............
+    .FGH..J..LNO.
+    .............
+    .JIJ.....JIJ.
+    .............
+    .....EEE.....
+    .J...EDE...J.
+    .....EEE.....
+    .............
+    .JIJ.....JIJ.
+    .............
+    .QIR..J..IST.
+    .............
+  # y=2
+  - |
+    .............
+    .J.J..J..J.J.
+    ..M.......M..
+    .J.J.....J.J.
+    .............
+    .............
+    .J.........J.
+    .............
+    .............
+    .J.J.....J.J.
+    ..M.......M..
+    .J.J..J..J.J.
+    .............
+  # y=3
+  - |
+    .............
+    .KKK..U..PPP.
+    .LLL.....LLL.
+    .KKK.....PPP.
+    .............
+    .............
+    .U.........U.
+    .............
+    .............
+    .PPP.....KKK.
+    .LLL.....LLL.
+    .PPP..U..KKK.
+    .............

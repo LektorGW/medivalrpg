@@ -1,0 +1,183 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: laboratorium
+name: '<#F8F8FF>Laboratorium</#F8F8FF>'
+description: 'Daje bardzo dużo punktów badań (Postęp); bez premii do podatków. Laboratorium z aparaturą.'
+function: lab
+beds: 0
+cost: 60000
+tier: 4
+category: civic
+zone: outer
+max-per-country: 1
+requires:
+  population: 80
+  treasury: 100000
+  era: 4
+  discovery: komputery
+foundation: fill
+foundation-block: gray_concrete
+ground-layer: 0
+palette:
+  'A': 'smooth_stone'
+  'B': 'white_concrete'
+  'C': 'light_gray_concrete'
+  'D': 'light_blue_stained_glass_pane'
+  'E': 'birch_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'birch_door[facing=north,half=upper,hinge=left,open=false]'
+  'G': 'wall_torch[facing=south]'
+  'H': 'sea_lantern'
+  'I': 'smooth_quartz_slab[type=top]'
+  'J': 'brewing_stand'
+  'K': 'barrel[facing=up,open=false]'
+  'L': 'enchanting_table'
+  'M': 'ladder[facing=south]'
+  'N': 'lightning_rod[facing=up,powered=false,waterlogged=false]'
+  'O': 'daylight_detector[inverted=false,power=0]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAA
+    _______________
+  # y=1
+  - |
+    CAAAAAAAAAAAAAC
+    A............MA
+    A.I.J.I.J.I.J.A
+    A.............A
+    A.............A
+    A.............A
+    A.I.I.I.I.I.I.A
+    AK............A
+    A.............A
+    CAAAAAAEAAAAAAC
+    ...............
+  # y=2
+  - |
+    CBDBDBDBDBDBDBC
+    B............MB
+    D.............D
+    B.............B
+    D.............D
+    B.............B
+    D.............D
+    B.............B
+    B.............B
+    CBDBDBBFBBDBDBC
+    ...............
+  # y=3
+  - |
+    CBBBBBBBBBBBBBC
+    B............MB
+    B..H...H...H..B
+    B.............B
+    B.............B
+    B.............B
+    B..H...H...H..B
+    B.............B
+    B.............B
+    CBBBBBBBBBBBBBC
+    ......G........
+  # y=4
+  - |
+    CBBBBBBBBBBBBBC
+    BAAAAAAAAAAAAMB
+    BAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAB
+    CBBBBBBBBBBBBBC
+    ...............
+  # y=5
+  - |
+    CBBBBBBBBBBBBBC
+    B.............B
+    B.I.J.I.J.I.J.B
+    B.............B
+    B.............B
+    B.............B
+    B.I.I.L.I.I.I.B
+    BK............B
+    B.............B
+    CBBBBBBBBBBBBBC
+    ...............
+  # y=6
+  - |
+    CBDBDBDBDBDBDBC
+    B.............B
+    D.............D
+    B.............B
+    D.............D
+    B.............B
+    D.............D
+    B.............B
+    B.............B
+    CBDBDBDBDBDBDBC
+    ...............
+  # y=7
+  - |
+    CBBBBBBBBBBBBBC
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    CBBBBBBBBBBBBBC
+    ...............
+  # y=8
+  - |
+    CBBBBBBBBBBBBBC
+    B.............B
+    B..H...H...H..B
+    B.............B
+    B.............B
+    B.............B
+    B..H...H...H..B
+    B.............B
+    B.............B
+    CBBBBBBBBBBBBBC
+    ...............
+  # y=9
+  - |
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    BBBBBBBBBBBBBBB
+    ...............
+  # y=10
+  - |
+    BBBBBBBBBBBBBBB
+    B.............B
+    B.............B
+    B..N.......O..B
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    B.............B
+    BBBBBBBBBBBBBBB
+    ...............

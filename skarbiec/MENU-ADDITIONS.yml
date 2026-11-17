@@ -1,0 +1,110 @@
+# ============================================================
+#  Propozycja do menu/src/main/resources/menus.yml (NIE wdrożona — do przeniesienia przez osobę od modułu Menu)
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Skarbiec 2026-10-29: statystyki Skarbu Świata, spis monet, przelewy do skarbców państw NPC, rynek kupca.
+#  Komenda /skarbswiata istnieje wyłącznie dla UUID WorldSteward (Brigadier `requires`): inni gracze, także opy,
+#  jej nie widzą. Przycisk ma uprawnienie skarbiec.admin tylko po to, żeby nie pokazywać go zwykłym graczom;
+#  dla innego admina komenda pozostanie nieznana — o dostępie decyduje UUID, nie uprawnienie.
+#  Pełne statystyki są w panelu WWW: #/skarbswiata (zakładki Bilans, Konta, Przepływy, Monety, Ruchy monet, Kupiec).
+#
+#  Skarbiec 2026-10-29 (merchant-release1): typy kupców i dostawy (/skarbiec kupcy), zmiana typu kupca,
+#  kramy kupców BetterModel (/skarbiec kram), przelew do wszystkich państw NPC (/skarbswiata wszystkimnpc).
+# ============================================================
+
+menus:
+  skarbiec:
+    items:
+      kupcy:
+        material: VILLAGER_SPAWN_EGG
+        name: "<green>Kupcy i dostawy"
+        lore:
+          - "<gray>Ogólny, kowal, spożywczy, budowlany."
+          - "<gray>Co mają teraz, czego szukają (★)"
+          - "<gray>i kiedy nowa dostawa (co 12 h)."
+          - "<dark_gray>/skarbiec kupcy"
+        requires-plugin: Skarbiec
+        action: "command:skarbiec kupcy"
+  admin:
+    items:
+      kupiec-typ:
+        material: IRON_AXE
+        name: "<gold>Typ kupca"
+        lore:
+          - "<gray>Zmień typ najbliższego kupca:"
+          - "<gray>ogolny, kowal, spozywczy, budowlany."
+          - "<gray>Kupcy bez typu są ogólni."
+          - "<dark_gray>/skarbiec npc typ <id|najblizszy> <typ>"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– dopisz typ"
+        requires-plugin: Skarbiec
+        permission: skarbiec.admin
+        action: "suggest:/skarbiec npc typ najblizszy "
+      kramy:
+        material: RED_BANNER
+        name: "<gold>Kramy kupców"
+        lore:
+          - "<gray>Model kramu (BetterModel) przy kupcu:"
+          - "<gray>postaw, przesuń, obróć, usuń."
+          - "<gray>Bez kolizji, wraca po restarcie."
+          - "<dark_gray>/skarbiec kram postaw|przesun|obroc|usun"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– stan kramów"
+        requires-plugin: Skarbiec
+        permission: skarbiec.admin
+        action: "command:skarbiec kram"
+      przelew-wszystkim-npc:
+        material: EMERALD_BLOCK
+        name: "<gold>Przelew do wszystkich państw NPC"
+        lore:
+          - "<gray>Ta sama kwota z rezerwy dla każdego"
+          - "<gray>państwa NPC: podgląd listy, sumy"
+          - "<gray>i rezerwy, jedno potwierdzenie (60 s)."
+          - "<dark_gray>/skarbswiata wszystkimnpc <kwota> <powód>"
+          - "<dark_gray>Tylko WorldSteward."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– wpisz komendę"
+        requires-plugin: Skarbiec
+        permission: skarbiec.admin
+        action: "suggest:/skarbswiata wszystkimnpc "
+      skarb-swiata:
+        material: GOLD_BLOCK
+        name: "<gold>Skarb Świata"
+        lore:
+          - "<gray>Rezerwa, budżety i pokrycie monet."
+          - "<gray>Pełne statystyki: panel WWW → Skarb Świata."
+          - "<dark_gray>Tylko WorldSteward."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– stan na czacie"
+          - "<dark_gray>/skarbswiata info"
+        requires-plugin: Skarbiec
+        permission: skarbiec.admin
+        action: "command:skarbswiata info"
+      spis-monet:
+        material: GOLD_NUGGET
+        name: "<gold>Spis monet fizycznych"
+        lore:
+          - "<gray>Liczy monety w ekwipunkach, skrzyniach,"
+          - "<gray>ender chestach i na ziemi (porcjami, w tle)."
+          - "<gray>Wynik i miejsca: panel WWW → Monety."
+          - "<dark_gray>Tylko WorldSteward."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– rozpocznij spis"
+          - "<dark_gray>/skarbswiata spis"
+        requires-plugin: Skarbiec
+        permission: skarbiec.admin
+        action: "command:skarbswiata spis"
+      przelew-npc:
+        material: EMERALD
+        name: "<gold>Przelew do skarbca państwa NPC"
+        lore:
+          - "<gray>Z rezerwy Skarbu Świata, z powodem"
+          - "<gray>i potwierdzeniem kwoty (60 s)."
+          - "<dark_gray>/skarbswiata kraj <kraj> <kwota> <powód>"
+          - "<dark_gray>/skarbswiata zwrotkraju <kraj> <kwota> <powód>"
+          - "<dark_gray>Tylko WorldSteward."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– wpisz komendę"
+        requires-plugin: Skarbiec
+        permission: skarbiec.admin
+        action: "suggest:/skarbswiata kraj "

@@ -1,0 +1,170 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: chata_zrebowa
+variant-of: chata
+name: '<#A0784A>Chata zrębowa</#A0784A>'
+description: 'Mieszkanie dla 2 obywateli (2 łóżka); bez wolnych łóżek nie przybywa osadników. Chata z bali z gankiem na słupach.'
+function: housing
+beds: 2
+cost: 1500
+tier: 0
+category: housing
+zone: inner
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@frame[axis=x]'
+  'D': '@frame[axis=z]'
+  'E': '@frame[axis=y]'
+  'F': '@fence'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': '@roof_slab[type=bottom]'
+  'J': '@wall'
+  'K': '@window'
+  'L': '@door[facing=north,half=lower,hinge=right,open=false]'
+  'M': '@door[facing=north,half=upper,hinge=right,open=false]'
+  'N': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'O': 'spruce_trapdoor[facing=west,half=bottom,open=true]'
+  'P': 'lantern[hanging=true]'
+  'Q': 'barrel[facing=up]'
+  'R': 'spruce_stairs[facing=west,half=bottom]'
+  'S': 'cobblestone'
+  'T': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'U': 'campfire[lit=false,signal_fire=false,facing=west]'
+  'V': 'light_gray_bed[facing=north,part=head]'
+  'W': 'light_gray_bed[facing=north,part=foot]'
+  'X': 'chest[facing=south]'
+  'Y': 'crafting_table'
+  'Z': 'spruce_fence'
+  'a': 'spruce_pressure_plate'
+  'b': 'spruce_stairs[facing=east,half=bottom]'
+  'c': 'white_carpet'
+layers:
+  # y=0
+  - |
+    _________
+    _BBBBBBB_
+    _BAAAAAB_
+    _BAAAAABS
+    _BAAAAABS
+    _BAAAAAB_
+    _BBBBBBB_
+    _AAAAAAA_
+    _BBBBBBB_
+    _________
+  # y=1
+  - |
+    .........
+    .CCCCCCC.
+    .DVXV.YD.
+    .DW.W.USS
+    .DbZ..QSS
+    .D...c.D.
+    .CCCLCCC.
+    ..Q...R..
+    .EFF.FFE.
+    .........
+  # y=2
+  - |
+    .........
+    .DCKCKCD.
+    OD.....D.
+    .K.....DS
+    .K.a...DS
+    OD.....D.
+    .DKCMCKD.
+    .N.N.N.N.
+    .E.....E.
+    .........
+  # y=3
+  - |
+    .........
+    .CCCCCCC.
+    .D.....D.
+    .D.....DS
+    .D.....D.
+    .D.....D.
+    .CCCCCCC.
+    ....P....
+    .E.....E.
+    .........
+  # y=4
+  - |
+    HHHHHHHHH
+    .ECCCCCE.
+    .D.....D.
+    .D.....DS
+    .D.....D.
+    .D.....D.
+    .ECCCCCE.
+    GGGGGGGGG
+    GGGGGGGGG
+    .........
+  # y=5
+  - |
+    .........
+    HHHHHHHHH
+    .J.....J.
+    .J.....JS
+    .J.....J.
+    .J.....J.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+  # y=6
+  - |
+    .........
+    .........
+    HHHHHHHHH
+    .K..P..KS
+    .K.....J.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    .........
+    .........
+    HHHHHHHHS
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=8
+  - |
+    .........
+    .........
+    .........
+    IIIIIIIIS
+    IIIIIIIII
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=9
+  - |
+    .........
+    .........
+    .........
+    ........T
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........

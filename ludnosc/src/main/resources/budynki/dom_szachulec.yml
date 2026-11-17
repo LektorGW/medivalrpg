@@ -1,0 +1,255 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: dom_szachulec
+variant-of: dom
+name: '<#E0D3B8>Dom szachulcowy</#E0D3B8>'
+description: 'Mieszkanie dla 4 obywateli (4 łóżka); bez wolnych łóżek nie przybywa osadników. Dom z muru pruskiego z wysuniętym piętrem i lukarną.'
+function: housing
+beds: 4
+cost: 4000
+tier: 0
+category: housing
+zone: inner
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '0':
+    wall: mud_bricks
+  '1':
+    frame: dark_oak_log
+    wall: white_terracotta
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': 'spruce_stairs[facing=north,half=top]'
+  'H': '@roof_stairs[facing=north,half=bottom]'
+  'I': '@roof_stairs[facing=south,half=bottom]'
+  'J': '@roof_slab[type=bottom]'
+  'K': '@window'
+  'L': '@roof_stairs[facing=east,half=bottom]'
+  'M': '@roof_stairs[facing=west,half=bottom]'
+  'N': '@roof_block'
+  'O': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'P': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'Q': 'lantern[hanging=true]'
+  'R': 'spruce_trapdoor[facing=north,half=top,open=false]'
+  'S': 'potted_red_tulip'
+  'T': 'potted_oxeye_daisy'
+  'U': 'potted_lily_of_the_valley'
+  'V': 'potted_allium'
+  'W': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'X': 'spruce_trapdoor[facing=north,half=bottom,open=true]'
+  'Y': 'spruce_trapdoor[facing=west,half=bottom,open=true]'
+  'Z': 'spruce_trapdoor[facing=east,half=bottom,open=true]'
+  'a': 'bricks'
+  'b': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'c': 'smoker[facing=south]'
+  'd': 'barrel[facing=up]'
+  'e': 'water_cauldron[level=3]'
+  'f': 'spruce_fence'
+  'g': 'white_carpet'
+  'h': 'spruce_stairs[facing=east,half=bottom]'
+  'i': 'spruce_stairs[facing=west,half=bottom]'
+  'j': 'bookshelf'
+  'k': 'chest[facing=south]'
+  'l': 'ladder[facing=north]'
+  'm': '@fence'
+  'n': 'cyan_bed[facing=north,part=head]'
+  'o': 'cyan_bed[facing=north,part=foot]'
+  'p': 'orange_bed[facing=north,part=head]'
+  'q': 'orange_bed[facing=north,part=foot]'
+  'r': 'lantern[hanging=false]'
+  's': 'lectern[facing=north]'
+  't': 'red_carpet'
+  'u': 'potted_blue_orchid'
+layers:
+  # y=0
+  - |
+    ___________
+    _BBBBBBBBB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BAAAAAAAB_
+    _BBBBBBBBB_
+    ___________
+    ___________
+  # y=1
+  - |
+    ...........
+    .DBBBBBBaD.
+    .Bjk..dcbB.
+    .B.......B.
+    .Bhf....eB.
+    .B.fi...dB.
+    .B....l..B.
+    .DBBBOBBBD.
+    ..RR...RR..
+    ...........
+  # y=2
+  - |
+    ..X.X......
+    .DCKCDCDaD.
+    .C......aC.
+    YD.......DZ
+    .K.g.....K.
+    YD.g.....DZ
+    .C....l..C.
+    .DKKCPCKKD.
+    ..ST...UV..
+    ...........
+  # y=3
+  - |
+    ...........
+    .DCDCDCDaD.
+    .C......aC.
+    .D.......D.
+    .C.Q...Q.C.
+    .D.......D.
+    .C....l..C.
+    .DCDCECDCD.
+    .G.G.Q.G.G.
+    ...........
+  # y=4
+  - |
+    ...........
+    .DEEEEEEaD.
+    .FAAAAAAAF.
+    .FAAAAAAAF.
+    .FAAAAAAAF.
+    .FAAAAAAAF.
+    .FAAAAlAAF.
+    .FAAAAAAAF.
+    .DEEEEEEED.
+    ...........
+  # y=5
+  - |
+    ...........
+    .DCDCDCDaD.
+    .Cnndk.ppC.
+    .Doo...qqD.
+    .C.......C.
+    .D.tt....D.
+    .C.....m.C.
+    .Ds.....uD.
+    .DCDCDCDCD.
+    ...........
+  # y=6
+  - |
+    ......X.X..
+    .DCKCDCKaD.
+    .C...r...C.
+    .D.......K.
+    .C.......C.
+    .K.......D.
+    .C.......C.
+    .D.......D.
+    .DKDCDCDKD.
+    .W.W...W.W.
+  # y=7
+  - |
+    ...........
+    .DCDCDCDaD.
+    .C.......C.
+    .D.......D.
+    .C...Q...C.
+    .D.......D.
+    .C.......C.
+    .D.......D.
+    .DCDCDCDCD.
+    ...........
+  # y=8
+  - |
+    IIIIIIIIIII
+    .DEEEEEEaD.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .F.......F.
+    .DEEEEEEED.
+    HHHHHHHHHHH
+  # y=9
+  - |
+    ...........
+    IIIIIIIIaII
+    .C.......C.
+    .C.......C.
+    .D.......D.
+    .D.......D.
+    .C.......C.
+    .C.......C.
+    HHHHDKDHHHH
+    ...........
+  # y=10
+  - |
+    ...........
+    ........a..
+    IIIIIIIIIII
+    .K.......K.
+    .D.......D.
+    .D.......D.
+    .K.......K.
+    HHHHC.CHHHH
+    ....DKD....
+    ...........
+  # y=11
+  - |
+    ...........
+    ........a..
+    ...........
+    IIIIIIIIIII
+    .D.......D.
+    .D.......D.
+    HHHHHHHHHHH
+    ....LNM....
+    ....LNM....
+    ...........
+  # y=12
+  - |
+    ...........
+    ........a..
+    ...........
+    ...........
+    IIIIIIIIIII
+    HHHHHHHHHHH
+    ...........
+    .....J.....
+    .....J.....
+    ...........
+  # y=13
+  - |
+    ...........
+    ........a..
+    ...........
+    ...........
+    JJJJJJJJJJJ
+    JJJJJJJJJJJ
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=14
+  - |
+    ...........
+    ........b..
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........

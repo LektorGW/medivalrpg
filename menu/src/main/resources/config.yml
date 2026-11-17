@@ -1,0 +1,415 @@
+# ============================================================
+#  Menu — główne menu serwera MEDIVALRPG
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Menu i książki definiuje się w menus.yml. Tutaj: ustawienia ogólne,
+#  kompas „Przewodnik”, /spawn, domy graczy i komunikaty (MiniMessage).
+#  Po zmianach: /menu reload
+# ============================================================
+
+# Adres mapy świata (squaremap) – placeholder <map_url> i klikalny <map_link>.
+map-url: "http://mc.example.org:8100"
+
+placeholders:
+  # <country>, gdy gracz nie ma kraju (albo nie ma pluginu Kraje).
+  no-country: "brak"
+  # <rank>, gdy gracz nie ma kraju.
+  no-rank: "-"
+
+menu:
+  # Minimalny odstęp między kliknięciami w menu (anty-spam), ms.
+  click-cooldown-ms: 250
+  # Dźwięki (klucze minecraft, "" = bez dźwięku).
+  sounds:
+    click: "ui.button.click"
+    error: "block.note_block.bass"
+
+# Kompas „Przewodnik” – PPM otwiera /menu.
+guide:
+  enabled: true
+  # COMPASS albo RECOVERY_COMPASS (albo dowolny przedmiot).
+  material: COMPASS
+  name: "<gold><bold>Przewodnik</bold></gold>"
+  lore:
+    - "<gray>PPM, aby otworzyć menu"
+    - "<dark_gray>Zgubiony? <gray>/przewodnik daj"
+  glint: true
+  # Daj kompas przy pierwszym wejściu (po zalogowaniu w nLogin). „Pierwsze” = pierwsze od instalacji Menu
+  # (lista graczy, którzy już go dostali: plugins/Menu/data/guide-received.txt).
+  give-on-first-join: true
+  # Slot docelowy: 8 = dziewiąte miejsce paska. Zajęty → pierwszy wolny slot.
+  preferred-slot: 8
+  # true = można go przekładać w swoim ekwipunku (nigdy do skrzyń, ramek itp.), false = zablokowany w miejscu.
+  movable: true
+  # Wyrzucenie: delete = znika z komunikatem, jak go odzyskać; block = nie da się wyrzucić.
+  on-drop: delete
+  # true = nie wypada przy śmierci i wraca po odrodzeniu.
+  keep-on-death: true
+  # true = (dla COMPASS) igła wskazuje spawn świata z spawn-world (puste = główny świat).
+  point-to-spawn: true
+  spawn-world: ""
+  # Bez nLogina: ile sekund po wejściu dać kompas.
+  login-fallback-seconds: 3
+  # Z nLoginem: jak długo czekać na zalogowanie (s).
+  login-max-wait-seconds: 600
+
+# Samouczek nowego gracza (/samouczek, menu „samouczek” w menus.yml).
+# Kroki 1–7 i 9 są odhaczane ze stanu gry (pieniądze, kraj, ziemia, mieszkania, spichlerz, budowa, produkcja, koszary),
+# kroki informacyjne po kliknięciu. Stan graczy: plugins/Menu/data/tutorial.json.
+tutorial:
+  enabled: true
+  # Zaproszenie na czacie po pierwszym zalogowaniu i krótkie przypomnienie przy kolejnych wejściach, dopóki gracz
+  # nie przejdzie kroków sprawdzanych ze stanu gry albo nie kliknie „nie pokazuj” (/samouczek ukryj).
+  # Nic nie jest otwierane ani teleportowane — to tylko wiadomość.
+  remind: true
+  # Ile sekund po zalogowaniu (Straznik/nLogin) wysłać wiadomość.
+  invite-delay-seconds: 3
+  # Krok „Pierwsze pieniądze”: tyle miedziaków (konto + monety przy sobie); 100 md = 1 zł.
+  money-goal: 100
+
+# Wspólne zasady teleportów /spawn i /dom.
+teleport:
+  # Ruch o więcej niż tyle bloków od miejsca startu anuluje odliczanie (obrażenia też anulują).
+  max-move: 0.5
+  # Combat tag: ile sekund po uderzeniu gracza / otrzymaniu ciosu od gracza nie można się teleportować.
+  combat-tag-seconds: 10
+  # Blokada, gdy gracz stoi na chunku z trwającym oblężeniem (KrajeApi#getSiege; bez pluginu Kraje nieaktywne).
+  block-during-siege: true
+  # Cząsteczki portalu podczas odliczania i po teleporcie.
+  particles: true
+  sounds:
+    # Co sekundę odliczania ("" = bez dźwięku).
+    tick: "block.note_block.hat"
+    # Po teleporcie.
+    done: "entity.enderman.teleport"
+
+# /spawn (alias /sp). Uprawnienie menu.spawn.bypass (op) pomija odliczanie, cooldown i blokady.
+spawn:
+  warmup-seconds: 5
+  cooldown-seconds: 30
+  # Punkt spawnu – ustawia go /ustawspawn (pozycja z obrotem; ustawia też spawn świata).
+  # Puste = spawn głównego świata (World#getSpawnLocation).
+  location: ""
+  # Nowi gracze przy pierwszym wejściu trafiają na spawn (po zalogowaniu w nLogin).
+  teleport-new-players: true
+  # Odrodzenie po śmierci na /spawn, jeśli gracz nie ma łóżka ani kotwicy odrodzenia.
+  respawn-at-spawn: false
+  # false = powracający gracz zostaje w miejscu wyjścia zapisanym przez serwer / nLogin.
+  # true = każde zalogowanie kończy się na spawnie, z jednorazowym /powrot do ostatniej pozycji.
+  always-on-join: false
+  # Jak długo po wejściu działa /powrot (minuty; 0 = wyłączone).
+  return-window-minutes: 10
+  # Pozycja przy wyjściu bliżej niż tyle bloków od spawnu nie nadpisuje zapamiętanej ostatniej pozycji.
+  return-keep-radius: 48
+  # Niebezpieczna ostatnia pozycja (lawa, przepaść, w bloku) → najbliższe bezpieczne miejsce w tym promieniu.
+  return-safe-radius: 8
+  # Nazwy NPC Skarbca tworzonych przez /ustawspawn zbuduj.
+  npc:
+    kupiec: "Kupiec Bartłomiej"
+    bankier: "Bankier Zenon"
+  # /ustawspawn zbuduj [noair] → podgląd → /ustawspawn zbuduj potwierdz; /ustawspawn cofnij (do restartu).
+  # Schematy: plugins/Menu/spawn/spawn.schem, spawn_noair.schem, markers.json (rozpakowywane przy 1. starcie).
+  build:
+    # Jak długo widać obrys (s) i ile czasu jest na potwierdzenie (s).
+    preview-seconds: 30
+    confirm-seconds: 120
+    # Kierunek patrzenia na spawnie (0 = południe, na tablicę ogłoszeń).
+    spawn-yaw: 0
+    # Szerokość pasa wygładzania terenu wokół muru (4–6; 0 = bez wygładzania).
+    smooth-width: 5
+    npc:
+      enabled: true
+      # Kierunki z README schematu: kupiec na południe (0), bankier na wschód (-90).
+      kupiec-yaw: 0
+      bankier-yaw: -90
+    # Region WorldGuard na obszar schematu + margines, od dołu do góry świata.
+    region:
+      enabled: true
+      id: spawn
+      margin: 8
+      priority: 10
+      # Gracze w regionie nie otrzymują obrażeń (flaga invincible).
+      invincible: true
+      greeting: "<gold>Witaj w stolicy MEDIVALRPG!"
+      farewell: "<gray>Opuszczasz spawn"
+      # deny-spawn dla wrogich mobów (pusta lista = mob-spawning deny; to blokuje też zwierzęta).
+      deny-spawn: [zombie, zombie_villager, husk, drowned, skeleton, stray, bogged, creeper, spider, cave_spider,
+                   enderman, witch, slime, phantom, pillager, vindicator, evoker, ravager, vex, silverfish, breeze]
+    # Kraje: obszar chroniony przed zajęciem (/kraj zaloz, /kraj zajmij) – schemat + bufor w chunkach.
+    kraje:
+      enabled: true
+      buffer-chunks: 3
+
+# Domy graczy: /ustawdom [nazwa], /dom [nazwa], /usundom <nazwa>, /domy.
+# Dane: plugins/Menu/data/homes.json. Uprawnienie menu.homes.bypass (op) pomija odliczanie, cooldown i blokady.
+homes:
+  enabled: true
+  # Limit domów. Więcej przez uprawnienie menu.homes.<n> (np. menu.homes.3), bez limitu: menu.homes.unlimited (op).
+  max: 1
+  warmup-seconds: 5
+  cooldown-seconds: 30
+  # true = dom tylko na terenie własnego kraju albo w dziczy (Kraje). Gdy teren domu przejdzie
+  # do obcego kraju (np. podbój), teleport do niego jest zablokowany.
+  only-own-or-wild: true
+
+book:
+  # Szerokość linii w pikselach (strona książki ma 114 px; mniejsza wartość = zapas bezpieczeństwa).
+  line-width: 112
+  # Linie na stronę (maks. 14).
+  lines-per-page: 14
+
+messages:
+  prefix: "<gold>[<yellow>Menu</yellow>]</gold> "
+  players-only: "<prefix><red>Tę komendę może wykonać tylko gracz.</red>"
+  unknown-menu: "<prefix><red>Nie ma menu <white><menu></white>.</red>"
+  unknown-book: "<prefix><red>Nie ma książki <white><book></white>.</red>"
+  no-access: "<prefix><red>To menu jest teraz niedostępne.</red>"
+  reloaded: "<prefix><green>Przeładowano config.yml i menus.yml.</green> <gray>Ostrzeżenia: <white><warnings></white> (szczegóły w konsoli)</gray>"
+
+  url-line: "<prefix><gray>Kliknij link: <link></gray>"
+  url-link: "<aqua><underlined><url></underlined></aqua>"
+  url-hover: "<gray>Otwórz w przeglądarce</gray>"
+  url-missing: "<prefix><red>Adres nie jest ustawiony (map-url w config.yml).</red>"
+  suggest-line: "<prefix><gray>Kliknij, aby wpisać komendę: <button></gray>"
+  suggest-button: "<yellow><underlined><command></underlined></yellow>"
+  suggest-hover: "<gray>Wstawia komendę do czatu – dokończ ją i naciśnij Enter</gray>"
+
+  nobody-nearby: "<prefix><red>Nikogo nie ma w pobliżu</red> <gray>(zasięg <white><range> bl.</white>). Podejdź bliżej do gracza.</gray>"
+  picker-title-interaction: "<dark_gray>Z kim? </dark_gray><name>"
+  picker-title-command: "<dark_gray>Wybierz gracza: /<command>"
+  picker-head-name: "<yellow><target>"
+  picker-head-lore:
+    - "<gray>Odległość: <white><distance> bl."
+    - ""
+    - "<gold>Kliknij</gold> <gray>→ /<command> <target>"
+  back-name: "<yellow>« Wróć"
+  close-name: "<red>Zamknij"
+
+  # Samouczek. <done>/<total> = kroki zrobione / wszystkie, <step> = nazwa następnego kroku.
+  tutorial-invite:
+    - ""
+    - "<gold>⚜ <bold>Nowy na MEDIVALRPG, <player>?</bold></gold>"
+    - "<gray><white>Samouczek</white> prowadzi krok po kroku: pieniądze, kraj, ziemia, domy, jedzenie i budowy.</gray>"
+    - "<click:run_command:'/samouczek'><hover:show_text:'<gray>Otwiera samouczek (<white>/samouczek</white>)'><green><bold>[▶ Otwórz samouczek]</bold></green></hover></click> <click:run_command:'/samouczek ukryj'><hover:show_text:'<gray>Wyłącza przypomnienia. Samouczek zostaje w <white>/menu</white>.'><dark_gray>[nie pokazuj]</dark_gray></hover></click>"
+    - ""
+  tutorial-reminder:
+    - "<gold>⚜ Samouczek:</gold> <gray>zrobione <white><done>/<total></white>. Następny krok: </gray><step> <click:run_command:'/samouczek'><hover:show_text:'<gray>Otwiera samouczek (<white>/samouczek</white>)'><green>[▶ otwórz]</green></hover></click> <click:run_command:'/samouczek ukryj'><hover:show_text:'<gray>Wyłącza przypomnienia. Samouczek zostaje w <white>/menu</white>.'><dark_gray>[nie pokazuj]</dark_gray></hover></click>"
+  tutorial-finished: "<prefix><green><bold>Samouczek ukończony!</bold></green> <gray>Znasz już podstawy. Wszystko inne znajdziesz w <white>/menu</white> i <white>/pomoc</white>.</gray>"
+  tutorial-dismissed: "<prefix><gray>Przypomnienia o samouczku wyłączone. Samouczek zostaje w <white>/menu</white> i pod <white>/samouczek</white>. Włącz ponownie: <click:run_command:'/samouczek przypominaj'><yellow><underlined>/samouczek przypominaj</underlined></yellow></click>.</gray>"
+  tutorial-enabled: "<prefix><green>Przypomnienia o samouczku włączone.</green> <gray>Wyłączysz je przez <white>/samouczek ukryj</white>.</gray>"
+  tutorial-unavailable: "<prefix><red>Samouczek jest teraz niedostępny.</red>"
+  tutorial-done-prefix: "<green>✔ </green>"
+  tutorial-done-lore: "<green>✔ Zrobione</green>"
+  tutorial-todo-lore: "<yellow>○ Jeszcze przed tobą</yellow>"
+  tutorial-summary-lore: "<gray>Twój postęp: <white><done>/<total></white> kroków</gray>"
+
+  # Centrum pomocy /pomoc (dane: pomoc.yml). Teksty z pomoc.yml są wstawiane jako zwykły tekst.
+  # <category> = nazwa kategorii w jej kolorze; <command> <description> <rank> <count> <query> <id> <name>
+  help-overview-header: "<gold>━━━━━ <bold>⚜ Pomoc MEDIVALRPG</bold> ━━━━━</gold>"
+  help-overview-intro: "<gray><line></gray>"
+  help-overview-line: "<dark_gray> » </dark_gray><name> <dark_gray>(<count>)</dark_gray> <gray>– <description></gray>"
+  help-header: "<gold>━━━━━ <bold>⚜ Pomoc »</bold> </gold><bold><category></bold><gold> ━━━━━</gold>"
+  help-description: "<gray><italic><description></italic></gray>"
+  help-guide-title: "<yellow><bold>Jak zacząć</bold></yellow>"
+  help-guide-line: "<gold> <number>.</gold> <line>"
+  help-guide-text: "<gray><text></gray>"
+  help-guide-code: "<white><text></white>"
+  help-guide-command: "<aqua><underlined><command></underlined></aqua>"
+  help-commands-title: "<yellow><bold>Komendy</bold></yellow> <dark_gray>(najedź – szczegóły, kliknij – wpisz na czacie)</dark_gray>"
+  help-line: "<dark_gray> » </dark_gray><aqua><command></aqua> <dark_gray>–</dark_gray> <gray><description></gray><rank>"
+  help-line-rank: " <dark_gray>[<rank>]</dark_gray>"
+  help-search-line: "<dark_gray> » [</dark_gray><category><dark_gray>]</dark_gray> <aqua><command></aqua> <dark_gray>–</dark_gray> <gray><description></gray><rank>"
+  help-hover-suggest: "<aqua><command></aqua><newline><gray><description></gray><rank><newline><newline><yellow>Kliknij, aby wpisać na czacie</yellow>"
+  help-hover-run: "<aqua><command></aqua><newline><gray><description></gray><rank><newline><newline><green>Kliknij, aby wykonać</green>"
+  help-hover-rank: "<newline><gray>Wymaga: <white><rank></white></gray>"
+  help-tabs: "<dark_gray>Kategorie: </dark_gray><tabs>"
+  help-tab: "<gray>[</gray><name><gray>]</gray>"
+  help-tab-current: "<white><bold>[<name>]</bold></white>"
+  help-tab-separator: " "
+  help-tab-hover: "<gray>Pomoc: </gray><name><newline><dark_gray>/pomoc <id>"
+  help-footer: "<dark_gray>» </dark_gray><search> <list> <menu>"
+  help-search-button: "<yellow>[🔍 Szukaj]</yellow>"
+  help-search-hover: "<gray>Wpisz <white>/pomoc szukaj <fraza></white>, np. <white>/pomoc szukaj podatek</white>"
+  help-list-button: "<yellow>[☰ Kategorie]</yellow>"
+  help-list-hover: "<gray>Wszystkie kategorie na czacie (<white>/pomoc lista</white>)"
+  help-menu-button: "<gold>[❓ Centrum pomocy]</gold>"
+  help-menu-hover: "<gray>Okno pomocy z kategoriami (<white>/pomoc</white>)"
+  help-search-header: "<gold>━━━ Wyniki dla „<white><query></white>” <dark_gray>(<count>)</dark_gray> ━━━</gold>"
+  help-search-none: "<prefix><red>Nic nie znaleziono dla „<white><query></white>”.</red> <gray>Spróbuj innego słowa albo otwórz <white>/pomoc</white>.</gray>"
+  help-search-usage: "<prefix><gray>Użycie: <white>/pomoc szukaj <fraza></white>, np. <white>/pomoc szukaj dom</white>.</gray>"
+  help-unknown-category: "<prefix><red>Nie ma kategorii pomocy <white><category></white>.</red> <gray>Lista: <white>/pomoc lista</white></gray>"
+  # Okno kategorii pomocy (generowane z pomoc.yml)
+  help-gui-title: "<dark_gray>❓ Pomoc » </dark_gray><category>"
+  help-gui-title-paged: "<dark_gray>❓ Pomoc » </dark_gray><category> <dark_gray>(<page>/<pages>)"
+  help-gui-border: YELLOW_STAINED_GLASS_PANE
+  help-gui-header-name: "<bold><category></bold>"
+  help-gui-header-lore:
+    - ""
+    - "<gray>Komend: <white><count></white>"
+    - "<gold>Kliknij</gold> <gray>– całość na czacie"
+  help-gui-text: "<gray><text>"
+  help-gui-empty: "<gray>Brak komend dostępnych dla ciebie."
+  help-gui-entry-icon: PAPER
+  help-gui-entry-icon-run: MAP
+  help-gui-entry-name: "<aqua><command>"
+  help-gui-entry-rank: "<dark_gray>Wymaga: <white><rank>"
+  help-gui-entry-suggest:
+    - ""
+    - "<yellow>Kliknij</yellow> <gray>– wpisz na czacie"
+  help-gui-entry-run:
+    - ""
+    - "<green>Kliknij</green> <gray>– wykonaj"
+  help-gui-guide-name: "<yellow><bold>Jak zacząć</bold>"
+  help-gui-guide-step: "<gold><number>.</gold> <gray><text>"
+  help-gui-guide-lore:
+    - ""
+    - "<gold>Kliknij</gold> <gray>– z klikalnymi komendami na czacie"
+  help-gui-chat-name: "<yellow>Pokaż na czacie"
+  help-gui-chat-lore:
+    - "<gray>Poradnik i wszystkie komendy"
+    - "<gray>tej kategorii, do kliknięcia."
+  help-gui-search-name: "<yellow>🔍 Szukaj komendy"
+  help-gui-search-lore:
+    - "<gray>Wpisz na czacie:"
+    - "<white>/pomoc szukaj <fraza>"
+  help-gui-back: "<yellow>« Wróć do pomocy"
+  help-gui-prev: "<yellow>« Poprzednia strona"
+  help-gui-next: "<yellow>Następna strona »"
+
+  # Ikony interakcji (dane z config.yml pluginu Interakcje).
+  # <name> <description> <command> <range> <consent>
+  interaction-name: "<name>"
+  interaction-lore-required:
+    - "<gray><description>"
+    - ""
+    - "<consent>"
+    - "<dark_gray>Zasięg: <range> bl. • /<command> <gracz>"
+    - ""
+    - "<gold>Kliknij</gold> <gray>– wybierz gracza</gray>"
+  interaction-lore-optional:
+    - "<gray><description>"
+    - ""
+    - "<consent>"
+    - "<dark_gray>Zasięg: <range> bl. • /<command> [gracz]"
+    - ""
+    - "<gold>LPM</gold> <gray>– do wszystkich w pobliżu</gray>"
+    - "<gold>PPM</gold> <gray>– wybierz gracza</gray>"
+  consent-yes: "<yellow>Wymaga zgody drugiej osoby"
+  consent-no: "<green>Bez pytania o zgodę"
+  interactions-empty: "<red>Brak dostępnych interakcji"
+
+  # Ikony tańców i emotek (menu type: motions; dane z config.yml pluginu Interakcje: dances / emotes).
+  # <name> <description> <command> <group>
+  motion-name: "<name>"
+  motion-lore:
+    - "<dark_gray><group>"
+    - "<gray><description>"
+    - ""
+    - "<dark_gray>/<command>"
+    - ""
+    - "<gold>Kliknij</gold> <gray>– zacznij</gray>"
+  motion-lore-target:
+    - "<dark_gray><group>"
+    - "<gray><description>"
+    - ""
+    - "<dark_gray>/<command> [gracz]"
+    - ""
+    - "<gold>LPM</gold> <gray>– sam</gray>"
+    - "<gold>PPM</gold> <gray>– w stronę gracza obok</gray>"
+  motion-group-dance: "Taniec"
+  motion-group-emote: "Emotka"
+  motions-empty: "<red>Brak dostępnych tańców i emotek"
+
+  # Menu "Państwa" (type: countries). <name> <color> (kolor kraju: <color>…</color>) <hex> <ruler> <chunks>
+  # (np. "24 chunki") <members> <npc> (= country-npc-suffix albo pusto) <command> (= kraj admin tp <name>)
+  country-name: "<color><bold><name></bold></color><npc>"
+  country-npc-suffix: " <dark_gray>(NPC)</dark_gray>"
+  country-lore-player:
+    - "<gray>Władca: <white><ruler></white>"
+    - "<gray>Obywatele: <white><members></white>"
+    - "<gray>Teren: <white><chunks></white>"
+    - ""
+    - "<gold>Kliknij</gold> <gray>– teleport do stolicy</gray>"
+    - "<dark_gray>/<command>"
+  country-lore-npc:
+    - "<gray>Władca: <white><ruler></white> <dark_gray>(NPC)</dark_gray>"
+    - "<gray>Kraj NPC – rządzi nim SI"
+    - "<gray>Teren: <white><chunks></white>"
+    - ""
+    - "<gold>Kliknij</gold> <gray>– teleport do stolicy</gray>"
+    - "<dark_gray>/<command>"
+  countries-empty: "<red>Nie ma jeszcze żadnego kraju"
+  countries-unavailable: "<red>Plugin Kraje jest niedostępny"
+
+  guide-first-join: "<prefix><gray>Dostajesz <gold>Przewodnika</gold> (kompas na pasku). <white>PPM</white> otwiera menu ze wszystkim, co oferuje serwer. Menu otworzysz też komendą <white>/menu</white>.</gray>"
+  guide-given: "<prefix><green>Otrzymujesz Przewodnika.</green> <gray>PPM, aby otworzyć menu.</gray>"
+  guide-already: "<prefix><gray>Masz już Przewodnika w ekwipunku.</gray>"
+  guide-no-space: "<prefix><red>Brak miejsca w ekwipunku na Przewodnika.</red> <gray>Zrób miejsce i wpisz <white>/przewodnik daj</white>.</gray>"
+  guide-disabled: "<prefix><red>Przewodnik jest wyłączony na tym serwerze.</red> <gray>Użyj <white>/menu</white>.</gray>"
+  guide-drop-deleted: "<prefix><gray>Przewodnik znika. Odzyskasz go komendą <white>/przewodnik daj</white>.</gray>"
+  guide-drop-blocked: "<prefix><red>Przewodnika nie można wyrzucić.</red>"
+  guide-returned: "<prefix><gray>Przewodnik wraca do twojego ekwipunku.</gray>"
+
+  # --- teleporty (/spawn, /dom)  <seconds>
+  teleport-start: "<prefix><light_purple>Teleport za <white><seconds> s</white>.</light_purple> <gray>Nie ruszaj się i unikaj obrażeń.</gray>"
+  teleport-actionbar: "<light_purple>Teleport za <white><seconds></white>…</light_purple> <dark_gray>(nie ruszaj się)</dark_gray>"
+  teleport-cancelled-move: "<prefix><red>Teleport anulowany – poruszyłeś się.</red>"
+  teleport-cancelled-damage: "<prefix><red>Teleport anulowany – otrzymałeś obrażenia.</red>"
+  teleport-cancelled-combat: "<prefix><red>Teleport anulowany – walczysz z graczem.</red>"
+  teleport-cooldown: "<prefix><red>Musisz odczekać jeszcze <white><seconds> s</white> przed kolejnym teleportem.</red>"
+  teleport-combat: "<prefix><red>Jesteś w walce!</red> <gray>Teleport będzie możliwy za <white><seconds> s</white>.</gray>"
+  teleport-siege: "<prefix><red>Na tym terenie trwa oblężenie – nie możesz się stąd teleportować.</red>"
+  teleport-failed: "<prefix><red>Teleport się nie udał. Spróbuj ponownie.</red>"
+
+  # --- spawn  <location>
+  spawn-arrived: "<prefix><green>Jesteś na spawnie.</green>"
+  spawn-missing: "<prefix><red>Spawn nie jest dostępny.</red>"
+  spawn-set: "<prefix><green>Ustawiono spawn serwera:</green> <white><location></white> <gray>(także spawn świata – nowi gracze i odrodzenie bez łóżka)</gray>"
+  spawn-set-config-only: "<prefix><yellow>Zapisano spawn <white><location></white>, ale nie udało się ustawić spawnu świata.</yellow>"
+
+  # --- domy  <name> <location> <limit> <count> <max>
+  home-set: "<prefix><green>Zapisano dom <white><name></white></green> <gray>(<location>). Wróć tu komendą <white>/dom <name></white>.</gray>"
+  home-updated: "<prefix><green>Przeniesiono dom <white><name></white></green> <gray>tutaj (<location>).</gray>"
+  home-arrived: "<prefix><green>Witaj w domu <white><name></white>.</green>"
+  home-deleted: "<prefix><gray>Usunięto dom <white><name></white>.</gray>"
+  home-unknown: "<prefix><red>Nie masz domu <white><name></white>.</red> <gray>Twoje domy: <white>/domy</white></gray>"
+  home-none: "<prefix><gray>Nie masz jeszcze domu. Stań w wybranym miejscu i wpisz <white>/ustawdom</white>.</gray>"
+  home-limit: "<prefix><red>Masz już maksymalną liczbę domów (<white><limit></white>).</red> <gray>Usuń któryś: <white>/usundom nazwa</white> albo nadpisz istniejący.</gray>"
+  home-bad-name: "<prefix><red>Nazwa domu: 1–<max> znaków, tylko litery a–z, cyfry, _ i - (bez polskich znaków).</red>"
+  home-foreign-land: "<prefix><red>Dom możesz ustawić tylko na terenie swojego kraju albo w dziczy.</red>"
+  home-foreign-blocked: "<prefix><red>Teren domu <white><name></white> należy teraz do obcego kraju – teleport zablokowany.</red> <gray>Usuń go: <white>/usundom <name></white></gray>"
+  home-world-missing: "<prefix><red>Świat domu <white><name></white> nie jest dostępny.</red>"
+  home-disabled: "<prefix><red>Domy są wyłączone na tym serwerze.</red>"
+  homes-header: "<prefix><gold>Twoje domy</gold> <gray>(<white><count></white>/<white><limit></white>) – kliknij, aby się teleportować:</gray>"
+  homes-line: " <dark_gray>•</dark_gray> <yellow><name></yellow> <dark_gray>(<location>)</dark_gray>"
+  homes-hover: "<gray>Teleport: <white>/dom <name></white></gray>"
+
+  # --- powrót do ostatniej pozycji  <minutes> <location> <radius>
+  return-offer: "<prefix><gray>Jesteś na spawnie.</gray> <click:run_command:'/powrot'><hover:show_text:'<gray>Teleport do <white><location></white> (/powrot)'><green><bold>[⟲ Wróć do ostatniej pozycji]</bold></green></hover></click> <dark_gray>(przez <minutes> min, jednorazowo)</dark_gray>"
+  return-actionbar: "<green>⟲ Kliknij na czacie albo wpisz <white>/powrot</white>, aby wrócić tam, gdzie skończyłeś</green>"
+  return-unavailable: "<prefix><red>Powrót do ostatniej pozycji jest już niedostępny.</red> <gray>Działa raz, przez kilka minut po wejściu na serwer.</gray>"
+  return-world-missing: "<prefix><red>Świat twojej ostatniej pozycji nie jest dostępny.</red>"
+  return-unsafe: "<prefix><red>Twoja ostatnia pozycja jest niebezpieczna i w promieniu <radius> bl. nie ma bezpiecznego miejsca.</red>"
+  return-arrived: "<prefix><green>Wróciłeś do ostatniej pozycji.</green>"
+
+  # --- budowa spawnu (/ustawspawn zbuduj)
+  build-no-worldedit: "<prefix><red>Do budowy spawnu potrzebny jest WorldEdit.</red>"
+  build-error: "<prefix><red>Błąd budowy spawnu:</red> <white><error></white> <gray>(szczegóły w konsoli)</gray>"
+  build-out-of-world: "<prefix><red>Spawn nie zmieści się tu w pionie (wychodzi poza dół lub górę świata).</red>"
+  build-preview: "<prefix><gold>Podgląd spawnu</gold> <gray>– czerwony obrys: schemat, żółty: pas wygładzania (<smooth> bl.).</gray><newline><red><bold>Uwaga:</bold> teren w obszarze 69×32×69 zostanie nadpisany</red> <gray><box>, wariant <white><variant></white>. Stoisz w punkcie wklejenia: blok pod tobą stanie się lodestone róży wiatrów.</gray><newline><click:run_command:'/ustawspawn zbuduj potwierdz'><hover:show_text:'<gray>/ustawspawn zbuduj potwierdz'><green><bold>[Potwierdź budowę]</bold></green></hover></click> <gray>(masz <seconds> s; punkt wklejenia jest zapamiętany, możesz się ruszać)</gray>"
+  build-nothing-pending: "<prefix><red>Nie ma budowy do potwierdzenia.</red> <gray>Najpierw <white>/ustawspawn zbuduj</white>.</gray>"
+  build-loading: "<prefix><gray>Wczytuję chunki i buduję spawn…</gray>"
+  build-done-header: "<prefix><gold><bold>Spawn zbudowany.</bold></gold>"
+  build-sum-blocks: " <dark_gray>•</dark_gray> <gray>Bloki: <white><count></white> zmian (w tym skarpy: <white><slope></white> kolumn)</gray>"
+  build-sum-spawn: " <dark_gray>•</dark_gray> <gray>Spawn Menu i świata: <white><location></white> (spawn świata: <white><world></white>), respawn_radius 0</gray>"
+  build-sum-npc: " <dark_gray>•</dark_gray> <gray>NPC Skarbca utworzone: <white><count></white>/2</gray>"
+  build-sum-npc-skipped: " <dark_gray>•</dark_gray> <yellow>NPC pominięte (brak pluginu Skarbiec albo wyłączone w configu)</yellow>"
+  build-sum-region: " <dark_gray>•</dark_gray> <gray>Region WorldGuard <white><id></white>: <box>, flagi: <white><flags></white></gray>"
+  build-sum-region-failed: " <dark_gray>•</dark_gray> <red>Region WorldGuard nie powstał: <error></red>"
+  build-sum-region-skipped: " <dark_gray>•</dark_gray> <yellow>Region pominięty (brak WorldGuarda albo wyłączony w configu)</yellow>"
+  build-sum-kraje: " <dark_gray>•</dark_gray> <gray>Kraje: ziemia neutralna <white>spawn</white> + bufor <white><buffer></white> chunki</gray>"
+  build-sum-kraje-failed: " <dark_gray>•</dark_gray> <red>Kraje: obszar chroniony nie został dodany (<error>)</red>"
+  build-sum-kraje-skipped: " <dark_gray>•</dark_gray> <yellow>Kraje pominięte (brak pluginu albo wyłączone w configu)</yellow>"
+  build-done-footer: "<prefix><click:run_command:'/ustawspawn cofnij'><hover:show_text:'<gray>Cofa bloki, region, obszar Kraje i punkt spawnu'><red><bold>[Cofnij]</bold></red></hover></click> <gray>(do restartu serwera; również <white>//undo</white>)</gray>"
+  build-undo-nothing: "<prefix><red>Nie ma budowy do cofnięcia (tylko ostatnia, do restartu).</red>"
+  build-undone: "<prefix><green>Cofnięto budowę spawnu</green> <gray>(bloki, region, obszar Kraje, punkt spawnu i gamerule). NPC (<white><npcs></white>) usuń ręcznie: <white>/skarbiec npc usun</white>.</gray>"

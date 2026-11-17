@@ -1,0 +1,38 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Katalog propozycji akcji; dopasować do schematu Menu, nie wklejać jako pełny config.
+# Komendy wykonuje gracz. Niczego nie instaluje ani nie zmienia w innym pluginie.
+turnieje:
+  plugin: Turnieje
+  entries:
+    - id: turniej-info
+      material: IRON_SWORD
+      name: '<gold>Turnieje rycerskie'
+      permission: turnieje.use
+      command: 'turniej info'
+    - id: turniej-zapisy
+      material: PAPER
+      name: '<yellow>Zapisz się na turniej'
+      lore: ['<gray>Sprawdź wpisowe w informacji o turnieju']
+      permission: turnieje.use
+      command: 'turniej zapisz'
+    - id: turniej-wypisz
+      material: BARRIER
+      name: '<red>Opuść turniej'
+      lore: ['<gray>Przed startem: zwrot wpisowego', '<gray>Po starcie: wycofanie z zawodów']
+      permission: turnieje.use
+      command: 'turniej wypisz'
+    - id: turniej-ranking
+      material: GOLDEN_SWORD
+      name: '<gold>Ranking rycerzy'
+      permission: turnieje.use
+      command: 'turniej ranking'
+    - id: turniej-widownia
+      material: SPYGLASS
+      name: '<yellow>Widownia'
+      permission: turnieje.use
+      command: 'turniej ogladaj'
+    - id: turniej-pomoc
+      material: BOOK
+      name: '<yellow>Zasady i komendy'
+      permission: turnieje.use
+      command: 'turniej pomoc'

@@ -1,0 +1,18 @@
+name: Armia
+version: '${version}'
+main: pl.medivalrpg.armia.ArmiaPlugin
+api-version: '26.3'
+description: Żołnierze NPC państw i AI państw prowadzonych przez NPC (Władcy NPC) dla serwera MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+softdepend: [Ludnosc, BetterModel]
+permissions:
+  armia.use:
+    description: Dostęp do /armia (/wojsko)
+    default: true
+  armia.admin:
+    description: Komendy administracyjne /npckraj (/nk), /armia przeładuj, omijanie ochrony żołnierzy
+    default: op
+    children:
+      armia.use: true

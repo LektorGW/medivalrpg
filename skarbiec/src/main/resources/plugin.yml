@@ -1,0 +1,24 @@
+name: Skarbiec
+version: '${version}'
+main: pl.medivalrpg.skarbiec.SkarbiecPlugin
+api-version: '26.3'
+description: Ekonomia serwera MEDIVALRPG (bank, monety, bankier i kupiec NPC, sklepy graczy, bezpieczny handel).
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# Kraje is integrated optionally (shop territory) WITHOUT softdepend: Kraje already softdepends on Skarbiec,
+# and a mutual softdepend would make the load order arbitrary. The Kraje API is looked up lazily at use time.
+# Ludnosc (seasonal merchant goods) the same way. BetterModel (market stalls of merchants) is optional.
+softdepend: [BetterModel]
+permissions:
+  skarbiec.use:
+    description: /saldo, /zaplac, /monety, /handel, /skarbiec pomoc|sklepy, bankier i kupiec
+    default: true
+  skarbiec.sklep:
+    description: Zakładanie sklepów (tabliczka [Sklep])
+    default: true
+  skarbiec.admin:
+    description: Komendy administracyjne Skarbca, otwieranie/niszczenie cudzych sklepów, przelew poza bankiem
+    default: op
+    children:
+      skarbiec.use: true
+      skarbiec.sklep: true

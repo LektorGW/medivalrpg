@@ -1,0 +1,1106 @@
+/*!
+ * Panel MEDIVALRPG — Statystyki Skarbu Świata (bilans, konta, przepływy, monety, ruchy, kupiec)
+ * Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+ * Kolory serii: paleta kategorialna sprawdzona walidatorem (kolejność sąsiednich par bezpieczna dla daltonizmu),
+ * osobne stopnie dla motywu jasnego i ciemnego. Tekst zawsze w kolorach tekstu, kolor tylko na znacznikach.
+ */
+
+:root[data-theme="dark"] {
+  --ws-1: #3987e5;
+  --ws-2: #d95926;
+  --ws-3: #199e70;
+  --ws-4: #c98500;
+  --ws-5: #9085e9;
+  --ws-6: #e66767;
+  --ws-7: #008300;
+  --ws-8: #d55181;
+  --ws-9: #b07a3c;
+  --ws-10: #1a9bab;
+  --ws-gray-1: #8a8275;
+  --ws-gray-2: #6c6558;
+  --ws-gray-3: #a59d8e;
+  --ws-heat: 220, 184, 108;
+}
+:root[data-theme="light"] {
+  --ws-1: #2a78d6;
+  --ws-2: #eb6834;
+  --ws-3: #1baf7a;
+  --ws-4: #eda100;
+  --ws-5: #6250d6;
+  --ws-6: #e34948;
+  --ws-7: #008300;
+  --ws-8: #e87ba4;
+  --ws-9: #a86d1f;
+  --ws-10: #1f8fbf;
+  --ws-gray-1: #8c8473;
+  --ws-gray-2: #6f6757;
+  --ws-gray-3: #aaa292;
+  --ws-heat: 135, 96, 26;
+}
+
+/* typy kont (stała barwa dla typu, niezależna od kolejności) */
+.ws-t-reserve { --tc: var(--ws-1); }
+.ws-t-cash { --tc: var(--ws-2); }
+.ws-t-payments { --tc: var(--ws-3); }
+.ws-t-merchant { --tc: var(--ws-4); }
+.ws-t-households { --tc: var(--ws-5); }
+.ws-t-citizens { --tc: var(--ws-10); }
+.ws-t-players { --tc: var(--ws-6); }
+.ws-t-countries { --tc: var(--ws-7); }
+.ws-t-firms { --tc: var(--ws-8); }
+.ws-t-railBudgets { --tc: var(--ws-9); }
+.ws-t-escrow { --tc: var(--ws-gray-1); }
+.ws-t-server { --tc: var(--ws-gray-2); }
+.ws-t-other { --tc: var(--ws-gray-3); }
+
+/* serie wykresu kategorii: kolejność slotów 1→7 z palety referencyjnej, „Pozostałe” szare */
+.ws-c1 { --tc: var(--ws-1); }
+.ws-c2 { --tc: var(--ws-2); }
+.ws-c3 { --tc: var(--ws-3); }
+.ws-c4 { --tc: var(--ws-4); }
+.ws-c5 { --tc: var(--ws-8); }
+.ws-c6 { --tc: var(--ws-7); }
+.ws-c7 { --tc: var(--ws-5); }
+.ws-c-rest { --tc: var(--ws-gray-1); }
+.ws-in { --tc: var(--ws-1); }
+.ws-out { --tc: var(--ws-2); }
+.ws-net { --tc: var(--text); }
+
+.ws-key {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--tc, var(--muted));
+  vertical-align: baseline;
+}
+
+.ws-body {
+  gap: 20px;
+}
+.ws-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-bottom: 10px;
+}
+.ws-card-head .card-title {
+  margin: 0;
+}
+.ws-sub {
+  margin: 18px 0 8px;
+  font-size: 1.02rem;
+}
+
+/* ---------------------------------------------------------------- nagłówek bilansu */
+
+.ws-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 28px;
+}
+.ws-hero-main,
+.ws-hero-side {
+  min-width: 0;
+}
+.ws-hero-side {
+  max-width: 460px;
+}
+.ws-hero-label {
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ws-hero-value {
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--gold-hi);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.ws-hero-sub {
+  margin-top: 4px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.ws-acc-h {
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+.ws-diff {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+.ws-diff > .ic {
+  width: 22px;
+  height: 22px;
+}
+.ws-diff-ok {
+  color: var(--ok);
+  background: var(--ok-bg);
+  border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+}
+.ws-diff-err {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+}
+
+/* ---------------------------------------------------------------- banery zgodności */
+
+.ws-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+.ws-banner > .ic {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  margin-top: 1px;
+}
+.ws-banner-ok {
+  border-color: color-mix(in srgb, var(--ok) 45%, transparent);
+  background: var(--ok-bg);
+}
+.ws-banner-ok > .ic {
+  color: var(--ok);
+}
+.ws-banner-warn {
+  border-color: color-mix(in srgb, var(--warn) 55%, transparent);
+  background: var(--warn-bg);
+}
+.ws-banner-warn > .ic,
+.ws-banner-warn > div > strong {
+  color: var(--warn);
+}
+.ws-banner-err {
+  border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+  background: var(--danger-bg);
+}
+.ws-banner-err > .ic,
+.ws-banner-err > div > strong {
+  color: var(--danger);
+}
+.ws-checks {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.ws-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.ws-check > .ic {
+  width: 16px;
+  height: 16px;
+  margin-top: 4px;
+}
+.ws-check-ok > .ic {
+  color: var(--ok);
+}
+.ws-check-warn > .ic {
+  color: var(--warn);
+}
+.ws-check-err > .ic {
+  color: var(--danger);
+}
+.ws-check-word {
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.ws-check-detail {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.ws-checks-ok {
+  margin-top: 8px;
+}
+.ws-checks-ok summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.ws-compare {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin-top: 6px;
+  color: var(--text);
+}
+
+/* ---------------------------------------------------------------- pasek udziałów */
+
+.ws-stack {
+  display: flex;
+  gap: 2px;
+  height: 26px;
+  margin: 4px 0 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--track);
+}
+.ws-stack-seg {
+  flex: 1 1 0;
+  min-width: 3px;
+  background: var(--tc);
+}
+.ws-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 8px 0 12px;
+  padding: 0;
+  font-size: 0.88rem;
+}
+.ws-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ws-share {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 140px;
+}
+.ws-share .bar {
+  flex: 1 1 70px;
+  max-width: 120px;
+}
+.ws-share-text {
+  min-width: 5.2em;
+  text-align: right;
+}
+.ws-plain {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------- plakietki */
+
+.ws-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--card-2);
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+.ws-cat {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--track);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+.ws-cat-old {
+  margin-left: 4px;
+  border-color: color-mix(in srgb, var(--warn) 45%, transparent);
+  background: var(--warn-bg);
+}
+.ws-acc {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  text-decoration: none;
+}
+.ws-acc:hover .ws-acc-name {
+  text-decoration: underline;
+}
+.ws-acc-name {
+  overflow-wrap: break-word;
+}
+.ws-acc-none {
+  color: var(--muted);
+  font-style: italic;
+}
+.ws-acc-cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ws-acc-title {
+  font-weight: 600;
+  text-decoration: none;
+}
+.ws-acc-id {
+  font-size: 0.74rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  margin-left: 4px;
+}
+.ws-acc-cell .ws-acc-id {
+  margin-left: 0;
+  padding-left: 0;
+  background: none;
+}
+.ws-route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  min-width: 0;
+}
+.ws-arrow {
+  color: var(--muted);
+}
+.ws-after {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+.ws-time {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ws-amt {
+  white-space: nowrap;
+}
+.ws-reason {
+  max-width: 280px;
+  overflow-wrap: anywhere;
+}
+.ws-linkbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--gold);
+  cursor: pointer;
+  text-align: left;
+}
+.ws-linkbtn:hover {
+  color: var(--gold-hi);
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------- kafelki */
+
+.ws-kpi .stat-value {
+  font-size: 1.22rem;
+}
+.ws-kpi-warn {
+  border-color: color-mix(in srgb, var(--warn) 55%, transparent);
+  background: var(--warn-bg);
+}
+.ws-kpis {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+}
+
+/* ---------------------------------------------------------------- filtry */
+
+.ws-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ws-range-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.ws-range {
+  display: inline-flex;
+  max-width: 100%;
+}
+.ws-range .seg-btn {
+  min-height: 36px;
+  padding: 6px 12px;
+  flex: 0 1 auto;
+}
+.ws-range-custom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ws-range-custom[hidden] {
+  display: none;
+}
+.ws-range-custom label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ws-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 10px 14px;
+}
+.ws-f {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.ws-f .input {
+  width: 100%;
+  min-width: 0;
+}
+.ws-filter-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+}
+.ws-chip-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+}
+.ws-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+.ws-results.loading {
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+.ws-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ws-window .seg-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  text-decoration: none;
+  min-height: 36px;
+}
+.ws-goods td.num,
+.ws-locs td.ws-nowrap {
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- wykresy */
+
+.ws-charts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+}
+.ws-three {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+}
+.ws-figure {
+  margin: 0;
+  min-width: 0;
+}
+.ws-fig-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.ws-plot {
+  position: relative;
+  min-height: 120px;
+  min-width: 0;
+}
+.ws-svg {
+  display: block;
+  overflow: visible;
+}
+.ws-svg:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.ws-bar {
+  fill: var(--tc);
+  stroke: var(--card);
+  stroke-width: 1;
+}
+.ws-line {
+  fill: none;
+  stroke: var(--tc);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.ws-line-dot {
+  fill: var(--tc);
+  stroke: var(--card);
+  stroke-width: 1.5;
+}
+.ws-key.ws-key-line {
+  height: 3px;
+  width: 14px;
+  border-radius: 2px;
+  align-self: center;
+}
+.ws-col.dim .ws-bar {
+  opacity: 0.35;
+}
+.ws-tip {
+  position: absolute;
+  top: var(--y, 4px);
+  left: var(--x, 0);
+  transform: translateX(12px);
+  z-index: 5;
+  min-width: 190px;
+  max-width: min(320px, 90vw);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  font-size: 0.86rem;
+}
+.ws-tip.left {
+  transform: translateX(calc(-100% - 12px));
+}
+.ws-tip-title {
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.ws-tip-row {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.ws-tip-row strong {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ws-tip-total {
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+/* Sankey */
+.ws-sankey-cols {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.ws-link {
+  fill: var(--tc);
+  opacity: 0.42;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+.ws-sankey.hovering .ws-link {
+  opacity: 0.16;
+}
+.ws-sankey .ws-link.on,
+.ws-link:focus-visible {
+  opacity: 0.8;
+  outline: none;
+}
+.ws-node-bar {
+  fill: var(--tc);
+  stroke: var(--card);
+  stroke-width: 1;
+}
+.ws-node-lead {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.ws-node-label {
+  fill: var(--text);
+  font-family: var(--sans);
+  font-size: 12px;
+}
+.ws-node-value {
+  fill: var(--muted);
+  font-family: var(--sans);
+  font-size: 11px;
+}
+
+/* macierz przepływów — mapa ciepła (jedna barwa, rośnie z kwotą) */
+.ws-matrix {
+  font-size: 0.86rem;
+}
+.ws-matrix caption {
+  text-align: left;
+  padding: 0 0 6px;
+}
+.ws-matrix th {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.ws-matrix th[scope="row"] {
+  white-space: nowrap;
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text);
+}
+.ws-matrix tfoot td,
+.ws-matrix tfoot th {
+  border-top: 1px solid var(--line-strong);
+  font-weight: 600;
+}
+.ws-matrix td {
+  white-space: nowrap;
+}
+.ws-matrix-details .table-wrap {
+  max-height: none;
+}
+.ws-heat-1 { background: rgba(var(--ws-heat), 0.08); }
+.ws-heat-2 { background: rgba(var(--ws-heat), 0.16); }
+.ws-heat-3 { background: rgba(var(--ws-heat), 0.26); }
+.ws-heat-4 { background: rgba(var(--ws-heat), 0.38); }
+.ws-heat-5 { background: rgba(var(--ws-heat), 0.52); }
+.ws-matrix-details {
+  margin-top: 12px;
+}
+
+/* ---------------------------------------------------------------- stronicowanie i eksport */
+
+.ws-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.ws-pager-info {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.ws-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 12px;
+}
+.ws-progress-label {
+  font-size: 0.9rem;
+}
+.ws-export-slot:empty {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- monety */
+
+.ws-census-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.ws-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.ws-status-pill .ic {
+  width: 15px;
+  height: 15px;
+}
+.ws-census-done .ws-status-pill {
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+.ws-census-running .ws-status-pill {
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+.ws-census-failed .ws-status-pill {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+.ws-census-progress {
+  margin-top: 12px;
+}
+.ws-kind-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 12px;
+}
+.ws-kind {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--card-2);
+}
+.ws-kind-label {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.ws-kind-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.ws-coords {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+.ws-src {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--line-strong);
+}
+.ws-src-LIVE {
+  color: var(--ok);
+}
+.ws-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 4px 16px;
+  margin: 0 0 10px;
+}
+.ws-facts dt {
+  color: var(--muted);
+}
+.ws-facts dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.ws-notes {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+.ws-errors summary {
+  cursor: pointer;
+  color: var(--warn);
+}
+.ws-errors ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------- kupiec */
+
+.ws-budget {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.ws-budget-pct {
+  color: var(--muted);
+}
+.ws-good {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+}
+.ws-good.on strong {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ws-star {
+  color: var(--gold-hi);
+}
+.ws-stock {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px 8px;
+}
+.ws-level {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ws-level-ok {
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+.ws-level-warn {
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+.ws-level-err {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+.ws-level-info {
+  color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+.ws-trend {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ws-trend-up {
+  color: var(--ok);
+}
+.ws-trend-down {
+  color: var(--danger);
+}
+
+/* ---------------------------------------------------------------- telefon */
+
+@media (max-width: 700px) {
+  .ws-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ws-hero-side {
+    max-width: none;
+  }
+  .ws-share {
+    min-width: 0;
+  }
+  .ws-reason {
+    max-width: none;
+  }
+  .ws-route {
+    justify-content: flex-end;
+  }
+  .ws-after {
+    align-items: flex-end;
+  }
+  .ws-range {
+    width: 100%;
+  }
+  .ws-range .seg-btn {
+    flex: 1 1 0;
+    padding: 6px 4px;
+  }
+  .ws-matrix,
+  .ws-matrix tbody,
+  .ws-matrix tfoot {
+    display: block;
+  }
+  .ws-matrix tr {
+    display: block;
+  }
+  .ws-matrix caption {
+    display: block;
+  }
+  .ws-matrix td.ws-heat-0 {
+    display: none;
+  }
+  .ws-matrix th[scope="row"] {
+    display: block;
+    padding: 4px 0 6px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .ws-matrix tfoot th,
+  .ws-matrix tfoot td {
+    display: flex;
+    justify-content: space-between;
+  }
+  .ws-matrix tfoot td::before {
+    content: attr(data-label);
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+  .ws-acc-cell {
+    align-items: flex-end;
+    text-align: right;
+  }
+  .ws-pager .btn {
+    padding-inline: 10px;
+  }
+  .ws-pager-info {
+    flex: 1 1 100%;
+    order: -1;
+  }
+}
+
+/* ---------------------------------------------------------------- zarząd: przelew do skarbca państwa NPC */
+
+.ws-npc-search {
+  margin: 10px 0;
+}
+.ws-npc-search .input {
+  flex: 1 1 220px;
+  max-width: 360px;
+  min-width: 0;
+}
+.ws-npc-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 2px;
+  margin-bottom: 14px;
+}
+.ws-npc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 12px;
+  font: inherit;
+  color: var(--text);
+  text-align: left;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.ws-npc-item:hover {
+  border-color: var(--gold);
+}
+.ws-npc-item.on {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 1px var(--gold);
+  background: color-mix(in srgb, var(--gold) 12%, var(--card-2));
+}
+.ws-npc-item .tag {
+  margin-left: 0;
+}
+.ws-npc-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+  font-weight: 600;
+}
+.ws-npc-bal {
+  flex: none;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ws-npc-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 12px 16px;
+  align-items: start;
+}
+.ws-npc-dir .seg-btn {
+  min-height: 38px;
+}
+.ws-npc-errors:empty {
+  display: none;
+}
+.ws-npc-errors {
+  margin-top: 12px;
+}
+.ws-npc-problems {
+  margin: 0;
+  padding-left: 18px;
+}
+.ws-npc-amount {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold-hi);
+  font-variant-numeric: tabular-nums;
+}
+.ws-npc-dirline {
+  margin: 0 0 6px;
+}
+.ws-npc-confirm .ws-facts {
+  margin-top: 10px;
+}
+
+/* ---------------------------------------------------------------- gospodarstwa i zasilenia */
+
+.ws-forecast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--card-2);
+}
+.ws-forecast > .ic {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.ws-forecast-self {
+  color: var(--ok);
+  background: var(--ok-bg);
+  border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+}
+.ws-forecast-low {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+}
+.ws-forecast-days > .ic {
+  color: var(--gold);
+}
+.ws-forecast-text {
+  display: block;
+  font-size: 1.05rem;
+}
+.ws-hh-grants {
+  margin-top: 8px;
+}
+.ws-grants .ws-level .ic {
+  width: 13px;
+  height: 13px;
+  vertical-align: -2px;
+}

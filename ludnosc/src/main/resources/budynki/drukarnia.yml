@@ -1,0 +1,162 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: drukarnia
+name: '<#D8C9A8>Drukarnia</#D8C9A8>'
+description: 'Podatki +3%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i punkty badań (Postęp); praca dla kartografów. Warsztat z prasami drukarskimi.'
+function: printing
+beds: 0
+cost: 8000
+tier: 2
+category: economy
+zone: inner
+max-per-country: 1
+requires:
+  population: 20
+  treasury: 0
+  era: 2
+  discovery: druk
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'white_terracotta'
+  'C': 'stripped_oak_log[axis=y]'
+  'D': 'glass_pane'
+  'E': 'oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'G': 'wall_torch[facing=south]'
+  'H': 'resin_brick_stairs[facing=north,half=bottom]'
+  'I': 'resin_brick_stairs[facing=south,half=bottom]'
+  'J': 'resin_bricks'
+  'K': 'resin_brick_slab[type=bottom]'
+  'L': 'loom[facing=south]'
+  'M': 'lectern[facing=south,has_book=false,powered=false]'
+  'N': 'barrel[facing=up,open=false]'
+  'O': 'bookshelf'
+  'P': 'cartography_table'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    ___________
+  # y=1
+  - |
+    CAAAAAAAAAC
+    A.........A
+    A.L.L..LN.A
+    A.......N.A
+    A.M.M..M..A
+    A.........A
+    A.O.....P.A
+    CAAAAEAAAAC
+    ...........
+  # y=2
+  - |
+    CBDBDBDBDBC
+    B.........B
+    D.........D
+    B.........B
+    D.........D
+    B.........B
+    B.........B
+    CBDBBFBBDBC
+    ...........
+  # y=3
+  - |
+    CBBBBBBBBBC
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    CBBBBBBBBBC
+    ....G......
+  # y=4
+  - |
+    CBBBBBBBBBC
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    CBBBBBBBBBC
+    ...........
+  # y=5
+  - |
+    IIIIIIIIIII
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    HHHHHHHHHHH
+  # y=6
+  - |
+    ...........
+    IIIIIIIIIII
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    HHHHHHHHHHH
+    ...........
+  # y=7
+  - |
+    ...........
+    ...........
+    IIIIIIIIIII
+    B.........B
+    B.........B
+    B.........B
+    HHHHHHHHHHH
+    ...........
+    ...........
+  # y=8
+  - |
+    ...........
+    ...........
+    ...........
+    IIIIIIIIIII
+    B.........B
+    HHHHHHHHHHH
+    ...........
+    ...........
+    ...........
+  # y=9
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    JJJJJJJJJJJ
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=10
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    KKKKKKKKKKK
+    ...........
+    ...........
+    ...........
+    ...........

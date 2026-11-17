@@ -1,0 +1,170 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: spichlerz
+name: '<#E6B35A>Spichlerz</#E6B35A>'
+description: 'Drewniany spichlerz ze skrzyniami na zapasy. Zwiększa pojemność spichlerza kraju.'
+function: granary
+beds: 0
+cost: 3000
+tier: 0
+category: food
+zone: outer
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'C': 'cobblestone'
+  'D': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'E': 'spruce_fence'
+  'K': 'chest[facing=south]'
+  'L': 'spruce_log[axis=y]'
+  'M': 'composter'
+  'P': 'spruce_planks'
+  'R': 'barrel[facing=up]'
+  'V': 'hay_block[axis=y]'
+  'X': 'spruce_log[axis=x]'
+  'Y': 'spruce_door[facing=north,half=lower,hinge=right,open=false]'
+  'Z': 'spruce_log[axis=z]'
+  'd': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'e': 'spruce_stairs[facing=west,half=bottom]'
+  'l': 'lantern[hanging=true]'
+  'o': 'spruce_trapdoor[facing=north,half=bottom,open=true]'
+  't': 'wall_torch[facing=south]'
+  'v': 'hay_block[axis=z]'
+  'w': 'spruce_stairs[facing=east,half=bottom]'
+  'y': 'spruce_door[facing=north,half=upper,hinge=right,open=false]'
+layers:
+  # y=0
+  - |
+    __________
+    _CCCCCCCC_
+    _CPPPPPPC_
+    _CPPPPPPC_
+    _CPPPPPPC_
+    _CPPPPPPC_
+    _CPPPPPPC_
+    _CPPPPPPC_
+    _CPPPPPPC_
+    _CCCCCCCC_
+    __________
+  # y=1
+  - |
+    ..........
+    .LCCCCCCL.
+    .CVKKKKVC.
+    .LV....VL.
+    .CV....VC.
+    .L.....ML.
+    .CR....RC.
+    .LR....RL.
+    .CR....RC.
+    .LCCDYCCL.
+    ..........
+  # y=2
+  - |
+    ..........
+    .LPPPPPPL.
+    .Pv....vP.
+    .Lv.....L.
+    .P......P.
+    .L......L.
+    .P......P.
+    .LR.....L.
+    .P......P.
+    .LPPdyPPL.
+    ...t..t...
+  # y=3
+  - |
+    ..........
+    .LPPPPPPL.
+    .E......E.
+    .L......L.
+    .E......E.
+    .L......L.
+    .E......E.
+    .L......L.
+    .E......E.
+    .LPPXXPPL.
+    ..........
+  # y=4
+  - |
+    ..........
+    .LPPPPPPL.
+    .P......P.
+    .L......L.
+    .P......P.
+    .L......L.
+    .P......P.
+    .L......L.
+    .P......P.
+    .LPPPPPPL.
+    ..........
+  # y=5
+  - |
+    w........e
+    wLXXXXXXLe
+    wZ......Ze
+    wZ......Ze
+    wZ......Ze
+    wZ......Ze
+    wZ......Ze
+    wZ......Ze
+    wZ......Ze
+    wLXXXXXXLe
+    w........e
+  # y=6
+  - |
+    .w......e.
+    .wPPPPPPe.
+    .w......e.
+    .w......e.
+    .w......e.
+    .w......e.
+    .w......e.
+    .w......e.
+    .w......e.
+    .wPPPPPPe.
+    .w......e.
+  # y=7
+  - |
+    ..w....e..
+    ..wPPPPe..
+    ..w....e..
+    ..w....e..
+    ..w....e..
+    ..w....e..
+    ..w....e..
+    ..w....e..
+    ..w....e..
+    ..wPooPe..
+    ..w....e..
+  # y=8
+  - |
+    ...w..e...
+    ...wPPe...
+    ...w..e...
+    ...w..e...
+    ...w..e...
+    ...wlle...
+    ...w..e...
+    ...w..e...
+    ...w..e...
+    ...wPPe...
+    ...w..e...
+  # y=9
+  - |
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....
+    ....we....

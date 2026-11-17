@@ -1,0 +1,227 @@
+# ============================================================
+#  Panel – most między stroną www a grą (MEDIVALRPG)
+#  © 2026 Maciej Kaczmarczyk — lektoro.pl
+# ============================================================
+
+# Adres Workera Cloudflare (bez końcowego ukośnika). Plugin łączy się z wss://<adres>/plugin.
+# Puste = panel wyłączony.
+worker-url: "https://panel.example.workers.dev"
+
+# Sekret współdzielony z Workerem (Worker secret PANEL_SECRET).
+# Gdy pusty, plugin przy starcie wygeneruje losowy (48 znaków) i zapisze go tutaj.
+plugin-secret: ""
+
+# ---- role panelu --------------------------------------------------------------------------
+# Admin panelu (pełny dostęp, także do państw NPC). Nicki graczy (wielkość liter bez znaczenia).
+# Dodawanie: /panel admin dodaj <nick> (z konsoli albo przez istniejącego admina).
+admins: []
+# true = każdy op serwera jest też adminem panelu. Domyślnie false: opy NIE są adminami panelu.
+ops-are-admins: false
+# „Zarządcy państw NPC” (globalni): dostęp tylko do zarządzania państwami NPC (admin.npc.*),
+# bez usuwania krajów, ekonomii, listy graczy i audytu. Przypisanie do JEDNEGO kraju NPC:
+# /panel zarzadca przypisz <kraj> <nick> (zapis w plugins/Panel/data.json).
+npc-managers: []
+
+# ---- limity -------------------------------------------------------------------------------
+limits:
+  # Logowanie hasłem: maks. nieudanych prób w oknie czasu, osobno dla nicku i dla adresu IP.
+  login-attempts: 5
+  login-window-minutes: 15
+  # Ile minut ważny jest link logowania z /panel (informacyjnie; ważność pilnuje Worker).
+  link-minutes: 10
+  # Odstęp między kolejnymi linkami /panel jednego gracza (sekundy).
+  link-cooldown-seconds: 10
+  # Maks. zmian (mutacji) na minutę wykonanych przez jednego użytkownika panelu.
+  mutations-per-minute: 30
+  # Ile czasu (ms) czekać na główny wątek serwera; Worker czeka 10 s, więc trzymaj mniej.
+  rpc-timeout-ms: 8000
+  # Maks. długość opisu kraju (Kraje ma też własny limit: country.description-max-length).
+  description-max-length: 200
+  # Maks. żołnierzy w jednym zamówieniu (rekrutacja / rozpuszczenie / dodanie przez admina).
+  max-army-count: 64
+  # Ile wpisów historii skarbca i dziennika AI wysyłać w country.get.
+  treasury-log: 20
+  npc-log: 30
+  # Ile ostatnich wpisów audytu trzymać w pamięci dla admin.audit (pełny log jest w audit.log).
+  audit-memory: 1000
+
+# Powiadomienia w grze o zmianach z panelu (dla członków kraju, którego dotyczą).
+notify-in-game: true
+
+# Historia państw (wykresy w panelu): co godzinę próbka skarbca, ludności, żołnierzy, chunków i jedzenia
+# każdego państwa NPC do plugins/Panel/history/<id kraju>.json. player-countries: true = także kraje graczy.
+history:
+  enabled: true
+  player-countries: false
+  keep-days: 30
+
+# Gospodarka kraju (panel: #/gospodarka/<kraj>, RPC country.economy): produkcja, skrzynie, spichlerz, tragarze, budowy,
+# braki i obywatele z Ludnosc (materialFlow). Widzą: władca i doradcy kraju, admin panelu, WorldSteward, zarządca kraju NPC.
+# Odczyt na głównym wątku; gotowa odpowiedź jest trzymana w pamięci serwera cache-seconds na kraj (Worker i przeglądarka
+# jej nie zapisują). fresh (przycisk „Odśwież”) przebudowuje ją najwyżej co fresh-min-seconds.
+# Próbnik: co sekundę najwyżej JEDEN kraj, którego ostatnia próbka jest starsza niż sample-seconds — do szacunku
+# dziennej produkcji (przyrost towaru w skrzyniach) i wykresów 24 h; pomija rundę, gdy średni tick > skip-above-mspt,
+# a odczyt dłuższy niż budget-ms wstrzymuje go proporcjonalnie. Historia jest tylko w pamięci (restart ją zeruje).
+economy:
+  enabled: true
+  cache-seconds: 15
+  fresh-min-seconds: 5
+  sample-seconds: 300
+  # Kraj, którego odczyt trwał k × budget-ms, jest próbkowany k razy rzadziej. Państwa NPC: tylko na żądanie
+  # (gdy ktoś otworzy stronę); true = próbkuj je także w tle.
+  sample-npc-countries: false
+  budget-ms: 8
+  skip-above-mspt: 45
+
+# Edytor planu państwa NPC (zakładka „Plan”): podkład mapy z góry (admin.npc.mapRender).
+map-render:
+  # Margines wokół ziemi kraju (bloki); strona może poprosić o 0–128.
+  margin: 32
+  # Największy bok obrazu w pikselach; większy obszar jest skalowany 2:1 (albo 4:1…).
+  max-size: 768
+  # Najwięcej chunków na jedną mapę (przy większym kraju margines maleje).
+  max-chunks: 4096
+  # Niezaładowane (ale wygenerowane) chunki: ile najwyżej wczytać asynchronicznie na jedną mapę i ile naraz.
+  max-async-loads: 1500
+  parallel-loads: 8
+  # Ile snapshotów chunków robić na jeden tick serwera (główny wątek).
+  snapshots-per-tick: 24
+  # Po ilu ms odpowiedzieć częściową mapą, jeśli pełna jeszcze się nie zrobiła (Worker czeka 10 s).
+  wait-ms: 5500
+  # Jak długo trzymać gotową mapę kraju w pamięci.
+  cache-seconds: 60
+  # Po ilu sekundach przerwać zbieranie chunków (reszta zostaje pusta).
+  job-timeout-seconds: 60
+  # Limit rozmiaru PNG po zakodowaniu base64 (KB); większy obraz jest dodatkowo zmniejszany 2:1.
+  max-png-kb: 1400
+
+plan:
+  # Ile bloków poza ziemią kraju mogą leżeć punkty planu (z ostrzeżeniem).
+  margin: 32
+
+# Narzędzie „Teren” edytora (admin.npc.territory): zajmowanie i zwalnianie chunków państwa NPC.
+territory:
+  # Koszt zajęcia chunka jak w Kraje: cost-base + cost-per-chunk × liczba chunków kraju.
+  # read-kraje-config: true = weź economy.claim-cost-base / claim-cost-per-chunk z plugins/Kraje/config.yml.
+  cost-base: 50
+  cost-per-chunk: 5
+  read-kraje-config: true
+  # Ile chunków zajmować/zwalniać na jeden tick serwera.
+  changes-per-tick: 32
+
+# Wydajność serwera (panel: Administracja → „Wydajność serwera”, RPC admin.health, w grze /panel wydajnosc).
+# Co interval-seconds: TPS, MSPT (średni czas ticka), gracze, załadowane chunki i encje oraz NPC pluginów
+# Ludnosc / Armia / Skarbiec / Wladcy / Zycie (po znacznikach PDC). Historia: fine-minutes pełnej rozdzielczości
+# + coarse-hours agregatów minutowych, zapis w plugins/Panel/health.json (co save-minutes i przy wyłączeniu).
+health:
+  enabled: true
+  interval-seconds: 10
+  fine-minutes: 60
+  coarse-hours: 24
+  # Liczenie NPC przegląda wszystkie załadowane encje (główny wątek; czas widać w panelu jako „skan NPC”).
+  # npc-scan-every: 3 = licz NPC co trzeci pomiar (między skanami panel pokazuje ostatni wynik).
+  npc-scan: true
+  npc-scan-every: 1
+  save-minutes: 10
+  # Najwięcej punktów na jednym wykresie (dłuższe zakresy są uśredniane) i krajów w rozbiciu NPC.
+  max-points: 720
+  country-limit: 50
+  # Progi ostrzeżeń (0 = wyłączony). TPS ostrzega PONIŻEJ progu, reszta POWYŻEJ.
+  # sustain-samples: ile kolejnych pomiarów musi przekraczać próg, zanim ostrzeżenie się włączy.
+  thresholds:
+    tps: 18.0
+    tps-critical: 15.0
+    mspt: 45.0
+    mspt-critical: 50.0
+    npc: 2000
+    npc-critical: 3000
+    entities: 8000
+    entities-critical: 12000
+    sustain-samples: 2
+    # Osobne progi NPC jednego pluginu, np. armia: 1000 (globalny limit wojska).
+    npc-plugin:
+      armia: 1000
+  # Komunikaty w grze przy nowym ostrzeżeniu: gracze z uprawnieniem (domyślnie op) i admini panelu online.
+  # cooldown-minutes: najczęściej jeden komunikat na rodzaj i poziom ostrzeżenia.
+  alerts:
+    enabled: true
+    permission: panel.health.alerts
+    panel-admins: true
+    cooldown-minutes: 15
+    recovery: true
+    console: true
+
+# Logowanie wiadomości wymienianych z Workerem (diagnostyka; hasła nie są logowane).
+debug: false
+
+# Komunikaty (MiniMessage). <prefix> wstawia prefiks. Pusty komunikat = nie wysyłaj.
+messages:
+  prefix: "<gold>[Panel]</gold> "
+  link: "<prefix><link><green><u>Kliknij tutaj, aby otworzyć panel państwa</u></green></link>\n<gray>Link jest jednorazowy i ważny <minutes> min – nie udostępniaj go nikomu.</gray>"
+  link-hover: "<yellow>Otwórz panel w przeglądarce</yellow>"
+  link-cooldown: "<prefix><red>Poczekaj <seconds> s przed kolejnym linkiem."
+  unavailable: "<prefix><red>Panel jest chwilowo niedostępny (brak połączenia ze stroną). Spróbuj za chwilę."
+  players-only: "<prefix><red>Tej komendy może użyć tylko gracz."
+  no-permission: "<prefix><red>Nie masz uprawnień."
+  logged-out: "<prefix><green>Wylogowano cię ze wszystkich sesji panelu."
+  reloaded: "<prefix><green>Przeładowano konfigurację panelu."
+  admin-added: "<prefix><green><player> jest teraz adminem panelu."
+  admin-removed: "<prefix><yellow><player> nie jest już adminem panelu."
+  admin-not-found: "<prefix><red><player> nie jest adminem panelu."
+  admin-already: "<prefix><gray><player> już jest adminem panelu."
+  admin-list: "<prefix><gray>Admini panelu: <white><list></white> <dark_gray>(opy są adminami: <ops>)</dark_gray>"
+  manager-added: "<prefix><green><player> jest teraz zarządcą wszystkich państw NPC."
+  manager-removed: "<prefix><yellow><player> nie jest już globalnym zarządcą państw NPC."
+  manager-not-found: "<prefix><red><player> nie jest globalnym zarządcą państw NPC."
+  manager-already: "<prefix><gray><player> już jest globalnym zarządcą."
+  manager-list: "<prefix><gray>Zarządcy państw NPC (wszystkie): <white><list></white>"
+  manager-list-assigned: "<dark_gray>-</dark_gray> <white><country></white><gray>: <player>"
+  manager-assigned: "<prefix><green><player> zarządza teraz państwem NPC <white><country></white>."
+  manager-unassigned: "<prefix><yellow>Państwo NPC <white><country></white> nie ma już przypisanego zarządcy."
+  country-not-found: "<prefix><red>Nie ma kraju <white><country></white>."
+  country-not-npc: "<prefix><red><white><country></white> nie jest państwem NPC."
+  player-not-found: "<prefix><red>Nie znaleziono gracza <white><player></white> (musiał choć raz wejść na serwer)."
+  status: "<prefix><gray>Połączenie ze stroną: <status> <dark_gray>(<url>)</dark_gray>"
+  status-online: "<green>aktywne</green>"
+  status-offline: "<red>brak</red>"
+  help: "<prefix><yellow>Panel państwa w przeglądarce</yellow> <dark_gray>(kliknij komendę)</dark_gray>\n<click:run_command:'/panel'><hover:show_text:'<gray>Kliknij, aby dostać link'><gold>/panel</gold></hover></click> <gray>– link logowania (jednorazowy)</gray>\n<click:run_command:'/panel wyloguj'><hover:show_text:'<gray>Kliknij, aby wylogować'><gold>/panel wyloguj</gold></hover></click> <gray>– wyloguj wszystkie sesje panelu</gray>"
+  help-admin: "<click:run_command:'/panel reload'><gold>/panel reload</gold></click> <gray>– przeładuj config</gray>\n<click:run_command:'/panel status'><gold>/panel status</gold></click> <gray>– połączenie ze stroną</gray>\n<click:run_command:'/panel wydajnosc'><gold>/panel wydajnosc</gold></click> <gray>– TPS, MSPT i liczba NPC</gray>\n<click:suggest_command:'/panel admin dodaj '><gold>/panel admin dodaj|usun <nick></gold></click>, <click:run_command:'/panel admin lista'><gold>/panel admin lista</gold></click>\n<click:suggest_command:'/panel zarzadca dodaj '><gold>/panel zarzadca dodaj|usun <nick></gold></click>, <click:run_command:'/panel zarzadca lista'><gold>/panel zarzadca lista</gold></click>\n<click:suggest_command:'/panel zarzadca przypisz '><gold>/panel zarzadca przypisz <kraj> <nick|-></gold></click> <gray>– zarządca jednego państwa NPC</gray>"
+  health-alert: "<prefix><gold>⚠ Wydajność serwera:</gold> <yellow><value></yellow> <dark_gray>(/panel wydajnosc)</dark_gray>"
+  health-alert-critical: "<prefix><red><bold>⚠ Wydajność serwera:</bold></red> <red><value></red> <dark_gray>(/panel wydajnosc)</dark_gray>"
+  health-recovered: "<prefix><green>✔ Wydajność wróciła do normy: <value>.</green>"
+  health-disabled: "<prefix><gray>Pomiary wydajności są wyłączone (health.enabled w config.yml)."
+  health-none: "<prefix><gray>Brak pomiarów — pierwszy będzie za kilka sekund."
+  health-status: "<prefix><gold>Wydajność serwera</gold> <dark_gray>(pomiar sprzed <seconds> s)</dark_gray>\n<gray>TPS: <tps> <dark_gray>(5 min <tps5>, 15 min <tps15>)</dark_gray> <gray>· MSPT: <mspt> ms\n<gray>Gracze: <white><players></white> · chunki: <white><chunks></white> · encje: <white><entities></white>\n<gray>NPC: <white><npc></white> <dark_gray>(<list>)</dark_gray>"
+  health-ok: "<green>✔ Brak ostrzeżeń."
+  health-warning-line: "<red>⚠ <value>"
+  health-good: "<green><value></green>"
+  health-warn: "<yellow><value></yellow>"
+  health-bad: "<red><value></red>"
+  suggest-player: "<gray>gracz"
+  suggest-npc-country: "<gray>państwo NPC"
+  suggest-none: "<gray>usuń przypisanie"
+
+  # Powiadomienia w grze dla członków kraju (<player> = kto, <country> = kraj, reszta zależy od akcji).
+  notify:
+    country-setColor: "<prefix><gray><white><player></white> zmienił kolor kraju na <white><value></white>."
+    country-setDescription: "<prefix><gray><white><player></white> zmienił opis kraju."
+    country-setTax: "<prefix><gray><white><player></white> zmienił podatek na <gold><value></gold>."
+    country-transferRuler: "<prefix><gold><white><player></white> przekazał władzę graczowi <white><value></white>."
+    member-setRank: "<prefix><gray><white><player></white> zmienił rangę <white><target></white> na <white><value></white>."
+    member-kick: "<prefix><yellow><white><player></white> wyrzucił z kraju <white><target></white>."
+    member-invite: "<prefix><gray><white><player></white> zaprosił do kraju <white><target></white>."
+    relation-propose: "<prefix><gray><white><player></white> zaproponował <white><value></white> krajowi <white><target></white>."
+    relation-declareWar: "<prefix><red><white><player></white> wypowiedział wojnę krajowi <white><target></white>!"
+    relation-breakAlliance: "<prefix><yellow><white><player></white> zerwał sojusz z <white><target></white>."
+    treasury-deposit: "<prefix><gray><white><player></white> wpłacił <gold><value></gold> do skarbca."
+    treasury-withdraw: "<prefix><gray><white><player></white> wypłacił <gold><value></gold> ze skarbca."
+    army-recruit: "<prefix><gray><white><player></white> zrekrutował wojsko: <white><value></white>"
+    army-disband: "<prefix><gray><white><player></white> rozpuścił wojsko: <white><value></white>"
+    admin-country-setRuler: "<prefix><gold>Administrator <white><player></white> ustanowił władcą <white><value></white>."
+    admin-relation-set: "<prefix><gray>Administrator <white><player></white> ustawił relację z <white><target></white>: <white><value></white>."
+    admin-treasury-adjust: "<prefix><gray>Administrator <white><player></white> zmienił stan skarbca o <gold><value></gold>."
+    postep-discover: "<prefix><gray><white><player></white> wybrał badania: <gold><target></gold> <dark_gray>(<value>)</dark_gray>."
+    postep-invest: "<prefix><gray><white><player></white> zainwestował w badania <gold><value></gold>."
+    admin-postep-setEra: "<prefix><gold>Administrator <white><player></white> ustawił epokę kraju: <white><value></white>."
+    admin-postep-points: "<prefix><gray>Administrator <white><player></white> zmienił punkty badań o <white><value></white>."
+    admin-postep-grant: "<prefix><gray>Administrator <white><player></white> nadał odkrycia: <white><value></white>."

@@ -1,0 +1,164 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: wieza
+name: '<#7F8C8D>Wieża strażnicza</#7F8C8D>'
+description: 'Budowla obronna: posterunek dla strażników; nie daje premii do podatków ani wzrostu. Kamienna wieża z platformą obserwacyjną i blankami.'
+function: tower
+beds: 0
+cost: 5000
+tier: 1
+category: defense
+zone: border
+max-per-country: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  '1': 'stone_brick_stairs[facing=north,half=top]'
+  '2': 'stone_brick_stairs[facing=south,half=top]'
+  '3': 'stone_brick_stairs[facing=east,half=top]'
+  '4': 'stone_brick_stairs[facing=west,half=top]'
+  'A': 'ladder[facing=south]'
+  'C': 'cobblestone'
+  'D': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'spruce_fence'
+  'N': 'red_banner[rotation=8]'
+  'P': 'spruce_planks'
+  'S': 'stone_bricks'
+  'Y': 'cracked_stone_bricks'
+  'd': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'e': 'wall_torch[facing=east]'
+  'j': 'lantern[hanging=false]'
+  'm': 'mossy_stone_bricks'
+  't': 'wall_torch[facing=south]'
+  'w': 'wall_torch[facing=west]'
+layers:
+  # y=0
+  - |
+    _______
+    _SSSSS_
+    _SSSSS_
+    _SSSSS_
+    _SSSSS_
+    _SSSSS_
+    _______
+  # y=1
+  - |
+    .......
+    .SCCCS.
+    .C.A.C.
+    .C...C.
+    .C...m.
+    .SCDCS.
+    .......
+  # y=2
+  - |
+    .......
+    .SmCCS.
+    .C.A.C.
+    .C...C.
+    .C...C.
+    .SCdCS.
+    .......
+  # y=3
+  - |
+    .......
+    .SCCYS.
+    .C.A.C.
+    .C...C.
+    .Ce..C.
+    .SCCCS.
+    ...t...
+  # y=4
+  - |
+    .......
+    .SC.CS.
+    .C.A.C.
+    .......
+    .C...C.
+    .SmCCS.
+    .......
+  # y=5
+  - |
+    .......
+    .SCCCS.
+    .C.A.C.
+    .C...m.
+    .Y...C.
+    .SCCCS.
+    .......
+  # y=6
+  - |
+    .......
+    .SCCCS.
+    .C.A.C.
+    .C...C.
+    .C..wC.
+    .SCCCS.
+    .......
+  # y=7
+  - |
+    .......
+    .SC.CS.
+    .m.A.C.
+    .......
+    .C...C.
+    .SC.CS.
+    .......
+  # y=8
+  - |
+    .......
+    .SCCCS.
+    .C.A.Y.
+    .C...C.
+    .C...C.
+    .SCCmS.
+    .......
+  # y=9
+  - |
+    .22222.
+    3SCYCS4
+    3C.A.C4
+    3C...C4
+    3Ce..C4
+    3SCCCS4
+    .11111.
+  # y=10
+  - |
+    SSSSSSS
+    SPPPPPS
+    SPPAPPS
+    SPPPPPS
+    SPPPPPS
+    SPPPPPS
+    SSSSSSS
+  # y=11
+  - |
+    S.S.S.S
+    .......
+    S.....S
+    .......
+    S..F..S
+    .......
+    S.S.S.S
+  # y=12
+  - |
+    j.....j
+    .......
+    .......
+    .......
+    ...F...
+    .......
+    j.....j
+  # y=13
+  - |
+    .......
+    .......
+    .......
+    .......
+    ...N...
+    .......
+    .......

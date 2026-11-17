@@ -1,0 +1,494 @@
+[
+ {
+  "name": "armia_koga",
+  "cubes": 199,
+  "bones": [
+   "statek",
+   "kadlub",
+   "tarcze",
+   "glow_latarnia",
+   "ster",
+   "ster_koniec",
+   "kotwica",
+   "zagiel_gl",
+   "plotno_gl",
+   "herb_gl",
+   "proporzec_gl",
+   "bandera",
+   "bandera_koniec"
+  ],
+  "animations": {
+   "fala": {
+    "length": 4.0,
+    "loop": "loop",
+    "bones": [
+     "statek"
+    ]
+   },
+   "zagle_rozwin": {
+    "length": 1.6,
+    "loop": "hold",
+    "bones": [
+     "zagiel_gl"
+    ]
+   },
+   "kotwica_opuszczona": {
+    "length": 0.05,
+    "loop": "hold",
+    "bones": [
+     "kotwica"
+    ]
+   },
+   "zagle_zwiniete": {
+    "length": 0.05,
+    "loop": "hold",
+    "bones": [
+     "zagiel_gl"
+    ]
+   },
+   "zagle_zwin": {
+    "length": 1.6,
+    "loop": "hold",
+    "bones": [
+     "zagiel_gl"
+    ]
+   },
+   "lopot": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "plotno_gl"
+    ]
+   },
+   "flagi": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "bandera",
+     "bandera_koniec",
+     "proporzec_gl"
+    ]
+   },
+   "kotwica_opusc": {
+    "length": 2.0,
+    "loop": "hold",
+    "bones": [
+     "kotwica"
+    ]
+   },
+   "kotwica_podnies": {
+    "length": 2.5,
+    "loop": "hold",
+    "bones": [
+     "kotwica"
+    ]
+   }
+  },
+  "shipType": "transportowiec",
+  "deckTop": 40.0,
+  "walkHalfLength": 61.141798896433215,
+  "walkHalfWidth": 22.08,
+  "hullHalfWidth": 24.0,
+  "hullHalfLength": 72.0,
+  "sails": [
+   {
+    "bone": "zagiel_gl",
+    "cloth": "plotno_gl",
+    "emblem": "herb_gl",
+    "yardY": 144.0,
+    "depth": 66
+   }
+  ],
+  "flags": [
+   "proporzec_gl",
+   "bandera",
+   "bandera_koniec"
+  ],
+  "tinted": [
+   "tarcze",
+   "proporzec_gl",
+   "bandera",
+   "bandera_koniec",
+   "herb_gl"
+  ],
+  "helmZ": -48.0,
+  "castleY": 73.0,
+  "railHeight": 7.0
+ },
+ {
+  "name": "armia_karawela",
+  "cubes": 210,
+  "bones": [
+   "statek",
+   "kadlub",
+   "tarcze",
+   "glow_latarnia",
+   "ster",
+   "ster_koniec",
+   "kotwica",
+   "zagiel_gl",
+   "plotno_gl",
+   "herb_gl",
+   "proporzec_gl",
+   "zagiel_bez",
+   "plotno_bez",
+   "proporzec_bez",
+   "bandera",
+   "bandera_koniec"
+  ],
+  "animations": {
+   "fala": {
+    "length": 4.0,
+    "loop": "loop",
+    "bones": [
+     "statek"
+    ]
+   },
+   "zagle_rozwin": {
+    "length": 1.6,
+    "loop": "hold",
+    "bones": [
+     "zagiel_bez",
+     "zagiel_gl"
+    ]
+   },
+   "kotwica_opuszczona": {
+    "length": 0.05,
+    "loop": "hold",
+    "bones": [
+     "kotwica"
+    ]
+   },
+   "zagle_zwiniete": {
+    "length": 0.05,
+    "loop": "hold",
+    "bones": [
+     "zagiel_bez",
+     "zagiel_gl"
+    ]
+   },
+   "zagle_zwin": {
+    "length": 1.6,
+    "loop": "hold",
+    "bones": [
+     "zagiel_bez",
+     "zagiel_gl"
+    ]
+   },
+   "lopot": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "plotno_bez",
+     "plotno_gl"
+    ]
+   },
+   "flagi": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "bandera",
+     "bandera_koniec",
+     "proporzec_bez",
+     "proporzec_gl"
+    ]
+   },
+   "kotwica_opusc": {
+    "length": 2.0,
+    "loop": "hold",
+    "bones": [
+     "kotwica"
+    ]
+   },
+   "kotwica_podnies": {
+    "length": 2.5,
+    "loop": "hold",
+    "bones": [
+     "kotwica"
+    ]
+   }
+  },
+  "shipType": "karawela",
+  "deckTop": 48.0,
+  "walkHalfLength": 74.34459301714156,
+  "walkHalfWidth": 30.08,
+  "hullHalfWidth": 32.0,
+  "hullHalfLength": 88.0,
+  "sails": [
+   {
+    "bone": "zagiel_gl",
+    "cloth": "plotno_gl",
+    "emblem": "herb_gl",
+    "yardY": 184.0,
+    "depth": 98
+   },
+   {
+    "bone": "zagiel_bez",
+    "cloth": "plotno_bez",
+    "emblem": null,
+    "yardY": 122.88,
+    "depth": 35
+   }
+  ],
+  "flags": [
+   "proporzec_gl",
+   "proporzec_bez",
+   "bandera",
+   "bandera_koniec"
+  ],
+  "tinted": [
+   "tarcze",
+   "proporzec_gl",
+   "proporzec_bez",
+   "bandera",
+   "bandera_koniec",
+   "herb_gl"
+  ],
+  "helmZ": -64.0,
+  "castleY": 81.0,
+  "railHeight": 7.0
+ },
+ {
+  "name": "armia_trebusz",
+  "cubes": 59,
+  "bones": [
+   "machina",
+   "rama",
+   "kolo_p_30",
+   "kolo_p_86",
+   "kolo_l_30",
+   "kolo_l_86",
+   "ramie",
+   "przeciwwaga",
+   "proca",
+   "kamien"
+  ],
+  "animations": {
+   "strzal": {
+    "length": 1.0,
+    "loop": "hold",
+    "bones": [
+     "kamien",
+     "proca",
+     "przeciwwaga",
+     "rama",
+     "ramie"
+    ]
+   },
+   "ladowanie": {
+    "length": 4.0,
+    "loop": "hold",
+    "bones": [
+     "kamien",
+     "proca",
+     "przeciwwaga",
+     "ramie"
+    ]
+   },
+   "jazda": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "kolo_l_30",
+     "kolo_l_86",
+     "kolo_p_30",
+     "kolo_p_86"
+    ]
+   }
+  },
+  "wheels": [
+   "kolo_p_30",
+   "kolo_p_86",
+   "kolo_l_30",
+   "kolo_l_86"
+  ],
+  "engine": "trebusz",
+  "release": 0.1,
+  "wheelRadius": 5,
+  "footprint": [
+   -21,
+   0,
+   22,
+   21,
+   0,
+   94
+  ]
+ },
+ {
+  "name": "armia_katapulta",
+  "cubes": 56,
+  "bones": [
+   "machina",
+   "rama",
+   "kolo_p_12",
+   "kolo_p_70",
+   "kolo_l_12",
+   "kolo_l_70",
+   "ramie",
+   "kamien"
+  ],
+  "animations": {
+   "strzal": {
+    "length": 0.5,
+    "loop": "hold",
+    "bones": [
+     "kamien",
+     "rama",
+     "ramie"
+    ]
+   },
+   "ladowanie": {
+    "length": 3.0,
+    "loop": "hold",
+    "bones": [
+     "kamien",
+     "ramie"
+    ]
+   },
+   "jazda": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "kolo_l_12",
+     "kolo_l_70",
+     "kolo_p_12",
+     "kolo_p_70"
+    ]
+   }
+  },
+  "wheels": [
+   "kolo_p_12",
+   "kolo_p_70",
+   "kolo_l_12",
+   "kolo_l_70"
+  ],
+  "engine": "katapulta",
+  "release": 0.08,
+  "wheelRadius": 7,
+  "footprint": [
+   -20,
+   0,
+   0,
+   20,
+   0,
+   80
+  ]
+ },
+ {
+  "name": "armia_taran",
+  "cubes": 59,
+  "bones": [
+   "machina",
+   "rama",
+   "kolo_p_20",
+   "kolo_p_76",
+   "kolo_l_20",
+   "kolo_l_76",
+   "liny",
+   "belka"
+  ],
+  "animations": {
+   "uderzenie": {
+    "length": 1.0,
+    "loop": "hold",
+    "bones": [
+     "belka",
+     "liny",
+     "rama"
+    ]
+   },
+   "ladowanie": {
+    "length": 2.0,
+    "loop": "hold",
+    "bones": [
+     "belka",
+     "liny"
+    ]
+   },
+   "jazda": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "kolo_l_20",
+     "kolo_l_76",
+     "kolo_p_20",
+     "kolo_p_76"
+    ]
+   }
+  },
+  "wheels": [
+   "kolo_p_20",
+   "kolo_p_76",
+   "kolo_l_20",
+   "kolo_l_76"
+  ],
+  "engine": "taran",
+  "release": 0.12,
+  "wheelRadius": 8,
+  "footprint": [
+   -25,
+   0,
+   4,
+   25,
+   0,
+   108
+  ]
+ },
+ {
+  "name": "armia_armata",
+  "cubes": 43,
+  "bones": [
+   "machina",
+   "laweta",
+   "kolo_p",
+   "kolo_l",
+   "lufa",
+   "dym",
+   "glow_plomien",
+   "wycior"
+  ],
+  "animations": {
+   "strzal": {
+    "length": 1.4,
+    "loop": "hold",
+    "bones": [
+     "dym",
+     "glow_plomien",
+     "laweta",
+     "lufa"
+    ]
+   },
+   "ladowanie": {
+    "length": 3.0,
+    "loop": "hold",
+    "bones": [
+     "laweta",
+     "wycior"
+    ]
+   },
+   "jazda": {
+    "length": 1.0,
+    "loop": "loop",
+    "bones": [
+     "kolo_l",
+     "kolo_p"
+    ]
+   }
+  },
+  "wheels": [
+   "kolo_p",
+   "kolo_l"
+  ],
+  "engine": "armata",
+  "release": 0.0,
+  "wheelRadius": 13,
+  "footprint": [
+   -22,
+   0,
+   2,
+   22,
+   0,
+   88
+  ]
+ }
+]

@@ -1,0 +1,16 @@
+// Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+{
+  "$schema": "../panel/web/node_modules/wrangler/config-schema.json",
+  "name": "medivalrpg-commands",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-28",
+  "workers_dev": true,
+  "durable_objects": {
+    "bindings": [{ "name": "COMMANDS", "class_name": "CommandsSynchronizer" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["CommandsSynchronizer"] }],
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "observability": { "enabled": false }
+  // CATALOG_URL is the public HTTPS Panel catalog asset, supplied as a secret.
+  // DISCORD_WEBHOOK_URL + SYNC_TOKEN. No production destination or credential here.
+}

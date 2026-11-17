@@ -1,0 +1,46 @@
+# ============================================================
+#  Propozycja do menu/src/main/resources/menus.yml (NIE wdrożona — do przeniesienia przez osobę od modułu Menu)
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Panel 2026-10-27: „Wydajność serwera” (TPS, MSPT, NPC). Przycisk w menu admina (menus.admin.items, rząd „serwer”)
+#  pokazuje na czacie ostatni pomiar i aktywne ostrzeżenia; pełne wykresy są w panelu WWW:
+#  Administracja → Wydajność serwera (#/admin/serwer).
+#  Uprawnienie panel.health.alerts (domyślnie op) — to samo, które dostaje komunikaty o spadku wydajności.
+#  keep-open: false — wynik jest na czacie, menu ma się zamknąć.
+# ============================================================
+
+menus:
+  admin:
+    items:
+      wydajnosc:
+        material: CLOCK
+        name: "<gold>⚠ Wydajność serwera"
+        lore:
+          - "<gray>TPS, czas ticka (MSPT), gracze, encje"
+          - "<gray>i liczba NPC pluginów (Ludność, Armia, Skarbiec…)."
+          - "<gray>Wykresy z 24 h: panel WWW → Administracja."
+          - ""
+          - "<gold>Kliknij</gold> <gray>– stan teraz na czacie"
+          - "<dark_gray>/panel wydajnosc"
+        requires-plugin: Panel
+        permission: panel.health.alerts
+        action: "command:panel wydajnosc"
+
+# ------------------------------------------------------------
+#  Panel 2026-10-29: „Gospodarka kraju” w panelu WWW (#/gospodarka/<kraj>) — dla władcy i doradców.
+#  Proponowane miejsce: menus.osada.items (obok „Przepływ materiałów” /ludnosc gospodarka). Przycisk daje link
+#  logowania do panelu; w panelu: menu → „Gospodarka kraju”. Ten sam stan w grze pokazuje /ludnosc gospodarka.
+# ------------------------------------------------------------
+#  osada:
+#    items:
+#      gospodarka-www:
+#        material: FILLED_MAP
+#        name: "<gold>Gospodarka w panelu WWW"
+#        lore:
+#          - "<gray>Produkcja, skrzynie, spichlerz, tragarze,"
+#          - "<gray>budowy, braki z podpowiedziami i obywatele"
+#          - "<gray>— z wykresami, także na telefonie."
+#          - "<dark_gray>Władca i doradcy · /panel → Gospodarka kraju"
+#        action: "command:panel"
+#        requires-plugin: Panel
+

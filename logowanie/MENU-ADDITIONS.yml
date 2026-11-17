@@ -1,0 +1,28 @@
+# ============================================================
+#  Strażnik (logowanie) — przyciski w menu (2026-10-29). JUŻ dopisane do menu/src/main/resources/menus.yml
+#  (menus.ustawienia.items: zmien-haslo, wyloguj); widoczne tylko, gdy plugin Straznik jest włączony.
+#  /login i /register nie mają przycisków (wpisuje się je przed zalogowaniem, gdy menu jest niedostępne).
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# ============================================================
+
+menus:
+  ustawienia:
+    items:
+      zmien-haslo:
+        material: TRIPWIRE_HOOK
+        name: "<gold>Zmień hasło"
+        lore:
+          - "<gray>Wpisz stare i nowe hasło na czacie."
+          - "<gray>Kończy też sesje w panelu WWW."
+          - "<dark_gray>/zmienhaslo <stare> <nowe>"
+        requires-plugin: Straznik
+        action: "suggest:/zmienhaslo "
+      wyloguj:
+        material: OAK_DOOR
+        name: "<red>Wyloguj"
+        lore:
+          - "<gray>Wychodzi z serwera i kończy sesję:"
+          - "<gray>kolejne wejście wymaga hasła."
+          - "<dark_gray>/wyloguj"
+        requires-plugin: Straznik
+        action: "suggest:/wyloguj"

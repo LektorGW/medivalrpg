@@ -1,0 +1,19 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Postep
+version: '${version}'
+main: pl.medivalrpg.postep.PostepPlugin
+api-version: '26.3'
+description: Epoki i postęp państw (Średniowiecze → Renesans → Epoka przemysłowa → Nowoczesność) dla serwera MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+softdepend: [Ludnosc, Armia, squaremap]
+permissions:
+  postep.use:
+    description: Dostęp do /postep (/epoka)
+    default: true
+  postep.admin:
+    description: Komendy /postep admin, omijanie wymogu rangi
+    default: op
+    children:
+      postep.use: true

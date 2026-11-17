@@ -1,0 +1,29 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.swamp"
+      }
+    },
+    "minecraft:visual/fog_color": "#c2d6f4",
+    "minecraft:visual/sky_color": "#8db0f1",
+    "minecraft:visual/water_fog_color": "#476e89",
+    "minecraft:visual/water_fog_end_distance": {
+      "argument": 0.85,
+      "modifier": "multiply"
+    }
+  },
+  "carvers": [],
+  "downfall": 0.9,
+  "effects": {
+    "dry_foliage_color": "#7a634b",
+    "foliage_color": "#787c44",
+    "grass_color": "#969d7d",
+    "water_color": "#3b6e90"
+  },
+  "features": [],
+  "has_precipitation": true,
+  "temperature": -0.25
+}

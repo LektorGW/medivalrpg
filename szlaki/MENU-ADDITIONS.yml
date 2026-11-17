@@ -1,0 +1,49 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Fragment do ręcznego scalenia z Menu/menus.yml; NIE jest automatycznie instalowany.
+# Slot auto: sprawdź pojemność menu docelowego przed scaleniem.
+menus:
+  main:
+    items:
+      szlaki:
+        material: CHEST_MINECART
+        name: '<gold>Karawany i szlaki morskie</gold>'
+        lore:
+          - '<gray>Rzeczywiste przewozy towarów.'
+          - '<gray>Lista tras, konwojów i pomoc firmy.'
+        requires-plugin: Szlaki
+        action: 'menu:szlaki'
+  szlaki:
+    title: '<gold>Karawany i szlaki morskie</gold>'
+    rows: 3
+    border: BLACK_STAINED_GLASS_PANE
+    auto-slots: [11-15]
+    requires-plugin: Szlaki
+    items:
+      lista:
+        material: MAP
+        name: '<yellow>Trasy i przewozy</yellow>'
+        action: 'command:szlaki lista'
+      pomoc:
+        material: BOOK
+        name: '<gold>Pomoc i zarządzanie firmą</gold>'
+        action: 'command:szlaki'
+      przejecie:
+        material: IRON_SWORD
+        name: '<red>Przejęcie w wojnie</red>'
+        lore:
+          - '<gray>Unieruchom wrogi konwój i podejdź do 6 bloków.'
+          - '<gray>Cały ładunek musi zmieścić się w ekwipunku.'
+          - '<gray>Wpisz UUID pokazane przez PPM lub listę.'
+        action: 'suggest:szlaki przejmij '
+      naprawa:
+        material: IRON_INGOT
+        name: '<green>Obrona i naprawa</green>'
+        lore:
+          - '<gray>Po 30 s bez ciosu rozpocznij naprawę.'
+          - '<gray>Pozostań przy konwoju 10 s i ponów komendę.'
+        action: 'suggest:szlaki napraw '
+      powrot:
+        slot: 22
+        material: ARROW
+        name: '<gray>Powrót</gray>'
+        action: 'menu:main'

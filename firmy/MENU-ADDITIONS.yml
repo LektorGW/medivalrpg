@@ -1,0 +1,205 @@
+# ============================================================
+#  Propozycja do menu/src/main/resources/menus.yml (NIE wdrożona — do przeniesienia przez osobę od modułu Menu)
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Firmy graczy (plugin Firmy, /firma, alias /kompania). Wpisy podzielone na etapy: przenosić tylko etap, którego jar
+#  jest wdrażany (komendy etapu 2 i 3 nie istnieją w jarze etapu 1).
+#   • ETAP 1: menu główne „Firmy”, menu „firmy”, przyciski admina.
+#   • ETAP 2: przyciski kontraktów, zleceń hurtowych i kredytów (sekcja niżej, zakomentowana do czasu wdrożenia).
+#   • ETAP 3: przyciski manufaktur i robotników (sekcja niżej, zakomentowana do czasu wdrożenia).
+#  Menu główne ma auto-slots [10-16, 19-25, 28-34, 37-43] — jest miejsce na jedną kategorię więcej.
+# ============================================================
+
+menus:
+  main:
+    items:
+      firmy:
+        material: GOLDEN_HELMET
+        name: "<gold>⚒ Firmy</gold>"
+        lore:
+          - "<gray>Cechy, kompanie kupieckie i manufaktury."
+          - "<gray>Wspólne konto, udziały, pensje, sklepy"
+          - "<gray>i magazyny firmy. Ranking firm."
+          - ""
+          - "<gold>Kliknij, aby otworzyć"
+        requires-plugin: Firmy
+        action: "menu:firmy"
+
+  # ---------------------------------------------------------------- ETAP 1
+  firmy:
+    title: "<gold>⚒ Firmy"
+    rows: 5
+    requires-plugin: Firmy
+    border: YELLOW_STAINED_GLASS_PANE
+    auto-slots: [10-16, 19-25, 28-34]
+    items:
+      moja:
+        material: GOLDEN_HELMET
+        name: "<gold>Moja firma"
+        lore:
+          - "<gray>Konto, ludzie, sklepy, magazyn i księga."
+          - "<gray>Bez firmy: pomoc, jak ją założyć."
+          - "<dark_gray>/firma"
+        action: "command:firma"
+      zaloz:
+        material: WRITABLE_BOOK
+        name: "<green>Załóż firmę"
+        lore:
+          - "<gray>Stań na ziemi kraju, który ma być siedzibą."
+          - "<gray>Typy: cech, kompania, manufaktura (Renesans)."
+          - "<gray>25 zł opłaty dla kraju + 25 zł kapitału."
+          - "<gray>W kraju gracza zgodę daje Władca/Doradca."
+          - "<dark_gray>/firma zaloz <typ> <nazwa>"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– wpisz komendę"
+        action: "suggest:/firma zaloz "
+      ranking:
+        material: GOLD_BLOCK
+        name: "<yellow>Ranking firm"
+        lore:
+          - "<gray>Według obrotu z 30 dni (także majątek,"
+          - "<gray>ludzie, wykonane kontrakty)."
+          - "<dark_gray>/firma ranking [obrot|majatek|ludzie|kontrakty]"
+        action: "command:firma ranking"
+      info:
+        material: NAME_TAG
+        name: "<yellow>Karta firmy"
+        lore:
+          - "<gray>Herb, kraj, typ, ludzie i obrót firmy."
+          - "<dark_gray>/firma info <firma>"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– wpisz nazwę"
+        action: "suggest:/firma info "
+      wplac:
+        material: EMERALD
+        name: "<green>Wpłać do firmy"
+        lore:
+          - "<gray>Z twojego konta bankowego na konto firmy."
+          - "<dark_gray>/firma wplac <kwota>"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– wpisz kwotę"
+        action: "suggest:/firma wplac "
+      ludzie:
+        material: PLAYER_HEAD
+        name: "<yellow>Ludzie i udziały"
+        lore:
+          - "<gray>Zaproś wspólnika albo czeladnika,"
+          - "<gray>ustaw pensję (do 50 zł dziennie)."
+          - "<gray>Udziały zmieniają się za zgodą obu stron."
+          - "<dark_gray>/firma zapros <gracz> <wspolnik|czeladnik>"
+          - "<dark_gray>/firma udzialy <gracz> <procent>"
+        action: "command:firma udzialy"
+      sklep:
+        material: OAK_SIGN
+        name: "<yellow>Sklep firmy"
+        lore:
+          - "<gray>Postaw zwykły [Sklep] na ziemi kraju siedziby,"
+          - "<gray>spójrz na niego i kliknij: utarg trafia"
+          - "<gray>na konto firmy (minus podatek kraju)."
+          - "<dark_gray>/firma sklep"
+        action: "command:firma sklep"
+      magazyn:
+        material: CHEST
+        name: "<yellow>Magazyn firmy"
+        lore:
+          - "<gray>Spójrz na skrzynię i kliknij: otwierają ją"
+          - "<gray>tylko ludzie firmy, a dziennik pokazuje,"
+          - "<gray>kto co wyjął."
+          - "<dark_gray>/firma magazyn"
+        action: "command:firma magazyn"
+      ksiega:
+        material: BOOK
+        name: "<yellow>Księga firmy"
+        lore:
+          - "<gray>Każdy wpływ, pensja, dywidenda i podatek."
+          - "<dark_gray>/firma ksiega"
+        action: "command:firma ksiega"
+      kraj:
+        material: RED_BANNER
+        name: "<gold>Firmy w moim kraju"
+        lore:
+          - "<gray>Władca i Doradca: wnioski o założenie firm,"
+          - "<gray>podatek od przychodu firm (0–20 %),"
+          - "<gray>zawieszenie sklepów firm wroga w wojnie."
+          - "<dark_gray>/firma kraj"
+        requires-plugin: [Firmy, Kraje]
+        condition: has-country
+        action: "command:firma kraj"
+      pomoc:
+        material: KNOWLEDGE_BOOK
+        name: "<aqua>Pomoc: firmy"
+        lore:
+          - "<gray>Poradnik i wszystkie komendy firm."
+        action: "help:firmy"
+
+  admin:
+    items:
+      firmy-alty:
+        material: SPYGLASS
+        name: "<gold>Firmy: wspólne adresy członków"
+        lore:
+          - "<gray>Ostrzeżenia o możliwych altach w firmach"
+          - "<gray>(bez automatycznych kar). Pełny widok:"
+          - "<gray>panel WWW → Firmy → Zarząd."
+          - "<dark_gray>/firma admin alty"
+        requires-plugin: Firmy
+        permission: firmy.admin
+        action: "command:firma admin alty"
+      firmy-zamroz:
+        material: PACKED_ICE
+        name: "<gold>Firmy: zamroź / odmroź"
+        lore:
+          - "<gray>Zamrożona firma nie wypłaca pieniędzy."
+          - "<dark_gray>/firma admin zamroz <firma> <powód>"
+          - "<dark_gray>/firma admin odmroz <firma>"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– wpisz komendę"
+        requires-plugin: Firmy
+        permission: firmy.admin
+        action: "suggest:/firma admin zamroz "
+
+# ---------------------------------------------------------------- ETAP 2 (dopisać do menus.firmy.items po wdrożeniu)
+#      kontrakty:
+#        material: PAPER
+#        name: "<yellow>Kontrakty"
+#        lore:
+#          - "<gray>Zlecenia z pełną zapłatą w depozycie."
+#          - "<gray>Wykonawca dostarcza prawdziwy towar do skrzyni,"
+#          - "<gray>opcjonalne wadium chroni zleceniodawcę."
+#          - "<dark_gray>/firma kontrakt lista"
+#        action: "command:firma kontrakt lista"
+#      hurt:
+#        material: HAY_BLOCK
+#        name: "<yellow>Zlecenia hurtowe władców NPC"
+#        lore:
+#          - "<gray>Duże dostawy dla dworów NPC; zapłata"
+#          - "<gray>z depozytu na konto firmy."
+#          - "<dark_gray>/firma hurt"
+#        action: "command:firma hurt"
+#      kredyty:
+#        material: GOLD_INGOT
+#        name: "<yellow>Kredyty firm"
+#        lore:
+#          - "<gray>Do 2× kapitału albo 50 % obrotu z 30 dni,"
+#          - "<gray>odsetki najwyżej 10 % za okres 7–30 dni,"
+#          - "<gray>spłata automatyczna z przychodów."
+#          - "<dark_gray>/firma kredyt"
+#        action: "command:firma kredyt"
+#
+# ---------------------------------------------------------------- ETAP 3 (dopisać do menus.firmy.items po wdrożeniu)
+#      warsztaty:
+#        material: CRAFTING_TABLE
+#        name: "<yellow>Warsztaty manufaktury"
+#        lore:
+#          - "<gray>Robotnicy NPC przetwarzają prawdziwe surowce"
+#          - "<gray>ze skrzyni wejścia do skrzyni wyjścia."
+#          - "<dark_gray>/firma warsztat"
+#        action: "command:firma warsztat"
+#      robotnicy:
+#        material: VILLAGER_SPAWN_EGG
+#        name: "<yellow>Robotnicy NPC"
+#        lore:
+#          - "<gray>Bezrobotni obywatele kraju siedziby,"
+#          - "<gray>pensja trafia do puli obywateli."
+#          - "<dark_gray>/firma robotnik zatrudnij|zwolnij"
+#        action: "command:firma robotnik"

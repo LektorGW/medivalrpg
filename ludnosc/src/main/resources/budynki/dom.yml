@@ -1,0 +1,215 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: dom
+name: '<#E0D3B8>Dom</#E0D3B8>'
+description: 'Mieszkanie dla 4 obywateli (4 łóżka); bez wolnych łóżek nie przybywa osadników. Piętrowy dom z muru pruskiego.'
+function: housing
+beds: 4
+cost: 4000
+tier: 0
+category: housing
+zone: inner
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '1':
+    base: cobblestone
+    floor: spruce_planks
+    frame: dark_oak_log
+    roof: dark_oak
+    roof_block: dark_oak_planks
+    wall: white_terracotta
+    window: glass_pane
+palette:
+  'A': 'ladder[facing=west]'
+  'C': '@base'
+  'D': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'E': 'spruce_fence'
+  'F': 'white_bed[facing=north,part=foot]'
+  'G': '@window'
+  'H': 'white_bed[facing=north,part=head]'
+  'L': '@frame[axis=y]'
+  'P': '@floor'
+  'Q': 'chest[facing=south]'
+  'R': 'barrel[facing=up]'
+  'S': 'stone_bricks'
+  'T': '@wall'
+  'U': 'smoker[facing=south]'
+  'V': 'lectern[facing=south]'
+  'W': 'crafting_table'
+  'X': '@frame[axis=x]'
+  'Z': '@frame[axis=z]'
+  'c': 'red_carpet'
+  'd': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'e': 'spruce_pressure_plate'
+  'f': 'potted_blue_orchid'
+  'h': '@roof_slab[type=bottom]'
+  'j': 'lantern[hanging=false]'
+  'k': '@roof_block'
+  'l': 'lantern[hanging=true]'
+  'n': '@roof_stairs[facing=north,half=bottom]'
+  'q': 'spruce_stairs[facing=east,half=bottom]'
+  's': '@roof_stairs[facing=south,half=bottom]'
+  't': 'wall_torch[facing=south]'
+  'w': 'spruce_stairs[facing=west,half=bottom]'
+layers:
+  # y=0
+  - |
+    ___________
+    _CCCCCCCCC_
+    _CPPPPPPPC_
+    _CPPPPPPPC_
+    _CPPPPPPPC_
+    _CPPPPPPPC_
+    _CPPPPPPPC_
+    _CCCCCCCCC_
+    ___________
+  # y=1
+  - |
+    ...........
+    .SCCCCCCCS.
+    .CUWR.R..C.
+    .C.......C.
+    .C....wEqC.
+    .Ccc.....C.
+    .C......AC.
+    .SCCCDCCCS.
+    ...........
+  # y=2
+  - |
+    ...........
+    .SCGCCCGCS.
+    .C.......C.
+    .G.......G.
+    .C.....e.C.
+    .G.......G.
+    .C......AC.
+    .SGGCdCGGS.
+    ....t.t....
+  # y=3
+  - |
+    ...........
+    .SCCCCCCCS.
+    .C.......C.
+    .C.......C.
+    .C..l....C.
+    .C.......C.
+    .C......AC.
+    .SCCCSCCCS.
+    ...........
+  # y=4
+  - |
+    ...........
+    .LXXXXXXXL.
+    .ZPPPPPPPZ.
+    .ZPPPPPPPZ.
+    .ZPPPPPPPZ.
+    .ZPPPPPPPZ.
+    .ZPPPPPPAZ.
+    .LXXXXXXXL.
+    ...........
+  # y=5
+  - |
+    ...........
+    .LTTTLTTTL.
+    .THHVQfHHT.
+    .TFF...FFT.
+    .L.......L.
+    .T.......T.
+    .T.....E.T.
+    .LTTTLTTTL.
+    ...........
+  # y=6
+  - |
+    ...........
+    .LTGTLTGTL.
+    .T...j...T.
+    .G.......T.
+    .L.......L.
+    .T.......G.
+    .T.......T.
+    .LTGTLTGTL.
+    ...........
+  # y=7
+  - |
+    ...........
+    .LTTTLTTTL.
+    .T.......T.
+    .T.......T.
+    .L.......L.
+    .T.......T.
+    .T.......T.
+    .LTTTLTTTL.
+    ...........
+  # y=8
+  - |
+    sssssssssss
+    .LXXXXXXXL.
+    .Z.......Z.
+    .Z.......Z.
+    .Z.......Z.
+    .Z.......Z.
+    .Z.......Z.
+    .LXXXXXXXL.
+    nnnnnnnnnnn
+  # y=9
+  - |
+    ...........
+    sssssssssss
+    .P.......P.
+    .P.......P.
+    .P.......P.
+    .P.......P.
+    .P.......P.
+    nnnnnnnnnnn
+    ...........
+  # y=10
+  - |
+    ...........
+    ...........
+    sssssssssss
+    .P.......P.
+    .G.......G.
+    .P.......P.
+    nnnnnnnnnnn
+    ...........
+    ...........
+  # y=11
+  - |
+    ...........
+    ...........
+    ...........
+    sssssssssss
+    .P...l...P.
+    nnnnnnnnnnn
+    ...........
+    ...........
+    ...........
+  # y=12
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    kkkkkkkkkkk
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=13
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    hhhhhhhhhhh
+    ...........
+    ...........
+    ...........
+    ...........

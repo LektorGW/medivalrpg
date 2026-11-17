@@ -1,0 +1,62 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# ============================================================
+#  PROPOZYCJA dla menu/src/main/resources/menus.yml (plugin Menu) — nowe interakcje i animacje pracy NPC (Interakcje).
+#  Nie jest wczytywana przez żaden plugin; koordynator przenosi ją ręcznie do menus.yml (format jak tam).
+#
+#  Nowe interakcje (/uscisk, /toast, /reweranse, /pasuj, /lenno, /koronuj) pojawiają się w menu „interakcje”
+#  (type: interactions) SAME — Menu czyta je z configu Interakcji. Brak zmian w samym menu „interakcje”
+#  (14 ikon mieści się w content-slots [10-16, 19-25, 28-34]).
+#
+#  1) Menu „postac”: nowy opis przycisku „interakcje” (wymienia ceremonie).
+#  2) Menu „postac”: nowy przycisk „tytul” (tytuł rycerski z pasowania).
+#  3) Menu „admin”: przycisk „npc-animacje” (stan animacji pracy NPC).
+# ============================================================
+
+menus:
+
+  postac:
+    items:
+      # (1) zastępuje istniejący opis
+      interakcje:
+        material: POPPY
+        name: "<light_purple>Interakcje z graczem"
+        lore:
+          - "<gray>Całus, przytulenie, piątka, ukłon,"
+          - "<gray>uścisk dłoni, toast, ukłon dworski…"
+          - "<gold>Ceremonie:</gold> <gray>pasowanie na rycerza,"
+          - "<gray>przysięga lenna, koronacja władcy."
+          - "<gray>Wybierz interakcję i gracza obok."
+          - ""
+          - "<gold>Kliknij, aby otworzyć"
+        permission: interakcje.use
+        action: "menu:interakcje"
+      # (2) nowy przycisk
+      tytul:
+        material: GOLDEN_SWORD
+        name: "<gold>⚔ Tytuł rycerski"
+        lore:
+          - "<gray>Po pasowaniu przez władcę kraju"
+          - "<gray>masz przed nickiem tytuł Sir albo Pani."
+          - "<gray>Zmień: /interakcje tytul sir|pani"
+          - "<gray>Ukryj: /interakcje tytul ukryj"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– twój tytuł"
+          - "<dark_gray>/interakcje tytul"
+        requires-plugin: Interakcje
+        permission: interakcje.use
+        action: "command:interakcje tytul"
+
+  admin:
+    items:
+      # (3) nowy przycisk
+      npc-animacje:
+        material: ARMOR_STAND
+        name: "<yellow>Animacje pracy NPC"
+        lore:
+          - "<gray>Ilu NPC ma pracę, ilu jest animowanych,"
+          - "<gray>czas przeglądu i odłożone starty."
+          - "<gray>Test: /interakcje npc test <praca>"
+          - "<dark_gray>/interakcje npc status"
+        requires-plugin: Interakcje
+        permission: interakcje.admin
+        action: "command:interakcje npc status"

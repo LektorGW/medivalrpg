@@ -1,0 +1,70 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Straż MEDIVALRPG — codzienny raport dla właściciela, natychmiastowe alerty i nocna kopia danych pluginów.
+# Zmiany w tym pliku wczytuje /straz przeladuj (bez restartu serwera).
+
+# Strefa czasowa godzin raportu i kopii.
+strefa: Europe/Warsaw
+
+# ------------------------------------------------------------------ Discord
+discord:
+  # Adres webhooka PRYWATNEGO kanału właściciela (np. #raporty-serwera). PUSTY = raport i alerty trafiają
+  # wyłącznie do logu serwera i do plików plugins/Straz/raporty/ (podgląd w grze: /straz raport).
+  # Jak ustawić (szczegóły w README pakietu):
+  #   1. Discord → kanał tylko dla właściciela → Edytuj kanał → Integracje → Webhooki → Nowy webhook → Kopiuj URL.
+  #   2. Wklej adres między apostrofy: webhook-url: 'https://discord.com/api/webhooks/<id>/<token>'
+  #   3. W konsoli albo w grze: /straz przeladuj, potem /straz test — na kanale pojawi się wiadomość testowa.
+  # Adres to SEKRET: nie wklejaj go do repozytorium, czatu ani dokumentacji. Straż nigdy nie wypisuje go w logu.
+  webhook-url: ''
+  # Nazwa nadawcy wiadomości na kanale.
+  nazwa: 'Straż MEDIVALRPG'
+  # Tylko do izolowanych testów: dopuszcza http://127.0.0.1:<port>/api/webhooks/<id>/<token>. Na produkcji false.
+  zezwol-loopback-test: false
+
+# ------------------------------------------------------------------ raport dzienny
+raport:
+  # Godzina raportu (HH:mm, strefa powyżej).
+  godzina: '09:00'
+  # Gdy serwer był wyłączony o godzinie raportu — wyślij zaległy raport po starcie (tego samego dnia).
+  nadrabiaj: true
+  # Ile dni trzymać pliki raportów i alertów w plugins/Straz/raporty/.
+  pliki-dni: 60
+
+# ------------------------------------------------------------------ alerty natychmiastowe
+alerty:
+  # Zamknięta pula świata (miedziaki). 100 000 000 md = 1 000 000 zł.
+  pula-oczekiwana: 100000000
+  # Co ile sekund sprawdzać sumę puli (czyta zapis bank/accounts.json Skarbca w tle).
+  pula-co-sekund: 300
+  # TPS poniżej progu przez tyle minut z rzędu → alert.
+  tps-prog: 15.0
+  tps-minut: 5
+  # Pojedynczy tick dłuższy niż tyle ms liczy się jako „lag spike” (raport).
+  lag-spike-ms: 500
+  # Nowy błąd ERROR/SEVERE (podpis niewidziany od tylu dni) → alert.
+  nowy-blad-dni: 7
+  # Wyrażenia regularne (Java) — pasujące komunikaty błędów nie wywołują alertu (dalej są w raporcie).
+  ignoruj-bledy: []
+  # Kolej: brak postępu budowy przez tyle godzin, gdy status to „Budowa …” → alert (0 = wyłączone).
+  kolej-bez-postepu-godzin: 12
+  # Najwyżej tyle alertów na godzinę (reszta tylko w logu i pliku, z licznikiem pominiętych).
+  max-na-godzine: 12
+
+# ------------------------------------------------------------------ nocna kopia danych pluginów
+kopia:
+  wlaczona: true
+  # Godzina kopii (HH:mm). 03:00 to pełny render mapy na hostingu — kopia jest później.
+  godzina: '04:30'
+  # Katalog kopii względem katalogu serwera (obok plugins/). Pliki plugins-RRRRMMDD.zip.
+  katalog: backups
+  # Ile najnowszych dziennych kopii zachować (starsze plugins-*.zip są usuwane).
+  zachowaj-dni: 14
+  # Katalogi w plugins/ do skopiowania (brakujące są pomijane).
+  katalogi: [Skarbiec, Kraje, Ludnosc, Armia, Kolej, Zycie, Wladcy, Postep, Panel, Menu, Nowosci, Interakcje, Szlaki, Turnieje, Glos, Straz]
+  # Pomijane pliki (glob względem plugins/).
+  pomijaj: ['**/*.tmp', '**/*.lock', 'Straz/raporty/**']
+  # Ograniczenie odczytu w MB/s (żeby kopia nie obciążała dysku). 0 = bez limitu.
+  limit-mb-s: 20
+  # Kopia jest „podejrzanie mała”, gdy ma mniej niż tyle bajtów albo mniej niż 50% poprzedniej.
+  min-bajtow: 1000000
+  # Wolne miejsce na dysku wymagane przed kopią: tyle razy rozmiar ostatniej kopii (+100 MB).
+  zapas-miejsca: 3

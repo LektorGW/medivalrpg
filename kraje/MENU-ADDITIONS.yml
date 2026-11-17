@@ -1,0 +1,39 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Katalog istniejących komend dla integratora Menu; nie jest automatycznie ładowany.
+# {kraj} należy zastąpić nazwą kraju. Komendy wykonuje gracz, nie konsola.
+# Widoczność przycisku nie zastępuje kontroli uprawnień w Kraje.
+unia:
+  info: '/kraj unia info'
+  zaproponuj: '/kraj unia zaproponuj {kraj}'
+  przyjmij: '/kraj unia przyjmij {kraj}'
+  odrzuc: '/kraj unia odrzuc {kraj}'
+  rzadz: '/kraj unia rzadz'
+  zerwij: '/kraj unia zerwij'
+  # Dopiero po wysłaniu prośby o potwierdzenie:
+  potwierdz: '/kraj unia zerwij potwierdz'
+ambasada:
+  lista: '/kraj ambasada lista'
+  otworz: '/kraj ambasada otworz {kraj}'
+  przyjmij: '/kraj ambasada przyjmij {kraj}'
+  odrzuc: '/kraj ambasada odrzuc {kraj}'
+  zamknij: '/kraj ambasada zamknij {kraj}'
+  wydal: '/kraj ambasada wydal {kraj}'
+  teleport: '/kraj ambasada tp {kraj}'
+# Chorągwie krajów (2026-10-29, przygotowane — nieaktywne). Obrazek wgrywa się w panelu WWW (#/kraj/<id>/flaga),
+# moderacja w panelu (#/flagi). Pozycja menu "Chorągiew kraju" może otwierać /kraj flaga (stan + link do panelu).
+flaga:
+  info: '/kraj flaga'
+  postaw: '/kraj flaga postaw'
+  auto: '/kraj flaga auto'
+  historia: '/kraj flaga historia'
+  wycofaj: '/kraj flaga wycofaj'
+  # Dopiero z potwierdzeniem:
+  domyslna: '/kraj flaga domyslna potwierdz'
+  # Sztandary w grze (2026-10-29, pakiet deploy-flags-banners-20261029 — przygotowane, nieaktywne).
+  # W menus.yml z requires-command, żeby przyciski pojawiły się dopiero po aktywacji jara.
+  # Władca/Doradca; opłata: materiały z ekwipunku + kwota ze skarbca kraju, limit dzienny na kraj.
+  sztandar: '/kraj flaga sztandar'               # requires-command: "kraj flaga sztandar"
+  sztandar-podglad: '/kraj flaga sztandar podglad'  # każdy członek, bez opłaty
+  przedmiot: '/kraj flaga przedmiot'             # requires-command: "kraj flaga przedmiot"
+# Moderatorzy (kraje.flagi.moderuj albo flags.moderators; gałąź ukryta dla innych, więc poza katalogiem graczy):
+# /kraj flaga admin kolejka | status | przebuduj | sztandar <kraj> | przedmiot <kraj>

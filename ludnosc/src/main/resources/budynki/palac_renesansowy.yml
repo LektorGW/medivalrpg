@@ -1,0 +1,353 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: palac_renesansowy
+name: '<#F5DEB3>Pałac renesansowy</#F5DEB3>'
+description: 'Podatki +12%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i punkty badań (Postęp). Łóżka (4) nie liczą się jako mieszkania. Czteroskrzydłowy pałac z arkadowym dziedzińcem.'
+function: palace
+beds: 4
+cost: 120000
+tier: 4
+category: representative
+zone: center
+max-per-country: 1
+requires:
+  population: 60
+  treasury: 200000
+  era: 2
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'smooth_stone'
+  'B': 'stone_bricks'
+  'C': 'white_terracotta'
+  'D': 'birch_planks'
+  'E': 'resin_bricks'
+  'F': 'smooth_sandstone'
+  'G': 'quartz_pillar[axis=y]'
+  'H': 'smooth_quartz_stairs[facing=east,half=top]'
+  'I': 'smooth_quartz_stairs[facing=west,half=top]'
+  'J': 'smooth_quartz_stairs[facing=south,half=top]'
+  'K': 'smooth_quartz_stairs[facing=north,half=top]'
+  'L': 'grass_block[snowy=false]'
+  'M': 'polished_andesite'
+  'N': 'smooth_quartz_slab[type=bottom]'
+  'O': 'water[level=0]'
+  'P': 'lantern[hanging=false]'
+  'Q': 'white_tulip'
+  'R': 'poppy'
+  'S': 'glass_pane'
+  'T': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'U': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'V': 'smooth_quartz'
+  'W': 'red_bed[facing=north,part=head]'
+  'X': 'red_bed[facing=north,part=foot]'
+  'Y': 'ladder[facing=south]'
+  'Z': 'lantern[hanging=true]'
+  'a': 'gold_block'
+  'b': 'quartz_stairs[facing=north,half=bottom]'
+  'c': '{kolor}_wall_banner[facing=south]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAALLLMLLLLMLLLLAAAAAA
+    AAAAAALLMLLLLMLLLLMAAAAAA
+    AAAAAALMLLLLMLLLLMLAAAAAA
+    AAAAAAMLLLLMLLLLMLLAAAAAA
+    AAAAAALLLLMOOOLMLLLAAAAAA
+    AAAAAALLLMLOOOMLLLLAAAAAA
+    AAAAAALLMLLOOOLLLLMAAAAAA
+    AAAAAALMLLLLMLLLLMLAAAAAA
+    AAAAAAMLLLLMLLLLMLLAAAAAA
+    AAAAAALLLLMLLLLMLLLAAAAAA
+    AAAAAALLLMLLLLMLLLLAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAA
+  # y=1
+  - |
+    FBBBBBBBBBBBBBBBBBBBBBBBF
+    BY.....................YB
+    B...........a...........B
+    B.......................B
+    B.......................B
+    FBBBBBG..G..G..G..GBBBBBF
+    FBBBBG.............GBBBBF
+    B......Q.........R......B
+    B.......................B
+    B....G....NNNNN....G....B
+    B.........N...N.........B
+    B.........N.G.N.........B
+    B....G....N...N....G....B
+    B.........NNNNN.........B
+    B.......................B
+    B....G.Q.........R.G....B
+    FBBBB...............BBBBF
+    FBBBBBG..G.....G..GBBBBBF
+    B.......................B
+    B.......................B
+    B.......................B
+    B.......................B
+    FBBBBBBBBBBBTBBBBBBBBBBBF
+  # y=2
+  - |
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    CY........c...c........YC
+    C...........b...........C
+    C.......................C
+    C.......................C
+    FCCCCCG..G..G..G..GCCCCCF
+    FCCCCG.............GCCCCF
+    C.......................C
+    C.......................C
+    C....G.............G....C
+    C.......................C
+    C...........P...........C
+    C....G.............G....C
+    C.......................C
+    C.......................C
+    C....G.............G....C
+    FCCCC...............CCCCF
+    FCCCCCG..G.....G..GCCCCCF
+    C.......................C
+    C.......................C
+    C.......................C
+    C.......................C
+    FCCCCCCCCCCCUCCCCCCCCCCCF
+  # y=3
+  - |
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    CY.....................YC
+    C.......................C
+    C.......................C
+    C.......................C
+    FCCCCCGHIGHIGHIGHIGCCCCCF
+    FCCCCG.............GCCCCF
+    C....J.............J....C
+    C....K.............K....C
+    C....G.............G....C
+    C....J.............J....C
+    C....K.............K....C
+    C....G.............G....C
+    C....J.............J....C
+    C....K.............K....C
+    C....G.............G....C
+    FCCCCJ.............JCCCCF
+    FCCCCCGHIGHIVHIGHIGCCCCCF
+    C.......................C
+    C.......................C
+    C.......................C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+  # y=4
+  - |
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    CY.....................YC
+    C.......................C
+    C..Z........Z........Z..C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    FCCCCF.............FCCCCF
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    FCCCCF.............FCCCCF
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C..Z........Z........Z..C
+    C.......................C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+  # y=5
+  - |
+    FFFFFFFFFFFFFFFFFFFFFFFFF
+    FYDDDDDDDDDDDDDDDDDDDDDYF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFF.............FFFFFF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FDDDDF.............FDDDDF
+    FFFFFF.............FFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FDDDDDDDDDDDDDDDDDDDDDDDF
+    FFFFFFFFFFFFFFFFFFFFFFFFF
+  # y=6
+  - |
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C..W.................W..C
+    C..X.................X..C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    FCCCCF.............FCCCCF
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    FCCCCF.............FCCCCF
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C..W.................W..C
+    C..X.................X..C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+  # y=7
+  - |
+    FCSCCSCCSCCSCCSCCSCCSCCCF
+    C.......................C
+    S.......................S
+    C.......................C
+    C.......................C
+    FCSCCSCCSCCSCCSCCSCCSCCCF
+    FCSCCF.............FCSCCF
+    C....C.............C....C
+    S....S.............S....S
+    C....C.............C....C
+    C....C.............C....C
+    S....S.............S....S
+    C....C.............C....C
+    C....C.............C....C
+    S....S.............S....S
+    C....C.............C....C
+    FCSCCF.............FCSCCF
+    FCSCCSCCSCCSCCSCCSCCSCCCF
+    C.......................C
+    S.......................S
+    C.......................C
+    C.......................C
+    FCSCCSCCSCCSCCSCCSCCSCCCF
+  # y=8
+  - |
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C.......................C
+    C.......................C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    FCCCCF.............FCCCCF
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    FCCCCF.............FCCCCF
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C.......................C
+    C.......................C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+  # y=9
+  - |
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C.......................C
+    C..Z........Z........Z..C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    FCCCCF.............FCCCCF
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    C....C.............C....C
+    FCCCCF.............FCCCCF
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+    C.......................C
+    C..Z........Z........Z..C
+    C.......................C
+    C.......................C
+    FCCCCCCCCCCCCCCCCCCCCCCCF
+  # y=10
+  - |
+    FEEEEEEEEEEEEEEEEEEEEEEEF
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    FEEEEEEEEEEEEEEEEEEEEEEEF
+    FEEEEF.............FEEEEF
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    EEEEEE.............EEEEEE
+    FEEEEF.............FEEEEF
+    FEEEEEEEEEEEEEEEEEEEEEEEF
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    EEEEEEEEEEEEEEEEEEEEEEEEE
+    FEEEEEEEEEEEEEEEEEEEEEEEF
+  # y=11
+  - |
+    P.......................P
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    .........................
+    P.......................P

@@ -1,0 +1,318 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: kamienica_podcieniowa
+variant-of: kamienica
+name: '<#D9CBB0>Kamienica podcieniowa</#D9CBB0>'
+description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Kamienica z podcieniami na kamiennych filarach.'
+function: housing
+beds: 6
+cost: 9000
+tier: 2
+category: housing
+zone: inner
+max-per-country: 0
+requires:
+  population: 16
+  treasury: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '1':
+    frame: dark_oak_log
+    wall: white_terracotta
+palette:
+  'A': '@base'
+  'B': '@floor'
+  'C': 'stone_brick_stairs[facing=west,half=top]'
+  'D': 'stone_brick_stairs[facing=east,half=top]'
+  'E': 'stone_brick_slab[type=top]'
+  'F': 'lantern[hanging=true]'
+  'G': '@frame[axis=x]'
+  'H': '@frame[axis=z]'
+  'I': '@frame[axis=y]'
+  'J': '@wall'
+  'K': '@roof_stairs[facing=south,half=bottom]'
+  'L': '@roof_stairs[facing=east,half=bottom]'
+  'M': '@roof_stairs[facing=north,half=bottom]'
+  'N': '@roof_block'
+  'O': '@roof_slab[type=bottom]'
+  'P': '@roof_stairs[facing=west,half=bottom]'
+  'Q': '@window'
+  'R': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'S': 'spruce_trapdoor[facing=north,half=top,open=false]'
+  'T': 'potted_orange_tulip'
+  'U': 'potted_lily_of_the_valley'
+  'V': 'potted_red_tulip'
+  'W': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'X': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'Y': 'barrel[facing=up]'
+  'Z': 'spruce_stairs[facing=north,half=bottom]'
+  'a': 'spruce_slab[type=top]'
+  'b': 'chest[facing=south]'
+  'c': 'crafting_table'
+  'd': 'cartography_table'
+  'e': 'ladder[facing=west]'
+  'f': 'bricks'
+  'g': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'h': '@fence'
+  'i': 'blue_bed[facing=north,part=head]'
+  'j': 'blue_bed[facing=north,part=foot]'
+  'k': 'lime_bed[facing=north,part=head]'
+  'l': 'lime_bed[facing=north,part=foot]'
+  'm': 'lantern[hanging=false]'
+  'n': 'spruce_fence'
+  'o': 'spruce_stairs[facing=east,half=bottom]'
+  'p': 'bookshelf'
+layers:
+  # y=0
+  - |
+    ___________
+    _AAAAAAAAA_
+    _ABBBBBBBA_
+    _ABBBBBBBA_
+    _ABBBBBBBA_
+    _ABBBBBBBA_
+    _ABBBBBBBA_
+    _AAAAAAAAA_
+    _AAAAAAAAA_
+    _AAAAAAAAA_
+    ___________
+  # y=1
+  - |
+    ...........
+    .AAAAAAAAA.
+    .Afbc.dY.A.
+    .A......eA.
+    .A.......A.
+    .A.aa.aa.A.
+    .A.......A.
+    .AAAAWAAAA.
+    ..YZ...ZY..
+    .A..A.A..A.
+    ...........
+  # y=2
+  - |
+    ...........
+    .AAAAAAAAA.
+    .Af......A.
+    .A......eA.
+    .A.......A.
+    .A.......A.
+    .A.......A.
+    .AQQAXAQQA.
+    ...........
+    .A..A.A..A.
+    ...........
+  # y=3
+  - |
+    ...........
+    .AAAAAAAAA.
+    .Af......A.
+    .A......eA.
+    .A...F...A.
+    .A.......A.
+    .A.......A.
+    .AAAAAAAAA.
+    .A.F...F.A.
+    .ACDAEACDA.
+    ...........
+  # y=4
+  - |
+    ...........
+    .IGGGGGGGI.
+    .HfBBBBBBH.
+    .HBBBBBBeH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .IGGGGGGGI.
+    ...........
+  # y=5
+  - |
+    ...........
+    .IJJJJJJJI.
+    .Jfiibk..J.
+    .J.jj.lheJ.
+    .J.......J.
+    .J.......J.
+    .J.on....J.
+    .J....Yp.J.
+    .J.......J.
+    .IJJJJJJJI.
+    ..S..S..S..
+  # y=6
+  - |
+    ...........
+    .IJQJJJQJI.
+    .Jf..m...J.
+    .J......eJ.
+    .J.......J.
+    .Q.......Q.
+    .J..V....J.
+    .J.......J.
+    .J.......J.
+    .IQJJQJJQI.
+    .RTRRURRVR.
+  # y=7
+  - |
+    ...........
+    .IJJJJJJJI.
+    .Jf......J.
+    .J......eJ.
+    .J.......J.
+    .J...F...J.
+    .J.......J.
+    .J.......J.
+    .J.......J.
+    .IJJJJJJJI.
+    ...........
+  # y=8
+  - |
+    ...........
+    .IGGGGGGGI.
+    .HfBBBBBBH.
+    .HBBBBBBeH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .HBBBBBBBH.
+    .IGGGGGGGI.
+    ...........
+  # y=9
+  - |
+    ...........
+    .IJJJJJJJI.
+    .Jfiibk..J.
+    .J.jj.lheJ.
+    .J.......J.
+    .J.......J.
+    .J.on....J.
+    .J....Yp.J.
+    .J.......J.
+    .IJJJJJJJI.
+    ...........
+  # y=10
+  - |
+    ...........
+    .IJQJJJQJI.
+    .Jf..m...J.
+    .J......eJ.
+    .J.......J.
+    .Q.......Q.
+    .J..V....J.
+    .J.......J.
+    .J.......J.
+    .IQJJQJJQI.
+    .R.RR.RR.R.
+  # y=11
+  - |
+    ...........
+    .IJJJJJJJI.
+    .Jf......J.
+    .J......eJ.
+    .J.......J.
+    .J...F...J.
+    .J.......J.
+    .J.......J.
+    .J.......J.
+    .IJJJJJJJI.
+    ...........
+  # y=12
+  - |
+    KKKKKKKKKKK
+    LIGGGGGGGIP
+    LHf......HP
+    LH.......HP
+    LH.......HP
+    LH.......HP
+    LH.......HP
+    LH.......HP
+    LH.......HP
+    LIGGGGGGGIP
+    MMMMMMMMMMM
+  # y=13
+  - |
+    ...........
+    .KKKKKKKKK.
+    .Lf......P.
+    .L.......P.
+    .L.......P.
+    .L.......P.
+    .L.......P.
+    .L.......P.
+    .L.......P.
+    .MIQIMIQIM.
+    ...........
+  # y=14
+  - |
+    ...........
+    ...........
+    ..fKKKKKK..
+    ..L.....P..
+    ..L.....P..
+    ..L.....P..
+    ..L.....P..
+    ..L.....P..
+    ..MMMMMMM..
+    ..LNP.LNP..
+    ...........
+  # y=15
+  - |
+    ...........
+    ...........
+    ..f........
+    ...KKKKK...
+    ...L...P...
+    ...L...P...
+    ...L...P...
+    ...MMMMM...
+    ...........
+    ...O...O...
+    ...........
+  # y=16
+  - |
+    ...........
+    ...........
+    ..f........
+    ...........
+    ....KKK....
+    ....L.P....
+    ....MMM....
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=17
+  - |
+    ...........
+    ...........
+    ..g........
+    ...........
+    ...........
+    .....N.....
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+  # y=18
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    .....O.....
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........

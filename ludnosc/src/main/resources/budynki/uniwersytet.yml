@@ -1,0 +1,281 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: uniwersytet
+name: '<#E8E4D8>Uniwersytet</#E8E4D8>'
+description: 'Daje najwięcej punktów badań (Postęp) i pracę bibliotekarzom i kartografom; bez premii do podatków. Kolegium z salami wykładowymi i portykiem.'
+function: university
+beds: 0
+cost: 30000
+tier: 3
+category: civic
+zone: inner
+max-per-country: 1
+requires:
+  population: 40
+  treasury: 40000
+  era: 2
+  discovery: uniwersytety
+foundation: fill
+foundation-block: polished_diorite
+ground-layer: 0
+palette:
+  'A': 'polished_diorite'
+  'B': 'calcite'
+  'C': 'quartz_pillar[axis=y]'
+  'D': 'glass_pane'
+  'E': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'H': 'resin_brick_stairs[facing=north,half=bottom]'
+  'I': 'resin_brick_stairs[facing=south,half=bottom]'
+  'J': 'resin_bricks'
+  'K': 'resin_brick_slab[type=bottom]'
+  'L': 'lantern[hanging=true]'
+  'M': 'bookshelf'
+  'N': 'lectern[facing=south,has_book=false,powered=false]'
+  'O': 'enchanting_table'
+  'P': 'ladder[facing=south]'
+  'Q': 'smooth_quartz_slab[type=bottom]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAA
+    ___________________
+  # y=1
+  - |
+    CAAAAAAAAAAAAAAAAAC
+    A................PA
+    A.M..M..M..M..M...A
+    A.................A
+    A.................A
+    A.................A
+    A.N..N..N..N..N...A
+    A.................A
+    A.................A
+    A.................A
+    A.................A
+    CAAAAAAAAEAAAAAAAAC
+    ........C.C........
+  # y=2
+  - |
+    CBDBDBDBDBDBDBDBDBC
+    B................PB
+    D.M..M..M..M..M...D
+    B.................B
+    D.................D
+    B.................B
+    D.................D
+    B.................B
+    D.................D
+    B.................B
+    B.................B
+    CBDBDBDBBFBBDBDBDBC
+    ........C.C........
+  # y=3
+  - |
+    CBBBBBBBBBBBBBBBBBC
+    B................PB
+    B..L...L...L...L..B
+    B.................B
+    B.................B
+    B.................B
+    B..L...L...L...L..B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    CBBBBBBBBBBBBBBBBBC
+    ........C.C........
+  # y=4
+  - |
+    CBBBBBBBBBBBBBBBBBC
+    BAAAAAAAAAAAAAAAAPB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAAAB
+    CBBBBBBBBBBBBBBBBBC
+    .......QQQQQ.......
+  # y=5
+  - |
+    CBBBBBBBBBBBBBBBBBC
+    B.................B
+    B..M..M..M..M..M..B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B..N..N..O..N..N..B
+    B.................B
+    B.................B
+    B.................B
+    CBBBBBBBBBBBBBBBBBC
+    ...................
+  # y=6
+  - |
+    CBDBDBDBDBDBDBDBDBC
+    B.................B
+    D.................D
+    B.................B
+    D.................D
+    B.................B
+    D.................D
+    B.................B
+    D.................D
+    B.................B
+    B.................B
+    CBDBDBDBDBDBDBDBDBC
+    ...................
+  # y=7
+  - |
+    CBBBBBBBBBBBBBBBBBC
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    CBBBBBBBBBBBBBBBBBC
+    ...................
+  # y=8
+  - |
+    IIIIIIIIIIIIIIIIIII
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    HHHHHHHHHHHHHHHHHHH
+  # y=9
+  - |
+    ...................
+    IIIIIIIIIIIIIIIIIII
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    HHHHHHHHHHHHHHHHHHH
+    ...................
+  # y=10
+  - |
+    ...................
+    ...................
+    IIIIIIIIIIIIIIIIIII
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    HHHHHHHHHHHHHHHHHHH
+    ...................
+    ...................
+  # y=11
+  - |
+    ...................
+    ...................
+    ...................
+    IIIIIIIIIIIIIIIIIII
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    B.................B
+    HHHHHHHHHHHHHHHHHHH
+    ...................
+    ...................
+    ...................
+  # y=12
+  - |
+    ...................
+    ...................
+    ...................
+    ...................
+    IIIIIIIIIIIIIIIIIII
+    B.................B
+    B.................B
+    B.................B
+    HHHHHHHHHHHHHHHHHHH
+    ...................
+    ...................
+    ...................
+    ...................
+  # y=13
+  - |
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    IIIIIIIIIIIIIIIIIII
+    B.................B
+    HHHHHHHHHHHHHHHHHHH
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+  # y=14
+  - |
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    JJJJJJJJJJJJJJJJJJJ
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+  # y=15
+  - |
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    KKKKKKKKKKKKKKKKKKK
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................

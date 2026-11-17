@@ -1,0 +1,240 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: karczma_zajazd
+variant-of: karczma
+name: '<#B5651D>Zajazd</#B5651D>'
+description: 'Podatki +5%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i lepszy nastrój — mieszkańcy schodzą się tu wieczorami. Łóżka dla podróżnych (4) nie liczą się jako mieszkania. Przydrożny zajazd z galerią na słupach i koniowiązem.'
+function: tavern
+beds: 4
+cost: 7000
+tier: 1
+category: civic
+zone: inner
+max-per-country: 2
+requires:
+  population: 12
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '0':
+    wall: mud_bricks
+  '1':
+    frame: dark_oak_log
+    wall: white_terracotta
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@fence'
+  'H': '@roof_stairs[facing=north,half=bottom]'
+  'I': '@roof_stairs[facing=south,half=bottom]'
+  'J': '@roof_slab[type=bottom]'
+  'K': '@window'
+  'L': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'M': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'N': 'lantern[hanging=true]'
+  'O': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'P': 'spruce_trapdoor[facing=west,half=bottom,open=true]'
+  'Q': 'water_cauldron[level=3]'
+  'R': 'hay_block[axis=y]'
+  'S': 'stripped_spruce_log[axis=x]'
+  'T': 'barrel[facing=south]'
+  'U': 'barrel[facing=up]'
+  'V': 'brewing_stand'
+  'W': 'campfire[lit=true,signal_fire=false,facing=west]'
+  'X': 'bricks'
+  'Y': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'Z': 'spruce_fence'
+  'a': 'spruce_pressure_plate'
+  'b': 'spruce_stairs[facing=south,half=bottom]'
+  'c': 'spruce_stairs[facing=north,half=bottom]'
+  'd': 'spruce_stairs[facing=east,half=bottom]'
+  'e': 'spruce_stairs[facing=west,half=bottom]'
+  'f': 'chest[facing=west]'
+  'g': 'smoker[facing=south]'
+  'h': 'ladder[facing=north]'
+  'i': 'green_bed[facing=north,part=head]'
+  'j': 'green_bed[facing=north,part=foot]'
+  'k': 'yellow_bed[facing=north,part=head]'
+  'l': 'yellow_bed[facing=north,part=foot]'
+  'm': 'chest[facing=south]'
+  'n': 'lantern[hanging=false]'
+  'o': 'brown_carpet'
+layers:
+  # y=0
+  - |
+    _____________
+    _BBBBBBBBBBB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAABX
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BBBBBBBBBBB_
+    _BBBBBBBBBBB_
+    _____________
+  # y=1
+  - |
+    .............
+    .DBBBBBBBBBD.
+    .BTTTQ....gB.
+    .BSSS..bbb.WX
+    .B.....ZZZ.B.
+    .BdZe..ccc.B.
+    .Bh.......fB.
+    .DBBBBLBBBBD.
+    .D..D...D..D.
+    .GGQ......RG.
+  # y=2
+  - |
+    .............
+    .DCKCDCDCKCD.
+    .CU........C.
+    PD.V.......XX
+    .K.....aaa.C.
+    PD.a.......D.
+    .Ch........C.
+    .DKKCDMDCKKD.
+    .O..O...O..O.
+    .............
+  # y=3
+  - |
+    .............
+    .DCDCDCDCDCD.
+    .C.........C.
+    .D.........XX
+    .C..N...N..C.
+    .D.........D.
+    .Ch........C.
+    .DCDCDEDCDCD.
+    .D..D.N.D..D.
+    .............
+  # y=4
+  - |
+    .............
+    .DEEEEEEEEED.
+    .FAAAAAAAAAF.
+    .FAAAAAAAAAFX
+    .FAAAAAAAAAF.
+    .FAAAAAAAAAF.
+    .FhAAAAAAAAF.
+    .DEEEEEEEEED.
+    .DAADAAADAAD.
+    .............
+  # y=5
+  - |
+    .............
+    .DCDCDCDCDCD.
+    .C.ii.m.kk.C.
+    .D.jj...ll.DX
+    .C...o.o..UC.
+    .D.........D.
+    .C.G.......C.
+    .DCDCD.DCDCD.
+    .GGGGGGGGGGG.
+    .............
+  # y=6
+  - |
+    .............
+    .DCKCDCDCKCD.
+    .C....n....C.
+    .D.........KX
+    .C.........C.
+    .D.........D.
+    .C.........C.
+    .DKDKD.DKDKD.
+    .............
+    .............
+  # y=7
+  - |
+    .............
+    .DCDCDCDCDCD.
+    .C.........C.
+    .D.........DX
+    .C.........C.
+    .D.........D.
+    .C.........C.
+    .DCDCDCDCDCD.
+    ...N.....N...
+    .............
+  # y=8
+  - |
+    IIIIIIIIIIIII
+    .DEEEEEEEEED.
+    .F.........F.
+    .F.........FX
+    .F.........F.
+    .F.........F.
+    .F.........F.
+    .DEEEEEEEEED.
+    .............
+    HHHHHHHHHHHHH
+  # y=9
+  - |
+    .............
+    IIIIIIIIIIIII
+    .C.........C.
+    .C.........CX
+    .D.........D.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    HHHHHHHHHHHHH
+    .............
+  # y=10
+  - |
+    .............
+    .............
+    IIIIIIIIIIIII
+    .K.........KX
+    .D.........D.
+    .K.........K.
+    .C.........C.
+    HHHHHHHHHHHHH
+    .............
+    .............
+  # y=11
+  - |
+    .............
+    .............
+    .............
+    IIIIIIIIIIIIX
+    .D....N....D.
+    .C.........C.
+    HHHHHHHHHHHHH
+    .............
+    .............
+    .............
+  # y=12
+  - |
+    .............
+    .............
+    .............
+    ............X
+    IIIIIIIIIIIII
+    HHHHHHHHHHHHH
+    .............
+    .............
+    .............
+    .............
+  # y=13
+  - |
+    .............
+    .............
+    .............
+    ............Y
+    JJJJJJJJJJJJJ
+    JJJJJJJJJJJJJ
+    .............
+    .............
+    .............
+    .............

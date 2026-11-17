@@ -1,0 +1,6 @@
+# Local development secrets for `wrangler dev`. Copy to .dev.vars (git-ignored).
+# Must match `plugin-secret` in plugins/Glos/config.yml.
+PLUGIN_SECRET=change-me-long-random-string
+# Optional: Cloudflare Realtime TURN credentials
+# TURN_KEY_ID=
+# TURN_KEY_API_TOKEN=

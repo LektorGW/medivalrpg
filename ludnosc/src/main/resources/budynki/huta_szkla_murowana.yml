@@ -1,0 +1,194 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: huta_szkla_murowana
+variant-of: huta_szkla
+name: '<#6FA3B3>Huta szkła murowana</#6FA3B3>'
+description: 'Hutnik kopie piasek w promieniu 24 bloków (do 48 dziennie) i wytapia szkło do skrzyni huty — dla budów. Potrzebuje piasku, paliwa (węgiel, węgiel drzewny albo kłody) i gracza w promieniu 96 bloków. Murowana huta ze szkarpami i kominem.'
+function: glassworks
+beds: 0
+cost: 4000
+tier: 1
+category: economy
+zone: shore
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@frame[axis=y]'
+  'D': '@frame[axis=x]'
+  'E': '@frame[axis=z]'
+  'F': '@roof_stairs[facing=north,half=bottom]'
+  'G': '@roof_stairs[facing=south,half=bottom]'
+  'H': '@roof_block'
+  'I': '@roof_slab[type=bottom]'
+  'J': '@wall'
+  'K': '@window'
+  'L': 'cobblestone_stairs[facing=south,half=bottom]'
+  'M': 'cobblestone_stairs[facing=north,half=bottom]'
+  'N': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'O': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'P': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'Q': 'spruce_trapdoor[facing=west,half=bottom,open=true]'
+  'R': 'spruce_trapdoor[facing=east,half=bottom,open=true]'
+  'S': 'wall_torch[facing=south]'
+  'T': 'bricks'
+  'U': 'blast_furnace[facing=south]'
+  'V': 'furnace[facing=west]'
+  'W': 'furnace[facing=east]'
+  'X': 'brick_stairs[facing=east,half=bottom]'
+  'Y': 'brick_stairs[facing=west,half=bottom]'
+  'Z': 'brick_stairs[facing=north,half=bottom]'
+  'a': 'brick_slab[type=bottom]'
+  'b': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'c': 'sand'
+  'd': '@fence'
+  'e': 'spruce_slab[type=bottom]'
+  'f': 'coal_block'
+  'g': 'cauldron'
+  'h': 'crafting_table'
+  'i': 'chest[facing=south]'
+  'j': 'glass'
+  'k': 'grindstone[face=floor,facing=west]'
+  'l': 'spruce_fence'
+  'm': 'spruce_pressure_plate'
+  'n': 'lantern[hanging=true]'
+layers:
+  # y=0
+  - |
+    ____B___B____
+    _BBBBBBBBBBB_
+    _BAAATTTAAAB_
+    _BAAATTTAAAB_
+    _BAAATTTAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BBBBBBBBBBB_
+    ____B___B____
+    _____________
+    _____________
+  # y=1
+  - |
+    ....B...B....
+    .CBBBBBBBBBC.
+    .BccdTTTghiB.
+    .Bcc.VTW...B.
+    .Bee.TUT...B.
+    .B........jB.
+    .Bff....lkjB.
+    .CBBBBNBBBBC.
+    ....B...B....
+    .............
+    .............
+  # y=2
+  - |
+    ....L...L....
+    .CKBBBBBBBKC.
+    .Bc..TTT...B.
+    QB...TTT...BR
+    .K...TTT...K.
+    QB.........BR
+    .Bf.....m.jB.
+    .CKBBBOBBBKC.
+    .P.PM...MP.P.
+    .............
+    .............
+  # y=3
+  - |
+    .............
+    .CBBBBBBBBBC.
+    .B...TTT...B.
+    .B...XTY...B.
+    .B...aZa...B.
+    .B.........B.
+    .B.........B.
+    .CBBBBBBBBBC.
+    .....S.S.....
+    .............
+    .............
+  # y=4
+  - |
+    GGGGGGGGGGGGG
+    .CDDDDDDDDDC.
+    .E....T....E.
+    .E.........E.
+    .E.........E.
+    .E.........E.
+    .E.........E.
+    .CDDDDDDDDDC.
+    FFFFFFFFFFFFF
+    .............
+    .............
+  # y=5
+  - |
+    .............
+    GGGGGGGGGGGGG
+    .J....T....J.
+    .J.........J.
+    .J.........J.
+    .J.........J.
+    .J.........J.
+    FFFFFFFFFFFFF
+    .............
+    .............
+    .............
+  # y=6
+  - |
+    .............
+    .............
+    GGGGGGTGGGGGG
+    .J.........J.
+    .K.........K.
+    .J.........J.
+    FFFFFFFFFFFFF
+    .............
+    .............
+    .............
+    .............
+  # y=7
+  - |
+    .............
+    .............
+    ......T......
+    GGGGGGGGGGGGG
+    .J.n.....n.J.
+    FFFFFFFFFFFFF
+    .............
+    .............
+    .............
+    .............
+    .............
+  # y=8
+  - |
+    .............
+    .............
+    ......T......
+    .............
+    HHHHHHHHHHHHH
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............
+  # y=9
+  - |
+    .............
+    .............
+    ......b......
+    .............
+    IIIIIIIIIIIII
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............

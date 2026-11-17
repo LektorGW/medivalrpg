@@ -1,0 +1,652 @@
+{
+  "copyright": "Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl",
+  "status": "PREPARED_NOT_DEPLOYED",
+  "unitsPerBlock": 16,
+  "trackGauge": 38,
+  "models": [
+    {
+      "name": "kolej_zuraw_wodny",
+      "label": "Żuraw wodny",
+      "cubes": 65,
+      "bounds": [
+        [
+          -9.0,
+          0.0,
+          -9.0
+        ],
+        [
+          41.5,
+          57.0,
+          9.0
+        ]
+      ],
+      "bones": [
+        "boom",
+        "valve"
+      ],
+      "animations": [
+        {
+          "name": "service_pz",
+          "loop": "once",
+          "length": 10,
+          "bones": [
+            "boom",
+            "valve"
+          ]
+        },
+        {
+          "name": "service_nz",
+          "loop": "once",
+          "length": 10,
+          "bones": [
+            "boom",
+            "valve"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_wieza_cisnien",
+      "label": "Wieża ciśnień",
+      "cubes": 150,
+      "bounds": [
+        [
+          -28.0,
+          0.0,
+          -29.0
+        ],
+        [
+          34.0,
+          105.0,
+          28.0
+        ]
+      ],
+      "bones": [
+        "valve"
+      ],
+      "animations": [
+        {
+          "name": "service",
+          "loop": "once",
+          "length": 6,
+          "bones": [
+            "valve"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_pompa_reczna",
+      "label": "Pompa ręczna",
+      "cubes": 50,
+      "bounds": [
+        [
+          -12.41603,
+          0.0,
+          -10.0
+        ],
+        [
+          14.0,
+          33.62404,
+          10.0
+        ]
+      ],
+      "bones": [
+        "handle"
+      ],
+      "animations": [
+        {
+          "name": "service",
+          "loop": "once",
+          "length": 6,
+          "bones": [
+            "handle"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_zbiornik_stacjonarny",
+      "label": "Stacjonarny zbiornik wody",
+      "cubes": 118,
+      "bounds": [
+        [
+          -15.5,
+          0.0,
+          -26.0
+        ],
+        [
+          20.5,
+          43.0,
+          30.5
+        ]
+      ],
+      "bones": [
+        "valve"
+      ],
+      "animations": [
+        {
+          "name": "service",
+          "loop": "once",
+          "length": 6,
+          "bones": [
+            "valve"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_bunkier_weglowy",
+      "label": "Bunkier i stanowisko załadunku węgla",
+      "cubes": 62,
+      "bounds": [
+        [
+          -28.0,
+          0.0,
+          -24.0
+        ],
+        [
+          30.5,
+          66.0,
+          46.79251
+        ]
+      ],
+      "bones": [
+        "gate",
+        "valve"
+      ],
+      "animations": [
+        {
+          "name": "service",
+          "loop": "once",
+          "length": 6,
+          "bones": [
+            "gate",
+            "valve"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_semafor_mechaniczny",
+      "label": "Semafor mechaniczny — stop",
+      "cubes": 47,
+      "bounds": [
+        [
+          -8.0,
+          0.0,
+          -8.0
+        ],
+        [
+          34.0,
+          86.0,
+          8.0
+        ]
+      ]
+    },
+    {
+      "name": "kolej_dzwignia_zwrotnicy",
+      "label": "Ręczna dźwignia zwrotnicy",
+      "cubes": 17,
+      "bounds": [
+        [
+          -9.0,
+          0.0,
+          -7.0
+        ],
+        [
+          14.0,
+          25.0,
+          7.0
+        ]
+      ],
+      "bones": [
+        "lever"
+      ],
+      "animations": [
+        {
+          "name": "throw_reverse",
+          "loop": "hold",
+          "length": 1,
+          "bones": [
+            "lever"
+          ]
+        },
+        {
+          "name": "throw_normal",
+          "loop": "hold",
+          "length": 1,
+          "bones": [
+            "lever"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_koziol_oporowy",
+      "label": "Kozioł oporowy",
+      "cubes": 30,
+      "bounds": [
+        [
+          -25.0,
+          0.0,
+          -16.0
+        ],
+        [
+          25.0,
+          33.0,
+          16.0
+        ]
+      ]
+    },
+    {
+      "name": "kolej_tor_referencyjny",
+      "label": "Tor referencyjny — rozstaw 38 jednostek",
+      "cubes": 14,
+      "bounds": [
+        [
+          -24.0,
+          -2.0,
+          -32.0
+        ],
+        [
+          24.0,
+          3.0,
+          32.0
+        ]
+      ]
+    },
+    {
+      "name": "kolej_rozjazd_referencyjny",
+      "label": "Rozjazd referencyjny — układ poglądowy",
+      "cubes": 81,
+      "bounds": [
+        [
+          -24.0,
+          -2.0,
+          -48.0
+        ],
+        [
+          47.04167,
+          3.0,
+          48.0
+        ]
+      ]
+    },
+    {
+      "name": "kolej_most_obrotnicy",
+      "label": "Most obrotnicy — moduł 8 m",
+      "cubes": 55,
+      "bounds": [
+        [
+          -25.0,
+          -11.0,
+          -64.0
+        ],
+        [
+          26.0,
+          14.0,
+          64.0
+        ]
+      ]
+    },
+    {
+      "name": "kolej_zegar_stacyjny",
+      "label": "Dwustronny zegar mechaniczny",
+      "cubes": 89,
+      "bounds": [
+        [
+          -10.0,
+          0.0,
+          -6.0
+        ],
+        [
+          10.0,
+          66.98045,
+          6.0
+        ]
+      ],
+      "bones": [
+        "minute_n",
+        "hour_n",
+        "minute_s",
+        "hour_s"
+      ],
+      "animations": [
+        {
+          "name": "time",
+          "loop": "loop",
+          "length": 43200,
+          "bones": [
+            "hour_n",
+            "hour_s",
+            "minute_n",
+            "minute_s"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kolej_lawka_peronowa",
+      "label": "Ławka peronowa",
+      "cubes": 11,
+      "bounds": [
+        [
+          -22.0,
+          0.0,
+          -5.0
+        ],
+        [
+          22.0,
+          26.0,
+          7.0
+        ]
+      ]
+    },
+    {
+      "name": "kolej_tablica_peronowa",
+      "label": "Tablica peronowa — miejsce na napis",
+      "cubes": 28,
+      "bounds": [
+        [
+          -28.0,
+          0.0,
+          -2.2
+        ],
+        [
+          28.0,
+          56.5,
+          2.2
+        ]
+      ]
+    },
+    {
+      "name": "kolej_warsztat_skrzynie_beczki",
+      "label": "Skrzynie, beczka i narzędzia warsztatowe",
+      "cubes": 85,
+      "bounds": [
+        [
+          -20.2,
+          0.0,
+          -9.38162
+        ],
+        [
+          18.4,
+          24.6,
+          9.38162
+        ]
+      ]
+    },
+    {
+      "name": "kolej_latarnia_olejowa",
+      "label": "Latarnia olejowa peronowa",
+      "cubes": 44,
+      "bounds": [
+        [
+          -6.0,
+          0.0,
+          -6.0
+        ],
+        [
+          6.0,
+          76.0,
+          6.0
+        ]
+      ]
+    }
+  ],
+  "blockAssemblies": {
+    "straight": {
+      "tiles": [
+        {
+          "model": "medivalrpg:block/rail_straight_0_0",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "elements": 5
+        },
+        {
+          "model": "medivalrpg:block/rail_straight_1_0",
+          "offset": [
+            1,
+            0,
+            0
+          ],
+          "elements": 2
+        },
+        {
+          "model": "medivalrpg:block/rail_straight_2_0",
+          "offset": [
+            2,
+            0,
+            0
+          ],
+          "elements": 5
+        }
+      ],
+      "footprintBlocks": [
+        3,
+        1
+      ]
+    },
+    "ascending": {
+      "tiles": [
+        {
+          "model": "medivalrpg:block/rail_ascending_0_0",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "elements": 22
+        },
+        {
+          "model": "medivalrpg:block/rail_ascending_1_0",
+          "offset": [
+            1,
+            0,
+            0
+          ],
+          "elements": 6
+        },
+        {
+          "model": "medivalrpg:block/rail_ascending_2_0",
+          "offset": [
+            2,
+            0,
+            0
+          ],
+          "elements": 22
+        }
+      ],
+      "footprintBlocks": [
+        3,
+        1
+      ]
+    },
+    "curve": {
+      "tiles": [
+        {
+          "model": "medivalrpg:block/rail_curve_0_1",
+          "offset": [
+            0,
+            0,
+            1
+          ],
+          "elements": 66
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_0_2",
+          "offset": [
+            0,
+            0,
+            2
+          ],
+          "elements": 72
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_0_3",
+          "offset": [
+            0,
+            0,
+            3
+          ],
+          "elements": 73
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_0_4",
+          "offset": [
+            0,
+            0,
+            4
+          ],
+          "elements": 64
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_1_0",
+          "offset": [
+            1,
+            0,
+            0
+          ],
+          "elements": 70
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_1_1",
+          "offset": [
+            1,
+            0,
+            1
+          ],
+          "elements": 84
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_1_2",
+          "offset": [
+            1,
+            0,
+            2
+          ],
+          "elements": 65
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_1_3",
+          "offset": [
+            1,
+            0,
+            3
+          ],
+          "elements": 73
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_1_4",
+          "offset": [
+            1,
+            0,
+            4
+          ],
+          "elements": 22
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_2_0",
+          "offset": [
+            2,
+            0,
+            0
+          ],
+          "elements": 78
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_2_1",
+          "offset": [
+            2,
+            0,
+            1
+          ],
+          "elements": 65
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_2_2",
+          "offset": [
+            2,
+            0,
+            2
+          ],
+          "elements": 66
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_2_3",
+          "offset": [
+            2,
+            0,
+            3
+          ],
+          "elements": 80
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_3_0",
+          "offset": [
+            3,
+            0,
+            0
+          ],
+          "elements": 74
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_3_1",
+          "offset": [
+            3,
+            0,
+            1
+          ],
+          "elements": 81
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_3_2",
+          "offset": [
+            3,
+            0,
+            2
+          ],
+          "elements": 76
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_3_3",
+          "offset": [
+            3,
+            0,
+            3
+          ],
+          "elements": 2
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_4_0",
+          "offset": [
+            4,
+            0,
+            0
+          ],
+          "elements": 67
+        },
+        {
+          "model": "medivalrpg:block/rail_curve_4_1",
+          "offset": [
+            4,
+            0,
+            1
+          ],
+          "elements": 21
+        }
+      ],
+      "footprintBlocks": [
+        5,
+        5
+      ]
+    }
+  },
+  "referenceTrackTopY": 3,
+  "vehicleWheelContactY": 0,
+  "integration": "Visual assets. Animations are played by pl.medivalrpg.kolej.visual; no water, coal, signalling, inventory or collision logic in the models."
+}

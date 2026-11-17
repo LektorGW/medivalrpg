@@ -1,0 +1,18 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Firmy
+version: '${version}'
+main: pl.medivalrpg.firmy.FirmyPlugin
+api-version: '26.3'
+description: Firmy graczy MEDIVALRPG — cechy, kompanie, manufaktury; konto w Skarbcu, udziały, pensje, podatek, sklepy i magazyny.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+softdepend: [Ludnosc, Wladcy, Szlaki, Kolej, Postep, Menu, Straznik, squaremap]
+# /firma (alias /kompania) jest rejestrowane przez Paper Brigadier (LifecycleEvents.COMMANDS).
+permissions:
+  firmy.use:
+    description: Firmy graczy (/firma)
+    default: true
+  firmy.admin:
+    description: Administracja firm (/firma admin, dostęp do magazynów)
+    default: op

@@ -1,0 +1,173 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: kuznia_kamienna
+variant-of: kuznia
+name: '<#8C8C8C>Kuźnia murowana</#8C8C8C>'
+description: 'Kowal przetapia surowe żelazo na sztabki i robi pochodnie dla kopalni (1 kłoda + 4 węgla → 16 pochodni); daje pracę kowalom. Potrzebuje surowego żelaza, węgla i kłód (donoszą tragarze) oraz gracza w promieniu 96 bloków. Murowana kuźnia z zadaszonym placem i kowadłem.'
+function: smithy
+beds: 0
+cost: 3500
+tier: 1
+category: economy
+zone: outer
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@base'
+  'B': 'andesite'
+  'C': '@frame[axis=y]'
+  'D': '@frame[axis=x]'
+  'E': '@frame[axis=z]'
+  'F': '@roof_stairs[facing=north,half=bottom]'
+  'G': '@roof_stairs[facing=south,half=bottom]'
+  'H': '@roof_block'
+  'I': '@roof_slab[type=bottom]'
+  'J': '@wall'
+  'K': 'blast_furnace[facing=south]'
+  'L': 'lava_cauldron'
+  'M': 'bricks'
+  'N': 'brick_stairs[facing=north,half=bottom]'
+  'O': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'P': 'smithing_table'
+  'Q': 'grindstone[face=floor,facing=north]'
+  'R': 'chest[facing=west]'
+  'S': 'lantern[hanging=false]'
+  'T': 'barrel[facing=up]'
+  'U': 'lantern[hanging=true]'
+  'V': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'W': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'X': '@window'
+  'Y': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'Z': 'anvil[facing=east]'
+  'a': 'water_cauldron[level=3]'
+  'b': 'coal_block'
+  'c': 'stonecutter[facing=south]'
+layers:
+  # y=0
+  - |
+    _________
+    _AAAAAAA_
+    _ABBBBBA_
+    _ABBBBBA_
+    _ABBBBBA_
+    _AAAAAAA_
+    _AAAAAAA_
+    _AAAAAAA_
+    _AAAAAAA_
+    _________
+  # y=1
+  - |
+    .........
+    .CMAAAAC.
+    .AKL.PQA.
+    .A.....A.
+    .AT...RA.
+    .CAAVAAC.
+    .....cT..
+    ..aZ..b..
+    .C.....C.
+    .........
+  # y=2
+  - |
+    .........
+    .CMAAAAC.
+    .AMM...A.
+    .A.....X.
+    .A....SA.
+    .CAAWAXC.
+    .....Y.Y.
+    ....U....
+    .C.....C.
+    .........
+  # y=3
+  - |
+    .........
+    .CMAAAAC.
+    .AMN...A.
+    .A..U..A.
+    .A.....A.
+    .CAAAAAC.
+    .DDDDDDD.
+    .DDDDDDD.
+    FFFFFFFFF
+    .........
+  # y=4
+  - |
+    GGGGGGGGG
+    .CMDDDDC.
+    .E.....E.
+    .E.....E.
+    .E.....E.
+    .CDDDDDC.
+    FFFFFFFFF
+    FFFFFFFFF
+    .........
+    .........
+  # y=5
+  - |
+    .........
+    GGMGGGGGG
+    .J.....J.
+    .J.....J.
+    .J.....J.
+    FFFFFFFFF
+    .........
+    .........
+    .........
+    .........
+  # y=6
+  - |
+    .........
+    ..M......
+    GGGGGGGGG
+    .J.....J.
+    FFFFFFFFF
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    ..M......
+    .........
+    HHHHHHHHH
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=8
+  - |
+    .........
+    ..M......
+    .........
+    IIIIIIIII
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=9
+  - |
+    .........
+    ..O......
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........

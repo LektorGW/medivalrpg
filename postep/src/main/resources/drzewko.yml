@@ -1,0 +1,355 @@
+# Drzewko odkryć — Postep (MEDIVALRPG)
+# © 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+# Każde odkrycie:
+#   nazwa               polska nazwa
+#   epoka               1 Średniowiecze, 2 Renesans, 3 Epoka przemysłowa, 4 Nowoczesność
+#   koszt               punkty badań
+#   wymaga              lista id innych odkryć (z tej samej albo wcześniejszej epoki; bez cykli)
+#   wymagane-do-epoki   true = potrzebne, by wejść w następną epokę
+#   kategoria           gospodarka | nauka | wojsko | budownictwo | dyplomacja (NPC wybierają wg osobowości)
+#   ikona               materiał w GUI drzewka
+#   opis, efekt         teksty dla graczy
+#   efekty              liczby w procentach; czytają je inne pluginy przez PostepApi.effect(kraj, klucz):
+#                       podatki, jedzenie, sila-armii, tempo-budowy, ludnosc (wzrost), badania (punkty badań — liczy Postep)
+# Konkretne skutki (nowe budynki, jednostki) inne pluginy sprawdzają przez PostepApi.hasDiscovery(kraj, id).
+# W GUI mieści się 8 odkryć na epokę.
+
+odkrycia:
+  # ---------------------------------------------------------------- Średniowiecze
+  kolo_wodne:
+    nazwa: Koło wodne
+    epoka: 1
+    koszt: 80
+    wymaga: []
+    wymagane-do-epoki: true
+    kategoria: gospodarka
+    ikona: WATER_BUCKET
+    opis: Młyny wodne mielą zboże i napędzają miechy kuźni.
+    efekt: "+5% jedzenia, +3% tempa budowy; Ludnosc: młyn wodny."
+    efekty: {jedzenie: 5, tempo-budowy: 3}
+  plug:
+    nazwa: Pług ciężki
+    epoka: 1
+    koszt: 80
+    wymaga: []
+    wymagane-do-epoki: true
+    kategoria: gospodarka
+    ikona: IRON_HOE
+    opis: Żelazny lemiesz i zaprzęg wołów orzą ciężkie gleby.
+    efekt: "+10% jedzenia, +5% wzrostu ludności."
+    efekty: {jedzenie: 10, ludnosc: 5}
+  kusza:
+    nazwa: Kusza
+    epoka: 1
+    koszt: 120
+    wymaga: []
+    wymagane-do-epoki: false
+    kategoria: wojsko
+    ikona: CROSSBOW
+    opis: Bełt przebija kolczugę z kilkudziesięciu kroków.
+    efekt: "+5% siły armii; Armia: kusznicy."
+    efekty: {sila-armii: 5}
+  cechy:
+    nazwa: Cechy rzemieślnicze
+    epoka: 1
+    koszt: 120
+    wymaga: [plug]
+    wymagane-do-epoki: false
+    kategoria: gospodarka
+    ikona: SMITHING_TABLE
+    opis: Mistrzowie, czeladnicy i terminatorzy pilnują jakości wyrobów.
+    efekt: "+5% podatków, +5% tempa budowy."
+    efekty: {podatki: 5, tempo-budowy: 5}
+  zegar:
+    nazwa: Zegar mechaniczny
+    epoka: 1
+    koszt: 140
+    wymaga: [kolo_wodne]
+    wymagane-do-epoki: true
+    kategoria: nauka
+    ikona: CLOCK
+    opis: Zegar na wieży ratusza odmierza godziny pracy i modlitwy.
+    efekt: "+5% punktów badań."
+    efekty: {badania: 5}
+  gotyk:
+    nazwa: Architektura gotycka
+    epoka: 1
+    koszt: 160
+    wymaga: [kolo_wodne]
+    wymagane-do-epoki: true
+    kategoria: budownictwo
+    ikona: CHISELED_STONE_BRICKS
+    opis: Łuki ostre, przypory i witraże pozwalają wznosić strzeliste katedry.
+    efekt: "+10% tempa budowy; Ludnosc: katedra gotycka."
+    efekty: {tempo-budowy: 10}
+  uniwersytety:
+    nazwa: Uniwersytety
+    epoka: 1
+    koszt: 220
+    wymaga: [zegar, gotyk]
+    wymagane-do-epoki: true
+    kategoria: nauka
+    ikona: BOOKSHELF
+    opis: Studium generale kształci prawników, lekarzy i astronomów.
+    efekt: "+10% punktów badań; Ludnosc: uniwersytet."
+    efekty: {badania: 10}
+
+  # ---------------------------------------------------------------- Renesans
+  druk:
+    nazwa: Druk
+    epoka: 2
+    koszt: 300
+    wymaga: [uniwersytety]
+    wymagane-do-epoki: true
+    kategoria: nauka
+    ikona: WRITABLE_BOOK
+    opis: Ruchoma czcionka Gutenberga — książki tanieją, wiedza się rozchodzi.
+    efekt: "+10% punktów badań; Ludnosc: drukarnia."
+    efekty: {badania: 10}
+  proch:
+    nazwa: Proch strzelniczy
+    epoka: 2
+    koszt: 280
+    wymaga: []
+    wymagane-do-epoki: true
+    kategoria: wojsko
+    ikona: GUNPOWDER
+    opis: Saletra, siarka i węgiel drzewny zmieniają oblicze wojny.
+    efekt: "+15% siły armii; Armia: arkebuzerzy, muszkieterowie, armaty."
+    efekty: {sila-armii: 15}
+  kartografia:
+    nazwa: Kartografia
+    epoka: 2
+    koszt: 260
+    wymaga: [zegar]
+    wymagane-do-epoki: false
+    kategoria: dyplomacja
+    ikona: MAP
+    opis: Dokładne mapy wybrzeży i szlaków handlowych.
+    efekt: "+3% podatków (handel)."
+    efekty: {podatki: 3}
+  nawigacja_oceaniczna:
+    nazwa: Nawigacja oceaniczna
+    epoka: 2
+    koszt: 320
+    wymaga: [kartografia]
+    wymagane-do-epoki: true
+    kategoria: dyplomacja
+    ikona: OAK_BOAT
+    opis: Karawele, astrolabium i kompas otwierają drogę za ocean.
+    efekt: "+5% podatków, +5% jedzenia; Ludnosc: port."
+    efekty: {podatki: 5, jedzenie: 5}
+  bankowosc:
+    nazwa: Bankowość
+    epoka: 2
+    koszt: 300
+    wymaga: [cechy]
+    wymagane-do-epoki: true
+    kategoria: gospodarka
+    ikona: GOLD_INGOT
+    opis: Weksle, kredyt i księgowość podwójna jak u Medyceuszy.
+    efekt: "+10% podatków; Ludnosc: bank."
+    efekty: {podatki: 10}
+  astronomia:
+    nazwa: Astronomia
+    epoka: 2
+    koszt: 340
+    wymaga: [druk, zegar]
+    wymagane-do-epoki: true
+    kategoria: nauka
+    ikona: SPYGLASS
+    opis: De revolutionibus — Ziemia krąży wokół Słońca.
+    efekt: "+5% punktów badań; Ludnosc: obserwatorium."
+    efekty: {badania: 5}
+  manufaktury:
+    nazwa: Manufaktury
+    epoka: 2
+    koszt: 300
+    wymaga: [bankowosc]
+    wymagane-do-epoki: false
+    kategoria: budownictwo
+    ikona: LOOM
+    opis: Podział pracy w wielkich warsztatach sukienniczych.
+    efekt: "+10% tempa budowy, +5% podatków."
+    efekty: {tempo-budowy: 10, podatki: 5}
+
+  # ---------------------------------------------------------------- Epoka przemysłowa
+  maszyna_parowa:
+    nazwa: Maszyna parowa
+    epoka: 3
+    koszt: 450
+    wymaga: [manufaktury]
+    wymagane-do-epoki: true
+    kategoria: budownictwo
+    ikona: BLAST_FURNACE
+    opis: Para Watta napędza pompy, kuźnie i przędzalnie.
+    efekt: "+15% tempa budowy; Ludnosc: fabryka z kominem."
+    efekty: {tempo-budowy: 15}
+  stal:
+    nazwa: Stal
+    epoka: 3
+    koszt: 450
+    wymaga: [proch]
+    wymagane-do-epoki: true
+    kategoria: wojsko
+    ikona: IRON_BLOCK
+    opis: Konwertor Bessemera daje tanią stal na mosty i działa.
+    efekt: "+10% siły armii, +5% tempa budowy; Ludnosc: stalowe mosty."
+    efekty: {sila-armii: 10, tempo-budowy: 5}
+  kolej:
+    nazwa: Kolej żelazna
+    epoka: 3
+    koszt: 550
+    wymaga: [maszyna_parowa, stal]
+    wymagane-do-epoki: true
+    kategoria: gospodarka
+    ikona: RAIL
+    opis: Parowozy łączą miasta, kopalnie i porty.
+    efekt: "+10% podatków, +5% wzrostu ludności; Ludnosc: dworzec i tory."
+    efekty: {podatki: 10, ludnosc: 5}
+  fabryki:
+    nazwa: System fabryczny
+    epoka: 3
+    koszt: 500
+    wymaga: [maszyna_parowa]
+    wymagane-do-epoki: false
+    kategoria: gospodarka
+    ikona: PISTON
+    opis: Ceglane hale, zmiany robotników i masowa produkcja.
+    efekt: "+10% podatków; Ludnosc: kamienice czynszowe."
+    efekty: {podatki: 10}
+  elektrycznosc:
+    nazwa: Elektryczność
+    epoka: 3
+    koszt: 600
+    wymaga: [astronomia]
+    wymagane-do-epoki: true
+    kategoria: nauka
+    ikona: REDSTONE
+    opis: Prądnica, żarówka i sieć miejska rozświetlają noc.
+    efekt: "+10% punktów badań, +5% tempa budowy; Ludnosc: latarnie."
+    efekty: {badania: 10, tempo-budowy: 5}
+  telegraf:
+    nazwa: Telegraf
+    epoka: 3
+    koszt: 500
+    wymaga: [elektrycznosc]
+    wymagane-do-epoki: true
+    kategoria: dyplomacja
+    ikona: NOTE_BLOCK
+    opis: Alfabet Morse'a — wiadomość przez kontynent w kilka minut.
+    efekt: "+5% punktów badań, +5% siły armii (dowodzenie)."
+    efekty: {badania: 5, sila-armii: 5}
+  szczepionki:
+    nazwa: Szczepionki
+    epoka: 3
+    koszt: 450
+    wymaga: [druk]
+    wymagane-do-epoki: false
+    kategoria: nauka
+    ikona: BREWING_STAND
+    opis: Jenner i Pasteur pokonują ospę i wściekliznę.
+    efekt: "+15% wzrostu ludności; Ludnosc: szpital."
+    efekty: {ludnosc: 15}
+  karabin_gwintowany:
+    nazwa: Karabin gwintowany
+    epoka: 3
+    koszt: 500
+    wymaga: [stal]
+    wymagane-do-epoki: false
+    kategoria: wojsko
+    ikona: IRON_SWORD
+    opis: Gwintowana lufa i odtylcowe ładowanie.
+    efekt: "+20% siły armii; Armia: piechota liniowa, artyleria."
+    efekty: {sila-armii: 20}
+
+  # ---------------------------------------------------------------- Nowoczesność
+  beton_zbrojony:
+    nazwa: Beton zbrojony
+    epoka: 4
+    koszt: 700
+    wymaga: [stal, fabryki]
+    wymagane-do-epoki: false
+    kategoria: budownictwo
+    ikona: GRAY_CONCRETE
+    opis: Stalowe pręty w betonie — wieżowce, mosty i bloki.
+    efekt: "+20% tempa budowy; Ludnosc: bloki mieszkalne, wieżowce."
+    efekty: {tempo-budowy: 20}
+  samochod:
+    nazwa: Samochód
+    epoka: 4
+    koszt: 800
+    wymaga: [kolej]
+    wymagane-do-epoki: false
+    kategoria: gospodarka
+    ikona: MINECART
+    opis: Silnik spalinowy i taśma produkcyjna.
+    efekt: "+10% podatków, +5% tempa budowy; Ludnosc: drogi asfaltowe, parkingi."
+    efekty: {podatki: 10, tempo-budowy: 5}
+  lotnictwo:
+    nazwa: Lotnictwo
+    epoka: 4
+    koszt: 900
+    wymaga: [samochod]
+    wymagane-do-epoki: false
+    kategoria: wojsko
+    ikona: ELYTRA
+    opis: Od braci Wright do odrzutowców.
+    efekt: "+20% siły armii; Ludnosc: lotnisko."
+    efekty: {sila-armii: 20}
+  radio:
+    nazwa: Radio
+    epoka: 4
+    koszt: 700
+    wymaga: [telegraf]
+    wymagane-do-epoki: false
+    kategoria: dyplomacja
+    ikona: JUKEBOX
+    opis: Fale radiowe niosą wiadomości do każdego domu.
+    efekt: "+5% punktów badań, +5% podatków."
+    efekty: {badania: 5, podatki: 5}
+  antybiotyki:
+    nazwa: Antybiotyki
+    epoka: 4
+    koszt: 700
+    wymaga: [szczepionki]
+    wymagane-do-epoki: false
+    kategoria: nauka
+    ikona: GLISTERING_MELON_SLICE
+    opis: Penicylina ratuje miliony istnień.
+    efekt: "+15% wzrostu ludności, +5% jedzenia."
+    efekty: {ludnosc: 15, jedzenie: 5}
+  komputery:
+    nazwa: Komputery
+    epoka: 4
+    koszt: 1000
+    wymaga: [radio, elektrycznosc]
+    wymagane-do-epoki: false
+    kategoria: nauka
+    ikona: COMPARATOR
+    opis: Tranzystor, układ scalony i mikroprocesor.
+    efekt: "+15% punktów badań; Ludnosc: biurowce."
+    efekty: {badania: 15}
+  internet:
+    nazwa: Internet
+    epoka: 4
+    koszt: 1200
+    wymaga: [komputery]
+    wymagane-do-epoki: false
+    kategoria: dyplomacja
+    ikona: ENDER_EYE
+    opis: Sieć łączy cały świat — rok 2026.
+    efekt: "+15% punktów badań, +10% podatków."
+    efekty: {badania: 15, podatki: 10}
+  energia_jadrowa:
+    nazwa: Energia jądrowa
+    epoka: 4
+    koszt: 1100
+    wymaga: [komputery]
+    wymagane-do-epoki: false
+    kategoria: budownictwo
+    ikona: END_CRYSTAL
+    opis: Reaktory dają prąd całym metropoliom.
+    efekt: "+10% tempa budowy, +10% siły armii."
+    efekty: {tempo-budowy: 10, sila-armii: 10}

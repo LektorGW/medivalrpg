@@ -1,0 +1,40 @@
+# ============================================================
+#  Do dopisania w menu/src/main/resources/pomoc.yml (kategoria `firmy`, lista `commands`) DOPIERO przy wdrożeniu
+#  jara etapu 2 / 3 (komend etapu 2 i 3 nie ma w jarze etapu 1).
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# ============================================================
+
+# ---- ETAP 2
+      - command: "/firma kontrakt lista"
+        description: "Kontrakty z zapłatą w depozycie: tablica ofert i kontrakty twojej firmy"
+        click: run
+        keywords: [zlecenie, umowa, depozyt, wadium]
+      - command: "/firma kontrakt zamow <firma|wszyscy> <przedmiot> <ilość> <cena> <godziny> [wadium]"
+        description: "Patrząc na skrzynię odbiorczą: zamów towar (zapłata od razu w depozycie)"
+      - command: "/firma kontrakt usluga <firma|wszyscy> <cena> <godziny> <wadium> <opis>"
+        description: "Zamów usługę (np. budowę); wykonanie potwierdzasz ty"
+      - command: "/firma kontrakt przyjmij|oddaj|potwierdz|odwolaj|spor <id>"
+        description: "Przebieg kontraktu: przyjęcie, oddanie towaru przy skrzyni, potwierdzenie, odwołanie, spór"
+      - command: "/firma hurt"
+        description: "Zlecenia hurtowe władców NPC dla firm (zapłata na konto firmy)"
+        click: run
+        keywords: [hurt, npc, władca]
+      - command: "/firma kredyt"
+        description: "Kredyty firm: limit, oferty i spłata (do 10 % za 7–30 dni, spłata z przychodów)"
+        click: run
+        keywords: [pozyczka, kredyt, odsetki]
+      - command: "/firma kredyt oferuj <firma> <kwota> <procent> <dni>"
+        description: "Pożycz firmie własne pieniądze (czekają w depozycie, aż firma przyjmie)"
+      - command: "/firma kredyt skarb <kwota> <procent> <dni> <cel>"
+        description: "Mistrz: wniosek o kredyt Skarbu Świata (decyzja właściciela serwera)"
+        rank: "mistrz"
+
+# ---- ETAP 3
+      - command: "/firma warsztat"
+        description: "Manufaktura: warsztaty, przepisy, robotnicy i stan pracy"
+        click: run
+        keywords: [manufaktura, warsztat, robotnik, produkcja]
+      - command: "/firma warsztat zaloz <przepis>"
+        description: "Patrząc na stanowisko na ziemi siedziby: nowy warsztat (potem skrzynie wejścia i wyjścia)"
+      - command: "/firma robotnik zatrudnij|zwolnij <warsztat>"
+        description: "Obywatel kraju siedziby pracuje w warsztacie za 3 zł dziennie dla obywateli"

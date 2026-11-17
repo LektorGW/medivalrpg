@@ -1,0 +1,189 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: owczarnia_kamienna
+variant-of: owczarnia
+name: '<#CFC6AE>Owczarnia kamienna</#CFC6AE>'
+description: 'Stado do 4 owiec daje wełnę, a pasterz wiąże bele siana (9 pszenicy → 1 bela) — do skrzyni owczarni, dla budów. Potrzebuje pszenicy z pól (jagnię kosztuje 2 pszenice) i gracza w promieniu 96 bloków. Kamienna owczarnia ze stryszkiem i zagrodą.'
+function: sheepfold
+beds: 0
+cost: 2500
+tier: 0
+category: economy
+zone: farm
+max-per-country: 2
+requires:
+  population: 6
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '0':
+    wall: mud_bricks
+  '1':
+    frame: dark_oak_log
+    wall: white_terracotta
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@frame[axis=x]'
+  'D': '@frame[axis=z]'
+  'E': '@frame[axis=y]'
+  'F': '@wall'
+  'G': '@roof_stairs[facing=west,half=bottom]'
+  'H': '@roof_stairs[facing=east,half=bottom]'
+  'I': '@roof_block'
+  'J': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'K': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'L': '@window'
+  'M': 'spruce_trapdoor[facing=east,half=bottom,open=true]'
+  'N': 'lantern[hanging=true]'
+  'O': 'hay_block[axis=y]'
+  'P': 'ladder[facing=north]'
+  'Q': 'hay_block[axis=x]'
+  'R': 'loom[facing=south]'
+  'S': 'white_wool'
+  'T': 'white_carpet'
+  'U': 'chest[facing=east]'
+  'V': 'composter[level=0]'
+  'W': '@fence'
+  'X': 'lantern[hanging=false]'
+  'Y': 'grass_block[snowy=false]'
+  'Z': 'spruce_fence'
+  'a': 'spruce_fence_gate[facing=south,in_wall=false,open=false,powered=false]'
+  'b': 'hay_block[axis=z]'
+layers:
+  # y=0
+  - |
+    _____________
+    BBBBBBBBBBBB_
+    BYYYYYBBAAAB_
+    BYYYYYBBAAAB_
+    BYYYYYBBAAAB_
+    BYYYYYBBAAAB_
+    BYYYYYBBAAAB_
+    BYYYYYBBBBBB_
+    BBBBBBB______
+    _____________
+    _____________
+  # y=1
+  - |
+    .............
+    ZZZZZZZEBBBE.
+    ZVV..OZBOQRB.
+    Z....bZB..SB.
+    Z.....ZBV..B.
+    Z.....ZB...B.
+    Z.....ZBU.PB.
+    Z.....ZEBJBE.
+    ZZZaZZZ.....W
+    .............
+    .............
+  # y=2
+  - |
+    .............
+    X......ELBLE.
+    .......BO..B.
+    .......B..TBM
+    .......L...L.
+    .......B...BM
+    .......B..PB.
+    .......ELKLE.
+    X.....X.....X
+    .............
+    .............
+  # y=3
+  - |
+    .............
+    .......EBBBE.
+    .......B...B.
+    .......B...B.
+    .......B.N.B.
+    .......B...B.
+    .......B..PB.
+    .......EBCBE.
+    .............
+    .............
+    .............
+  # y=4
+  - |
+    .............
+    .......ECCCE.
+    .......DAAAD.
+    .......DAAAD.
+    .......DAAAD.
+    .......DAAAD.
+    .......DAAPD.
+    .......ECCCE.
+    .............
+    .............
+    .............
+  # y=5
+  - |
+    .............
+    .......EFEFE.
+    .......FO.OF.
+    .......EO.OE.
+    .......F...F.
+    .......EO..E.
+    .......F...F.
+    .......EF.FE.
+    .............
+    .............
+    .............
+  # y=6
+  - |
+    ......H.....G
+    ......HECCCEG
+    ......HD...DG
+    ......HD...DG
+    ......HD...DG
+    ......HD...DG
+    ......HD...DG
+    ......HECCCEG
+    ......H..N..G
+    .............
+    .............
+  # y=7
+  - |
+    .......H...G.
+    .......HFFFG.
+    .......H...G.
+    .......H...G.
+    .......H...G.
+    .......H...G.
+    .......H...G.
+    .......HFFFG.
+    .......H.D.G.
+    .............
+    .............
+  # y=8
+  - |
+    ........H.G..
+    ........HFG..
+    ........H.G..
+    ........H.G..
+    ........H.G..
+    ........H.G..
+    ........H.G..
+    ........HFG..
+    ........H.G..
+    .............
+    .............
+  # y=9
+  - |
+    .........I...
+    .........I...
+    .........I...
+    .........I...
+    .........I...
+    .........I...
+    .........I...
+    .........I...
+    .........I...
+    .............
+    .............

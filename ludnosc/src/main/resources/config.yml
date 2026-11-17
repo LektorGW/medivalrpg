@@ -1,0 +1,1373 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Ludnosc — obywatele NPC (wieśniacy) państw i budowanie budynków. Serwer MEDIVALRPG.
+# Kwoty pieniędzy zawsze w miedziakach (1 sr = 10 md, 1 zł = 100 md). Jedzenie liczone w "punktach jedzenia".
+# Teksty: MiniMessage (https://docs.advntr.dev/minimessage/format.html).
+
+# Transport wizualny działa na istniejących torach, w załadowanych chunkach blisko graczy.
+# Wagoniki kopalniane: każda epoka; tramwaje: od 3; dźwigi przy wieżowcach: od 4.
+# Przy limicie epok 2 działają wyłącznie wagoniki kopalniane.
+transport:
+  enabled: true
+  max-carts: 24
+  max-cranes: 8
+
+citizens:
+  # Wieśniak bez kraju, który się urodzi albo stoi (przy wczytaniu chunka / zajęciu terenu) na terenie kraju,
+  # staje się jego obywatelem.
+  adopt-villagers: true
+  # true = przyjmuj tylko, gdy kraj ma wolne łóżka.
+  adopt-requires-free-housing: false
+  # Imię obywatela (custom name). <imie>, <kraj>, <kolor>...</kolor> = kolor kraju.
+  name-format: '<kolor><imie></kolor>'
+  # false = imię widać po najechaniu celownikiem, true = zawsze nad głową.
+  name-always-visible: false
+  # Nadany zawód nie przepada, gdy wieśniak nie znajdzie stanowiska pracy (ustawia 1 pkt doświadczenia).
+  lock-profession: true
+  # Wagi losowania zawodu nowych osadników (klucze vanilla bez "minecraft:"). none = bezrobotny.
+  professions:
+    farmer: 30
+    fisherman: 6
+    shepherd: 6
+    butcher: 5
+    fletcher: 5
+    mason: 5
+    leatherworker: 4
+    librarian: 4
+    cleric: 4
+    armorer: 4
+    weaponsmith: 4
+    toolsmith: 4
+    cartographer: 2
+    none: 10
+  # Rekord obywatela, którego nie ma w chunku ostatniej znanej pozycji przy tylu kolejnych wczytaniach, jest usuwany.
+  forget-after-missed-loads: 3
+  # Rozwiązanie kraju: release = zostają zwykłymi wieśniakami, remove = znikają.
+  on-disband: release
+  # Chunk zdobyty / przekazany innemu krajowi: switch = obywatele przechodzą do nowego kraju,
+  # release = stają się wolnymi wieśniakami, leave = odchodzą (znikają).
+  on-conquest: switch
+  # Chunk porzucony (dzicz, np. bankructwo): release | keep (zostają obywatelami) | leave.
+  on-unclaim: release
+  # Pobór (LudnoscApi.conscript): najpierw najbliższy załadowany wieśniak; true = gdy żadnego nie ma w pobliżu,
+  # bierze obywatela z niezaładowanego chunka (od razu znika z rejestru, encja zniknie przy wczytaniu chunka).
+  # Dzięki temu rekrutacja z panelu www i przez AI działa także bez graczy w pobliżu.
+  conscript-unloaded: true
+  names:
+    - Bolesław
+    - Mieszko
+    - Kazimierz
+    - Władysław
+    - Przemysł
+    - Bogdan
+    - Bogusław
+    - Bronisław
+    - Czesław
+    - Dobromir
+    - Jarosław
+    - Mirosław
+    - Radosław
+    - Sobiesław
+    - Stanisław
+    - Wojciech
+    - Zbigniew
+    - Ziemowit
+    - Leszek
+    - Lech
+    - Racibor
+    - Siemowit
+    - Wit
+    - Zawisza
+    - Jan
+    - Maciej
+    - Bartosz
+    - Szymon
+    - Mikołaj
+    - Wawrzyniec
+    - Florian
+    - Jakub
+    - Marcin
+    - Piotr
+    - Tomasz
+    - Grzegorz
+    - Bartłomiej
+    - Michał
+    - Józef
+    - Andrzej
+    - Jadwiga
+    - Dobrawa
+    - Bogumiła
+    - Dobrosława
+    - Mirosława
+    - Radosława
+    - Wiesława
+    - Zofia
+    - Agnieszka
+    - Małgorzata
+    - Katarzyna
+    - Elżbieta
+    - Barbara
+    - Jagna
+    - Marianna
+    - Helena
+    - Anna
+    - Maria
+    - Ewa
+    - Urszula
+    - Kunegunda
+    - Salomea
+    - Rycheza
+    - Świętosława
+    - Ludmiła
+    - Wanda
+    - Bożena
+    - Danuta
+    - Grażyna
+    - Halszka
+
+growth:
+  # Co ile minut kraj może dostać nowego osadnika (jeśli ludność < mieszkania i jest jedzenie).
+  interval-minutes: 20
+  max-per-tick: 1
+  # Jedzenie zużywane przez przybycie jednego osadnika.
+  food-per-settler: 20
+
+daily:
+  # Dzienny rozrachunek: produkcja jedzenia, posiłki, podatki NPC, odejścia. Nadrabiany po restarcie.
+  time: '06:00'
+  timezone: 'Europe/Warsaw'
+  max-catch-up-days: 3
+
+food:
+  per-citizen: 4
+  # Jedzenie dziennie od jednego dorosłego rolnika (farmer).
+  farmer-production: 10
+  # Jedzenie dziennie z jednego pola uprawnego (budynek "pole").
+  farm-production: 15
+  # Pojemność spichlerza kraju: bazowa + za każdy zbudowany spichlerz.
+  base-capacity: 300
+  capacity-per-granary: 2000
+  # Ile skrzyń/beczek można oznaczyć /ludnosc spichlerz oznacz (poza tymi w budynkach spichlerza).
+  max-marked-chests: 6
+  # Punkty jedzenia za sztukę przedmiotu włożonego do skrzyni spichlerza.
+  items:
+    WHEAT: 1
+    CARROT: 1
+    POTATO: 1
+    BEETROOT: 1
+    BREAD: 5
+    BAKED_POTATO: 4
+    APPLE: 3
+    MELON_SLICE: 1
+    SWEET_BERRIES: 1
+    HAY_BLOCK: 9
+    COOKED_BEEF: 8
+    COOKED_PORKCHOP: 8
+    COOKED_MUTTON: 6
+    COOKED_CHICKEN: 6
+    COOKED_RABBIT: 5
+    COOKED_COD: 5
+    COOKED_SALMON: 6
+    BEEF: 3
+    PORKCHOP: 3
+    MUTTON: 2
+    CHICKEN: 2
+    COD: 2
+    SALMON: 2
+    PUMPKIN_PIE: 8
+    MUSHROOM_STEW: 6
+    BEETROOT_SOUP: 6
+    RABBIT_STEW: 10
+    COOKIE: 1
+    DRIED_KELP: 1
+
+taxes:
+  # Dzienny podatek od dorosłego obywatela NPC (md), mnożony przez mnożnik zawodu.
+  per-citizen: 3
+  baby-multiplier: 0.0
+  # Mnożnik przy całkowitym głodzie (liniowo do 1.0 przy pełnym wyżywieniu).
+  hungry-multiplier: 0.3
+  # Mnożnik dla obywateli ponad liczbę łóżek.
+  homeless-multiplier: 0.5
+  # Decyzja użytkownika 2026-10-29: podatek obywateli NPC +50% (mnożniki ×1,5; per-citizen jest liczbą całkowitą).
+  professions:
+    none: 0.9
+    nitwit: 0.3
+    farmer: 1.5
+    fisherman: 1.5
+    shepherd: 1.5
+    butcher: 1.65
+    fletcher: 1.8
+    mason: 1.8
+    leatherworker: 1.8
+    librarian: 2.25
+    cleric: 2.1
+    cartographer: 2.25
+    armorer: 2.4
+    weaponsmith: 2.4
+    toolsmith: 2.25
+
+departures:
+  # Dni głodu tolerowane; potem odchodzi ułamek ludności (proporcjonalnie do braku jedzenia) dziennie.
+  hunger-grace-days: 2
+  hunger-fraction: 0.2
+  # Dni z brakiem łóżek tolerowane; potem odchodzi ułamek bezdomnych dziennie.
+  homeless-grace-days: 3
+  homeless-fraction: 0.25
+  max-per-day: 5
+  # Głód działa stopniowo: jednego dnia odchodzi najwyżej taki ułamek ludności (zawsze co najwyżej max-per-day).
+  max-fraction-per-day: 0.1
+
+# Pory roku (jeden cykl dla całego serwera, w czasie rzeczywistym): wiosna → lato → jesień → zima.
+# Pora mnoży produkcję jedzenia (rolnicy, pola, premie budynków, jedzenie wirtualne krajów NPC, widoczne zbiory).
+# Zimą pola dają bardzo mało — kraje muszą zrobić zapasy jesienią. Zmiana pory jest ogłaszana graczom.
+seasons:
+  enabled: true
+  # Długość jednej pory roku w dniach rzeczywistych (może być ułamek, np. 0.5).
+  length-days: 7
+  # Pora, od której zaczyna się cykl przy pierwszym uruchomieniu (wiosna | lato | jesien | zima).
+  # Potem pora jest liczona z zapisanego początku (data.json); zmiana: /ludnosc admin pora ustaw.
+  first: jesien
+  # Mnożnik produkcji jedzenia w danej porze.
+  food:
+    wiosna: 0.9
+    lato: 1.1
+    jesien: 1.4
+    zima: 0.25
+  # Szansa, że krok wzrostu upraw w świecie (pszenica, marchew, ziemniaki, buraki...) się uda (1 = jak w vanilla).
+  crop-growth:
+    enabled: true
+    wiosna: 1.0
+    lato: 1.0
+    jesien: 0.9
+    zima: 0.4
+  # Kraje NPC też odczuwają pory roku i nieurodzaj.
+  affects-npc-countries: true
+  # Ogłoszenie nowej pory (czat + tytuł) i krótka informacja po wejściu na serwer.
+  announce: true
+  announce-on-join: true
+  # Nieurodzaj: losowany codziennie (dzienny rozrachunek) osobno dla każdego kraju z ludnością.
+  poor-harvest:
+    chance:
+      wiosna: 0.04
+      lato: 0.06
+      jesien: 0.03
+      zima: 0.0
+    # Mnożnik produkcji jedzenia podczas nieurodzaju i jego długość w dniach rzeczywistych.
+    multiplier: 0.4
+    min-days: 2
+    max-days: 4
+    # Po nieurodzaju kraj ma tyle dni spokoju.
+    cooldown-days: 10
+
+# Praca obywateli: przydział do pól, kopalń, kamieniołomów, tartaków i przystani oraz widoczna praca wieśniaków.
+# Plan dnia (do pracy, targ, karczma, dom) prowadzi plugin Zycie; Ludnosc steruje wieśniakiem tylko na miejscu pracy.
+# Bez Zycie Ludnosc sama prowadzi pracowników do pracy. Wszystko tylko w załadowanych chunkach, w pobliżu graczy;
+# niezaładowane osady produkują wirtualnie (dzienny rozrachunek).
+work:
+  enabled: true
+  # Widoczna praca tylko z graczem w tym promieniu (bloki).
+  player-range: 64
+  # Wydajność: najwyżej tylu wieśniaków co 5 ticków i budżet czasu na jeden przebieg (ms).
+  citizens-per-tick: 12
+  budget-ms: 1.0
+  # Godziny pracy (czas MC: 0 = 6:00, 6000 = 12:00) — jak praca w planie dnia Zycie.
+  hours: {start: 2000, end: 9000}
+  # Odnoszenie plonów do spichlerza po pracy (zebranie przy dzwonie — Zycie wtedy nie steruje).
+  delivery-hours: {start: 9000, end: 10500}
+  # Zawody vanilla w kolejności pierwszeństwa (najpierw pierwszy zawód, potem kolejne; none = bezrobotny).
+  jobs:
+    farmer: [farmer]
+    miner: [mason, toolsmith, armorer, weaponsmith, none]
+    quarryman: [mason, none]
+    woodcutter: [fletcher, none]
+    fisher: [fisherman]
+  # Miejsca pracy w budynku (kopalnia: mines.slots-base + mines.slots-per-level za poziom).
+  slots:
+    farm: 2
+    quarry: 2
+    sawmill: 2
+    harbor: 2
+  # Rolnik niesie tyle zbiorów, zanim pójdzie do spichlerza (resources.food-per-harvest × pora roku za zbiór).
+  basket: 6
+  # Dzienny limit jedzenia z widocznych zbiorów na rolnika (ponad jego zwykłą dzienną produkcję) i ryb na rybaka.
+  harvest-cap-per-farmer: 8
+  fish-cap-per-fisher: 6
+  # Najdalszy spichlerz (budynek albo oznaczona skrzynia), do którego rolnik zanosi plony; dalej — oddaje przy polu.
+  granary-range: 64
+  # Droga do spichlerza trwająca dłużej jest zaliczana bez dojścia (jedzenie nie przepada).
+  delivery-timeout-seconds: 45
+  # Pole bez pracującego obywatela-rolnika obsługuje manekin-zastępca (false = tylko obywatele).
+  stand-in-workers: true
+  # Rolnicy otwierają furtkę pola i zamykają ją po wyjściu (tylko pola Ludnosc).
+  open-field-gates: true
+
+protection:
+  enabled: true
+  # Obcy nie mogą krzywdzić obywateli na terenie ich kraju. W wojnie (KrajeApi.isAtWar) mogą, jeśli true.
+  war-allows-damage: true
+  # Obywatele-gracze mogą krzywdzić własnych wieśniaków.
+  own-country-can-damage: true
+  # Zakaz zmiany imienia obywatela nametagiem i prowadzenia go na smyczy przez obcych.
+  block-name-tags: true
+  block-leash-by-foreigners: true
+
+npc-countries:
+  # Kraj NPC (CountryCreateEvent npc=true): osadnicy w stolicy, zapas jedzenia i darmowe budynki startowe.
+  initial-settlers: 4
+  initial-food: 200
+  # Jedzenie wirtualne co dzień (bez rolników i skrzyń).
+  virtual-food-per-day: 10
+  virtual-food-per-citizen: 5
+  ignore-capacity: false
+  starting-buildings: [dom]
+  starting-buildings-free: true
+
+building:
+  # Minimalna ranga w kraju do /ludnosc buduj (CITIZEN, ADVISOR, RULER).
+  rank: ADVISOR
+  # Place budowy naraz: bazowo + sites-per-tier za każdy poziom osady powyżej Osady + sites-per-era za każdą epokę
+  # powyżej Średniowiecza (plugin Postep), najwyżej max-sites-cap (Osada 5, Wieś 6 … Metropolia 10).
+  max-sites-per-country: 5
+  sites-per-tier: 1
+  sites-per-era: 1
+  max-sites-cap: 12
+  # Bloki na sekundę na jednego budowniczego.
+  blocks-per-second: 2.0
+  builders-per-site: 2
+  # Limit bloków na jeden tick nadrabiania (plac wczytany po przerwie).
+  max-blocks-per-tick: 40
+  # Czy plac w niezaładowanym chunku też "pracuje" (bloki zostaną postawione po wczytaniu, nic się nie ładuje).
+  offline-progress: true
+  # Ile warstw naturalnego terenu (ziemia, kamień, piasek...) powyżej podłogi wolno wykopać.
+  max-terrain-cut: 2
+  # Maksymalna głębokość fundamentu pod podłogą.
+  max-foundation-depth: 12
+  # Zwrot kosztu przy anulowaniu budowy (0..1).
+  refund-on-cancel: 0.5
+  # Jak długo trwa podgląd /ludnosc buduj (sekundy).
+  preview-seconds: 90
+  # Dodatkowe bloki uznawane za naturalny teren (oprócz ziemi, kamienia, piasku, liści, terakoty).
+  terrain-blocks: [GRAVEL, CLAY, SNOW_BLOCK, ICE, PACKED_ICE, SANDSTONE, RED_SANDSTONE, MOSS_BLOCK, MUD, COAL_ORE, IRON_ORE, COPPER_ORE]
+  builder:
+    # mannequin = postać gracza z narzędziem, villager = wieśniak-murarz (bez AI).
+    type: mannequin
+    # Nicki Mojang do skinów budowniczych (pusta lista = domyślne skiny Mannequina).
+    skins: []
+    tools: [IRON_AXE, IRON_SHOVEL, STONE_PICKAXE, IRON_PICKAXE, WOODEN_AXE]
+    move-interval-ticks: 30
+  hologram: true
+  effects: true
+
+construction:
+  # Kolejka budów: gdy kraj ma już building.max-sites-per-country placów, nowe zamówienia czekają w kolejce
+  # (płatne od razu, teren zarezerwowany). Anulowanie pozycji z kolejki zwraca 100%. 0 = bez kolejki.
+  queue-size: 10
+  # Budżet CPU: najwyżej tyle bloków na tick budowy (co 0,5 s) na kraj i na cały serwer (place obsługiwane po kolei).
+  blocks-per-tick-country: 80
+  blocks-per-tick-server: 400
+  # Aktywne place budowy trzymają swoje chunki załadowane (bilety chunków pluginu), żeby budowa szła 24/7 także bez
+  # graczy w pobliżu. Limit na cały serwer; pierwszeństwo mają najstarsze zamówienia. Place poza limitem budują
+  # wirtualnie (postęp liczony w czasie) i nadrabiają po wczytaniu chunka.
+  keep-loaded: true
+  max-loaded-chunks-total: 64
+  # Godziny pracy w czasie Minecrafta (0 = 6:00, 12000 = 18:00). Poza nimi budowniczowie odpoczywają przy ognisku.
+  work-hours:
+    enabled: true
+    start: 0
+    end: 12000
+  night-campfire: true
+  # Materiały: na placu stoi skrzynia "magazyn budowy". Drewno (kłody, 1 kłoda = 4 deski) i kamień (bruk, kamień)
+  # przynoszą do niej tragarze z magazynów kraju, a budowniczowie zużywają je blok po bloku. Pozostałe bloki (szkło,
+  # wełna, kraty...) są opłacone kosztem zamówienia. false = budowa wyłącznie za monety (bez fizycznego materiału).
+  require-materials: true
+  # Kraj bez tartaku (drewno) albo kamieniołomu/kopalni (kamień) lub bez żadnego zarejestrowanego magazynu kupuje dany
+  # materiał za monety zamówienia (nie blokuje się). Kraj, który go wytwarza, czeka na dostawę najwyżej tyle minut,
+  # potem też kupuje (0 = czeka bez końca).
+  material-wait-minutes: 60
+  # Ile bloków budowniczy przynosi naraz ze stosu materiału na placu (potem idzie po kolejną porcję; 0 = bez noszenia).
+  carry-load: 12
+  # Budowniczych: building.builders-per-site + 1 na każde N bloków budynku, maksymalnie builders-max.
+  blocks-per-extra-builder: 800
+  builders-max: 6
+  # Szybkość chodu budowniczych (bloki/s) i zasięg rąk (bloki).
+  walk-speed: 3.5
+  reach: 4.5
+  # Rusztowanie przy ścianach wyższych niż N bloków (rozbierane po zakończeniu).
+  scaffolding: true
+  scaffolding-min-height: 3
+  scaffolding-max-blocks: 400
+  # Schody do drzwi zewnętrznych, gdy próg jest nad terenem.
+  entrance-stairs: true
+  max-entrance-steps: 8
+  # Modernizacja (nowe materiały po awansie osady): koszt = koszt budynku × udział bloków-materiałów × mnożnik.
+  upgrade-cost-multiplier: 0.4
+
+underground:
+  # Podziemia budynków: piwnice (cellar) pod domami, lochy (dungeon) pod ratuszem, lochy z tunelem ucieczkowym
+  # (tunnel) pod zamkiem, katakumby (catacombs) pod katedrą. Kopane stopniowo w godzinach pracy po zbudowaniu
+  # budynku (starsze budynki: /ludnosc podziemia kop, kraje NPC same). Najpierw obmurowanie (jaskinie, woda i lawa
+  # odcięte), potem kopanie, na końcu drabiny, światło i wyposażenie. Wejście: klapa w podłodze.
+  enabled: true
+  blocks-per-step: 6
+  # Każda gotowa piwnica powiększa spichlerz o tyle.
+  cellar-capacity: 50
+  # Typ budynku → rodzaj podziemi (none = bez).
+  features:
+    chata: cellar
+    dom: cellar
+    kamienica: cellar
+    karczma: cellar
+    ratusz: dungeon
+    zamek: tunnel
+    katedra: catacombs
+  # Koszt dokopania podziemi do istniejącego budynku (md); przy nowych budynkach gratis.
+  cost:
+    cellar: 300
+    dungeon: 3000
+    tunnel: 5000
+    catacombs: 4000
+
+resources:
+  # Drwale z tartaków ścinają całe drzewa na ziemi kraju (z liśćmi), sadzą sadzonki; omijają drogi, budynki z ogrodami
+  # i centrum, zawsze zostawiają co najmniej keep-trees-around drzew w pobliżu. Kamieniołomy, kopalnie i przystanie
+  # dają kamień, rudy i ryby raz dziennie. Nadwyżka ponad sell-above jest sprzedawana do skarbca (ceny w md).
+  lumberjacks: true
+  lumberjack-blocks-per-step: 3
+  lumberjack-rest-seconds: 20
+  lumberjack-radius: 28
+  lumberjack-max-logs: 120
+  keep-trees-around: 3
+  quarry-stone-per-day: 32
+  mine-ore-per-day: 8
+  harbour-fish-per-day: 16
+  sell-above: 512
+  prices: {drewno: 2, kamien: 1, rudy: 6, ryby: 2, kruszce: 25}
+  # Rolnicy na polach zbierają dojrzałe uprawy i sieją od nowa (jedzenie do spichlerza), kamieniarze i rybacy pracują
+  # w kamieniołomie i na przystani (produkcja dzienna). Przy require-materials brakujące drewno/kamień biorą z magazynu.
+  field-workers: true
+  food-per-harvest: 2
+
+logistics:
+  # Tragarze NPC przenoszą prawdziwe przedmioty między zarejestrowanymi skrzyniami kraju: pełne magazyny tartaków,
+  # kamieniołomów i kopalń → magazyn kraju; plony pól i ryby → spichlerz (zamieniane na zapas jedzenia, który zasila
+  # wzrost ludności); drewno i kamień z magazynów → skrzynia placu budowy. Oba końce muszą być wczytane i w zasięgu.
+  enabled: true
+  # przedmiotów na jeden kurs, najdłuższy kurs (bloki), tragarzy naraz na kraj i na serwer
+  load: 32
+  max-distance: 160
+  per-country: 3
+  total: 16
+  # tyle jednostek drewna/kamienia (1 kłoda = 4) tragarze trzymają w skrzyni placu, gdy budowa jeszcze ich potrzebuje
+  site-stock: 96
+  # od takiego zapełnienia slotów skrzynia miejsca pracy jest opróżniana do magazynu kraju
+  unload-fill: 0.75
+  walk-speed: 2.5
+
+workshops:
+  # Łańcuchy produkcji wiosek (huta szkła, cegielnia, owczarnia, kuźnia). Zakład pracuje fizycznie tylko w
+  # wczytanym terenie z graczem w promieniu player-range, w godzinach pracy; wszystko trafia do jego prawdziwej skrzyni
+  # (albo magazynu kraju), a tragarze wożą dalej. Materiał, którego kraj nie wytwarza (brak zakładu albo zakład bez
+  # surowca/paliwa dłużej niż stall-grace-minutes), budowy kupują za monety zamówienia jak dotąd.
+  enabled: true
+  player-range: 96
+  budget-ms: 2.0
+  per-tick: 6
+  action-seconds: 10
+  stall-grace-minutes: 20
+  # bez nowego kroku, gdy tyle zapisów produkcji czeka (kopalnie i pola mają swoją kolej); zakład bez własnej
+  # skrzyni (pracujący z magazynu kraju) robi krok najwyżej co shared-store-seconds
+  max-pending: 2
+  shared-store-seconds: 30
+  dig:
+    # piasek (huta) i glina (cegielnia) wyłącznie na ziemi kraju: poza strefami planu gracza, obszarami chronionymi,
+    # spawnem, budynkami i drogami; tylko wierzchnia warstwa (bez dołów, bez nowych strumieni przy wodzie)
+    radius: 24
+    sand-per-day: 48
+    clay-per-day: 24
+    scan-columns: 192
+    rescan-seconds: 120
+    spawn-radius: 160
+    building-margin: 3
+  kiln:
+    batch: 8
+    # wytopów z 1 węgla / węgla drzewnego (kłody zamieniane na węgiel drzewny, gdy nie ma czym palić)
+    smelts-per-fuel: 8
+    brick-stock: 64
+    terracotta-stock: 16
+  smithy:
+    # kuźnia wytapia surowe żelazo z kopalni i robi pochodnie (1 kłoda + 4 węgle → 16)
+    enabled: true
+    torch-stock: 32
+  sheep:
+    flock: 4
+    # pierwsza para w cenie budynku; po wymarciu stada nowa para po refound-days dniach (0 = nigdy)
+    founders: 2
+    regrow-minutes: 10
+    breed-minutes: 15
+    refound-days: 3
+    hay-stock: 4
+
+walls:
+  # Mury miejskie (kraje NPC, od poziomu osady from-level): prostokąt wokół zabudowy + margin, baszty co tower-every
+  # bloków i w narożnikach, bramy tam, gdzie mur przecina drogi; budowane modułami po module-cells bloków.
+  from-level: 2
+  margin: 6
+  tower-every: 16
+  module-cells: 32
+  cost-per-cell: 40
+  # Mur idzie za miastem: wypukła otoczka zabudowy, po grzbietach, z bramami na każdej drodze; rzeka, jezioro i klif
+  # zastępują mur. Gdy miasto wyrośnie poza mur (albo kraj straci ziemię), powstaje nowy pierścień, a stary jest
+  # rozbierany odcinkami (demolish) albo zostaje jako mur wewnętrzny (keep). Najpierw odcinki od strony obcych/wrogów.
+  old-ring: demolish
+
+kingdom:
+  # Plan królestwa (kraje NPC): duży i bogaty kraj zakłada nowe osady na swojej ziemi, co najmniej min-distance bloków
+  # od innych osad (płasko, sucho, zwarcie), z własnym centrum (najpierw studnia) i planowaniem; trakt do stolicy.
+  min-level: 2
+  min-treasury: 60000
+  min-chunks: 24
+  min-distance: 96
+  max-settlements: 3
+  # Wojna: palisady / mury na najbardziej zagrożonych odcinkach granicy (od strony wroga), najwyżej tyle odcinków.
+  border-segments: 6
+
+redesign:
+  # Przeprojektowanie miasta (plan v2): regularne ulice wokół rynku (gęstsze w późniejszych epokach), kwartały,
+  # zieleń. Kraje NPC liczą plan po awansie i co interval-hours, gracze przez /ludnosc przebudowa. Realizacja
+  # stopniowa: rozbiórki co demolish-hours (tylko budynki Ludnosc, nigdy zabytki), ulice odcinkami, niwelacja wolnych
+  # kwartałów najwyżej level-blocks-per-day bloków terenu dziennie na kraj.
+  radius: 96
+  interval-hours: 24
+  demolish-hours: 2
+  level-blocks-per-day: 4000
+  level-cost-per-column: 1
+  # /ludnosc admin przebudowa|drogi|modernizuj: płaci skarbiec kraju (chyba że admin doda "darmowo").
+  admin-pays: true
+
+rebuild:
+  # Zabytki: nigdy nie są wyburzane.
+  heritage: [kosciol, katedra, zamek, palac, pomnik, ratusz, cmentarz]
+  # Przebudowa miast w nowej epoce (plugin Postep): drogi w stylu epoki, modernizacja materiałów, wyburzanie małych
+  # domów i stawianie większych (chata → kamienica → blok). Kraje NPC same, przez kolejne tygodnie; co ile godzin
+  # najwyżej jedna rozbiórka; budynki bliżej placu niż old-town-radius zostają jako starówka.
+  demolish-hours: 6
+  old-town-radius: 22
+
+villages:
+  # Przejmowanie wiosek (LudnoscApi.findVillage/adoptVillage, woła je Armia): chunk z co najmniej tyloma blokami
+  # ziemi uprawnej należy do wioski; zasięg szukania pokoju wokół łóżka (domy → "dom wiejski");
+  # tyle bloków ziemi uprawnej liczy się jak jedno pole (jedzenie, food.farm-production).
+  min-farmland-per-chunk: 4
+  house-reach: 7
+  farmland-per-field: 40
+
+mines:
+  # Fizyczne światło w galerii, przed wydobyciem wymagającym kolejnego punktu oświetlenia.
+  lighting:
+    enabled: true
+    spacing: 7
+    item: TORCH
+    consume-from-store: true
+  # Kopalnia drąży chodnik z dna szybu: schody w dół o "depth" bloków, potem poziomy chodnik z torami, stemplami
+  # i pochodniami. Omija wodę i lawę, zamurowuje jaskinie, nie kopie pod cudzym terenem. Jeden krok co 2 s w godzinach pracy.
+  depth: 12
+  # Kroki chodnika w jednym zleceniu rozbudowy (pierwsze po zbudowaniu kopalni gratis) i jego koszt (md).
+  extension-blocks: 16
+  extension-cost: 800
+  # Dłuższe chodniki: poziomy kopalni (1–5) rosną z długością, piętrami (co 10 bl. w dół) i epoką.
+  max-length: 400
+  # Dochód dzienny za każdy blok chodnika (md), wypłacany razem z podatkiem NPC.
+  income-per-block: 2
+  # Urobek: dziennie na górnika (obywatele z work.jobs.miner), × poziom kopalni × narzędzia × nastrój. Działa także,
+  # gdy osada nie jest wczytana. Do tego resources.mine-ore-per-day na kopalnię i prawdziwe rudy z chodników.
+  ore-per-miner: 6
+  stone-per-miner: 10
+  precious-per-miner: 0.4
+  # +30% urobku za każdy poziom kopalni powyżej 1.
+  level-bonus: 0.3
+  # Miejsca dla górników: poziom 1 = slots-base, każdy kolejny poziom + slots-per-level.
+  slots-base: 2
+  slots-per-level: 2
+  # Narzędzia: kuźnia w kraju +25%, każda epoka powyżej pierwszej +15%.
+  smithy-tool-bonus: 0.25
+  era-tool-bonus: 0.15
+  # Część dziennego urobku sprzedawana od razu do skarbca (reszta trafia do magazynu kraju).
+  sell-share: 0.6
+  # Cena kruszców (złoto, diamenty, szmaragdy), gdy brak jej w resources.prices.
+  precious-price: 25
+  # Górnicy sami drążą chodnik (bez płatnej rozbudowy): kroki na górnika na godzinę rzeczywistą w godzinach pracy.
+  # Płatna rozbudowa (/ludnosc kopalnia rozbuduj) nadal drąży szybciej. Chodnik nigdy nie wychodzi poza ziemię kraju.
+  auto-dig: true
+  steps-per-miner-hour: 4
+  # Najwyżej tyle kopalni drążących same trzyma wczytany chunk przodka (bilety chunków).
+  max-auto-tickets: 8
+  # Widoczni górnicy (manekiny) przy przodku, gdy gracz jest w pobliżu: połowa górników, najwyżej tylu.
+  crew-max: 3
+  # Gracz, który spadnie do szybu kopalni, nie dostaje obrażeń (lina asekuracyjna).
+  fall-protection: true
+
+repair:
+  # Automatyczna naprawa budynków z szablonów: okresowe porównanie z szablonem (tylko załadowane chunki, budżet czasu).
+  enabled: true
+  # Budżet czasu sprawdzania na tick (ms) i jak często sprawdzać ten sam budynek (minuty).
+  budget-ms: 1.0
+  interval-minutes: 10
+  # Zlecenie naprawy, gdy brakuje więcej niż ten ułamek bloków albo zniszczony jest kluczowy blok (łóżko, drzwi, dach nad łóżkiem).
+  threshold: 0.02
+  # Koszt = koszt budynku × (brakujące / wszystkie) × mnożnik.
+  cost-multiplier: 0.5
+  # Kraje graczy: true = naprawa zlecana automatycznie (jak w krajach NPC), false = powiadomienie + /ludnosc napraw.
+  auto-for-players: false
+  # Ruina: zniszczony ponad ten ułamek → rebuild (odbudowa od zera) albo remove (usunięcie z rejestru).
+  ruin-threshold: 0.7
+  ruin-mode: rebuild
+
+planner:
+  # Planowanie osady (LudnoscApi.developSettlement i /ludnosc buduj auto).
+  search-radius: 64
+  spacing: 2
+  max-slope: 4
+  # Mieszkania, gdy wolnych łóżek mniej niż ten ułamek ludności.
+  housing-free-ratio: 0.2
+  # Spichlerz, gdy zapas jedzenia przekracza ten ułamek pojemności.
+  granary-full-ratio: 0.85
+  roads: true
+  # Od tego poziomu osady drogi są z bruku (wcześniej ścieżki).
+  paved-road-level: 3
+  # Gdy nie ma miejsca na budynek: kraje NPC same zajmują przyległe chunki (koszt i limit terenu jak w Kraje, przyczyna
+  # NPC), wybierając płaski i suchy teren blisko centrum. true = także kraje graczy. Najwyżej auto-claim-max na próbę.
+  auto-claim-for-players: false
+  auto-claim-max: 3
+
+# Poziomy osady liczone z ludności i skarbca (md). Kolejność od najniższego; indeks = tier budynków.
+levels:
+  - {name: 'Osada', population: 0, treasury: 0}
+  - {name: 'Wieś', population: 8, treasury: 2000}
+  - {name: 'Miasteczko', population: 20, treasury: 10000}
+  - {name: 'Miasto', population: 40, treasury: 30000}
+  - {name: 'Stolica', population: 70, treasury: 80000}
+  - {name: 'Metropolia', population: 150, treasury: 300000}
+
+# Balans budynków (nadpisuje wartości z szablonów): koszt (md), poziom (tier), limit na kraj, wymagania.
+# bonus (za każdy ukończony budynek): food = jedzenie/dzień, tax = +udział podatku (0.05 = +5%),
+# growth = szansa na dodatkowego osadnika na tick wzrostu, granary = pojemność spichlerza.
+# Premie wojskowe (koszary, stajnia, wieża) wymagałyby API Armii — patrz README.
+buildings:
+  studnia: {cost: 800, tier: 0, max-per-country: 3}
+  chata: {cost: 1500, tier: 0}
+  dom: {cost: 4000, tier: 0}
+  spichlerz: {cost: 3000, tier: 0}
+  kuznia: {cost: 3500, tier: 1, max-per-country: 2, population: 8}
+  koszary: {cost: 6000, tier: 1, max-per-country: 3, population: 10}
+  wieza: {cost: 5000, tier: 1}
+  karczma: {cost: 7000, tier: 1, max-per-country: 2, population: 12, bonus: {tax: 0.05, growth: 0.1}}
+  mlyn: {cost: 6000, tier: 1, max-per-country: 2, population: 12, bonus: {food: 8}}
+  stajnia: {cost: 4500, tier: 1, max-per-country: 2, population: 10}
+  mur: {cost: 2500, tier: 1, population: 10}
+  targ: {cost: 5000, tier: 2, max-per-country: 1, population: 16, bonus: {tax: 0.1}}
+  kamienica: {cost: 9000, tier: 2, population: 16}
+  ratusz: {cost: 15000, tier: 2, max-per-country: 1, population: 20, treasury: 20000, bonus: {tax: 0.08}}
+  kosciol: {cost: 20000, tier: 2, max-per-country: 1, population: 24, treasury: 25000, bonus: {growth: 0.2}}
+  brama: {cost: 8000, tier: 2, max-per-country: 4, population: 20}
+  zamek: {cost: 60000, tier: 3, max-per-country: 1, population: 40, treasury: 100000, bonus: {tax: 0.1}}
+  pole: {cost: 600, tier: 0}
+  palac: {cost: 150000, tier: 4, max-per-country: 1, population: 60, treasury: 250000, bonus: {tax: 0.15}}
+  piekarnia: {cost: 3500, tier: 1, max-per-country: 2, population: 8, bonus: {food: 12}}
+  browar: {cost: 5000, tier: 2, max-per-country: 1, population: 16, bonus: {tax: 0.04, growth: 0.1}}
+  tartak: {cost: 3000, tier: 1, max-per-country: 2, population: 8, bonus: {tax: 0.05}}
+  kopalnia: {cost: 4000, tier: 1, max-per-country: 2, population: 10}
+  biblioteka: {cost: 9000, tier: 2, max-per-country: 1, population: 20, bonus: {tax: 0.02, growth: 0.15}}
+  zielarnia: {cost: 3000, tier: 1, max-per-country: 1, population: 10, bonus: {growth: 0.25}}
+  przystan: {cost: 3000, tier: 1, max-per-country: 2, population: 8, bonus: {food: 10, tax: 0.03}}
+  cmentarz: {cost: 1500, tier: 1, max-per-country: 1, population: 15, bonus: {growth: 0.05}}
+  pomnik: {cost: 12000, tier: 3, max-per-country: 1, population: 30, treasury: 40000, bonus: {tax: 0.03}}
+  magazyn: {cost: 6000, tier: 2, max-per-country: 2, population: 16, bonus: {granary: 300}}
+  laznia: {cost: 8000, tier: 2, max-per-country: 1, population: 18, bonus: {growth: 0.15}}
+  latarnia: {cost: 9000, tier: 2, max-per-country: 1, population: 20, bonus: {food: 4, tax: 0.03}}
+  rynek: {cost: 14000, tier: 3, max-per-country: 1, population: 30, treasury: 30000, bonus: {tax: 0.06, growth: 0.05}}
+  ogrody: {cost: 30000, tier: 4, max-per-country: 1, population: 60, treasury: 150000, bonus: {tax: 0.03, growth: 0.1}}
+  koszary2: {cost: 14000, tier: 3, max-per-country: 2, population: 30}
+  akademia: {cost: 22000, tier: 3, max-per-country: 1, population: 35, treasury: 50000}
+  skarbiec: {cost: 25000, tier: 3, max-per-country: 1, population: 35, treasury: 60000, bonus: {tax: 0.08}}
+  katedra: {cost: 90000, tier: 4, max-per-country: 1, population: 50, treasury: 120000, bonus: {tax: 0.02, growth: 0.3}}
+  arena: {cost: 35000, tier: 3, max-per-country: 1, population: 35, treasury: 40000, bonus: {tax: 0.04, growth: 0.05}}
+  most: {cost: 5000, tier: 1, max-per-country: 4, population: 10, bonus: {tax: 0.02}}
+  kamieniolom: {cost: 4500, tier: 2, max-per-country: 2, population: 12, bonus: {tax: 0.04}}
+  # Budynki epok (plugin Postep): wymagana epoka i odkrycie są w szablonie (requires.era, requires.discovery).
+  kamienica_renesansowa: {cost: 9000, tier: 1, population: 14}
+  kamienica_czynszowa: {cost: 12000, tier: 2, population: 20}
+  fabryka: {cost: 25000, tier: 2, max-per-country: 3, population: 25, bonus: {tax: 0.10}}
+  dworzec: {cost: 30000, tier: 3, max-per-country: 1, population: 30, bonus: {tax: 0.06, growth: 0.05}}
+  blok: {cost: 30000, tier: 2, population: 40}
+  wiezowiec_biurowy: {cost: 120000, tier: 3, max-per-country: 2, population: 60, treasury: 150000, bonus: {tax: 0.15}}
+  wiezowiec: {cost: 200000, tier: 5, max-per-country: 3, population: 120, treasury: 250000}
+
+register:
+  # /ludnosc dom zglos — maksymalna objętość zaznaczenia WorldEdit.
+  max-volume: 40000
+
+# Budynki postawione ręcznie przez graczy i zgłoszone z typem: /ludnosc budynek zglos <typ> [nazwa] (Władca/Doradca —
+# ranga building.rank). Zaznaczenie z /ludnosc kopia pos1/pos2 albo WorldEdit. Cały obrys na ziemi własnego kraju,
+# bez nachodzenia na inne budynki, place budowy i miejsca zamówione w kolejce. Limity na kraj i wymagania (epoka,
+# odkrycie, poziom osady, ludność, skarbiec) jak dla budynku zamawianego tego rodzaju (szablon `template`).
+# Zgłoszony budynek nie jest burzony, przebudowywany, modernizowany ani naprawiany przez budowniczych; bez kluczowych
+# bloków jego funkcja wyłącza się do czasu naprawy przez graczy.
+player-buildings:
+  enabled: true
+  max-volume: 32768          # największe zaznaczenie (pól)
+  min-side: 3                # najmniejsza szerokość i głębokość
+  min-height: 3              # najmniejsza wysokość
+  max-per-country: 40        # wszystkich zgłoszonych budynków kraju (0 = bez limitu)
+  requirements: true         # poziom osady, ludność i skarbiec jak przy zamawianiu (epoka i odkrycie zawsze)
+  recheck-delay-ticks: 40    # po zmianie bloków w budynku: ponowne sprawdzenie po tylu tickach
+  sweep-seconds: 30          # co tyle sekund sprawdzany jest jeden wczytany zgłoszony budynek (0 = wyłącz)
+  # Typy (klucz → nadpisania). Klucze: enabled, name, max (zgłoszonych tego typu na kraj, 0 = tylko limit szablonu),
+  # min-volume, template, function, effect, blocks: [{name, count, materials: [BLOK|#BED|#WATER|#CONTAINER|#ANVIL|#CANDLE]}].
+  # #BED = całe łóżko (obie połowy w obrysie), #WATER = źródło wody, #CONTAINER = skrzynia/beczka.
+  # Domyślne (w kodzie): mieszkanie, spichlerz (max 3), magazyn, koszary, kuznia, studnia, karczma, kosciol, ratusz.
+  # Funkcje z własnym mechanizmem (kopalnia, pole, tartak, kamieniołom, przystań, huta, cegielnia, owczarnia, mur,
+  # brama, most) i budynki epok przemysłowych nie są przyjmowane.
+  types:
+    spichlerz:
+      max: 3
+
+templates:
+  # Kopiuje wbudowane szablony do plugins/Ludnosc/budynki/ (można je tam edytować; pliki mają pierwszeństwo).
+  export-builtins: true
+  # Koszt budynku z pliku .schem bez pliku opisu <nazwa>.schem.yml.
+  schematic-default-cost: 3000
+  # Sprawdza przy starcie obracanie stanów bloków z BlockData#rotate serwera (ostrzega przy różnicach).
+  verify-rotation: true
+
+storage:
+  autosave-minutes: 5
+
+messages:
+  # /ludnosc budynek — budynki postawione przez graczy i zgłoszone z typem
+  budynek:
+    disabled: '<prefix><red>Zgłaszanie własnych budynków jest wyłączone.</red>'
+    help-header: '<prefix><gold>Własne budynki</gold> <gray>— nadaj funkcję budowli postawionej przez graczy</gray>'
+    help-line: ' <yellow><syntax></yellow> <gray>— <text></gray>'
+    help-zglos: 'zgłoś zaznaczony budynek z typem (Władca/Doradca)'
+    help-typy: 'typy do zgłoszenia, wymagane bloki i czy twój kraj może'
+    help-info: 'co to za budynek, w którym stoisz, i czy działa'
+    help-usun: 'wyrejestruj zgłoszony budynek (bloki zostają)'
+    help-hint: ' <gray>Zaznacz budynek od podłogi do dachu: <white>/ludnosc kopia pos1</white> i <white>pos2</white> (albo WorldEdit), potem <white>/ludnosc budynek zglos <typ></white>.</gray>'
+    usage: '<prefix><yellow>Użycie: /ludnosc budynek zglos <typ> [nazwa]</yellow> <gray>Typy: <types>. Wymagania: /ludnosc budynek typy</gray>'
+    unknown-type: '<prefix><red>Nie ma typu „<type>”.</red> <gray>Typy do zgłoszenia: <types>.</gray>'
+    no-selection: '<prefix><red>Najpierw zaznacz budynek:</red> <gray>stań w narożniku i wpisz /ludnosc kopia pos1, w przeciwległym górnym narożniku /ludnosc kopia pos2 (albo zaznacz WorldEditem).</gray>'
+    refused-header: '<prefix><red>Nie można zgłosić budynku „<type>”:</red>'
+    refused-line: ' <red>✘</red> <gray><problem></gray>'
+    refused-hint: ' <gray>Obrys zaznaczenia widać przez chwilę cząsteczkami. Popraw i spróbuj ponownie.</gray>'
+    registered: '<prefix><green>Zgłoszono budynek <white><name></white> kraju <white><country></white></green> <gray><box></gray><newline> <gray>Działa: <effect>.</gray>'
+    registered-beds: ' <gray>Całe łóżka w środku: <white><beds></white>.</gray>'
+    registered-hint: ' <gray>Bloki zostają nietknięte — budowniczowie nie przebudują, nie zmodernizują i nie naprawią go za was. Jeśli zabraknie kluczowych bloków, funkcja wyłączy się do naprawy.</gray>'
+    types-header: '<prefix><gold>Typy budynków do zgłoszenia</gold> <gray>(kliknij typ, aby wpisać komendę)</gray>'
+    types-line: ' <gold><name></gold> <dark_gray>(<key>)</dark_gray> <gray>— wymaga: <white><needs></white>; <effect></gray> <status>'
+    types-ok: '<green>✔ możecie zgłosić</green>'
+    types-no: '<red>✘ <reason></red>'
+    types-hover: '<gray>Limit: <limit><newline>Najmniejsza objętość: <volume> pól<newline>Kliknij, aby wpisać komendę</gray>'
+    types-footer: ' <gray>Zaznaczenie: od <min> do <max> pól, cały obrys na ziemi kraju, bez nachodzenia na inne budynki. Kopalnie, pola, tartaki, kamieniołomy, przystanie, zakłady i mury mają własne mechanizmy — zamawia się je przez /ludnosc buduj.</gray>'
+    none-here: '<prefix><red>Nie stoisz w żadnym zarejestrowanym budynku</red> <gray>(ani nie patrzysz na niego).</gray>'
+    info-header: '<prefix><gold><name></gold> <dark_gray>id <id></dark_gray>'
+    info-country: ' <gray>Kraj:</gray> <white><country></white> <gray>obrys <box></gray>'
+    info-own: ' <gray>Postawiony przez graczy, zgłosił <white><author></white> (<date>).</gray>'
+    info-working: ' <green>✔ Działa jako <function></green> <gray>— <effect>.</gray>'
+    info-broken: ' <red>✘ Nieczynny (<function>): brakuje <missing>.</red> <gray>Postawcie brakujące bloki w obrysie — funkcja wróci sama.</gray>'
+    info-unknown-type: ' <yellow>Typ tego budynku nie jest już dostępny w konfiguracji — funkcja pozostaje bez zmian.</yellow>'
+    info-own-hint: ' <gray>Budowniczowie go nie przebudują ani nie naprawią. Wyrejestrowanie: /ludnosc budynek usun (bloki zostają).</gray>'
+    info-template: ' <gray>Funkcja:</gray> <white><function></white> <gray>• zamówił: <white><origin></white></gray>'
+    info-repairing: ' <yellow>W naprawie.</yellow>'
+    info-damaged: ' <red>Uszkodzony <percent>%</red> <gray>— /ludnosc napraw</gray>'
+    not-player-building: '<prefix><red>Ten budynek nie jest zgłoszonym budynkiem graczy.</red> <gray>Budynki budowniczych anuluje się przez /ludnosc buduj anuluj, domy zgłoszone przez admina — admin.</gray>'
+    not-own: '<prefix><red>To budynek innego kraju.</red>'
+    removed: '<prefix><yellow>Wyrejestrowano budynek <white><name></white>.</yellow> <gray>Bloki zostają; budynek nie ma już funkcji.</gray>'
+    broken: '<prefix><red>Budynek <white><name></white> w <pos> przestał działać: brakuje <missing>.</red> <gray>Postawcie brakujące bloki, a funkcja wróci.</gray>'
+    restored: '<prefix><green>Budynek <white><name></white> w <pos> znów działa.</green>'
+    list-working: ' <green>✔</green>'
+    list-broken: ' <red>✘ nieczynny: brakuje <missing></red>'
+  prefix: '<gold>[Ludność]</gold> '
+  no-permission: '<prefix><red>Nie masz uprawnień.</red>'
+  players-only: '<prefix><red>Tylko dla graczy.</red>'
+  unknown-command: '<prefix><red>Nieznana komenda.</red> <gray>Wpisz <white>/ludnosc pomoc</white>.</gray>'
+  no-country: '<prefix><red>Nie należysz do żadnego kraju.</red>'
+  rank-too-low: '<prefix><red>Wymagana ranga: <white><rank></white>.</red>'
+  country-not-found: '<prefix><red>Nie ma kraju <white><name></white>.</red>'
+  invalid-number: '<prefix><red>Zła liczba: <white><value></white>.</red>'
+  reloaded: '<prefix><green>Przeładowano konfigurację. Szablonów budynków: <white><templates></white>.</green>'
+  no-economy: '<prefix><red>Skarbiec jest niedostępny.</red>'
+
+  info-header: '<gold>═══ Ludność: <country> ═══</gold>'
+  info-npc: ' <gray>(kraj NPC)</gray>'
+  info-era: '<gray>Epoka:</gray> <gold><era></gold>'
+  info-level: '<gray>Poziom osady:</gray> <gold><level></gold> <dark_gray>• następny: <next></dark_gray>'
+  info-level-next: '<white><name></white> <gray>(ludność <population>, skarbiec <treasury>)</gray>'
+  info-level-max: '<white>najwyższy</white>'
+  info-population: '<gray>Mieszkańcy:</gray> <white><population></white> <gray>• łóżka:</gray> <white><housing></white>'
+  info-food: '<gray>Spichlerz:</gray> <white><food></white><gray>/<capacity> jedzenia • dziennie:</gray> <white><balance></white>'
+  info-tax: '<gray>Podatek od obywateli NPC:</gray> <gold><tax></gold> <gray>dziennie</gray>'
+  info-status-ok: '<green>Obywatele są syci i mają dach nad głową.</green>'
+  info-status-hungry: '<red>Głód od <days> dni — podatki spadają, osadnicy odchodzą.</red>'
+  info-status-homeless: '<yellow>Brakuje <missing> łóżek (od <days> dni).</yellow>'
+  info-buildings: '<gray>Budynki:</gray> <white><list></white>'
+  info-sites: '<gray>W budowie:</gray> <white><list></white>'
+  info-slots: '<gray>Place:</gray> <white><n></white><gray>/<max></gray>'
+  info-queue: '<gray>W kolejce:</gray> <white><n></white><gray>/<max></gray> <dark_gray>(/ludnosc kolejka)</dark_gray>'
+  info-none: 'brak'
+
+  buildings-header: '<gold>═══ Budynki: <country> ═══</gold>'
+  buildings-line: ' <white><name></white> <gray>(<function>) • <pos> • łóżka: <beds></gray>'
+  buildings-site-line: ' <yellow>⚒ <name></yellow> <gray>• <pos> • <percent>%</gray>'
+  buildings-queue-line: ' <gray>⌛ #<nr> <name> • <pos> • w kolejce</gray>'
+  buildings-empty: '<gray>Brak budynków.</gray>'
+
+  types-header: '<gold>═══ Budynki do zbudowania ═══</gold> <gray>(najedź, aby zobaczyć pełny opis)</gray>'
+  types-line: ' <white><name></white> <gray>[<id>] • <size> • łóżka: <beds> • <cost></gray>'
+  types-hover: '<white><name></white><newline><gray><description></gray><newline><gray>Funkcja: <function></gray><newline><yellow>Kliknij, aby zbudować</yellow>'
+
+  granary-status: '<prefix><gray>Spichlerz kraju:</gray> <white><food></white><gray>/<capacity> jedzenia, punktów zbiórki: <chests>.</gray>'
+  granary-hint: '<gray>Włóż jedzenie do skrzyni spichlerza (budynek spichlerza albo skrzynia oznaczona <white>/ludnosc spichlerz oznacz</white>).</gray>'
+  granary-not-container: '<prefix><red>Patrz na skrzynię albo beczkę.</red>'
+  granary-not-own-land: '<prefix><red>Skrzynia musi stać na terenie twojego kraju.</red>'
+  granary-marked: '<prefix><green>Skrzynia jest teraz punktem zbiórki spichlerza.</green>'
+  granary-already: '<prefix><yellow>Ta skrzynia już należy do spichlerza.</yellow>'
+  granary-unmarked: '<prefix><yellow>Skrzynia nie należy już do spichlerza.</yellow>'
+  granary-not-marked: '<prefix><red>Ta skrzynia nie należy do spichlerza.</red>'
+  granary-limit: '<prefix><red>Limit oznaczonych skrzyń: <max>.</red>'
+  granary-deposit: '<prefix><green>Spichlerz przyjął <white><amount></white> jedzenia</green> <gray>(stan <food>/<capacity>).</gray>'
+  granary-full: '<prefix><yellow>Spichlerz jest pełny (<capacity>). Reszta została w skrzyni.</yellow>'
+
+  build-usage: '<prefix><gray>Użycie: <white>/ludnosc buduj <typ></white> — typy: <white><types></white></gray>'
+  build-unknown-type: '<prefix><red>Nieznany budynek <white><type></white>.</red> <gray>Dostępne: <types></gray>'
+  build-no-target: '<prefix><red>Patrz na ziemię, na której ma stanąć budynek (do 12 bloków).</red>'
+  build-plan: '<prefix><gold><name></gold> <gray>• <size> • koszt</gray> <gold><cost></gold> <gray>• front:</gray> <white><facing></white><newline><status>'
+  build-buttons: '<rotate> <confirm> <cancel>'
+  build-button-rotate: '<yellow>[↻ Obróć]</yellow>'
+  build-button-rotate-hover: '<gray>Obróć o 90°</gray>'
+  build-button-confirm: '<green>[✔ Buduj]</green>'
+  build-button-confirm-hover: '<gray>Zapłać ze skarbca i zleć budowę</gray>'
+  build-button-cancel: '<red>[✖ Anuluj]</red>'
+  build-button-cancel-hover: '<gray>Porzuć plan</gray>'
+  build-status-ok: '<green>Teren jest wolny — można budować.</green>'
+  build-result-not-own-land: '<red>Cały budynek musi stać na terenie twojego kraju.</red>'
+  build-result-obstructed: '<red>Teren jest zajęty (budowle, drzewa albo inny budynek) lub zbyt nierówny.</red>'
+  build-result-funds: '<red>W skarbcu kraju brakuje pieniędzy (koszt <cost>).</red>'
+  build-result-too-many: '<red>Kolejka budów jest pełna (<max> placów budowy + <queue> w kolejce).</red>'
+  build-status-queued: '<yellow>Wszystkie place budowy są zajęte — budynek trafi do kolejki (pozycja <position>), płatność od razu.</yellow>'
+  build-queued: '<prefix><yellow>Zamówienie <white><name></white> dodane do kolejki (pozycja <position>).</yellow> <gray>Zapłacono <cost>; teren jest zarezerwowany. Budowa ruszy, gdy zwolni się plac.</gray>'
+  build-result-unknown: '<red>Nieznany typ budynku.</red>'
+  build-ordered: '<prefix><green>Budowa <white><name></white> zlecona!</green> <gray>Zapłacono <cost> ze skarbca. Budowniczowie są w drodze.</gray>'
+  build-failed: '<prefix><status>'
+  build-auto-none: '<prefix><gray>Planer nie widzi teraz potrzeby budowy (<reason>).</gray>'
+  build-failure-reason: '<prefix><gray>Powód:</gray> <yellow><reason></yellow>'
+  build-auto-funds: '<prefix><red>Na to, czego osada potrzebuje, brakuje pieniędzy w skarbcu.</red>'
+  build-auto-nospot: '<prefix><yellow>Planer nie znalazł jeszcze dobrego miejsca — teren jest skanowany, spróbuj za chwilę.</yellow>'
+  build-auto-proposal: '<prefix><aqua>Planer proponuje:</aqua> <gold><name></gold> <gray>(<reason>) — obrys na podglądzie, droga zaznaczona.</gray>'
+  reason-well: 'serce osady'
+  reason-housing: 'brakuje łóżek'
+  reason-defense: 'wojna'
+  reason-food: 'spichlerz pełny'
+  reason-military: 'armia rośnie'
+  reason-growth: 'rozwój osady'
+  reason-more-housing: 'miejsce dla nowych osadników'
+  reason-no-funds: 'brak pieniędzy'
+  reason-nothing-needed: 'wszystko jest'
+  repair-needed: '<prefix><yellow>Budynek <white><name></white> jest uszkodzony (<percent>%).</yellow> <gray>Naprawa kosztuje <cost>.</gray> <button>'
+  repair-button: '<green>[Napraw]</green>'
+  repair-button-hover: '<gray>Zleć naprawę (Doradca+)</gray>'
+  repair-ordered: '<prefix><green>Zlecono naprawę: <white><name></white></green> <gray>(koszt <cost>).</gray>'
+  repair-none: '<prefix><gray>Nie ma uszkodzonych budynków do naprawy.</gray>'
+  repair-funds: '<prefix><red>Brak pieniędzy na naprawę <white><name></white> (<cost>).</red>'
+  repair-refused: '<prefix><red>Nie zlecono naprawy <white><name></white>:</red> <gray><reason>.</gray>'
+  repair-busy: '<prefix><gray><name> jest już w naprawie.</gray>'
+  repair-done: '<prefix><green>Naprawiono: <white><name></white>.</green>'
+  upgrade-done: '<prefix><green>Zmodernizowano: <white><name></white></green> <gray>(materiały: <level>).</gray>'
+  upgrade-ordered: '<prefix><green>Zlecono modernizację: <white><name></white></green> <gray>(koszt <cost>).</gray>'
+  upgrade-none: '<prefix><gray>Nie ma budynków do modernizacji — wszystkie mają materiały obecnego poziomu osady.</gray>'
+  upgrade-funds: '<prefix><red>Brak pieniędzy na modernizację <white><name></white> (<cost>).</red>'
+  upgrade-busy: '<prefix><gray><name> jest już w naprawie lub modernizacji.</gray>'
+  buildings-outdated: ' <aqua>do modernizacji</aqua>'
+  resources-header: '<gold>═══ Magazyn surowców ═══</gold>'
+  resources-line: ' <white><name></white><gray>: <amount></gray>'
+  resources-empty: '<prefix><gray>Magazyn surowców jest pusty (drwale z tartaku, kamieniołom, kopalnia, przystań).</gray>'
+  kingdom-founded: '<prefix><gold>Założono nową osadę</gold> <gray>(<pos>) — to już <n>. osada królestwa; trakt do stolicy w budowie.</gray>'
+  kingdom-header: '<gold>═══ Królestwo ═══</gold> <gray>S stolica, o osada, # drogi, T las, ^ skały, ~ woda, . ziemia</gray>'
+  kingdom-row: '<white><row></white>'
+  kingdom-none: '<prefix><gray>Kraj nie ma jeszcze ziemi do pokazania.</gray>'
+  admin-redesign-preview: '<prefix><gold>Plan przebudowy <white><country></white>:</gold> <gray>rozbiórki <demolish>, nowe ulice <roads> m, kwartały do wyrównania <quarters> (ok. <level> bl. terenu), koszt ok. <cost>, czas ok. <time>.</gray>'
+  admin-redesign-done: '<prefix><green>Przebudowa <white><country></white> zlecona: <n> zleceń</green> <gray>(reszta stopniowo: rozbiórki → wyrównanie kwartałów → ulice → budynki w kwartałach, kolejka uzupełniana co 30 s).</gray>'
+  admin-redesign-sped-up: '<prefix><green>Przebudowa <white><country></white> już trwała (plan planisty) — przyspieszona:</green> <gray>od teraz bez dziennego limitu, kolejka uzupełniana co 30 s (<n> nowych zleceń).</gray>'
+  admin-redesign-busy: '<prefix><yellow>Przebudowa <white><country></white> już trwa — nic nie dokładam.</yellow>'
+  admin-redesign-status: '<gray> Kwartały wyrównane <white><levelled>/<quarters></white>, zabudowane <white><filled>/<fill></white>; rozbiórki do zlecenia <white><demolish></white>, ulice <white><roads></white> bl.; w kolejce <white><queued></white>, place budowy <white><sites></white>.</gray>'
+  admin-redesign-buttons: ' <cancel> <reset>'
+  admin-redesign-button-cancel: '<red>[Anuluj przebudowę]</red>'
+  admin-redesign-button-cancel-hover: '<gray>Usuwa zamówienia przebudowy z kolejki (zwrot), zatrzymuje wyrównywanie. Rozpoczęte budowy i rozbiórki trwają dalej.</gray>'
+  admin-redesign-button-reset: '<gold>[Od nowa]</gold>'
+  admin-redesign-button-reset-hover: '<gray>Anuluje obecną przebudowę i od razu liczy oraz zleca nowy plan.</gray>'
+  admin-redesign-cancelled: '<prefix><yellow>Anulowano przebudowę <white><country></white></yellow> <gray>(usunięto <n> zleceń, zwrot <refund>; rozpoczęte budowy i rozbiórki trwają dalej).</gray>'
+  admin-redesign-none-active: '<prefix><gray><country> nie ma trwającej przebudowy.</gray>'
+  admin-roads-done: '<prefix><green>Przebudowa dróg <white><country></white>: <result></green>'
+  admin-modernize-done: '<prefix><green>Modernizacja <white><country></white>: <n> budynków zleconych.</green>'
+  redesign-done: '<prefix><green>Przebudowa miasta według nowego planu zakończona.</green>'
+  redesign-preview: '<prefix><gold>Plan przebudowy:</gold> <gray>nowe ulice <roads> bl. (zielone), do rozbiórki <demolish> (czerwone), kwartały do wyrównania <quarters> (żółte). Koszt ok. <cost>, czas ok. <time>.</gray> <click:run_command:/ludnosc przebudowa potwierdz><green>[Potwierdź]</green></click>'
+  redesign-confirmed: '<prefix><green>Plan przebudowy przyjęty — budowniczowie zaczynają.</green>'
+  redesign-none: '<prefix><gray>Miasto odpowiada planowi — nie ma czego przebudowywać.</gray>'
+  redesign-ruler: '<prefix><red>Plan przebudowy zatwierdza tylko Władca.</red>'
+  info-redesign: ' <red>do rozbiórki</red>'
+  era-rebuild: '<prefix><gold>Nowa epoka: <white><era></white>!</gold> <gray>Miasto będzie przebudowywane: drogi, materiały, większe domy (/ludnosc modernizuj, /ludnosc przebuduj).</gray>'
+  demolish-done: '<prefix><gray>Rozebrano: <white><name></white> — na jego miejscu stanie nowy budynek.</gray>'
+  rebuild-roads: '<prefix><green>Zlecono przebudowę dróg w stylu epoki.</green>'
+  rebuild-roads-none: '<prefix><gray>Drogi mają już styl obecnej epoki (albo kraj nie ma dróg).</gray>'
+  rebuild-roads-funds: '<prefix><red>Brak pieniędzy na przebudowę dróg.</red>'
+  underground-done: '<prefix><green>Gotowe: <white><feature></white> pod <white><name></white>.</green> <gray>Wejście przez klapę w podłodze.</gray>'
+  underground-started: '<prefix><green>Zaczęto kopać: <white><feature></white> pod <white><name></white></green> <gray>(koszt <cost>).</gray>'
+  underground-exists: '<prefix><gray><name> ma już podziemia.</gray>'
+  underground-noplace: '<prefix><red>Pod <white><name></white> nie da się bezpiecznie kopać (brak miejsca na wejście, cudzy teren albo za blisko dna świata).</red>'
+  underground-funds: '<prefix><red>Brak pieniędzy na <feature> (<cost>).</red>'
+  underground-unsupported: '<prefix><gray>Ten budynek nie ma podziemi.</gray>'
+  underground-none: '<prefix><gray>Brak budynków, pod którymi można kopać.</gray>'
+  underground-header: '<gold>═══ Podziemia ═══</gold> <gray>(kliknij, aby dokopać)</gray>'
+  underground-line: ' <white><name></white> <gray>[<id>] • <feature> •</gray> <state>'
+  underground-state-none: '<yellow>brak</yellow>'
+  underground-state-noplace: '<red>brak miejsca</red>'
+  underground-state-done: '<green>gotowe</green>'
+  underground-state-digging: '<aqua>kopanie <percent>%</aqua>'
+  mine-floor: '<prefix><green>Górnicy z <white><name></white> zeszli piętro niżej</green> <gray>(piętro <floor>).</gray>'
+  mine-level: '<prefix><gold>Kopalnia <white><name></white> osiągnęła poziom <level>!</gold> <gray>Większy dochód i więcej rud.</gray>'
+  mine-line-level: ' <gray>• poziom</gray> <gold><level></gold> <gray>• piętra <floors> • rudy <ores></gray>'
+  mine-extended: '<prefix><green>Górnicy z <white><name></white> skończyli odcinek chodnika</green> <gray>(długość <length>).</gray>'
+  mine-stopped: '<prefix><yellow>Górnicy z <white><name></white> przerwali drążenie — woda, lawa albo cudzy teren.</yellow> <gray>(długość <length>)</gray>'
+  mine-ordered: '<prefix><green>Zlecono rozbudowę kopalni</green> <gray>(koszt <cost>).</gray>'
+  mine-none: '<prefix><gray>Kraj nie ma kopalni.</gray>'
+  mine-busy: '<prefix><gray>Górnicy już drążą chodnik.</gray>'
+  mine-max: '<prefix><gray>Kopalnie osiągnęły największą długość.</gray>'
+  mine-funds: '<prefix><red>Brak pieniędzy na rozbudowę kopalni (<cost>).</red>'
+  mine-header: '<gold>═══ Kopalnie ═══</gold> <gray>dochód dzienny: <income></gray>'
+  mine-line: ' <white><id></white> <gray>• chodnik <length>/<max> • głębokość y=<y></gray><state>'
+  mine-digging: ' <yellow>• drążą (<remaining>)</yellow>'
+  mine-yield: '<gray>Urobek dziennie:</gray> <white><ore></white> <gray>rud,</gray> <white><stone></white> <gray>kamienia,</gray> <white><precious></white> <gray>kruszców • narzędzia <tools> • <share>% od razu do skarbca</gray>'
+  mine-last: '<gray>Ostatni dzień:</gray> <white><ore></white> <gray>rud,</gray> <white><stone></white> <gray>kamienia,</gray> <white><precious></white> <gray>kruszców • sprzedano za</gray> <gold><sold></gold>'
+  mine-line-miners: ' <gray>• górnicy <miners>/<slots></gray>'
+  mine-line-blocked: ' <red>• przodek zablokowany (woda/lawa/granica)</red>'
+  mine-fall-saved: '<prefix><yellow>Lina asekuracyjna górników złapała cię w szybie kopalni.</yellow>'
+  types-bonus: '<newline><green>Premia: <bonus></green>'
+  # --- opisy budynków (2026-11-11): skutek na liście bez najeżdżania, opis i premia w podglądzie budowy
+  types-line-effect: ' <dark_gray>—</dark_gray> <yellow><effect></yellow>'
+  build-plan-info: ' <gray><description></gray>'
+  build-plan-bonus: ' <green>Premia: <bonus></green>'
+  # --- /ludnosc magazyn (2026-11-11)
+  magazyn:
+    header: '<gold>═══ Magazyny kraju ═══</gold>'
+    warehouse: ' <gold><name></gold> <dark_gray><id></dark_gray> <gray>(<pos>) — skrzynie i beczki: <white><containers></white>, zajęte sloty: <white><used>/<slots></white></gray>'
+    warehouse-unloaded: ' <gold><name></gold> <dark_gray><id></dark_gray> <gray>(<pos>) — teren niewczytany albo skrzynie są właśnie spisywane (spróbuj za chwilę)</gray>'
+    none: ' <gray>Kraj nie ma magazynu. Zamów go: <white>/ludnosc buduj magazyn</white> albo zgłoś własny budynek z 2 skrzyniami: <white>/ludnosc budynek zglos magazyn</white>.</gray>'
+    hint: ' <gray>Do magazynu należy każda skrzynia i beczka w budynku — wkładaj drewno, kamień i inne materiały do dowolnej. Tragarze znoszą tam urobek i noszą stamtąd materiały na budowy.</gray>'
+    workplaces: '<yellow>Miejsca pracy i ich skrzynie:</yellow>'
+    workplace: ' <white><name></white> <dark_gray><id></dark_gray> <gray>— <status></gray>'
+    link-look: '<prefix><red>Stań przy skrzyni lub beczce (do 6 bloków) i patrz na nią.</red> <gray>Skrzynia stojąca w magazynie, spichlerzu albo miejscu pracy zostanie powiązana z tym budynkiem. Dla skrzyni stojącej osobno podaj ID miejsca pracy z listy <white>/ludnosc magazyn</white>, np. <white>/ludnosc magazyn powiaz <example></white>, albo zrób z niej skład kraju: <white>/ludnosc magazyn domyslny</white>.</gray>'
+    link-outside: '<prefix><yellow>Ta skrzynia nie stoi w żadnym magazynie, spichlerzu ani miejscu pracy.</yellow> <gray>Podaj ID miejsca pracy: <white>/ludnosc magazyn powiaz ID</white> (ID z listy <white>/ludnosc magazyn</white>) albo zrób z niej skład całego kraju: <white>/ludnosc magazyn domyslny</white>.</gray>'
+    linked: '<prefix><green>Powiązano skrzynię <white><pos></white> z budynkiem: <white><name></white> <dark_gray><id></dark_gray>.</green>'
+    linked-default: '<prefix><green>Skrzynia <white><pos></white> jest teraz domyślnym składem kraju.</green>'
+    linked-warehouse: '<prefix><green><white><name></white> korzysta teraz ze skrzyń magazynu <dark_gray><id></dark_gray>.</green>'
+    error: '<prefix><red><reason></red>'
+    usage: '<prefix><gray>Użycie: <white>/ludnosc magazyn</white> — stan; <white>/ludnosc magazyn powiaz [ID]</white> — powiąż skrzynię, na którą patrzysz; <white>/ludnosc magazyn powiaz ID ID_MAGAZYNU</white> — miejsce pracy korzysta z magazynu; <white>/ludnosc magazyn domyslny</white> — wskazana skrzynia składem kraju.</gray>'
+  bonus-food: 'jedzenie +<value>/dzień'
+  bonus-tax: 'podatki +<value>%'
+  bonus-growth: 'wzrost +<value>%'
+  bonus-granary: 'spichlerz +<value>'
+  bonus-mine: 'dochód z chodników (<value> za blok/dzień)'
+  repair-ruin-removed: '<prefix><red>Ruina <white><name></white> została usunięta z rejestru budynków.</red>'
+  buildings-damaged: ' <red>uszkodzony <percent>%</red>'
+  buildings-repairing: ' <yellow>w naprawie</yellow>'
+  plan-shown: '<prefix><aqua>Plan miasta (<level>):</aqua> <gray><plots> działek i <roads> pól dróg — cząsteczki przez 20 s. Kolory: centrum złote, domy pomarańczowe, warsztaty brązowe, pola zielone, obrona szara, budowy żółte, kolejka błękitna.</gray>'
+  site-waiting-material: '<prefix><yellow>Budowa <white><name></white> czeka na materiał w magazynie budowy: <white><material></white>.</yellow> <gray>(<pos>)</gray>'
+  build-no-plan: '<prefix><red>Nie masz planu budowy. Użyj <white>/ludnosc buduj <typ></white>.</red>'
+  build-plan-cancelled: '<prefix><gray>Plan budowy porzucony.</gray>'
+  build-plan-expired: '<prefix><gray>Plan budowy wygasł.</gray>'
+  facing-north: 'północ'
+  facing-east: 'wschód'
+  facing-south: 'południe'
+  facing-west: 'zachód'
+
+  queue-header: '<gold>═══ Kolejka budów: <country> (<n>/<max>) ═══</gold>'
+  queue-line: ' <yellow>#<nr></yellow> <white><name></white> <gray>• <pos> • <cost> • zamówił: <by></gray>'
+  queue-empty: '<gray>Kolejka jest pusta.</gray>'
+  queue-bad-number: '<prefix><red>Podaj numer pozycji z kolejki (1–<max>).</red>'
+  queue-cancelled: '<prefix><yellow>Usunięto z kolejki: <white><name></white>.</yellow> <gray>Zwrot: <refund>.</gray>'
+  queue-moved: '<prefix><gray>Przesunięto <white><name></white> w kolejce.</gray>'
+  queue-showing: '<prefix><aqua>Obrys <white><name></white> (<pos>) widać przez 10 s.</aqua>'
+  queue-started: '<prefix><green>Rozpoczęto budowę: <white><name></white> (z kolejki).</green> <gray>(<pos>)</gray>'
+  queue-skipped: '<prefix><red>Pominięto <white><name></white> z kolejki — teren zajęty albo już nie należy do kraju.</red> <gray>Zwrot: <refund>.</gray>'
+  queue-lost: '<prefix><red>Utracono teren pod <white><name></white> z kolejki.</red> <gray>Zwrot: <refund>.</gray>'
+  queue-button-up: '<yellow>[▲]</yellow>'
+  queue-button-up-hover: '<gray>Wyżej w kolejce</gray>'
+  queue-button-down: '<yellow>[▼]</yellow>'
+  queue-button-down-hover: '<gray>Niżej w kolejce</gray>'
+  queue-button-show: '<aqua>[Pokaż]</aqua>'
+  queue-button-show-hover: '<gray>Pokaż obrys cząsteczkami</gray>'
+  queue-button-cancel: '<red>[✖]</red>'
+  queue-button-cancel-hover: '<gray>Usuń z kolejki (zwrot 100%) — kliknij i potwierdź Enterem</gray>'
+  site-hologram: '<gold>⚒ <name></gold><newline><gray>Budowa: <white><percent>%</white> • budowniczych: <builders></gray>'
+  site-hologram-night: '<gold>⚒ <name></gold><newline><gray>Budowa: <white><percent>%</white> • noc, budowniczowie odpoczywają</gray>'
+  site-hologram-material: '<gold>⚒ <name></gold><newline><yellow>Brak materiału: <material></yellow>'
+  site-finished: '<prefix><green>Budowa zakończona: <white><name></white></green> <gray>(<pos>).</gray>'
+  site-cancelled: '<prefix><yellow>Budowa <white><name></white> anulowana.</yellow> <gray>Zwrot: <refund>.</gray>'
+  site-obstructed: '<prefix><red>Budowa <white><name></white> anulowana — teren okazał się zajęty.</red> <gray>Zwrot: <refund>.</gray>'
+  builder-name: '<gray>Budowniczy</gray> <white><imie></white>'
+
+  house-no-worldedit: '<prefix><red>Ta komenda wymaga WorldEdit (zaznacz dom różdżką //wand).</red>'
+  house-no-selection: '<prefix><red>Najpierw zaznacz dom WorldEditem (//pos1, //pos2).</red>'
+  house-too-big: '<prefix><red>Zaznaczenie jest za duże (maks. <max> bloków).</red>'
+  house-not-country: '<prefix><red>Środek zaznaczenia musi leżeć na terenie kraju.</red>'
+  house-no-beds: '<prefix><red>W zaznaczeniu nie ma żadnego łóżka.</red>'
+  house-overlap: '<prefix><red>Zaznaczenie nachodzi na inny zarejestrowany budynek.</red>'
+  house-registered: '<prefix><green>Zgłoszono dom: <white><beds></white> łóżek dla kraju <white><country></white>.</green>'
+  house-removed: '<prefix><yellow>Usunięto budynek <white><name></white> z rejestru (bloki zostają).</yellow>'
+  house-none-here: '<prefix><red>Nie stoisz w żadnym zarejestrowanym budynku.</red>'
+
+  admin-usage: '<prefix><gray>Użycie: <white><usage></white></gray>'
+  admin-added: '<prefix><green>Dodano <white><n></white> obywateli krajowi <white><country></white>.</green>'
+  admin-removed: '<prefix><yellow>Usunięto <white><n></white> obywateli kraju <white><country></white>.</yellow>'
+  admin-not-on-land: '<prefix><red>Stań na terenie tego kraju albo dodaj obywateli w jego stolicy (chunk musi być wczytany).</red>'
+  admin-site-cancelled: '<prefix><yellow>Anulowano budowę <white><name></white> (zwrot <refund>).</yellow>'
+  admin-no-site: '<prefix><red>Nie znaleziono placu budowy (stań na nim albo podaj id z /ludnosc budynki).</red>'
+  admin-food: '<prefix><green>Spichlerz kraju <white><country></white>: <white><food></white> jedzenia.</green>'
+  admin-queue-cleared: '<prefix><yellow>Wyczyszczono kolejkę kraju <white><country></white>: <n> pozycji, zwrot <refund>.</yellow>'
+  admin-daily-done: '<prefix><green>Wykonano dzienny rozrachunek ludności.</green>'
+  admin-growth-done: '<prefix><green>Wykonano tick wzrostu ludności (nowych osadników: <n>).</green>'
+
+  protect-citizen: '<prefix><red>To obywatel kraju <white><country></white> — nie możesz go krzywdzić poza wojną.</red>'
+  protect-leash: '<prefix><red>Nie możesz uprowadzić obywatela kraju <white><country></white>.</red>'
+  protect-nametag: '<prefix><red>Obywatele mają już imiona.</red>'
+
+  notify-settler: '<prefix><gray>Nowy osadnik <white><name></white> zamieszkał w kraju.</gray>'
+  notify-departures: '<prefix><red><n> obywateli opuściło kraj</red> <gray>(głód lub brak łóżek).</gray>'
+  alert-storage-full: '<prefix><yellow><country>: <detail> — magazyn nie mieści produkcji, praca wstrzymana. Opróżnij skrzynię lub przypisz większy magazyn: /ludnosc magazyn.</yellow>'
+  alert-torches: '<prefix><yellow><country>: <detail> — brak pochodni wymaganych do dalszego drążenia. Uzupełnij pochodnie w przypisanym magazynie.</yellow>'
+  alert-storage-missing: '<prefix><yellow><country>: <detail> — praca czeka na przypisanie magazynu: /ludnosc magazyn.</yellow>'
+  alert-storage-unavailable: '<prefix><yellow><country>: <detail> — magazyn niedostępny (niezaładowany, zniszczony lub zmienił właściciela). Sprawdź skrzynię i powiązanie: /ludnosc magazyn.</yellow>'
+  alert-work-recovered: '<prefix><green><country>: <detail> — produkcja została wznowiona; zapisano kolejny pakiet w magazynie.</green>'
+  alert-food: '<prefix><yellow><country>: dostępne jedzenie na kolejny dzienny posiłek: <detail> pkt. Uzupełnij spichlerz lub magazyny żywności. Niezaładowane i nieprawidłowe magazyny nie są liczone.</yellow>'
+  alert-food-recovered: '<prefix><green><country>: dostępny zapas wystarcza już na kolejny dzienny posiłek mieszkańców.</green>'
+
+  info-season: '<gray>Pora roku:</gray> <gold><season></gold> <gray>(dzień <day>/<days>, <next> za <left>) • plony</gray> <white><food></white>'
+  info-blight: '<red>Nieurodzaj do <until> — plony <factor>.</red>'
+  info-work: '<gray>Praca:</gray> <white>rolnicy <farmers> • górnicy <miners> • kamieniarze <quarry> • drwale <wood> • rybacy <fish></white> <dark_gray>(/ludnosc praca)</dark_gray>'
+  season-changed: '<prefix><gold>Nadeszła pora roku: <season>!</gold> <gray><hint> Plony <food>.</gray>'
+  season-title: '<gold><season></gold>'
+  season-subtitle: '<gray><hint></gray>'
+  season-join: '<prefix><gray>Pora roku:</gray> <gold><season></gold> <gray>(dzień <day>/<days>) • plony <food> • <next> za <left>.</gray>'
+  season-join-blight: '<prefix><red>W twoim kraju trwa nieurodzaj — oszczędzajcie zapasy spichlerza.</red>'
+  season-hint:
+    wiosna: 'Pola budzą się do życia, siew trwa.'
+    lato: 'Pełnia wzrostu — pola dają dobrze.'
+    jesien: 'Żniwa! Najlepszy czas, by napełnić spichlerze przed zimą.'
+    zima: 'Mróz — pola prawie nic nie dają, żyje się z zapasów.'
+  season-disabled: '<prefix><gray>Pory roku są wyłączone.</gray>'
+  season-header: '<gold>═══ Pory roku ═══</gold>'
+  season-now: '<gray>Teraz:</gray> <gold><season></gold> <gray>(dzień <day>/<days>) • plony</gray> <white><food></white> <gray>• wzrost upraw <growth>% • <next> za <left></gray>'
+  season-row: ' <white><season></white><gray>: plony <food>, wzrost upraw <growth>%, nieurodzaj <blight>% dziennie</gray> <dark_gray>— <hint></dark_gray>'
+  season-advice: '<gray>Rada: jesienią zapełnij spichlerz (</gray><white>/ludnosc spichlerz</white><gray>) — zimą rolnicy prawie nic nie dają, a głód wypędza osadników.</gray>'
+  blight-start: '<prefix><red>Nieurodzaj w kraju!</red> <gray>Plony spadają do <percent>% przez <days> dni. Oszczędzajcie zapasy spichlerza.</gray>'
+  blight-end: '<prefix><green>Nieurodzaj minął — pola znów rodzą normalnie.</green>'
+  work-header: '<gold>═══ Praca: <country> ═══</gold>'
+  work-line: ' <white><job></white><gray>: <workers>/<slots> miejsc w <places> bud. • zawody: <professions></gray>'
+  work-none: '<gray>Kraj nie ma jeszcze miejsc pracy (pole, kopalnia, kamieniołom, tartak, przystań).</gray>'
+  work-free: '<gray>Dorośli:</gray> <white><adults></white> <gray>• przy pracy:</gray> <white><assigned></white>'
+  work-today: '<gray>Dziś z widocznej pracy: jedzenie</gray> <white><food></white><gray>/<cap> • ryby</gray> <white><fish></white><gray>/<fishcap></gray>'
+  work-season: '<gray>Mnożnik plonów teraz (pora roku, nieurodzaj):</gray> <white><factor></white>'
+  admin-season-set: '<prefix><green>Ustawiono porę roku:</green> <gold><season></gold> <gray>(dzień <day>/<days>, plony <food>).</gray>'
+  admin-season-info: '<gray>Początek:</gray> <white><start></white> <gray>• koniec:</gray> <white><end></white> <gray>• długość: <length> dni • nr pory: <serial></gray>'
+  admin-season-blights: '<gray>Nieurodzaj teraz:</gray> <white><list></white>'
+  admin-blight-started: '<prefix><yellow>Nieurodzaj w kraju <white><country></white> na <days> dni.</yellow>'
+  admin-blight-ended: '<prefix><green>Zakończono nieurodzaj w kraju <white><country></white>.</green>'
+  admin-blight-none: '<prefix><gray>W kraju <white><country></white> nie ma nieurodzaju.</gray>'
+  admin-work-header: '<gold>═══ Praca: <name> ═══</gold>'
+  admin-work-line: ' <gray>•</gray> <white><line></white>'
+  admin-work-stats: '<gray>Praca obywateli: tablice <boards>, pracownicy <workers> • na minutę: zbiory <harvests>, dostawy <deliveries>, ścieżki <paths>, ryby <catches> • przebieg <ms> ms (max <max> ms), ponad budżet <over>×</gray>'
+  admin-work-hint: '<gray>Spójrz na wieśniaka (do 8 bloków) albo stań przy obywatelu, aby zobaczyć jego pracę.</gray>'
+
+  help-header: '<gold>═══ Ludność — <category> <gray>(<page>/<pages>)</gray> ═══</gold>'
+  help-line: ' <yellow><syntax></yellow> <gray>— <short></gray>'
+  help-hover: '<yellow><syntax></yellow><newline><white><description></white><newline><gray>Wymaga: <rank></gray><newline><dark_gray>Kliknij, aby wpisać</dark_gray>'
+  help-nav: '<prev> <next>'
+  help-prev: '<yellow>[« Poprzednia]</yellow>'
+  help-next: '<yellow>[Następna »]</yellow>'
+  help-prev-disabled: '<dark_gray>[« Poprzednia]</dark_gray>'
+  help-next-disabled: '<dark_gray>[Następna »]</dark_gray>'
+  help-tabs: '<gray>Działy: <tabs></gray>'
+  help-tab: '<yellow><category></yellow>'
+  help-tab-current: '<white><u><category></u></white>'
+  help-tab-separator: '<dark_gray> | </dark_gray>'
+  help-page-hover: '<gray>Strona <page>: <category></gray>'
+  help-categories:
+    informacje: 'Informacje'
+    budowa: 'Budowa'
+    spichlerz: 'Spichlerz'
+    admin: 'Admin'
+  help-entries:
+    budynek-zglos:
+      short: 'nadaj funkcję budynkowi postawionemu przez graczy'
+      description: 'Zaznacz budynek (/ludnosc kopia pos1 i pos2 albo WorldEdit) i zgłoś go z typem: mieszkanie (całe łóżka), spichlerz i magazyn (skrzynie/beczki), koszary (łóżka), kuźnia (kowadło + piec), studnia (źródło wody), karczma (beczka + palenisko), kościół (pulpit + świeca lub dzwon), ratusz (stół kartograficzny + pulpit). Cały obrys na ziemi kraju, bez nachodzenia na inne budynki; limity na kraj i wymagania epoki jak przy zamawianiu. Budowniczowie go nie przebudują ani nie naprawią.'
+      rank: 'Doradca lub Władca'
+    budynek-typy:
+      short: 'typy do zgłoszenia i ich wymagania'
+      description: 'Lista typów własnych budynków: wymagane bloki, działanie i czy twój kraj może teraz zgłosić dany typ (limit, poziom osady, ludność, epoka).'
+      rank: 'każdy'
+    budynek-info:
+      short: 'co to za budynek, w którym stoisz'
+      description: 'Typ, kraj, kto zgłosił albo zamówił, czy działa i czego brakuje. Pokazuje obrys cząsteczkami.'
+      rank: 'każdy'
+    budynek-usun:
+      short: 'wyrejestruj zgłoszony budynek'
+      description: 'Stań w budynku zgłoszonym przez graczy twojego kraju: traci funkcję i znika z rejestru, bloki zostają. Budynków budowniczych to nie dotyczy.'
+      rank: 'Doradca lub Władca'
+    buduj-gracze:
+      short: 'Niezbędne budynki kraju'
+      description: 'Kraj graczy: chata, kopalnia, kamieniołom, tartak, pole, przystań, huta szkła, cegielnia, owczarnia, kuźnia, spichlerz, magazyn, studnia i koszary. Pozostałe budowle wznosicie sami; kopie własnych budowli pozostają dostępne.'
+      rank: 'Doradca lub Władca'
+    buduj-anuluj-plac:
+      short: 'Anuluj podgląd lub zleconą budowę'
+      description: 'Bez argumentu anuluje tylko podgląd (plac nigdy nie znika przez przypadek — wtedy pokazuje się lista placów). Z id (8 znaków) — wskazany plac; potwierdz — plac, na którym stoisz, albo jedyny plac lub zlecenie. Zwrot 100%, jeśli prace się nie zaczęły, potem według building.refund-on-cancel; materiały niewykorzystane wracają. Kolejka: /ludnosc kolejka anuluj <nr> (zwrot 100%).'
+      rank: 'Doradca lub Władca'
+    pomoc:
+      short: 'ta pomoc'
+      description: 'Interaktywna pomoc Ludności. Kliknij komendę, aby ją wpisać.'
+      rank: 'każdy'
+    info:
+      short: 'ludność, łóżka, jedzenie, podatki'
+      description: 'Pokazuje liczbę obywateli NPC, mieszkań, stan spichlerza, dzienny podatek i budynki kraju (domyślnie twojego).'
+      rank: 'każdy'
+    budynki:
+      short: 'lista budynków i placów budowy'
+      description: 'Zbudowane i zgłoszone budynki kraju oraz postęp trwających budów.'
+      rank: 'każdy'
+    typy:
+      short: 'budynki do zbudowania'
+      description: 'Lista szablonów (chata, dom, spichlerz, koszary, kuźnia, studnia, wieża...) z rozmiarem, łóżkami i kosztem.'
+      rank: 'każdy'
+    buduj:
+      short: 'plan budynku z podglądem'
+      description: 'Pokazuje obrys budynku cząsteczkami w miejscu, na które patrzysz (front w twoją stronę). Potem obróć, potwierdź lub anuluj. Koszt płaci skarbiec kraju.'
+      rank: 'Doradca'
+    buduj-auto:
+      short: 'planer proponuje budynek'
+      description: 'Planer osady wybiera, czego kraj potrzebuje (łóżka, spichlerz, koszary, rozwój, budynki reprezentacyjne według poziomu) i gdzie (płaski teren, front do centrum, droga). Pokazuje podgląd do potwierdzenia.'
+      rank: 'Doradca'
+    buduj-obroc:
+      short: 'obróć plan o 90°'
+      description: 'Obraca planowany budynek zgodnie z ruchem wskazówek zegara.'
+      rank: 'Doradca'
+    buduj-potwierdz:
+      short: 'zleć budowę'
+      description: 'Płaci ze skarbca i wysyła budowniczych. Budowa trwa stopniowo i przetrwa restart serwera.'
+      rank: 'Doradca'
+    buduj-anuluj:
+      short: 'porzuć plan'
+      description: 'Porzuca plan budowy (nic nie kosztuje).'
+      rank: 'Doradca'
+    plan:
+      short: 'pokaż plan miasta'
+      description: 'Cząsteczkami pokazuje działki (budynki, budowy, kolejkę) i drogi kraju w pobliżu przez 20 sekund.'
+      rank: 'każdy'
+    kolejka:
+      short: 'kolejka budów kraju'
+      description: 'Gdy wszystkie place budowy są zajęte, nowe zamówienia czekają tu (opłacone, z zarezerwowanym terenem) i ruszają same po zakończeniu budowy. Przyciski: wyżej, niżej, pokaż, usuń.'
+      rank: 'Doradca'
+    kolejka-anuluj:
+      short: 'usuń pozycję (zwrot 100%)'
+      description: 'Usuwa zamówienie z kolejki i zwraca całą zapłaconą kwotę do skarbca.'
+      rank: 'Doradca'
+    kolejka-wyzej:
+      short: 'przesuń wyżej'
+      description: 'Przesuwa zamówienie o jedno miejsce bliżej startu.'
+      rank: 'Doradca'
+    kolejka-nizej:
+      short: 'przesuń niżej'
+      description: 'Przesuwa zamówienie o jedno miejsce dalej.'
+      rank: 'Doradca'
+    kolejka-pokaz:
+      short: 'pokaż obrys'
+      description: 'Pokazuje obrys zakolejkowanego budynku cząsteczkami przez 10 sekund.'
+      rank: 'Doradca'
+    napraw:
+      short: 'napraw uszkodzony budynek'
+      description: 'Zleca naprawę uszkodzonego budynku (id z /ludnosc budynki) albo wszystkich. Koszt zależy od zniszczeń; naprawa ma pierwszeństwo w kolejce budów, ale czeka na koniec oblężenia.'
+      rank: 'Doradca'
+    modernizuj:
+      short: 'modernizuj budynek'
+      description: 'Przebudowuje ściany, dach, okna i podłogi budynku na materiały obecnego poziomu osady (id z /ludnosc budynki albo wszystkie). Taniej niż nowy budynek; ma pierwszeństwo w kolejce.'
+      rank: 'Doradca'
+    kopalnia:
+      short: 'kopalnie kraju'
+      description: 'Pokazuje kopalnie kraju: górników i miejsca, poziom, długość chodników, dzienny urobek (rudy, kamień, kruszce) i ile trafia od razu do skarbca.'
+      rank: 'każdy'
+    pora:
+      short: 'pora roku i plony'
+      description: 'Obecna pora roku (wiosna, lato, jesień, zima), ile dni zostało, mnożniki plonów i wzrostu upraw oraz szansa nieurodzaju. Zimą pola prawie nic nie dają — zrób zapasy jesienią.'
+      rank: 'każdy'
+    praca:
+      short: 'kto gdzie pracuje'
+      description: 'Rolnicy na polach, górnicy w kopalniach, kamieniarze, drwale i rybacy: zajęte i wolne miejsca pracy, dzisiejsze plony i połowy z widocznej pracy.'
+      rank: 'każdy'
+    magazyn:
+      short: 'surowce kraju'
+      description: 'Drewno od drwali, kamień z kamieniołomów i kopalni, rudy i kruszce z kopalni, ryby z przystani. Nadwyżka idzie do skarbca.'
+      rank: 'każdy'
+    buduj-wariant:
+      short: 'inny wariant planowanego budynku'
+      description: 'Dom, chata, kamienica, karczma i inne mają kilka wariantów (szachulec, kamień, strzecha...). Podgląd wybiera wariant dla działki; ta komenda przełącza na następny w tym samym miejscu i obrocie.'
+      rank: 'Doradca'
+    budowy:
+      short: 'place budowy i czego brakuje'
+      description: 'Każdy plac budowy kraju: etap (niwelacja, fundament, ściany, dach...), postęp, budowniczowie, materiał do końca (drewno, kamień, szkło, cegła, wełna, siano, żelazo...) z oznaczeniem: z magazynu kraju albo za monety zamówienia, i powód przestoju.'
+      rank: 'każdy'
+    obywatel:
+      short: 'dom, praca, pensja i rodzina obywatela'
+      description: 'Karta obywatela: stały dom i łóżko, miejsce pracy, co robi teraz, pensja, oszczędności i rodzina. Spójrz na wieśniaka albo podaj imię.'
+      rank: 'każdy'
+    obywatele:
+      short: 'bezdomni, bezrobotni, oszczędności'
+      description: 'Statystyki obywateli kraju: bezdomni, bezrobotni, średnie oszczędności, pary, dzieci, pensje i samodzielne chaty.'
+      rank: 'każdy'
+    obywatele-chatki:
+      short: 'obywatele sami budują chaty'
+      description: 'Włącza/wyłącza chaty opłacane z oszczędności obywateli, gdy brakuje łóżek, i limit chat budowanych naraz.'
+      rank: 'Doradca+'
+    kopia:
+      short: 'kopie budowli graczy'
+      description: 'Zaznacz budowlę (pos1/pos2 albo WorldEdit) na ziemi kraju i zapisz jako szablon (zapisz, lista, info, nazwa, usun); budowniczowie postawią kopię w innym miejscu (buduj, obrót i podgląd jak przy /ludnosc buduj) za opłatą ze skarbca i z drewnem/kamieniem z magazynu.'
+      rank: 'Doradca (zapis/budowa), lista i info — każdy'
+    gospodarka:
+      short: 'przepływ materiałów kraju'
+      description: 'Co produkują pola, tartaki, kamieniołomy, kopalnie i zakłady (huta szkła, cegielnia, owczarnia, kuźnia), gdzie leży towar, które materiały kraj wytwarza, a które kupuje za monety, spichlerz i wzrost, potrzeby budów, tragarze w drodze i braki.'
+      rank: 'każdy'
+    zaklady:
+      short: 'łańcuchy produkcji: szkło, cegły, wełna, siano, żelazo'
+      description: 'Zakłady kraju: huta szkła (piasek z brzegów → szkło), cegielnia (glina znad wody → cegły i terakota), owczarnia (owce → wełna, pszenica → bele siana), kuźnia (surowe żelazo → sztabki, węgiel i drewno → pochodnie). Stan pracy, wydobycie dziś, paliwo, stado oraz lista materiałów: z własnych zakładów albo za monety zamówień.'
+      rank: 'każdy'
+    plan-krolestwo:
+      short: 'mapa królestwa'
+      description: 'Mapa ziemi kraju w czacie: stolica, osady, drogi, lasy, skały i woda.'
+      rank: 'każdy'
+    przebudowa:
+      short: 'plan przebudowy miasta'
+      description: 'Pokazuje nowy plan miasta (ulice, rozbiórki, wyrównanie kwartałów), koszt i czas; potwierdz (Władca) go uruchamia.'
+      rank: 'Doradca'
+    przebuduj:
+      short: 'drogi w stylu epoki'
+      description: 'Przebudowuje drogi kraju w stylu obecnej epoki (bruk, kostka, asfalt z pasami, chodniki, latarnie). Płatne ze skarbca.'
+      rank: 'Doradca'
+    podziemia:
+      short: 'podziemia budynków'
+      description: 'Piwnice pod domami, lochy pod ratuszem, lochy z tunelem ucieczkowym pod zamkiem i katakumby pod katedrą — stan kopania.'
+      rank: 'każdy'
+    podziemia-kop:
+      short: 'dokop podziemia'
+      description: 'Zleca wykopanie podziemi pod starszym budynkiem (id z /ludnosc podziemia). Nowe budynki dostają je same.'
+      rank: 'Doradca'
+    kopalnia-rozbuduj:
+      short: 'rozbuduj kopalnię'
+      description: 'Płaci za kolejny odcinek chodnika najkrótszej wolnej kopalni (albo o podanym id). Górnicy drążą go w godzinach pracy.'
+      rank: 'Doradca'
+    spichlerz:
+      short: 'stan spichlerza'
+      description: 'Ile jedzenia ma kraj i ile może zmieścić. Jedzenie wkłada się do skrzyń spichlerza.'
+      rank: 'każdy'
+    spichlerz-oznacz:
+      short: 'skrzynia = punkt zbiórki'
+      description: 'Skrzynia lub beczka, na którą patrzysz, staje się punktem zbiórki spichlerza: jedzenie włożone do niej trafia do zapasów kraju przy zamknięciu.'
+      rank: 'Doradca'
+    spichlerz-usun:
+      short: 'odznacz skrzynię'
+      description: 'Skrzynia, na którą patrzysz, przestaje należeć do spichlerza.'
+      rank: 'Doradca'
+    dom-zglos:
+      short: 'zgłoś dom z zaznaczenia WE'
+      description: 'Rejestruje budynek zaznaczony WorldEditem jako mieszkanie; pojemność = liczba łóżek w środku.'
+      rank: 'admin'
+    dom-usun:
+      short: 'wyrejestruj budynek'
+      description: 'Usuwa z rejestru budynek, w którym stoisz (bloki zostają).'
+      rank: 'admin'
+    admin-dodaj:
+      short: 'dodaj obywateli'
+      description: 'Tworzy n obywateli kraju w miejscu, w którym stoisz (na terenie kraju).'
+      rank: 'admin'
+    admin-usun:
+      short: 'usuń obywateli'
+      description: 'Usuwa n obywateli kraju (najpierw wczytanych).'
+      rank: 'admin'
+    admin-budynek-anuluj:
+      short: 'anuluj budowę'
+      description: 'Anuluje plac budowy, na którym stoisz, albo o podanym id (początek id wystarczy).'
+      rank: 'admin'
+    admin-kolejka:
+      short: 'kolejka budów kraju'
+      description: 'Pokazuje kolejkę budów kraju; z "wyczysc" usuwa wszystkie pozycje ze zwrotem 100%.'
+      rank: 'admin'
+    admin-jedzenie:
+      short: 'ustaw jedzenie'
+      description: 'Ustawia zapas jedzenia w spichlerzu kraju.'
+      rank: 'admin'
+    admin-pora:
+      short: 'pora roku: podgląd / ustaw'
+      description: 'info pokazuje początek i koniec obecnej pory oraz kraje z nieurodzajem; ustaw <wiosna|lato|jesien|zima> [dzień] zaczyna wybraną porę teraz (ogłoszenie dla wszystkich).'
+      rank: 'admin'
+    admin-nieurodzaj:
+      short: 'wywołaj / zakończ nieurodzaj'
+      description: 'Zaczyna nieurodzaj w kraju na podaną liczbę dni (domyślnie seasons.poor-harvest.max-days) albo kończy go słowem koniec.'
+      rank: 'admin'
+    admin-praca:
+      short: 'podgląd pracy wieśniaka'
+      description: 'Pokazuje przydział, miejsce pracy, stan (np. niesie plony do spichlerza), trzymany przedmiot i cel wieśniaka, na którego patrzysz. Bez celu: statystyki i czas przebiegu.'
+      rank: 'admin'
+    admin-dzien:
+      short: 'wymuś dzienny rozrachunek'
+      description: 'Od razu liczy produkcję, posiłki, podatki NPC i odejścia wszystkich krajów.'
+      rank: 'admin'
+    admin-wzrost:
+      short: 'wymuś wzrost ludności'
+      description: 'Od razu wykonuje tick wzrostu ludności.'
+      rank: 'admin'
+    admin-przebudowa:
+      short: 'wymuś przebudowę miasta'
+      description: 'Plan v2 dowolnego kraju: podglad (cząsteczki + podsumowanie i postęp), teraz (rozbiórki, wyrównanie kwartałów, ulice i budynki w kwartałach — kolejka uzupełniana na bieżąco; ponowne teraz nie dokłada drugiej przebudowy), anuluj (zatrzymuje trwającą) albo reset (anuluj + teraz). Dodaj darmowo, aby skarbiec nie płacił.'
+      rank: 'admin'
+    admin-drogi:
+      short: 'wymuś drogi epoki'
+      description: 'Przebudowuje sieć dróg dowolnego kraju w stylu jego epoki (darmowo = bez kosztu).'
+      rank: 'admin'
+    admin-modernizuj:
+      short: 'wymuś modernizację'
+      description: 'Modernizuje wszystkie przestarzałe budynki dowolnego kraju (darmowo = bez kosztu).'
+      rank: 'admin'
+    admin-reload:
+      short: 'przeładuj konfigurację'
+      description: 'Wczytuje ponownie config.yml i szablony budynków.'
+      rank: 'admin'
+    admin-krolestwo:
+      short: 'królewska przebudowa KRÓLESTWA'
+      description: 'Preview sprawdza przygotowany manifest i assety bez zmiany świata. Start rozpoczyna autoryzowaną pełną przebudowę jednego ustalonego kraju. Status pokazuje postęp, resume po awarii ponownie sprawdza SHA i bezpiecznie powtarza etapy. Wymaga przygotowanych kopii zapasowych; nie uruchamia restartu.'
+      rank: 'admin'
+
+# Fizyczne magazyny: skan wyłącznie znanych bbox, bez wymuszania chunków.
+production:
+  scan-blocks-per-tick: 128
+  # Maksymalnie jeden zatwierdzony pakiet na interwał; trwały zapis regionów może opóźnić tick.
+  commit-interval-ticks: 20
+  # Magazyn (zamówiony i zgłoszony): każda skrzynia i beczka w jego obrysie jest składem kraju — najwyżej tyle na magazyn.
+  warehouse-containers: 40
+
+# Alerty tylko do władcy i doradców kraju. Kraje NPC: jawnie wskazani zarządcy.
+alerts:
+  enabled: true
+  cooldown-seconds: 600       # ograniczone do 60–3600 s; osobno na miejsce pracy / kraj dla żywności
+  npc-manager-uuids: []      # brak automatycznego rozsyłania wszystkim administratorom
+
+# Opcjonalny most pluginów: rzeczywisty transfer gracz -> istniejący magazyn kraju.
+supply:
+  enabled: true
+  warehouse-range: 16       # od gracza do każdej połowy skrzyni; ograniczone do 4–32 bloków
+  disk-proof-timeout-seconds: 30 # 5–120 s; brak obu zapisanych markerów -> blokada/audyt, nie potwierdzenie
+  allowed-materials: [COBBLESTONE, COBBLED_DEEPSLATE, STONE, STONE_BRICKS, OAK_LOG, SPRUCE_LOG, BIRCH_LOG, RAW_IRON, RAW_COPPER, IRON_INGOT, COAL, TORCH, WHEAT, COD, SALMON, BREAD, CARROT, POTATO]

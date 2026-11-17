@@ -1,0 +1,32 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "creative": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.creative"
+      },
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.game"
+      },
+      "underwater": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.under_water"
+      }
+    },
+    "minecraft:visual/sky_color": "#7ba4ff"
+  },
+  "carvers": [],
+  "downfall": 0.5,
+  "effects": {
+    "foliage_color": "#6fb34c",
+    "grass_color": "#8ec667",
+    "water_color": "#3f76e4"
+  },
+  "features": [],
+  "has_precipitation": true,
+  "temperature": 0.5
+}

@@ -1,0 +1,415 @@
+/*!
+ * Panel MEDIVALRPG — Gospodarka kraju (produkcja, skrzynie, spichlerz, tragarze, budowy, obywatele)
+ * Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+ * Kolory rodzajów towarów z palety Statystyk Skarbu Świata (--ws-*, css/world-stats.css); kolor nigdy nie jest jedyną
+ * informacją — wartości i nazwy zawsze są tekstem obok znacznika.
+ */
+
+.eco-k-wood { --tc: var(--ws-9); }
+.eco-k-stone { --tc: var(--ws-gray-1); }
+.eco-k-ore { --tc: var(--ws-1); }
+.eco-k-food { --tc: var(--ws-4); }
+.eco-k-fish { --tc: var(--ws-10); }
+.eco-k-textile { --tc: var(--ws-8); }
+.eco-k-ceramics { --tc: var(--ws-2); }
+.eco-k-tools { --tc: var(--ws-6); }
+.eco-k-other { --tc: var(--ws-5); }
+
+.eco-head .ch-main h1 {
+  overflow-wrap: anywhere;
+}
+.eco-head-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-self: center;
+}
+.eco-role {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* kafelki: obramowanie + słowo w podpisie, nie tylko kolor */
+.eco-kpis .stat.eco-kpi-err {
+  border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+  background: var(--danger-bg);
+}
+.eco-kpis .stat.eco-kpi-err .stat-sub {
+  color: var(--danger);
+  font-weight: 600;
+}
+.eco-kpis .stat.eco-kpi-warn {
+  border-color: color-mix(in srgb, var(--warn) 55%, transparent);
+  background: var(--warn-bg);
+}
+.eco-kpis .stat.eco-kpi-warn .stat-sub {
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.eco-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+}
+
+/* ostrzeżenia */
+.eco-alerts {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.eco-alert {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-left-width: 4px;
+  background: var(--card-2);
+}
+.eco-alert > .ic {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  margin-top: 2px;
+}
+.eco-alert p {
+  margin: 4px 0 0;
+}
+.eco-alert-error {
+  border-left-color: var(--danger);
+}
+.eco-alert-error > .ic,
+.eco-alert-error .eco-level {
+  color: var(--danger);
+}
+.eco-alert-warn {
+  border-left-color: var(--warn);
+}
+.eco-alert-warn > .ic,
+.eco-alert-warn .eco-level {
+  color: var(--warn);
+}
+.eco-alert-info > .ic,
+.eco-alert-info .eco-level {
+  color: var(--muted);
+}
+.eco-alert-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+}
+.eco-level {
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.eco-hint {
+  color: var(--text);
+}
+.eco-hint > span {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* słupki towarów */
+.eco-bars {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.eco-bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(40px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+.eco-bar-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.eco-bar-label > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.eco-bar-track {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--track);
+  overflow: hidden;
+}
+.eco-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--tc);
+}
+.eco-bar-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.eco-bar-more {
+  font-size: 0.86rem;
+}
+.eco-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+  background: var(--tc);
+}
+.eco-legend {
+  margin-top: 12px;
+}
+.eco-nodata {
+  margin: 10px 0 0;
+}
+
+/* stany */
+.eco-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.eco-state .ic {
+  width: 14px;
+  height: 14px;
+}
+.eco-state-ok {
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+.eco-state-warn {
+  color: var(--warn);
+  background: var(--warn-bg);
+  border-color: color-mix(in srgb, var(--warn) 45%, transparent);
+}
+.eco-state-err {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+  font-weight: 600;
+}
+.eco-state-idle {
+  color: var(--muted);
+}
+.eco-ok {
+  color: var(--ok);
+}
+.eco-warn {
+  color: var(--warn);
+  font-weight: 600;
+}
+.eco-err,
+.eco-bad {
+  color: var(--danger);
+  font-weight: 600;
+}
+.eco-idle {
+  color: var(--muted);
+}
+.eco-fn::first-letter {
+  text-transform: uppercase;
+}
+.eco-id {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.eco-coords {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.eco-facts {
+  margin-top: 14px;
+}
+.eco-jobs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+/* skrzynie */
+.eco-stores {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+}
+.eco-store {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card-2);
+  min-width: 0;
+}
+.eco-store-full {
+  border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+}
+.eco-store-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.eco-store-head strong {
+  overflow-wrap: anywhere;
+}
+.eco-goods {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+.eco-fill-err .bar-fill {
+  background: var(--danger);
+}
+.eco-fill-warn .bar-fill {
+  background: var(--warn);
+}
+.eco-fill-mid .bar-fill,
+.eco-fill-ok .bar-fill {
+  background: var(--gold);
+}
+.eco-food {
+  margin-top: 4px;
+}
+
+/* budowy */
+.eco-sites {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.eco-site {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-left-width: 4px;
+  background: var(--card-2);
+}
+.eco-site-waiting {
+  border-left-color: var(--warn);
+}
+.eco-site-working {
+  border-left-color: var(--ok);
+}
+.eco-site-head {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.eco-site-pct {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.eco-site p {
+  margin: 6px 0 0;
+  font-size: 0.92rem;
+}
+
+/* tragarze */
+.eco-hauls,
+.eco-recent {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.eco-hauls li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+}
+.eco-route {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--muted);
+  min-width: 0;
+}
+.eco-arrow {
+  color: var(--gold);
+}
+.eco-recent li {
+  font-size: 0.88rem;
+}
+.eco-sub {
+  margin: 16px 0 8px;
+  font-size: 0.95rem;
+  color: var(--gold);
+}
+
+.eco-denied h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  color: var(--danger);
+}
+.eco-tech summary {
+  cursor: pointer;
+  color: var(--gold);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  font-size: 1.05rem;
+}
+.eco-extra {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .eco-bar-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "label value" "track track";
+    gap: 4px 10px;
+  }
+  .eco-bar-label {
+    grid-area: label;
+  }
+  .eco-bar-value {
+    grid-area: value;
+  }
+  .eco-bar-track {
+    grid-area: track;
+  }
+  .eco-head-actions {
+    width: 100%;
+  }
+  .eco-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

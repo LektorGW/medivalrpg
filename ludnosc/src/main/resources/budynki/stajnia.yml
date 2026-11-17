@@ -1,0 +1,159 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: stajnia
+name: '<#8B5A2B>Stajnia</#8B5A2B>'
+description: 'Daje pracę garbarzom i pasterzom; nie daje premii do podatków ani wzrostu. Drewniana stajnia z boksami i korytami.'
+function: stable
+beds: 0
+cost: 4500
+tier: 1
+category: economy
+zone: outer
+max-per-country: 2
+requires:
+  population: 10
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '1':
+    frame: spruce_log
+    roof: spruce
+    wall: spruce_planks
+palette:
+  'A': 'coarse_dirt'
+  'B': 'cobblestone'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': '@roof_slab[type=bottom]'
+  'J': 'spruce_fence_gate[facing=south,open=false,in_wall=false,powered=false]'
+  'K': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'L': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'M': 'wall_torch[facing=south]'
+  'N': 'spruce_fence'
+  'O': 'hay_block[axis=y]'
+  'P': 'hay_block[axis=x]'
+  'Q': 'water_cauldron[level=3]'
+  'R': 'composter'
+  'S': 'chest[facing=south]'
+  'T': 'lantern[hanging=true]'
+layers:
+  # y=0
+  - |
+    _____________
+    _BBBBBBBBBBB_
+    _BCCCCCCCCCB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BBBBBBBBBBB_
+    _____________
+  # y=1
+  - |
+    .............
+    .DBDBDBDBDBD.
+    .BO.O.Q.O.OB.
+    .BQ...S...RB.
+    .D.N.N.N.N.D.
+    .B.N.N.N.N.B.
+    .B.N.N.N.N.B.
+    .DJDJDKDJDJD.
+    .............
+  # y=2
+  - |
+    .............
+    .DCDCDCDCDCD.
+    .C..P......C.
+    .N.........N.
+    .D.........D.
+    .N.........N.
+    .C.........C.
+    .D.D.DLD.D.D.
+    .............
+  # y=3
+  - |
+    .............
+    .DCDCDCDCDCD.
+    .C.........C.
+    .C.........C.
+    .D.........D.
+    .C.........C.
+    .C.........C.
+    .DCDCDCDCDCD.
+    .....M.M.....
+  # y=4
+  - |
+    HHHHHHHHHHHHH
+    .DEEEEEEEEED.
+    .F.........F.
+    .F.........F.
+    .F.........F.
+    .F.........F.
+    .F.........F.
+    .DEEEEEEEEED.
+    GGGGGGGGGGGGG
+  # y=5
+  - |
+    .............
+    HHHHHHHHHHHHH
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    GGGGGGGGGGGGG
+    .............
+  # y=6
+  - |
+    .............
+    .............
+    HHHHHHHHHHHHH
+    .C.........C.
+    .C.........C.
+    .C.........C.
+    GGGGGGGGGGGGG
+    .............
+    .............
+  # y=7
+  - |
+    .............
+    .............
+    .............
+    HHHHHHHHHHHHH
+    .C.T.....T.C.
+    GGGGGGGGGGGGG
+    .............
+    .............
+    .............
+  # y=8
+  - |
+    .............
+    .............
+    .............
+    .............
+    CCCCCCCCCCCCC
+    .............
+    .............
+    .............
+    .............
+  # y=9
+  - |
+    .............
+    .............
+    .............
+    .............
+    IIIIIIIIIIIII
+    .............
+    .............
+    .............
+    .............

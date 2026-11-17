@@ -1,0 +1,148 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: przystan
+name: '<#4682B4>Przystań</#4682B4>'
+description: 'Rybacy (2 miejsca pracy) łowią dorsze i łososie do skrzyni przystani — do 6 ryb dziennie na rybaka; podatki +3%. Łowią za dnia, gdy gracz jest w promieniu 64 bloków; stawiaj nad wodą. Chata rybacka z pomostem.'
+function: harbor
+beds: 0
+cost: 3000
+tier: 1
+category: economy
+zone: water
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'J': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'K': '@window'
+  'L': 'barrel[facing=up]'
+  'M': 'smoker[facing=south]'
+  'N': 'chest[facing=south]'
+  'O': 'barrel[facing=west]'
+  'P': 'lantern[hanging=true]'
+  'Q': 'spruce_planks'
+  'R': 'spruce_log[axis=y]'
+  'S': 'spruce_fence'
+  'T': 'lantern[hanging=false]'
+  'U': 'wall_torch[facing=south]'
+layers:
+  # y=0
+  - |
+    _________
+    _BBBBBBB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BBBBBBB_
+    __QQQQQ__
+    __RQQQR__
+    __QQQQQ__
+    __RQQQR__
+  # y=1
+  - |
+    .........
+    .DBBBBBD.
+    .BLL.MNB.
+    .B.....B.
+    .B....OB.
+    .B.....B.
+    .DBBIBBD.
+    ..S...S..
+    ..S...S..
+    ..SL..S..
+    ..S...S..
+  # y=2
+  - |
+    .........
+    .DCCCCCD.
+    .CL....C.
+    .K.....K.
+    .C.....C.
+    .C.....C.
+    .DKCJCKD.
+    ...U.U...
+    .........
+    .........
+    ..T...T..
+  # y=3
+  - |
+    .........
+    .DCCCCCD.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .DCCCCCD.
+    .........
+    .........
+    .........
+    .........
+  # y=4
+  - |
+    HHHHHHHHH
+    .DEEEEED.
+    .F.....F.
+    .F.....F.
+    .F.....F.
+    .F.....F.
+    .DEEEEED.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+  # y=5
+  - |
+    .........
+    HHHHHHHHH
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+  # y=6
+  - |
+    .........
+    .........
+    HHHHHHHHH
+    .C..P..C.
+    .C.....C.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    .........
+    .........
+    HHHHHHHHH
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........

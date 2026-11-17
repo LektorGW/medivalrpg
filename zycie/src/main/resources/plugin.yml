@@ -1,0 +1,19 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Zycie
+version: '${version}'
+main: pl.medivalrpg.zycie.ZyciePlugin
+api-version: '26.3'
+description: Codzienne życie i nastrój obywateli NPC (wieśniaków) państw MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Ludnosc]
+softdepend: [Armia, Postep, Skarbiec]
+permissions:
+  zycie.use:
+    description: Dostęp do /zycie (/miasto)
+    default: true
+  zycie.admin:
+    description: Komendy /zycie admin
+    default: op
+    children:
+      zycie.use: true

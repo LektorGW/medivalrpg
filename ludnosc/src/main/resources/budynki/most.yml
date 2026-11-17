@@ -1,0 +1,155 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: most
+name: '<#A9A9A9>Most</#A9A9A9>'
+description: 'Przeprawa przez wodę; podatki +2%. Stawiany nad wodą. Kamienny most z łukami i latarniami.'
+function: bridge
+beds: 0
+cost: 5000
+tier: 1
+category: infrastructure
+zone: water
+max-per-country: 4
+requires:
+  population: 10
+  treasury: 0
+foundation: none
+foundation-block: cobblestone
+ground-layer: 3
+palette:
+  'A': 'stone_bricks'
+  'B': 'spruce_planks'
+  'C': 'stone_brick_stairs[facing=south,half=top]'
+  'D': 'stone_brick_stairs[facing=north,half=top]'
+  'E': 'stone_brick_wall'
+  'F': 'lantern[hanging=false]'
+layers:
+  # y=0
+  - |
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _AAAAA_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _AAAAA_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+  # y=1
+  - |
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _AAAAA_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _AAAAA_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+  # y=2
+  - |
+    _AAAAA_
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _AAAAA_
+    _DDDDD_
+    _______
+    _______
+    _______
+    _CCCCC_
+    _AAAAA_
+    _DDDDD_
+    _______
+    _______
+    _______
+    _______
+    _AAAAA_
+  # y=3
+  - |
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+    AABBBAA
+  # y=4
+  - |
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+    E.....E
+  # y=5
+  - |
+    F.....F
+    .......
+    .......
+    .......
+    .......
+    .......
+    F.....F
+    .......
+    .......
+    .......
+    .......
+    .......
+    F.....F
+    .......
+    .......
+    .......
+    .......
+    .......
+    F.....F

@@ -1,0 +1,88 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Katalog istniejących komend dla integratora Menu; nie jest automatycznie ładowany.
+# Wywołania jako gracz. Zastąp {kraj}, {id}, {pora}, {dzien}, {dni} wartościami.
+# Uprawnienia nadal sprawdza Ludnosc; ten plik nie zmienia modułu Menu.
+ludnosc:
+  permission: ludnosc.use
+  pora: '/ludnosc pora'
+  praca: '/ludnosc praca'
+  praca_kraju: '/ludnosc praca {kraj}'
+  spichlerz: '/ludnosc spichlerz'
+  magazyn: '/ludnosc magazyn'
+  magazyn_status: '/ludnosc magazyn status'
+  # Doradca+, patrząc na skrzynię lub beczkę; cały kontener musi należeć do kraju.
+  magazyn_powiaz: '/ludnosc magazyn powiaz {id}'
+  magazyn_istniejacy: '/ludnosc magazyn powiaz {id} {id_magazynu}'
+  magazyn_domyslny: '/ludnosc magazyn domyslny'
+  kopalnie: '/ludnosc kopalnia'
+  # Rozbudowa pobiera koszt ze skarbca; wymaga uprawnień budowania w kraju.
+  kopalnia_rozbuduj: '/ludnosc kopalnia rozbuduj'
+  kopalnia_rozbuduj_id: '/ludnosc kopalnia rozbuduj {id}'
+  # Place budowy: etap (niwelacja, fundament, ściany, dach...), postęp, budowniczowie, czego brakuje.
+  budowy: '/ludnosc budowy'
+  # Po /ludnosc buduj <typ>: następny wariant wyglądu (szachulec, kamień, strzecha...) w tym samym miejscu.
+  # Katalog gracza: tylko niezbędne budynki; warianty tych samych funkcji również dostępne.
+  # chata, kopalnia, kamieniolom, tartak, pole, przystan, huta_szkla, cegielnia,
+  # owczarnia, kuznia, spichlerz, magazyn, studnia, koszary. Inne budynki gracze wznoszą sami.
+  buduj: '/ludnosc buduj'
+  buduj_anuluj: '/ludnosc buduj anuluj'
+  buduj_anuluj_id: '/ludnosc buduj anuluj {id}'
+  kolejka_anuluj: '/ludnosc kolejka anuluj {nr}'
+  buduj_wariant: '/ludnosc buduj wariant'
+  # Przepływ materiałów: produkcja → skrzynie → magazyn/spichlerz → budowy, tragarze w drodze, braki.
+  gospodarka: '/ludnosc gospodarka'
+  # Łańcuchy produkcji: huta szkła, cegielnia, owczarnia, kuźnia — stan, wydobycie dziś, paliwo, stado;
+  # które materiały kraj wytwarza sam, a które budowy kupują za monety zamówienia.
+  zaklady: '/ludnosc zaklady'
+  # Doradca+: nowe budynki pracy (podgląd obrysu jak zwykle, potem /ludnosc buduj potwierdz).
+  buduj_huta_szkla: '/ludnosc buduj huta_szkla'
+  buduj_cegielnia: '/ludnosc buduj cegielnia'
+  buduj_owczarnia: '/ludnosc buduj owczarnia'
+  # Skrzynia zakładu (jeśli nie ma własnej w budynku, zakład używa magazynu kraju).
+  zaklad_magazyn_powiaz: '/ludnosc magazyn powiaz {id}'
+admin:
+  permission: ludnosc.admin
+  pora_info: '/ludnosc admin pora info'
+  # {pora}: wiosna | lato | jesien | zima; {dzien}: dzień danej pory.
+  pora_ustaw: '/ludnosc admin pora ustaw {pora} {dzien}'
+  praca_diagnostyka: '/ludnosc admin praca'
+  # {dni}: 1..60. Nazwa kraju może zawierać spacje.
+  nieurodzaj_start: '/ludnosc admin nieurodzaj {kraj} {dni}'
+  nieurodzaj_koniec: '/ludnosc admin nieurodzaj {kraj} koniec'
+  reload: '/ludnosc admin reload'
+  # Tylko po ręcznym audycie niejednoznacznej operacji. Nie wydaje ponownie towaru.
+  magazyn_audyt: '/ludnosc magazyn audyt {id} potwierdz'
+  # Podgląd budów i gospodarki dowolnego kraju (nazwa może zawierać spacje).
+  budowy_kraju: '/ludnosc budowy {kraj}'
+  gospodarka_kraju: '/ludnosc gospodarka {kraj}'
+  zaklady_kraju: '/ludnosc zaklady {kraj}'
+# Kopie budowli graczy. {nazwa}: 2–24 znaki (litery, cyfry, _ -). Zapis/usuwanie/budowa: Doradca+ kraju.
+kopie:
+  permission: ludnosc.use
+  pomoc: '/ludnosc kopia'
+  pos1: '/ludnosc kopia pos1'
+  pos2: '/ludnosc kopia pos2'
+  zaznaczenie: '/ludnosc kopia zaznaczenie'
+  wyczysc: '/ludnosc kopia wyczysc'
+  # Całe zaznaczenie na ziemi własnego kraju; {przod}: polnoc | wschod | poludnie | zachod (opcjonalnie).
+  zapisz: '/ludnosc kopia zapisz {nazwa}'
+  zapisz_przod: '/ludnosc kopia zapisz {nazwa} {przod}'
+  lista: '/ludnosc kopia lista'
+  info: '/ludnosc kopia info {nazwa}'
+  # Podgląd jak /ludnosc buduj; koszt ze skarbca kraju po potwierdzeniu.
+  buduj: '/ludnosc kopia buduj {nazwa}'
+  nazwa: '/ludnosc kopia nazwa {nazwa} {nowa_nazwa}'
+  usun: '/ludnosc kopia usun {nazwa}'
+# Życie obywateli: dom i łóżko, praca, rytm dnia, pensje, oszczędności, rodzina. {imie}: imię obywatela.
+obywatele:
+  permission: ludnosc.use
+  # Patrząc na wieśniaka (do 8 bloków).
+  obywatel: '/ludnosc obywatel'
+  obywatel_imie: '/ludnosc obywatel {imie}'
+  # Bezdomni, bezrobotni, średnie oszczędności, pary, dzieci, stan samodzielnych chat.
+  statystyki: '/ludnosc obywatele'
+  statystyki_kraju: '/ludnosc obywatele {kraj}'
+  # Tylko kraje NPC: samodzielne chaty; w kraju graczy włączenie nie uruchamia automatów. {n}: 0–20 naraz (0 = wyłączone).
+  chatki_wlacz: '/ludnosc obywatele chatki wl'
+  chatki_wylacz: '/ludnosc obywatele chatki wyl'
+  chatki_limit: '/ludnosc obywatele chatki limit {n}'

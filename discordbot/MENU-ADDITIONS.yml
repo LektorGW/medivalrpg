@@ -1,0 +1,43 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Propozycja do scalenia z Menu przy aktywacji DiscordBot. Nie wdrożono.
+menus:
+  main:
+    items:
+      discord:
+        material: CHAIN
+        name: "<blue>Discord — powiązanie konta"
+        lore:
+          - "<gray>Jednorazowy kod do połączenia kont."
+        requires-plugin: DiscordBot
+        requires-command: discord polacz
+        action: "command:discord polacz"
+  admin:
+    items:
+      discord-status:
+        material: COMPARATOR
+        name: "<blue>Discord — stan bota"
+        requires-plugin: DiscordBot
+        permission: discordbot.admin
+        action: "command:discord status"
+      discord-layout:
+        material: WRITABLE_BOOK
+        name: "<blue>Discord — podgląd układu"
+        lore:
+          - "<gray>Pełna lista planowanych zmian, bez wykonania."
+          - "<gray>Pokazuje także stare kanały do usunięcia i wyjątki."
+          - "<gray>Tworzenie i usuwanie mają osobne potwierdzenia."
+        requires-plugin: DiscordBot
+        permission: discordbot.admin
+        requires-command: discord admin uklad podglad
+        action: "command:discord admin uklad podglad"
+      discord-kronika:
+        material: WRITABLE_BOOK
+        name: "<gold>Kronika wojen — kolejka"
+        requires-plugin: DiscordBot
+        requires-command: discord admin kronika
+        permission: discordbot.admin
+        action: "command:discord admin kronika"
+# Celowo brak przycisku uruchamiającego tworzenie struktury; wymaga jawnej komendy administratora.
+
+# Nowy wpis admina: pełny stan kolejki, bez publikacji na Discordzie.
+# Pomoc /discord admin kronika w pomoc.yml musi mieć discord:false.

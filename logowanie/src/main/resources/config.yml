@@ -1,0 +1,149 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Strażnik — logowanie graczy MEDIVALRPG (serwer w trybie offline). Po zmianach: /straznik przeladuj.
+
+logowanie:
+  # Czas na /login albo /register (sekundy); po nim gracz jest wyrzucany.
+  limit-czasu-sekundy: 90
+  # Co ile sekund przypominać komendę (czat + tytuł).
+  przypomnienie-co-sekund: 10
+  # Złe hasła w jednym połączeniu, po których gracz jest wyrzucany.
+  proby-na-polaczenie: 3
+  blokada:
+    # Tyle nieudanych prób (na nick ALBO na adres IP) w oknie czasu blokuje logowanie.
+    po-nieudanych: 5
+    okno-minut: 15
+    czas-minut: 15
+
+sesja:
+  # Ten sam gracz z tego samego IP w ciągu N minut od wyjścia nie musi wpisywać /login. Restart serwera kończy sesje.
+  wlaczona: true
+  minuty: 10
+
+konta-na-ip:
+  # Ile kont można zarejestrować z jednego adresu (0 = bez limitu). Liczą się adres rejestracji i ostatni adres.
+  limit: 3
+  wyjatki:
+    - 127.0.0.1
+
+haslo:
+  min-dlugosc: 6
+  max-dlugosc: 64
+  # Hasło nie może zawierać nicku.
+  zakaz-nicku: true
+  # Parametry nowych hashy (Argon2id). Hasła z nLogin (Argon2id m=32 MiB, t=5) są przehaszowane przy pierwszym logowaniu.
+  argon2:
+    pamiec-kib: 65536
+    iteracje: 3
+    rownoleglosc: 1
+    # Ile haszowań naraz (każde zajmuje pamiec-kib pamięci).
+    watki: 2
+
+nick:
+  # Dozwolone nicki (jak w nLogin).
+  wzorzec: '[a-zA-Z0-9_]{3,16}'
+  # Konto zarejestrowane jako "Gracz" nie wpuszcza nicku "gracz" ani "GRACZ" (w trybie offline to inny gracz z innym UUID).
+  ochrona-wielkosci-liter: true
+  # Nie wpuszczaj drugiego połączenia na nick, który jest już zalogowany z innego adresu IP.
+  blokuj-podwojne-wejscie: true
+
+limbo:
+  # Przed zalogowaniem ekwipunek jest zapisywany (plugins/Straznik/limbo/) i chowany, a gracz stoi w miejscu limbo.
+  # Po zalogowaniu wraca dokładnie tam, gdzie się wylogował, z całym ekwipunkiem.
+  ukryj-ekwipunek: true
+  ukryj-pozycje: true
+  # Miejsce oczekiwania: 'swiat;x;y;z[;yaw;pitch]'. Puste = spawn głównego świata.
+  lokalizacja: ''
+  # Niezalogowani są niewidoczni dla innych i nie widzą innych graczy ani czatu.
+  ukryj-graczy: true
+  ukryj-czat: true
+  slepota: false
+
+import:
+  nlogin:
+    # Przy pierwszym starcie (jednorazowo, znacznik w bazie) importuje konta z nLogin. Plik nie jest zmieniany.
+    przy-starcie: true
+    plik: 'plugins/nLogin/nlogin.db'
+
+admin:
+  # /straznik haslo, import i eksport tylko z konsoli (hasło wpisane na czacie widzą pluginy czatu).
+  hasla-tylko-z-konsoli: true
+
+log:
+  # Ukrywa w konsoli i logs/latest.log linie "... issued server command: /login ..." (i inne komendy z hasłem).
+  ukryj-komendy-w-konsoli: true
+
+wyglad:
+  bossbar: true
+  tytuly: true
+  # Okno logowania/rejestracji zaraz po wejściu (pola hasła, przycisk „Wyjdź”). Komendy czatu działają zawsze.
+  # Uwaga: okno Minecrafta nie ma pola maskowanego — hasło jest widoczne na ekranie gracza (nie trafia do logów).
+  okno: true
+
+wiadomosci:
+  prefix: '<dark_gray>[<gold>Strażnik</gold>]</dark_gray> '
+  przypomnienie-login: '<prefix><yellow>Zaloguj się: <gold>/login <hasło></gold></yellow>'
+  przypomnienie-rejestracja: '<prefix><yellow>Załóż konto: <gold>/register <hasło> <hasło></gold> <gray>(min. <min> znaków, bez spacji)</gray></yellow>'
+  tytul-login: '<gold>Witaj ponownie!</gold>'
+  podtytul-login: '<yellow>/login <hasło></yellow>'
+  tytul-rejestracja: '<gold>Witaj w MEDIVALRPG!</gold>'
+  podtytul-rejestracja: '<yellow>/register <hasło> <hasło></yellow>'
+  tytul-zalogowano: '<green>Zalogowano</green>'
+  bossbar: '<white>Czas na zalogowanie: <gold><sekundy> s</gold></white>'
+  zalogowano: '<prefix><green>Zalogowano. Miłej gry!</green>'
+  zarejestrowano: '<prefix><green>Konto założone. Zapamiętaj hasło — będzie potrzebne przy każdym wejściu.</green>'
+  sesja-zalogowano: '<prefix><green>Zalogowano automatycznie (ta sama sesja).</green>'
+  juz-zalogowany: '<prefix><gray>Jesteś już zalogowany.</gray>'
+  nie-zalogowany: '<prefix><red>Najpierw się zaloguj.</red>'
+  najpierw-zaloguj: '<prefix><red>Najpierw się zaloguj: <gold>/login <hasło></gold> albo <gold>/register <hasło> <hasło></gold></red>'
+  brak-konta: '<prefix><red>Nie masz jeszcze konta. Załóż je: <gold>/register <hasło> <hasło></gold></red>'
+  konto-istnieje: '<prefix><red>To konto już istnieje. Zaloguj się: <gold>/login <hasło></gold></red>'
+  sprawdzam: '<prefix><gray>Chwila, sprawdzam hasło…</gray>'
+  zle-haslo: '<prefix><red>Złe hasło. Pozostałe próby: <proby>.</red>'
+  zle-haslo-kick: '<red>Złe hasło.</red><newline><gray>Jeśli nie pamiętasz hasła, napisz do administracji na Discordzie.</gray>'
+  blokada-kick: '<red>Za dużo nieudanych prób logowania.</red><newline><gray>Spróbuj ponownie za <minuty> min.</gray>'
+  blokada: '<prefix><red>Za dużo nieudanych prób. Spróbuj ponownie za <minuty> min.</red>'
+  limit-czasu-kick: '<red>Minął czas na zalogowanie.</red><newline><gray>Wejdź ponownie i wpisz /login <hasło>.</gray>'
+  hasla-rozne: '<prefix><red>Hasła się różnią. Wpisz to samo hasło dwa razy: <gold>/register <hasło> <hasło></gold></red>'
+  haslo-za-krotkie: '<prefix><red>Hasło jest za krótkie (minimum <min> znaków).</red>'
+  haslo-za-dlugie: '<prefix><red>Hasło jest za długie (maksimum <max> znaków).</red>'
+  haslo-spacja: '<prefix><red>Hasło nie może zawierać spacji.</red>'
+  haslo-slabe: '<prefix><red>To hasło jest zbyt proste. Wymyśl inne.</red>'
+  haslo-nick: '<prefix><red>Hasło nie może zawierać twojego nicku.</red>'
+  haslo-takie-samo: '<prefix><red>Nowe hasło musi być inne niż stare.</red>'
+  limit-kont-ip: '<prefix><red>Z tego adresu założono już <limit> kont(a). Napisz do administracji, jeśli potrzebujesz kolejnego.</red>'
+  zmiana-zle-stare: '<prefix><red>Stare hasło jest nieprawidłowe.</red>'
+  zmieniono-haslo: '<prefix><green>Hasło zmienione. Sesje w panelu WWW zostały zakończone.</green>'
+  wylogowano-kick: '<gold>Wylogowano.</gold><newline><gray>Do zobaczenia w MEDIVALRPG!</gray>'
+  wyrejestrowano-kick: '<red>Twoje konto zostało usunięte przez administrację.</red><newline><gray>Wejdź ponownie i załóż nowe.</gray>'
+  juz-na-serwerze: '<red>Gracz o tym nicku jest już na serwerze.</red>'
+  nick-nieprawidlowy: '<red>Nieprawidłowy nick.</red><newline><gray>Dozwolone: litery, cyfry i _ (3–16 znaków).</gray>'
+  nick-wielkosc-liter: '<red>To konto jest zarejestrowane jako <gold><nick></gold>.</red><newline><gray>Wejdź z dokładnie takim nickiem (wielkość liter ma znaczenie).</gray>'
+  blad-bazy-kick: '<red>System logowania jest chwilowo niedostępny.</red><newline><gray>Spróbuj za chwilę.</gray>'
+  blad: '<prefix><red>Wystąpił błąd. Spróbuj ponownie.</red>'
+  uzycie-login: '<prefix><yellow>Użycie: <gold>/login <hasło></gold></yellow>'
+  uzycie-rejestracja: '<prefix><yellow>Użycie: <gold>/register <hasło> <hasło></gold> (to samo hasło dwa razy)</yellow>'
+  uzycie-zmiana: '<prefix><yellow>Użycie: <gold>/zmienhaslo <stare hasło> <nowe hasło></gold></yellow>'
+  tylko-gracz: '<prefix><red>Tę komendę wpisuje gracz w grze.</red>'
+  tylko-konsola: '<prefix><red>Ta komenda działa tylko z konsoli serwera.</red>'
+  admin-pomoc-naglowek: '<prefix><gold>Administracja kontami</gold> <gray>(najedź, aby zobaczyć opis; kliknij, aby wpisać)</gray>'
+  admin-brak-konta: '<prefix><red>Brak konta <nick>.</red>'
+  admin-haslo-zmienione: '<prefix><green>Hasło gracza <nick> zmienione.</green>'
+  admin-wyrejestrowano: '<prefix><green>Konto <nick> usunięte.</green>'
+  admin-odblokowano: '<prefix><green>Odblokowano: <cel>.</green>'
+  admin-nie-zablokowany: '<prefix><gray>Brak blokady dla: <cel>.</gray>'
+  admin-info: "<prefix><gold><nick></gold> <gray>(<stan>)</gray><newline><gray>UUID:</gray> <white><uuid></white><newline><gray>Źródło:</gray> <white><zrodlo></white>, <gray>hasło:</gray> <white><schemat></white><newline><gray>Utworzono:</gray> <white><utworzono></white>, <gray>ostatnie logowanie:</gray> <white><logowanie></white>, <gray>zmiana hasła:</gray> <white><zmiana></white><newline><gray>Ostatni adres:</gray> <white><ip></white>"
+  haslo-puste: '<prefix><red>Wpisz hasło.</red>'
+  wyszedl-kick: '<gray>Do zobaczenia w MEDIVALRPG!</gray>'
+  okno-tytul-login: '<gold>MEDIVALRPG — logowanie</gold>'
+  okno-tytul-rejestracja: '<gold>MEDIVALRPG — nowe konto</gold>'
+  okno-info-login: '<white>Witaj ponownie, <gold><nick></gold>! Wpisz hasło do swojego konta.</white>'
+  okno-info-rejestracja: '<white>Witaj, <gold><nick></gold>! Załóż konto: wpisz hasło dwa razy (min. <min> znaków, bez spacji). Zapamiętaj je — będzie potrzebne przy każdym wejściu.</white>'
+  okno-stan-login: '<gray>Pozostały czas: <yellow><sekundy> s</yellow> · próby: <yellow><proby></yellow></gray>'
+  okno-stan-rejestracja: '<gray>Pozostały czas: <yellow><sekundy> s</yellow></gray>'
+  okno-pole-haslo: 'Hasło'
+  okno-pole-powtorz: 'Powtórz hasło'
+  okno-przycisk-zaloguj: '<green>Zaloguj</green>'
+  okno-przycisk-zarejestruj: '<green>Załóż konto</green>'
+  okno-przycisk-wyjdz: '<red>Wyjdź</red>'
+  import-blad: '<prefix><red>Błąd: <blad></red>'
+  przeladowano: '<prefix><green>Przeładowano (ostrzeżenia: <ostrzezenia>).</green>'

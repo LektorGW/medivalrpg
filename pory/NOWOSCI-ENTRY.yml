@@ -1,0 +1,14 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Proponowany wpis do plugins/Nowosci/changelog.yml (dopisać przy wdrożeniu Pory, potem /nowosci reload).
+# id: użyj aktualnego next-id z produkcyjnego changelog.yml (wg MEMORY.md 30.10: 52) i zwiększ next-id o 1.
+  - id: 52
+    date: "2026-10-31"
+    title: "Pory roku widać na całym świecie"
+    category: nowe
+    points:
+      - "Świat zmienia się razem z porą roku z kalendarza serwera — bez modów i bez pobierania czegokolwiek."
+      - "<hl>Jesień</hl>: liście robią się złote, pomarańczowe i rdzawe, trawa żółknie, a pod drzewami spadają kolorowe liście."
+      - "<hl>Zima</hl>: mróz bieli trawę, korony drzew brunatnieją, zamiast deszczu pada śnieg, a ziemię, liście i dachy pokrywa biała warstwa — z każdym dniem grubsza."
+      - "<hl>Wiosna</hl>: świeża, jasna zieleń, a resztki śniegu topnieją w pierwszych dniach. <hl>Lato</hl> wygląda jak zwykle."
+      - "Śnieg jest tylko do oglądania: nie przeszkadza w chodzeniu, nie trzeba go odkopywać i nie psuje budowli."
+      - "Wpisz <cmd>/pory</cmd>, żeby zobaczyć, jaka jest pora i ile dni zostało do następnej."

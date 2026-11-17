@@ -1,0 +1,18 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Straznik
+version: '${version}'
+main: pl.medivalrpg.straznik.StraznikPlugin
+api-version: '26.3'
+description: Strażnik — logowanie i rejestracja graczy MEDIVALRPG (serwer offline), następca nLogin z zachowaniem haseł.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# nLogin: gdy jest włączony, Strażnik pozostaje nieaktywny (przełączenie = przeniesienie nLogin do plugins/disabled/).
+softdepend: [nLogin]
+# Wtyczki korzystające z logowania ładują się po Strażniku (API w ServicesManager, zdarzenie PlayerAuthenticatedEvent).
+loadbefore: [Menu, Nowosci, Panel, Kolej]
+# Komendy /login (/l, /log, /zaloguj), /register (/reg, /zarejestruj), /zmienhaslo (/changepassword, /changepass),
+# /wyloguj (/logout) i /straznik (/auth) są rejestrowane przez Paper Brigadier (LifecycleEvents.COMMANDS).
+permissions:
+  straznik.admin:
+    description: Administracja kontami (/straznik info|haslo|wyrejestruj|odblokuj|import|eksport|przeladuj)
+    default: op

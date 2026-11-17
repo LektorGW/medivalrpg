@@ -1,0 +1,15 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Szlaki
+version: '${version}'
+main: pl.medivalrpg.szlaki.SzlakiPlugin
+api-version: '26.3'
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+permissions:
+  szlaki.zarzadzanie:
+    default: op
+    description: Zarządzanie firmą i projektami tras
+  szlaki.admin:
+    default: op
+    description: Zatwierdzanie tras i audyt operacji

@@ -1,0 +1,35 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Katalog istniejących komend dla integratora Menu; nie jest automatycznie ładowany.
+# {kraj} należy zastąpić nazwą kraju (z polskimi literami w cudzysłowie). Komendy wykonuje gracz, nie konsola.
+# Widoczność przycisku nie zastępuje kontroli uprawnień w Armii.
+npckraj:
+  permission: armia.admin
+  # Wojny państw NPC (2026-10-29): wojny z udziałem NPC, ofensywy w tle z postępem i siłami, zmęczenie wojną,
+  # hegemon i ostatnie wydarzenia (zdobycze, bunty, odpadnięcia wasali, warunki pokoju).
+  wojny: '/nk wojny'
+  wojny_kraju: '/nk wojny {kraj}'
+# Pomoc (pomoc.yml, kategoria administracji / państwa NPC), discord: false — komenda tylko dla administracji:
+#   /nk wojny [kraj] — „Wojny państw NPC: kto z kim walczy, ofensywy w tle (postęp, siły, straty), zmęczenie wojną.”
+# Dla graczy nie ma nowej komendy: zbiorcze ogłoszenia na czacie („Księstwo X zdobywa 3 ziemie kraju Y”) i granice na mapie.
+
+# Taran (2026-10-29, przygotowany, nieaktywny): komenda gracza, przycisk w sekcji Armia/dowodzenie (ranga Doradca+).
+armia:
+  permission: armia.use
+  # Tarany oddziału ruszają na bramę lub mur, na który patrzy gracz (tylko aktywnie oblegany chunk wroga).
+  taranuj: '/armia taranuj'
+  rekrutuj_taran: '/armia rekrutuj taran'
+# Pomoc (menu/src/main/resources/pomoc.yml, kategoria Armia) — dodane z `requires-command: "armia taranuj"` i
+# `discord: false` do czasu wdrożenia (potem usunąć flagę i opublikować):
+#   /armia taranuj — „Taran na bramę lub mur obleganego chunka (patrz na cel)”.
+
+# Wyprawy dalekie / desant (2026-10-31, przygotowane, nieaktywne): przyciski administratora w sekcji państw NPC.
+npckraj_desant:
+  permission: armia.admin
+  # Natychmiastowa wyprawa morska kraju NPC na wroga (cel oblężeń z panelu albo pierwszy wróg); rejs liczony w tle.
+  desant: '/nk desant {kraj}'
+  desant_na: '/nk desant {kraj} {cel}'
+  status: '/nk desant {kraj} status'
+  anuluj: '/nk desant {kraj} anuluj'
+  teraz: '/nk desant {kraj} teraz'
+# Pomoc (pomoc.yml, administracja / państwa NPC), discord: false — tylko administracja:
+#   /nk desant <kraj> [cel] — „Wyprawa morska państwa NPC na wroga za morzem: rejs w tle, lądowanie przy graczach, oblężenie desantowe.”

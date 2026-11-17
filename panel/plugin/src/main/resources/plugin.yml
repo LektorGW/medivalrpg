@@ -1,0 +1,19 @@
+name: Panel
+version: '${version}'
+main: pl.medivalrpg.panel.PanelPlugin
+api-version: '26.3'
+description: Most między stroną www (panel zarządzania państwami) a grą MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+softdepend: [Armia, Ludnosc, nLogin, Postep, Zycie, Kolej]
+# Komenda /panel jest rejestrowana przez Paper Brigadier (LifecycleEvents.COMMANDS).
+# Role panelu (admin, zarządca państw NPC) są w config.yml (admins, npc-managers), nie w uprawnieniach Bukkit,
+# bo gracz zalogowany na stronie zwykle nie jest online.
+permissions:
+  panel.use:
+    description: Link logowania do panelu (/panel) i wylogowanie (/panel wyloguj)
+    default: true
+  panel.health.alerts:
+    description: Komunikaty o spadku wydajności serwera (TPS, MSPT, NPC) i /panel wydajnosc
+    default: op

@@ -1,0 +1,127 @@
+<!doctype html>
+<!-- Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl -->
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#1b130c">
+  <meta name="color-scheme" content="dark">
+  <title>Głos — mowa krainy</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="crest" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="56" height="56"><path d="M32 4 L56 12 V30 C56 46 45 56 32 60 C19 56 8 46 8 30 V12 Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 26 q10 -10 20 0 M18 34 q14 -14 28 0 M26 42 h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      </div>
+      <h1>Głos</h1>
+      <p class="sub">Mowa niesie się tak daleko, jak sięga twój głos.</p>
+      <div id="status" class="status" data-state="idle" hidden><span class="lamp" aria-hidden="true"></span><span id="status-text">Rozłączono</span></div>
+    </header>
+
+    <!-- Brak tokenu -->
+    <section id="screen-notoken" class="card scroll" hidden>
+      <h2>Brak zaproszenia</h2>
+      <p class="lead">Wpisz <kbd>/glos</kbd> w grze, aby dostać link.</p>
+      <p class="hint">Serwer wyśle ci na czacie osobisty odnośnik. Otwórz go w przeglądarce (na komputerze albo telefonie), kliknij „Połącz” i zezwól na użycie mikrofonu. Usłyszysz tylko tych, którzy stoją w pobliżu twojej postaci.</p>
+    </section>
+
+    <!-- Ekran startowy -->
+    <section id="screen-connect" class="card scroll" hidden>
+      <h2>Witaj, wędrowcze</h2>
+      <p>Kliknij <strong>Połącz</strong> i zezwól przeglądarce na użycie mikrofonu. Głosy graczy w pobliżu usłyszysz z kierunku, w którym stoją.</p>
+      <label class="field" for="mic-select-pre">Mikrofon
+        <select id="mic-select-pre"><option value="">Domyślny mikrofon</option></select>
+      </label>
+      <button id="btn-connect" class="btn btn-big" type="button">Połącz</button>
+      <p class="hint">Najlepiej w słuchawkach — inaczej inni mogą słyszeć echo własnych głosów.</p>
+      <p id="connect-error" class="error" role="alert" hidden></p>
+    </section>
+
+    <!-- Rozłączono na stałe -->
+    <section id="screen-kicked" class="card scroll" hidden>
+      <h2>Rozłączono</h2>
+      <p id="kick-reason" class="lead"></p>
+      <p id="kick-hint" class="hint">Wpisz <kbd>/glos</kbd> w grze, aby dostać nowy link.</p>
+      <button id="btn-here" class="btn" type="button" hidden>Połącz w tej karcie</button>
+    </section>
+
+    <!-- Główny widok -->
+    <section id="screen-main" hidden>
+      <div id="banner-muted" class="banner danger" role="status" hidden>Zostałeś wyciszony przez administrację</div>
+      <div id="banner-uw" class="banner water" role="status" hidden>Jesteś pod wodą — głosy dochodzą stłumione</div>
+      <div id="banner-nomic" class="banner warn" role="status" hidden>Brak dostępu do mikrofonu — możesz tylko słuchać.</div>
+      <div id="banner-wait" class="banner" role="status" hidden>Czekam na wieści z serwera gry…</div>
+      <button id="banner-audio" class="banner warn as-button" type="button" hidden>Dźwięk wstrzymany przez przeglądarkę — dotknij tutaj, aby wznowić.</button>
+
+      <div class="grid">
+        <div class="card">
+          <div class="who">
+            <span class="speak-dot" id="my-speaking" aria-hidden="true"></span>
+            <span>Mówisz jako <strong id="my-name">—</strong></span>
+          </div>
+
+          <div class="modes" role="group" aria-label="Tryb głosu">
+            <button type="button" class="mode" data-mode="whisper" aria-pressed="false"><span class="mi" aria-hidden="true"><i></i><i></i><i></i></span>Szept</button>
+            <button type="button" class="mode" data-mode="normal" aria-pressed="false"><span class="mi" aria-hidden="true"><i></i><i></i><i></i></span>Normalnie</button>
+            <button type="button" class="mode" data-mode="shout" aria-pressed="false"><span class="mi" aria-hidden="true"><i></i><i></i><i></i></span>Krzyk</button>
+          </div>
+          <p class="range">Zasięg twojego głosu: <strong id="my-range">—</strong></p>
+
+          <div class="controls">
+            <button id="btn-mute" class="btn toggle" type="button" aria-pressed="false">Wycisz mikrofon <kbd>M</kbd></button>
+            <button id="btn-deafen" class="btn toggle" type="button" aria-pressed="false">Wycisz wszystkich</button>
+          </div>
+
+          <label class="field slider" for="master">
+            <span>Głośność ogólna <output id="master-val">100%</output></span>
+            <input type="range" id="master" min="0" max="200" step="5" value="100">
+          </label>
+        </div>
+
+        <div class="card">
+          <h3>Mikrofon</h3>
+          <label class="field" for="mic-select">Urządzenie
+            <select id="mic-select"><option value="">Domyślny mikrofon</option></select>
+          </label>
+
+          <div class="meter" aria-hidden="true"><div id="meter-fill" class="meter-fill"></div><div id="meter-thr" class="meter-thr"></div></div>
+
+          <fieldset class="tx">
+            <legend>Nadawanie</legend>
+            <label><input type="radio" name="tx" value="vad" checked> Wykrywanie głosu</label>
+            <label><input type="radio" name="tx" value="ptt"> Naciśnij, aby mówić</label>
+          </fieldset>
+
+          <div id="vad-wrap">
+            <label class="field slider" for="threshold">
+              <span>Próg czułości <output id="thr-val">-45 dB</output></span>
+              <input type="range" id="threshold" min="-80" max="-10" step="1" value="-45">
+            </label>
+            <p class="hint">Przesuń tak, by pasek przekraczał kreskę tylko, gdy mówisz.</p>
+          </div>
+
+          <div id="ptt-wrap" hidden>
+            <p class="field">Klawisz: <button id="btn-pttkey" class="btn small" type="button">V</button></p>
+            <p class="hint">Klawisz działa tylko, gdy ta karta jest aktywna. Na telefonie przytrzymaj przycisk poniżej.</p>
+            <button id="btn-hold" class="btn btn-big hold" type="button">Przytrzymaj, aby mówić</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>W pobliżu <span id="peer-count" class="count"></span></h3>
+        <ul id="peer-list" class="peers"></ul>
+        <p id="peer-empty" class="hint">Nikogo w zasięgu słuchu.</p>
+      </div>
+    </section>
+
+    <footer class="foot">Głos · czat zbliżeniowy krainy<br><a href="https://lektoro.pl" target="_blank" rel="noopener">© 2026 Maciej Kaczmarczyk — lektoro.pl</a></footer>
+  </main>
+  <div id="audio-sink" hidden></div>
+</body>
+</html>

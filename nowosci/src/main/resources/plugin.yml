@@ -1,0 +1,20 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Nowosci
+version: '${version}'
+main: pl.medivalrpg.nowosci.NowosciPlugin
+api-version: '26.3'
+description: Nowości na serwerze MEDIVALRPG — changelog pokazywany graczom po zalogowaniu (/nowosci).
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# Straznik (lub nLogin): changelog pokazuje się dopiero po udanym /login albo /register (bez nich — po wejściu).
+softdepend: [Straznik, nLogin]
+# Komendy (/nowosci, /zmiany, /changelog) są rejestrowane przez Paper Brigadier (LifecycleEvents.COMMANDS).
+permissions:
+  nowosci.use:
+    description: Czytanie nowości (/nowosci, /nowosci czat, /nowosci przeczytane)
+    default: true
+  nowosci.admin:
+    description: Zarządzanie wpisami (/nowosci dodaj|punkt|usun|oglos|reload)
+    default: op
+    children:
+      nowosci.use: true

@@ -1,0 +1,39 @@
+# Build output
+build/
+.gradle/
+out/
+dist/
+*.class
+*.log
+
+# Node / Cloudflare
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+.venv/
+*.pyc
+
+# Local runtime data, test servers and generated artefacts
+testserver/
+downloads/
+**/test/screenshots/
+**/test/screenshots-dist/
+**/test/cache/
+*.db
+*.sqlite
+*.mca
+*.zip
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Java packages named "build" are source code
+!**/src/**/build/

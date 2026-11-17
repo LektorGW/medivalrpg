@@ -1,0 +1,37 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Interakcje
+version: '${version}'
+main: pl.medivalrpg.interakcje.InterakcjePlugin
+api-version: '26.3'
+description: Interakcje RP między graczami z animacjami postaci (BetterModel) – całus, przytulenie, taniec, siadanie...
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# BetterModel (opcjonalnie): animacje postaci na modelu gracza. Bez niego interakcje używają cząsteczek.
+# Kraje (opcjonalnie): sprawdzenie władcy przy koronacji i pasowaniu.
+softdepend: [BetterModel, Kraje]
+# Komendy są rejestrowane przez Paper Brigadier (LifecycleEvents.COMMANDS), dynamicznie z config.yml.
+# Uprawnienia interakcje.<id> dla każdej interakcji z configu są rejestrowane w kodzie (domyślnie: true).
+permissions:
+  interakcje.use:
+    description: Korzystanie z interakcji i /interakcje
+    default: true
+  interakcje.bypass.cooldown:
+    description: Pomijanie cooldownów interakcji
+    default: op
+  interakcje.admin:
+    description: /interakcje reload
+    default: op
+    children:
+      interakcje.use: true
+  interakcje.sit:
+    description: Siadanie (/usiadz, prawy klik na schody)
+    default: true
+  interakcje.lay:
+    description: Leżenie (/poloz)
+    default: true
+  interakcje.dance:
+    description: Tańce (/taniec)
+    default: true
+  interakcje.emote:
+    description: Emotki (/emotka)
+    default: true

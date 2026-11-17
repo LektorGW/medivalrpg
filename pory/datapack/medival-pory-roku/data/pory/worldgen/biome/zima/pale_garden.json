@@ -1,0 +1,20 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {},
+    "minecraft:audio/music_volume": 0.0,
+    "minecraft:visual/fog_color": "#969290",
+    "minecraft:visual/sky_color": "#b7bcc3",
+    "minecraft:visual/water_fog_color": "#4d639e"
+  },
+  "carvers": [],
+  "downfall": 0.8,
+  "effects": {
+    "dry_foliage_color": "#857c6a",
+    "foliage_color": "#8d927e",
+    "grass_color": "#9ca397",
+    "water_color": "#6277b1"
+  },
+  "features": [],
+  "has_precipitation": true,
+  "temperature": -0.25
+}

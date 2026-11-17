@@ -1,0 +1,177 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: chata_szachulec
+variant-of: chata
+name: '<#C8A165>Chata szachulcowa</#C8A165>'
+description: 'Mieszkanie dla 2 obywateli (2 łóżka); bez wolnych łóżek nie przybywa osadników. Niska chata z muru pruskiego z okiennicami i kominem.'
+function: housing
+beds: 2
+cost: 1500
+tier: 0
+category: housing
+zone: inner
+max-per-country: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '0':
+    wall: mud_bricks
+  '1':
+    frame: dark_oak_log
+    wall: white_terracotta
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': '@roof_slab[type=bottom]'
+  'J': '@window'
+  'K': '@door[facing=north,half=lower,hinge=left,open=false]'
+  'L': '@door[facing=north,half=upper,hinge=left,open=false]'
+  'M': 'spruce_trapdoor[facing=south,half=bottom,open=true]'
+  'N': 'spruce_trapdoor[facing=north,half=top,open=false]'
+  'O': 'potted_oxeye_daisy'
+  'P': 'potted_lily_of_the_valley'
+  'Q': 'spruce_trapdoor[facing=west,half=bottom,open=true]'
+  'R': 'spruce_trapdoor[facing=north,half=bottom,open=true]'
+  'S': 'spruce_stairs[facing=north,half=bottom]'
+  'T': 'wall_torch[facing=south]'
+  'U': 'cobblestone'
+  'V': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'W': 'campfire[lit=false,signal_fire=false,facing=west]'
+  'X': 'brown_bed[facing=north,part=head]'
+  'Y': 'brown_bed[facing=north,part=foot]'
+  'Z': 'red_bed[facing=north,part=head]'
+  'a': 'red_bed[facing=north,part=foot]'
+  'b': 'chest[facing=south]'
+  'c': 'crafting_table'
+  'd': 'barrel[facing=up]'
+  'e': 'smoker[facing=west]'
+  'f': 'spruce_fence'
+  'g': 'spruce_pressure_plate'
+  'h': 'composter'
+  'i': 'brown_carpet'
+  'j': 'lantern[hanging=true]'
+  'k': 'spruce_slab[type=top]'
+  'l': 'hay_block[axis=y]'
+  'm': 'hay_block[axis=x]'
+layers:
+  # y=0
+  - |
+    _________
+    _BBBBBBB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BBBBBBB_
+    _BBBBBBB_
+    _________
+  # y=1
+  - |
+    .........
+    .DBBBBBD.
+    .BXbcdZB.
+    .BY...aB.
+    .B.fiiWU.
+    .BhS..eB.
+    .DBBKBBD.
+    ..N..SS..
+    .........
+  # y=2
+  - |
+    ...R.R...
+    .DCCJCCD.
+    QC.....C.
+    .J.....C.
+    .J.g...U.
+    QC.....C.
+    .DJCLCJD.
+    .MOT.MPM.
+    .........
+  # y=3
+  - |
+    .........
+    .DCCDCCD.
+    .C.....C.
+    .C.....C.
+    .D.....U.
+    .C.....C.
+    .DCCECCD.
+    .........
+    .........
+  # y=4
+  - |
+    HHHHHHHHH
+    .DEEEEED.
+    .Fkk...F.
+    .Fkk...F.
+    .Fkk...U.
+    .Fkk...F.
+    .DEEEEED.
+    GGGGGGGGG
+    .........
+  # y=5
+  - |
+    .........
+    HHHHHHHHH
+    .Cld...C.
+    .Dm....D.
+    .D.....U.
+    .C.....C.
+    GGGGGGGGG
+    .........
+    .........
+  # y=6
+  - |
+    .........
+    .........
+    HHHHHHHHH
+    .J..j..D.
+    .D.....U.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    .........
+    .........
+    HHHHHHHHH
+    GGGGGGGUG
+    .........
+    .........
+    .........
+    .........
+  # y=8
+  - |
+    .........
+    .........
+    .........
+    IIIIIIIII
+    IIIIIIIUI
+    .........
+    .........
+    .........
+    .........
+  # y=9
+  - |
+    .........
+    .........
+    .........
+    .........
+    .......V.
+    .........
+    .........
+    .........
+    .........

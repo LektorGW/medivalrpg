@@ -1,0 +1,205 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: kopalnia
+name: '<#8B8682>Kopalnia</#8B8682>'
+description: 'Górnicy drążą chodnik w głąb i znoszą do skrzyni kopalni bruk, węgiel i rudy (bez dochodu w monetach). Potrzebuje górników (2 miejsca pracy na poziom kopalni) i pochodni w skrzyni — bez światła praca staje. Szyb z wyciągiem.'
+function: mine
+beds: 0
+cost: 4000
+tier: 1
+category: economy
+zone: mountain
+max-per-country: 2
+requires:
+  population: 10
+  treasury: 0
+foundation: none
+foundation-block: cobblestone
+ground-layer: 8
+palette:
+  'A': 'cobblestone'
+  'B': 'stone'
+  'C': 'stone_bricks'
+  'D': 'ladder[facing=south]'
+  'E': 'lantern[hanging=false]'
+  'F': 'spruce_planks'
+  'G': 'spruce_fence'
+  'H': 'spruce_fence_gate[facing=south,open=false,in_wall=false,powered=false]'
+  'I': '@frame[axis=y]'
+  'J': '@frame[axis=x]'
+  'K': '@frame[axis=z]'
+  'L': 'iron_chain[axis=y]'
+  'M': 'lantern[hanging=true]'
+  'N': '@roof_slab[type=bottom]'
+  'O': 'barrel[facing=up]'
+  'P': 'chest[facing=west]'
+  'Q': 'rail'
+layers:
+  # y=0
+  - |
+    _________
+    _________
+    __AAAAA__
+    __ABBBA__
+    __ABBBA__
+    __ABBBA__
+    __AAAAA__
+    _________
+    _________
+  # y=1
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A....__
+    __A.E.A__
+    __AAAAA__
+    _________
+    _________
+  # y=2
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A....__
+    __A...A__
+    __AAAAA__
+    _________
+    _________
+  # y=3
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A...A__
+    __A...A__
+    __AAAAA__
+    _________
+    _________
+  # y=4
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A...A__
+    __A...A__
+    __AAAAA__
+    _________
+    _________
+  # y=5
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A...A__
+    __A...A__
+    __AAAAA__
+    _________
+    _________
+  # y=6
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A...A__
+    __A...A__
+    __AAAAA__
+    _________
+    _________
+  # y=7
+  - |
+    _________
+    _________
+    __AAAAA__
+    __A.D.A__
+    __A...A__
+    __A...A__
+    __AAAAA__
+    _________
+    _________
+  # y=8
+  - |
+    _________
+    _FFFFFFF_
+    _FCCCCCF_
+    _FC.D.CF_
+    _FC...CF_
+    _FC...CF_
+    _FCCCCCF_
+    _FFFFFFF_
+    _________
+  # y=9
+  - |
+    .........
+    .I.....I.
+    .Q.G.G...
+    ..G...GA.
+    .OG...GP.
+    .QG...G..
+    ...GHG...
+    .I.....I.
+    .........
+  # y=10
+  - |
+    .........
+    .I.....I.
+    .........
+    .........
+    ....M....
+    .........
+    .........
+    .I.....I.
+    .........
+  # y=11
+  - |
+    .........
+    .I.....I.
+    .........
+    .........
+    ....L....
+    .........
+    .........
+    .I.....I.
+    .........
+  # y=12
+  - |
+    .........
+    .I.....I.
+    .........
+    .........
+    ....L....
+    .........
+    .........
+    .I.....I.
+    .........
+  # y=13
+  - |
+    .........
+    .JJJKJJJ.
+    ....K....
+    ....K....
+    ....K....
+    ....K....
+    ....K....
+    .JJJKJJJ.
+    .........
+  # y=14
+  - |
+    .........
+    .NNNNNNN.
+    .NNNNNNN.
+    .NNNNNNN.
+    .NNNNNNN.
+    .NNNNNNN.
+    .NNNNNNN.
+    .NNNNNNN.
+    .........

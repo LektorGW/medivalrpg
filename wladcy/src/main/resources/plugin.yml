@@ -1,0 +1,23 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Wladcy
+version: '${version}'
+main: pl.medivalrpg.wladcy.WladcyPlugin
+api-version: '26.3'
+description: Rozmowy graczy z władcami krajów NPC (Claude, Anthropic API), zlecenia władców i reputacja graczy dla serwera MEDIVALRPG.
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec, Armia]
+softdepend: [Ludnosc, Postep]
+# Oficjalny Anthropic Java SDK — Paper pobiera go (z zależnościami: OkHttp, Jackson, Kotlin stdlib) z Maven Central
+# przy starcie do katalogu libraries/ i ładuje w osobnym classloaderze pluginu. SDK NIE jest wpakowany do jara.
+libraries:
+  - com.anthropic:anthropic-java:${anthropicSdkVersion}
+permissions:
+  wladcy.use:
+    description: Rozmowy z władcami NPC (/wladca), zlecenia (/zlecenia) i reputacja (/reputacja)
+    default: true
+  wladcy.admin:
+    description: /wladca koszt, /wladca przeladuj, /zlecenia admin, /reputacja admin
+    default: op
+    children:
+      wladcy.use: true

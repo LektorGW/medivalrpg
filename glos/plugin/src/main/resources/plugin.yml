@@ -1,0 +1,17 @@
+name: Glos
+version: '${version}'
+main: pl.medivalrpg.glos.GlosPlugin
+api-version: '26.3'
+description: Proximity voice chat w przeglądarce (serwerowa część systemu Głos)
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+# Komendy /glos (aliasy vc, voice, audio) są rejestrowane przez Paper Brigadier (LifecycleEvents.COMMANDS).
+permissions:
+  glos.use:
+    description: Korzystanie z czatu głosowego (/glos, tryby, rozłączanie)
+    default: true
+  glos.admin:
+    description: Wyciszanie graczy, lista podłączonych, przeładowanie configu
+    default: op
+    children:
+      glos.use: true

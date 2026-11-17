@@ -1,0 +1,162 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: kuznia
+name: '<#9A9A9A>Kuźnia</#9A9A9A>'
+description: 'Kowal przetapia surowe żelazo na sztabki i robi pochodnie dla kopalni (1 kłoda + 4 węgla → 16 pochodni); daje pracę kowalom. Potrzebuje surowego żelaza, węgla i kłód (donoszą tragarze) oraz gracza w promieniu 96 bloków. Otwarta kuźnia z paleniskiem, kowadłem i kominem.'
+function: smithy
+beds: 0
+cost: 3500
+tier: 1
+category: economy
+zone: outer
+max-per-country: 2
+requires:
+  population: 8
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '1':
+    roof: spruce
+    wall: spruce_planks
+palette:
+  'A': 'anvil[facing=east]'
+  'B': 'bricks'
+  'C': 'cobblestone'
+  'G': 'grindstone[face=floor,facing=north]'
+  'K': 'chest[facing=east]'
+  'L': 'spruce_log[axis=y]'
+  'M': 'smithing_table'
+  'P': '@wall'
+  'R': 'barrel[facing=up]'
+  'S': 'stone_bricks'
+  'U': 'blast_furnace[facing=south]'
+  'V': 'lava_cauldron'
+  'X': 'spruce_log[axis=x]'
+  'Z': 'spruce_log[axis=z]'
+  'f': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'g': 'andesite'
+  'h': '@roof_slab[type=bottom]'
+  'k': '@wall'
+  'l': 'lantern[hanging=true]'
+  'n': '@roof_stairs[facing=north,half=bottom]'
+  's': '@roof_stairs[facing=south,half=bottom]'
+  't': 'wall_torch[facing=east]'
+  'u': 'wall_torch[facing=west]'
+  'w': 'water_cauldron[level=3]'
+layers:
+  # y=0
+  - |
+    _________
+    _CCCCCCC_
+    _CgggggC_
+    _CgggggC_
+    _CgggggC_
+    _CgggggC_
+    _CSSSSSC_
+    _CCCCCCC_
+    _________
+  # y=1
+  - |
+    .........
+    .LBBSSSL.
+    .SUV.MGS.
+    .S...A.S.
+    .L.....L.
+    .SR...wS.
+    .SK....S.
+    .L.....L.
+    .........
+  # y=2
+  - |
+    .........
+    .LBBSSSL.
+    .........
+    .........
+    .Lt...uL.
+    .........
+    .........
+    .L.....L.
+    .........
+  # y=3
+  - |
+    .........
+    .LBSSSSL.
+    .........
+    .........
+    .L.....L.
+    .........
+    .........
+    .L.....L.
+    .........
+  # y=4
+  - |
+    sssssssss
+    .LBXXXXL.
+    .Z.....Z.
+    .Z.....Z.
+    .Z.....Z.
+    .Z.....Z.
+    .Z.....Z.
+    .LXXXXXL.
+    nnnnnnnnn
+  # y=5
+  - |
+    .........
+    ssBssssss
+    .P.....P.
+    .P.....P.
+    .P.....P.
+    .P.....P.
+    .P.....P.
+    nnnnnnnnn
+    .........
+  # y=6
+  - |
+    .........
+    ..B......
+    sssssssss
+    .P.....P.
+    .P.....P.
+    .P.....P.
+    nnnnnnnnn
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    ..B......
+    .........
+    sssssssss
+    .P..l..P.
+    nnnnnnnnn
+    .........
+    .........
+    .........
+  # y=8
+  - |
+    .........
+    ..B......
+    .........
+    .........
+    kkkkkkkkk
+    .........
+    .........
+    .........
+    .........
+  # y=9
+  - |
+    .........
+    ..f......
+    .........
+    .........
+    hhhhhhhhh
+    .........
+    .........
+    .........
+    .........

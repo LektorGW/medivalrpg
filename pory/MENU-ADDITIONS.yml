@@ -1,0 +1,72 @@
+# ============================================================
+#  Propozycja do menu/src/main/resources/menus.yml i pomoc.yml (NIE wdrożona — do przeniesienia przez osobę od
+#  modułu Menu przy następnym buildzie Menu; plugin Pory działa bez tego).
+#  (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  Pory 2026-10-31: wizualne pory roku (kolory biomów, śnieg zimą, spadające liście jesienią) zgodne z zegarem
+#  Ludnosc. /pory dla graczy; /pory admin podglad|odswiez|status|reload dla adminów (pory.admin, domyślnie op).
+# ============================================================
+
+menus:
+  swiat:
+    items:
+      pory-roku:
+        material: OAK_SAPLING
+        name: "<gold>🍂 Pory roku</gold>"
+        lore:
+          - "<gray>Jaka jest pora roku, ile dni zostało"
+          - "<gray>i jak teraz wygląda świat."
+          - "<gray>Jesienią złote liście, zimą śnieg i mróz."
+          - "<dark_gray>/pory"
+        requires-plugin: Pory
+        permission: pory.use
+        action: "command:pory"
+  admin:
+    items:
+      pory-podglad:
+        material: SNOW_BLOCK
+        name: "<gold>Pory — podgląd pory (tylko dla ciebie)"
+        lore:
+          - "<gray>Zobacz świat w innej porze roku."
+          - "<gray>Inni gracze i zegar Ludnosc bez zmian."
+          - "<dark_gray>/pory admin podglad <wiosna|lato|jesien|zima|wylacz>"
+          - ""
+          - "<gold>Kliknij</gold> <gray>– dopisz porę"
+        requires-plugin: Pory
+        permission: pory.admin
+        action: "suggest:/pory admin podglad "
+      pory-status:
+        material: CLOCK
+        name: "<gold>Pory — stan"
+        lore:
+          - "<gray>Pora z zegara Ludnosc, warianty biomów,"
+          - "<gray>pakiety, kolejki odświeżania, śnieg."
+          - "<dark_gray>/pory admin status"
+        requires-plugin: Pory
+        permission: pory.admin
+        action: "command:pory admin status"
+
+# --- pomoc.yml: kategoria "ludnosc", lista commands (obok /ludnosc pora) ---
+pomoc:
+  categories:
+    ludnosc:
+      commands:
+        - command: /pory
+          description: Pora roku na świecie i jak teraz wygląda (kolory, śnieg, liście)
+          requires-plugin: Pory
+          click: run
+          keywords:
+            - pory
+            - pora roku
+            - zima
+            - jesien
+            - snieg
+            - liscie
+        - command: /pory admin podglad <pora>
+          description: Podgląd innej pory roku tylko dla siebie (wylacz = koniec)
+          requires-plugin: Pory
+          discord: false
+          rank: Admin
+          keywords:
+            - pory
+            - podglad

@@ -1,0 +1,252 @@
+# ============================================================
+#  Scenariusz „Europa 1350” — państwa NPC rozstawione jak na mapie Europy
+#  © 2026 Maciej Kaczmarczyk — lektoro.pl
+#
+#  /nk scenariusz pokaz europa1350        — lista państw i planowanych miejsc
+#  /nk scenariusz zaladuj europa1350 potwierdz — tworzy państwa (istniejące nazwy są pomijane)
+#
+#  Wszystko edytuje się tutaj: nazwy, kolory, władców, pozycje, osobowości i liczby. Północ = −Z, wschód = +X,
+#  spawn ok. 0,0, świat pregenerowany w promieniu 4000. Nazwy państw jak w Kraje: litery, cyfry, _ i -, bez spacji,
+#  3–24 znaki. Kolory muszą być różne. skin: nick Mojang albo puste (domyślny wygląd władcy).
+#  Stolica: najbliższa wioska w promieniu „promien-wioski” od x/z (przy dzwonie), inaczej x/z na suchym i płaskim
+#  terenie; zawsze z dala od obszarów chronionych Kraje (spawn) i od innych państw.
+#  honor (0–100, opcjonalny): dotrzymywanie słowa i pogarda dla podłych interesów w rozmowach (plugin Wladcy);
+#  pominięty = liczony z osobowości (wysoka dyplomacja i niska agresja → wyższy honor).
+# ============================================================
+id: europa1350
+wersja: 2                        # wersja pliku (Armia nadpisuje starszą wersją z jara, zostawiając kopię .yml.old)
+nazwa: "Europa 1350"
+opis: "Dwanaście królestw, cesarstw i księstw średniowiecznej Europy"
+swiat: ""                        # pusty = pierwszy świat serwera
+promien-wioski: 400              # szukanie wioski wokół x/z (bloki)
+odleglosc-od-spawnu: 300         # odstęp od obszarów chronionych Kraje (np. spawn) albo od spawnu świata
+odleglosc-miedzy-panstwami: 500  # minimalny odstęp stolic (także od już istniejących krajów)
+
+panstwa:
+  - nazwa: "Królestwo_Polskie"
+    kolor: "#DC143C"
+    wladca: "Kazimierz Wielki"
+    skin: ""
+    agresja: 35
+    ekspansja: 55
+    dyplomacja: 75
+    bogactwo: 65
+    honor: 85
+    max-chunki: 70
+    max-zolnierze: 30
+    x: 900
+    z: -300
+    skarbiec-zl: 380
+    wojsko: {piechota: 2, lucznik: 2}
+    osadnicy: 12
+    jedzenie: 400
+
+  - nazwa: "Wielkie_Księstwo_Litwy"
+    kolor: "#2E7D32"
+    wladca: "Witold Wielki"
+    skin: ""
+    agresja: 60
+    ekspansja: 85
+    dyplomacja: 55
+    bogactwo: 45
+    honor: 60
+    max-chunki: 90
+    max-zolnierze: 35
+    x: 1800
+    z: -1600
+    skarbiec-zl: 240
+    wojsko: {piechota: 3, lucznik: 2, rycerz: 2}
+    osadnicy: 10
+    jedzenie: 400
+
+  - nazwa: "Zakon_Krzyżacki"
+    kolor: "#2B2B2B"
+    wladca: "Ulrich von Jungingen"
+    skin: ""
+    agresja: 85
+    ekspansja: 70
+    dyplomacja: 25
+    bogactwo: 70
+    honor: 35
+    max-chunki: 70
+    max-zolnierze: 40
+    x: 600
+    z: -1800
+    skarbiec-zl: 420
+    wojsko: {piechota: 3, kusznik: 3, rycerz: 3}
+    osadnicy: 9
+    jedzenie: 400
+
+  - nazwa: "Cesarstwo_Rzymskie"
+    kolor: "#F4D03F"
+    wladca: "Fryderyk Barbarossa"
+    skin: ""
+    agresja: 65
+    ekspansja: 60
+    dyplomacja: 50
+    bogactwo: 75
+    honor: 65
+    max-chunki: 80
+    max-zolnierze: 35
+    x: -1200
+    z: -200
+    skarbiec-zl: 460
+    wojsko: {piechota: 3, kusznik: 2, rycerz: 2}
+    osadnicy: 14
+    jedzenie: 400
+
+  - nazwa: "Królestwo_Francji"
+    kolor: "#1F3A93"
+    wladca: "Filip IV Piękny"
+    skin: ""
+    agresja: 55
+    ekspansja: 50
+    dyplomacja: 60
+    bogactwo: 80
+    honor: 20
+    max-chunki: 70
+    max-zolnierze: 30
+    x: -2600
+    z: 300
+    skarbiec-zl: 490
+    wojsko: {piechota: 2, lucznik: 2, rycerz: 2}
+    osadnicy: 14
+    jedzenie: 400
+
+  - nazwa: "Królestwo_Anglii"
+    kolor: "#E67E22"
+    wladca: "Edward III"
+    skin: ""
+    agresja: 75
+    ekspansja: 60
+    dyplomacja: 45
+    bogactwo: 65
+    honor: 55
+    max-chunki: 60
+    max-zolnierze: 35
+    x: -3200
+    z: -1700
+    skarbiec-zl: 380
+    wojsko: {piechota: 3, lucznik: 4, rycerz: 1}
+    osadnicy: 11
+    jedzenie: 400
+
+  - nazwa: "Republika_Wenecka"
+    kolor: "#00A6A6"
+    wladca: "doża Enrico Dandolo"
+    skin: ""
+    agresja: 30
+    ekspansja: 40
+    dyplomacja: 85
+    bogactwo: 95
+    honor: 15
+    max-chunki: 50
+    max-zolnierze: 25
+    x: -400
+    z: 1900
+    skarbiec-zl: 600
+    wojsko: {piechota: 2, kusznik: 2}
+    osadnicy: 13
+    jedzenie: 400
+
+  - nazwa: "Cesarstwo_Bizantyjskie"
+    kolor: "#6A0DAD"
+    wladca: "Aleksy I Komnen"
+    skin: ""
+    agresja: 40
+    ekspansja: 30
+    dyplomacja: 80
+    bogactwo: 85
+    honor: 40
+    max-chunki: 50
+    max-zolnierze: 30
+    x: 2000
+    z: 2600
+    skarbiec-zl: 530
+    wojsko: {piechota: 2, lucznik: 1, rycerz: 2}
+    osadnicy: 14
+    jedzenie: 400
+
+  - nazwa: "Złota_Orda"
+    kolor: "#A0522D"
+    wladca: "chan Batu"
+    skin: ""
+    agresja: 95
+    ekspansja: 90
+    dyplomacja: 20
+    bogactwo: 40
+    honor: 20
+    max-chunki: 100
+    max-zolnierze: 45
+    x: 3400
+    z: -200
+    skarbiec-zl: 200
+    wojsko: {lucznik: 6, rycerz: 4}
+    osadnicy: 8
+    jedzenie: 400
+
+  - nazwa: "Królestwo_Węgier"
+    kolor: "#7CB342"
+    wladca: "Maciej Korwin"
+    skin: ""
+    agresja: 55
+    ekspansja: 55
+    dyplomacja: 60
+    bogactwo: 70
+    honor: 60
+    max-chunki: 70
+    max-zolnierze: 30
+    x: 1000
+    z: 1100
+    skarbiec-zl: 420
+    wojsko: {piechota: 2, lucznik: 2, rycerz: 2}
+    osadnicy: 12
+    jedzenie: 400
+
+  - nazwa: "Królestwo_Kastylii"
+    kolor: "#E84393"
+    wladca: "Alfons X Mądry"
+    skin: ""
+    agresja: 50
+    ekspansja: 65
+    dyplomacja: 65
+    bogactwo: 60
+    honor: 90
+    max-chunki: 70
+    max-zolnierze: 30
+    x: -3000
+    z: 2400
+    skarbiec-zl: 350
+    wojsko: {piechota: 3, kusznik: 2, rycerz: 1}
+    osadnicy: 11
+    jedzenie: 400
+
+  - nazwa: "Królestwo_Norwegii"
+    kolor: "#5DADE2"
+    wladca: "Harald Srogi"
+    skin: ""
+    agresja: 90
+    ekspansja: 80
+    dyplomacja: 30
+    bogactwo: 45
+    honor: 25
+    max-chunki: 80
+    max-zolnierze: 40
+    x: -800
+    z: -3300
+    skarbiec-zl: 240
+    wojsko: {piechota: 5, lucznik: 3, rycerz: 1}
+    osadnicy: 8
+    jedzenie: 400
+
+# Relacje startowe (wojen na start nie ma). relacja: sojusz albo brak; opinia -100..100 (opinia „a” o „b”);
+# nastawienie: auto, przyjazne, wrogie, nigdy_wojny, cel_ataku; obustronnie (domyślnie tak, dla b: "*" nie).
+relacje:
+  - {a: "Królestwo_Polskie", b: "Wielkie_Księstwo_Litwy", relacja: sojusz, opinia: 70}
+  - {a: "Królestwo_Polskie", b: "Królestwo_Węgier", opinia: 50}
+  - {a: "Zakon_Krzyżacki", b: "Królestwo_Polskie", opinia: -70, nastawienie: wrogie}
+  - {a: "Zakon_Krzyżacki", b: "Wielkie_Księstwo_Litwy", opinia: -70, nastawienie: wrogie}
+  - {a: "Królestwo_Anglii", b: "Królestwo_Francji", opinia: -70, nastawienie: wrogie}
+  - {a: "Republika_Wenecka", b: "Cesarstwo_Bizantyjskie", opinia: -20}
+  - {a: "Złota_Orda", b: "*", opinia: -40, nastawienie: wrogie}
+  - {a: "Cesarstwo_Rzymskie", b: "Królestwo_Francji", opinia: -30}

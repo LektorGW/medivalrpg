@@ -1,0 +1,484 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wladcy — rozmowy z władcami krajów NPC (Claude, Anthropic API).
+
+# Klucz API Anthropic. Najbezpieczniej wpisać go TUTAJ (plik czyta tylko serwer).
+# Pusty = zmienna środowiskowa ANTHROPIC_API_KEY. Bez klucza plugin działa, ale władcy są „nieosiągalni”.
+# Można też z konsoli: /wladca klucz <klucz> (zapisuje tutaj; uwaga: komendy konsoli mogą trafić do logów).
+api-key: ""
+
+api:
+  # claude-opus-5-5 (domyślnie, najlepsze odgrywanie ról) albo claude-haiku-5-5 (ok. 40× tańszy, słabszy w roli).
+  model: claude-opus-5-5
+  # Ile model myśli przed odpowiedzią: low | medium | high | xhigh | max. Na Opus 5.5 myślenia nie da się wyłączyć,
+  # effort jest jedyną kontrolą (koszt i opóźnienie). Dla czatu: low.
+  effort: low
+  # Limit tokenów wyjścia na jedno wywołanie (myślenie + odpowiedź).
+  max-tokens: 2048
+  # Server-side fallbacks (fallbacks: "default", beta server-side-fallback-2026-07-01): gdy klasyfikator odmówi,
+  # API samo ponawia na zalecanym modelu. Dla claude-haiku-5-5 nie jest wysyłane (Haiku nie ma tej funkcji).
+  fallbacks: true
+  timeout-seconds: 30
+  # Ponowienia SDK przy 429/5xx (z odczekaniem). Mało = mniej spamu; władca „zamyśla się” zamiast czekać.
+  max-retries: 1
+  # Wątki wywołań API (nigdy główny wątek serwera).
+  threads: 2
+  # Ile rund narzędzi na jedną wiadomość gracza (ostatnia runda wymusza odpowiedź słowami).
+  max-tool-rounds: 3
+
+limits:
+  per-player-per-day: 40
+  cooldown-seconds: 4
+  max-input-chars: 300
+  # Po przekroczeniu władcy „odmawiają audiencji do jutra”. Liczone z response.usage i cennika poniżej.
+  daily-budget-usd: 3.00
+  # 0 = bez limitu miesięcznego.
+  monthly-budget-usd: 0
+
+conversation:
+  # Gracz musi stać najwyżej tyle bloków od władcy, żeby zacząć.
+  start-radius: 6
+  # Odejście dalej kończy rozmowę.
+  max-distance: 8
+  # Cisza tak długo (sekundy) kończy rozmowę.
+  idle-seconds: 180
+  # Inni gracze w tym promieniu widzą rozmowę jako RP (0 = nikt).
+  rp-radius: 8
+  # Najwięcej wiadomości gracza w jednej audiencji.
+  max-messages: 20
+  reply-max-chars: 600
+
+display:
+  # Krótki tekst odpowiedzi nad głową władcy (TextDisplay, nietrwały).
+  text-display: true
+  seconds: 6
+  max-chars: 90
+
+memory:
+  # Ile ostatnich wymian gracz × władca pamiętać między rozmowami.
+  exchanges: 6
+  notes: 5
+  reply-chars: 300
+
+diplomacy:
+  # Kto może zawierać sojusz/pokój i płacić trybut w imieniu kraju: wladca | doradca.
+  min-rank: wladca
+
+tribute:
+  # Najwyższy trybut, jakiego władca może zażądać (miedziaki; 5000 = 50 zł).
+  max-amount: 5000
+  expire-minutes: 5
+  # Poprawa nastawienia władcy za każdą zapłaconą złotą koronę (max +50 za raz).
+  sympathy-per-gold: 2
+  refuse-sympathy: -10
+
+gift:
+  # Władca NPC może dziennie rozdać najwyżej tyle % swojego skarbca (wszystkim razem).
+  max-treasury-percent-per-day: 5
+  # ...i najwyżej tyle jednemu graczowi dziennie (miedziaki).
+  max-per-player-per-day: 1000
+
+style:
+  # 0–100: swoboda mowy władców. 67–100: żywo, z humorem, emocjami i staropolskimi przekleństwami, ostro na
+  # bezczelnych; dojrzałe tematy epoki (wojna, intrygi, przekupstwo, przemyt, zamtuzy jako tło, handel niewolnikami
+  # w świecie gry) grane swobodnie. 34–66: żywo, rzadkie łagodne przekleństwa. 0–33: dworska powaga, ciemne tematy
+  # tylko jako tło. Twarde granice (bez treści seksualnych wprost, nieletnich, nienawiści wobec realnych grup,
+  # instrukcji szkody w realnym świecie, podszywania się pod realne osoby) obowiązują zawsze.
+  freedom: 75
+
+# Czy władca może wypowiedzieć wojnę w rozmowie (narzędzie wypowiedz_wojne; koszt płaci skarbiec NPC).
+allow-war: true
+war:
+  # Max 1 wojna wypowiedziana w rozmowie na kraj NPC w tym czasie.
+  cooldown-hours: 24
+  # Przy niższej agresji kraju NPC (ustawienie Armii) gra odmawia, a władca się wycofuje.
+  min-aggression: 40
+
+# Zlecenia władców NPC (/zlecenia, także w rozmowie przez narzędzia zaproponuj_zlecenie / odbierz_zlecenie).
+# Kwoty w miedziakach (1 sr = 10 md, 1 zł = 100 md). Tylko przedmioty średniowiecza i renesansu (epoka ≤ 2).
+zlecenia:
+  enabled: true
+  # Ile ofert ma dzienna tablica każdego kraju NPC (nowa tablica o północy czasu serwera). Każdy gracz może
+  # wziąć każdą ofertę raz dziennie — oferty nie są „zajmowane” przez innych.
+  offers-per-day: 4
+  # Wagi losowania typów (przy co najmniej 3 ofertach każdy dostępny typ trafia na tablicę co najmniej raz).
+  weights: {dostawa: 40, surowce: 35, transport: 25}
+  # Jedna oferta dziennie jest „zaszczytna” ★: nagroda ×1,5 i +2 reputacji, wymaga reputacji Znajomy+.
+  premium-multiplier: 1.5
+  premium-reputation-bonus: 2
+  limits:
+    max-active: 2
+    # Ukończone (i porzucone/nieudane, przy limicie kraju) zlecenia na dzień — anty-farma.
+    max-completed-per-day: 6
+    max-per-country-per-day: 3
+  cooldowns:
+    # Odstęp między przyjęciem kolejnych zleceń.
+    accept-seconds: 10
+    # Po porzuceniu albo niezdążeniu ten kraj nic graczowi nie zleca przez tyle minut.
+    after-fail-minutes: 30
+  # false: zlecenie przyjmiesz tylko na ziemi kraju albo przy jego władcy (true = skądkolwiek).
+  accept-anywhere: false
+  # Oddanie: w promieniu tylu chunków od chunka stolicy albo przy władcy.
+  capital-radius-chunks: 2
+  reward:
+    # Nagroda idzie ze skarbca kraju NPC: przy przyjęciu trafia do depozytu (konto wladcy:zlecenie-…), przy oddaniu
+    # na konto gracza, przy porażce wraca do skarbca. Zamknięta pula: create-money jest ignorowane (zawsze false).
+    create-money: false
+    # Rezerwa skarbca kraju NPC, której zlecenia nie ruszają: tyle dni żołdu armii i utrzymania ziemi, nie mniej niż reserve-min (md).
+    reserve-days-of-wages: 2
+    reserve-min: 500
+    min: 20
+    max: 2000
+    # Jedna nagroda najwyżej tyle % skarbca; wszystkie nagrody kraju dziennie najwyżej tyle %.
+    max-treasury-percent-per-quest: 3
+    max-treasury-percent-per-day: 10
+    # Bogactwo władcy (Armia, 0–100) zmienia nagrody o ±20%.
+    wealth-effect: 0.2
+  dostawa:
+    time-limit-minutes: 120
+    reputation: 4
+    # Stała premia za zlecenie + cena za towar (price md za każde „per” sztuk; skup u kupca płaci mniej).
+    bonus: 30
+    pool:
+      - {material: WHEAT, name: "pszenica", min: 32, max: 64, price: 10, per: 16}
+      - {material: BREAD, name: "chleb", min: 16, max: 32, price: 20, per: 8}
+      - {material: LEATHER, name: "skóra", min: 8, max: 24, price: 15, per: 4}
+      - {material: WHITE_WOOL, name: "biała wełna", min: 16, max: 32, price: 12, per: 8}
+      - {material: FEATHER, name: "pióra", min: 16, max: 32, price: 6, per: 8}
+      - {material: STRING, name: "nici", min: 16, max: 32, price: 8, per: 8}
+      - {material: PAPER, name: "papier", min: 16, max: 32, price: 10, per: 8}
+      - {material: BOOK, name: "księgi", min: 4, max: 8, price: 12, per: 1}
+      - {material: CANDLE, name: "świece", min: 8, max: 16, price: 4, per: 1}
+      - {material: ARROW, name: "strzały", min: 32, max: 64, price: 8, per: 16}
+      - {material: HONEY_BOTTLE, name: "miód w butelkach", min: 4, max: 12, price: 6, per: 1}
+      - {material: COOKED_BEEF, name: "pieczona wołowina", min: 16, max: 32, price: 12, per: 4}
+  surowce:
+    time-limit-minutes: 180
+    reputation: 5
+    bonus: 40
+    # Nagroda ×, gdy kraj naprawdę tego potrzebuje (dane z Ludnosc). Bez Ludnosc surowiec jest losowy.
+    need-multiplier: 1.3
+    resources:
+      drewno:
+        name: "drewno"
+        # Kraj „potrzebuje”, gdy w magazynie Ludnosc ma mniej niż tyle.
+        threshold: 300
+        pool:
+          - {material: OAK_LOG, name: "kłody dębowe", min: 32, max: 64, price: 12, per: 16}
+          - {material: SPRUCE_LOG, name: "kłody świerkowe", min: 32, max: 64, price: 12, per: 16}
+          - {material: BIRCH_LOG, name: "kłody brzozowe", min: 32, max: 64, price: 12, per: 16}
+      kamien:
+        name: "kamień"
+        threshold: 400
+        pool:
+          - {material: COBBLESTONE, name: "bruk", min: 64, max: 128, price: 10, per: 64}
+          - {material: STONE_BRICKS, name: "kamienne cegły", min: 32, max: 64, price: 10, per: 16}
+      rudy:
+        name: "kruszce"
+        threshold: 120
+        pool:
+          - {material: IRON_INGOT, name: "sztabki żelaza", min: 8, max: 24, price: 10, per: 1}
+          - {material: COAL, name: "węgiel", min: 16, max: 48, price: 12, per: 8}
+      ryby:
+        name: "ryby"
+        threshold: 80
+        pool:
+          - {material: COD, name: "dorsze", min: 12, max: 24, price: 6, per: 4}
+          - {material: SALMON, name: "łososie", min: 8, max: 20, price: 7, per: 4}
+      # Żywność: brakuje, gdy obywatele głodują, bilans jedzenia jest ujemny albo spichlerz < 25%.
+      zywnosc:
+        name: "żywność"
+        pool:
+          - {material: WHEAT, name: "pszenica", min: 48, max: 96, price: 10, per: 16}
+          - {material: BREAD, name: "chleb", min: 24, max: 48, price: 20, per: 8}
+          - {material: CARROT, name: "marchew", min: 32, max: 64, price: 8, per: 16}
+          - {material: POTATO, name: "ziemniaki", min: 32, max: 64, price: 8, per: 16}
+  transport:
+    # Zapieczętowany ładunek do stolicy innego kraju (nie wroga) drogą lądową. Nie da się go postawić ani spalić;
+    # zgubiony = zlecenie przepada po czasie. Czas: base + per 100 bloków odległości stolic.
+    reputation: 6
+    base-minutes: 20
+    minutes-per-100-blocks: 4
+    min-distance: 150
+    max-distance: 3000
+    base-reward: 60
+    reward-per-100-blocks: 25
+    cargo-material: BARREL
+    goods: ["sukno flandryjskie", "przyprawy", "beczka wina", "sól kamienna", "listy i pieczęcie", "sztaby srebra", "miód pitny", "futra"]
+
+# Reputacja gracza u każdego kraju: −100…100. Progi: Wróg ≤ −60, Nieufny −59…−20, Obcy −19…19, Znajomy 20…49,
+# Przyjaciel 50…79, Bohater ≥ 80. Wróg nie dostaje zleceń, Nieufny tylko dostawy, zaszczytne od Znajomego.
+reputacja:
+  refuse: -1
+  abandon: -3
+  fail: -4
+  # Trybut zapłacony / odmówiony w rozmowie z władcą.
+  tribute-paid: 3
+  tribute-refused: -2
+  # Najwięcej punktów zysku na dzień u jednego kraju (straty bez limitu).
+  daily-gain-cap: 15
+  # Mnożnik nagród za zlecenia wg progu.
+  reward-multiplier: {wrog: 0, nieufny: 0.8, obcy: 1.0, znajomy: 1.1, przyjaciel: 1.25, bohater: 1.5}
+  # Mnożnik dziennego limitu darów władcy (podaruj, gift.max-per-player-per-day) dla gracza wg progu.
+  gift-multiplier: {wrog: 0, nieufny: 0.5, obcy: 1.0, znajomy: 1.2, przyjaciel: 1.5, bohater: 2.0}
+
+# Cennik w USD za milion tokenów (sprawdzaj aktualny na stronie Anthropic). Klucz = id modelu (albo jego początek).
+pricing:
+  claude-opus-5-5: {input: 4.00, output: 20.00, cache-read: 0.20, cache-write: 5.00}
+  claude-haiku-5-5: {input: 0.10, output: 0.50, cache-read: 0.01, cache-write: 0.125}
+  # Modele, na które może trafić fallback po odmowie klasyfikatora:
+  claude-opus-5: {input: 5.00, output: 25.00, cache-read: 0.50, cache-write: 6.25}
+  claude-opus-4-8: {input: 5.00, output: 25.00, cache-read: 0.50, cache-write: 6.25}
+  default: {input: 5.00, output: 25.00, cache-read: 0.50, cache-write: 6.25}
+
+messages:
+  prefix: "<dark_aqua>[Władcy]</dark_aqua> "
+  players-only: "<prefix><red>Tylko dla graczy."
+  reloaded: "<prefix><green>Przeładowano. Model: <white><model></white>, klucz API: <white><key></white>."
+  key-present: "jest"
+  key-missing: "brak"
+  key-set: "<prefix><green>Klucz API ustawiony i zapisany w config.yml."
+  key-cleared: "<prefix><yellow>Klucz API usunięty z config.yml."
+  rulers-unavailable: "<prefix><gray>Władcy są dziś nieosiągalni — posłańcy wrócili z pustymi rękami. Spróbuj później."
+  budget-exceeded: "<prefix><gray>Władcy odmawiają dziś dalszych audiencji. Wróć jutro."
+  daily-limit: "<prefix><gray>Wykorzystałeś dzisiejsze audiencje (<white><limit></white>). Wróć jutro."
+  no-ruler-near: "<prefix><gray>Nie widzisz w pobliżu żadnego władcy (podejdź na <white><radius></white> bloków)."
+  already-talking: "<prefix><gray>Już rozmawiasz z <ruler><gray>. Pisz na czacie albo <white>/wladca koniec</white>."
+  not-talking: "<prefix><gray>Nie prowadzisz teraz rozmowy z władcą."
+  conversation-start: "<prefix><gray>Stajesz przed obliczem <ruler> <gray>(<country><gray>). Pisz na czacie — słowa trafią tylko do władcy i osób obok. <white>/wladca koniec</white><gray> kończy rozmowę (także odejście na <distance> bl. albo <idle> s ciszy)."
+  end-by-player: "<prefix><gray>Kłaniasz się i odchodzisz od <ruler><gray>."
+  end-by-ruler: "<prefix><ruler> <gray>daje znak, że audiencja skończona."
+  end-walked-away: "<prefix><gray>Odszedłeś — rozmowa z <ruler> <gray>zakończona."
+  end-idle: "<prefix><ruler> <gray>wrócił do swoich spraw (długa cisza)."
+  end-too-long: "<prefix><ruler> <gray>jest zmęczony audiencją. Wróć później."
+  end-switched: "<prefix><gray>Kończysz rozmowę z <ruler><gray>."
+  end-shutdown: "<prefix><gray>Rozmowa z <ruler> <gray>przerwana."
+  end-country-gone: "<prefix><gray>Kraj <ruler> <gray>upadł — rozmowa przerwana."
+  too-long: "<prefix><gray>Za długo (<length>/<max> znaków). Mów krócej."
+  cooldown: "<prefix><gray>Poczekaj chwilę (<seconds> s), władca jeszcze rozważa twoje słowa."
+  still-thinking: "<prefix><ruler> <gray>jeszcze nie skończył myśleć nad poprzednimi słowami."
+  thinking: "<ruler> <gray>się zastanawia…"
+  chat-player-self: "<gray>Ty <dark_gray>→</dark_gray> <ruler><gray>:</gray> <white><text>"
+  chat-player-rp: "<gray><player> <dark_gray>→</dark_gray> <ruler><gray>:</gray> <white><text>"
+  chat-ruler: "<ruler><gray>:</gray> <#f3e9d2><text>"
+  ruler-silent: "<ruler> <gray>milczy przez chwilę, przyglądając ci się uważnie."
+  ruler-refuses: "<ruler><gray>:</gray> <#f3e9d2>O tym nie będę z tobą rozprawiał. Mów o czym innym."
+  ruler-pondering: "<ruler> <gray>zamyśla się głęboko… Spróbuj za chwilę."
+  tribute-demand: "<prefix><ruler> <gray>żąda trybutu <gold><amount></gold> ze skarbca twojego kraju: <pay> <refuse> <dark_gray>(<minutes> min)"
+  tribute-pay-button: "<green><bold>[Zapłać <amount>]</bold>"
+  tribute-pay-hover: "<gray>Przelew <gold><amount></gold> ze skarbca twojego kraju do skarbca władcy."
+  tribute-refuse-button: "<red><bold>[Odmów]</bold>"
+  tribute-refuse-hover: "<gray>Władca to zapamięta."
+  tribute-expired: "<prefix><gray>To żądanie trybutu już nie obowiązuje."
+  tribute-not-allowed: "<prefix><red>Trybut może zapłacić tylko ranga <white><rank></white> kraju, od którego go żądano."
+  tribute-no-money: "<prefix><red>W skarbcu twojego kraju brakuje <amount>."
+  tribute-paid: "<prefix><green>Zapłacono trybut <gold><amount></gold>. <ruler> <green>przyjmuje go z zadowoleniem."
+  tribute-refused: "<prefix><yellow>Odmówiłeś trybutu <amount>. <ruler> <yellow>tego nie zapomni."
+  gift-player: "<prefix><ruler> <green>wręcza ci dar: <gold><amount></gold> (na twoje konto)."
+  gift-country: "<prefix><ruler> <green>przekazuje <gold><amount></gold> do skarbca kraju <white><country></white>."
+  war-announcement: "<dark_red><bold>⚔</bold></dark_red> <ruler> <gray>z kraju</gray> <country><gray>, urażony słowami posła</gray> <white><player></white><gray>, wypowiada wojnę krajowi</gray> <target><gray>! Powód:</gray> <white><reason>"
+  cost-report: "<prefix><gold>Koszt API</gold> <gray>(model <white><model></white>, rozmów teraz: <white><conversations></white>)\n<gray>Dziś <white><day></white>: <gold><day_usd></gold> / <white><daily_budget></white> · zapytań: <white><day_requests></white> · średnio <white><avg></white>\n<gray>Tokeny dziś: wejście <white><input></white>, wyjście <white><output></white>, cache odczyt <white><cache_read></white>, cache zapis <white><cache_write></white> (trafienia <white><hit></white>)\n<gray>Miesiąc <white><month></white>: <gold><month_usd></gold> / <white><monthly_budget></white> · zapytań: <white><month_requests></white> · łącznie od początku: <gold><total_usd>"
+  help-header: "<gold><bold>▌ <title></bold></gold> <gray>— <category> <dark_gray>(<page>/<pages>)"
+  help-line: " <yellow><syntax></yellow> <dark_gray>—</dark_gray> <gray><short>"
+  help-hover: "<yellow><syntax></yellow>\n<gray><description>\n<dark_gray>Dla: <rank>"
+  help-nav: " <prev>   <next>"
+  help-prev: "<yellow>« poprzednia"
+  help-prev-disabled: "<dark_gray>« poprzednia"
+  help-next: "<yellow>następna »"
+  help-next-disabled: "<dark_gray>następna »"
+  help-page-hover: "<gray>Strona <page>: <category>"
+  help-tabs: " <tabs>"
+  help-tab: "<gray><category>"
+  help-tab-current: "<gold><u><category></u>"
+  help-tab-separator: "<dark_gray> | "
+  help-wladca:
+    title: "Władcy"
+    categories:
+      rozmowa: "Rozmowa"
+      admin: "Admin"
+    entries:
+      rozmowa:
+        short: "porozmawiaj z władcą NPC obok"
+        description: "Stań najwyżej 6 bloków od władcy kraju NPC (albo kliknij „Porozmawiaj” w jego oknie). Potem pisz na czacie — słowa trafiają do władcy, a gracze obok widzą rozmowę."
+        rank: "każdy"
+      koniec:
+        short: "zakończ rozmowę"
+        description: "Kończy audiencję. Rozmowa kończy się też, gdy odejdziesz albo długo milczysz."
+        rank: "każdy"
+      pomoc:
+        short: "ta pomoc"
+        description: "Interaktywna pomoc. Najedź na komendę, by zobaczyć opis; kliknij, by wpisać ją na czat."
+        rank: "każdy"
+      koszt:
+        short: "zużycie API dziś i w miesiącu"
+        description: "Koszt w USD liczony z usage odpowiedzi i cennika w config.yml, tokeny, trafienia cache."
+        rank: "admin"
+      klucz:
+        short: "ustaw klucz API (tylko konsola)"
+        description: "Zapisuje klucz w config.yml. Bezpieczniej wpisać go ręcznie w pliku, bo komendy konsoli mogą trafić do logów."
+        rank: "konsola"
+      przeladuj:
+        short: "przeładuj config.yml"
+        description: "Wczytuje config, cennik, limity i tworzy klienta API od nowa."
+        rank: "admin"
+  # ---------------------------------------------------------------- zlecenia i reputacja
+  quest-disabled: "<prefix><gray>Zlecenia władców są wyłączone."
+  quest-reloaded: "<prefix><green>Przeładowano config (także zlecenia i reputację)."
+  quest-notice: "<prefix><gray><text>"
+  quest-list-header: "<gold><bold>▌ Zlecenia</bold></gold> <gray>— w toku: <white><active></white>/<white><max></white>, dziś wykonane: <white><done></white>/<white><max_day></white>"
+  quest-active-none: " <gray>Nie masz zleceń w toku."
+  quest-active-line: " <yellow>#<id></yellow> <type> <gray>dla</gray> <country><gray>: <white><task></white> <dark_gray>·</dark_gray> <gold><reward></gold><secured> <dark_gray>·</dark_gray> <gray>zostało <white><left></white> <turnin> <abandon>"
+  quest-turnin-button: "<green>[Oddaj]"
+  quest-turnin-hover: "<gray>Oddaj: <where>"
+  quest-abandon-button: "<red>[Porzuć]"
+  quest-abandon-hover: "<gray>Porzucenie obniża reputację (<white><rep></white>) i daje przerwę u tego kraju."
+  quest-board-header: "<gold><bold>▌ Tablica zleceń</bold></gold> <country> <gray>— twoja reputacja: <tier> <dark_gray>(<value>)"
+  quest-board-line: " <yellow>#<id></yellow> <type><premium> <white><task></white> <dark_gray>·</dark_gray> <gold><reward></gold><secured> <dark_gray>·</dark_gray> <gray><time></gray> <dark_gray>·</dark_gray> <green>+<rep> rep.</green> <buttons>"
+  quest-board-premium: " <gold>★</gold>"
+  quest-board-empty: " <gray>Władca nie ma dziś zleceń."
+  quest-board-locked: "<dark_gray>[niedostępne]"
+  quest-board-used: "<dark_gray>[już wzięte]"
+  quest-accept-button: "<green><bold>[Przyjmij]</bold>"
+  quest-accept-hover: "<gray>Przyjmij zlecenie <yellow>#<id></yellow>. Nagroda zostanie odłożona ze skarbca władcy."
+  quest-refuse-button: "<red>[Odrzuć]"
+  quest-refuse-hover: "<gray>Odrzucenie lekko obniża reputację (<white><rep></white>)."
+  quest-nearby-header: "<gold><bold>▌ Kraje NPC ze zleceniami</bold></gold> <gray>(najbliższe; kliknij, by zobaczyć tablicę)"
+  quest-nearby-line: " <country> <dark_gray>—</dark_gray> <gray>ofert: <white><offers></white>, reputacja: <tier><gray>, stolica: <white><distance></white>"
+  quest-nearby-hover: "<gray>Pokaż tablicę zleceń.\n<dark_gray>Przyjmiesz zlecenie na ziemi tego kraju albo przy jego władcy."
+  quest-not-in-npc: "<prefix><gray>Nie stoisz na ziemi kraju NPC. Zlecenia przyjmiesz na jego ziemi albo w rozmowie z władcą (<white>/wladca rozmowa</white>)."
+  quest-no-npc-countries: "<prefix><gray>Nie ma jeszcze żadnych krajów NPC."
+  quest-unknown: "<prefix><red>Nie ma takiego zlecenia (tablice odnawiają się o północy)."
+  quest-unknown-country: "<prefix><red>Nie ma kraju o nazwie <white><name></white>."
+  quest-accept-where: "<prefix><red>To zlecenie przyjmiesz na ziemi kraju <country> <red>albo przy jego władcy."
+  quest-deny-disabled: "<prefix><red>Zlecenia są wyłączone."
+  quest-deny-enemy: "<prefix><red>Jesteś wrogiem kraju <country><red> — władca nie powierzy ci żadnego zlecenia."
+  quest-deny-tier-type: "<prefix><red>Przy reputacji <tier> <red>dostaniesz tylko proste dostawy."
+  quest-deny-premium: "<prefix><red>Zaszczytne zlecenia wymagają reputacji co najmniej <green>Znajomy</green>."
+  quest-deny-max-active: "<prefix><red>Masz już <white><limit></white> zleceń w toku. Skończ albo porzuć któreś."
+  quest-deny-daily: "<prefix><red>Wykonałeś dziś już <white><limit></white> zleceń. Wróć jutro."
+  quest-deny-country-daily: "<prefix><red>Dziś zrobiłeś już <white><limit></white> zleceń dla <country><red>. Wróć jutro."
+  quest-deny-used: "<prefix><red>To zlecenie już dziś przyjąłeś albo odrzuciłeś."
+  quest-deny-cooldown: "<prefix><red>Niedawno zawiodłeś <country><red>. Nowe zlecenie dostaniesz za <white><time></white>."
+  quest-deny-too-fast: "<prefix><red>Chwilę — dopiero co przyjąłeś zlecenie."
+  quest-deny-no-funds: "<prefix><red>Skarbiec <country> <red>nie udźwignie dziś tej nagrody."
+  quest-deny-active-here: "<prefix><red>Już wykonujesz to zlecenie."
+  quest-deny-need-changed: "<prefix><yellow>Pilne zapotrzebowanie kraju <country> <yellow>nie jest już potwierdzone. Wybierz inne zlecenie z tablicy."
+  quest-deny-supply-unavailable: "<prefix><yellow>Nowe zlecenia surowcowe wymagają obsługi rzeczywistych magazynów Ludnosc. Spróbuj później."
+  quest-deny-bank-unavailable: "<prefix><yellow>Nowe zlecenia z depozytem wymagają obsługi trwałego zapisu banku Skarbiec. Spróbuj później."
+  quest-acceptance-pending: "<prefix><yellow>#<id>: przyjęcie czeka na trwały zapis finansowania. <reason> <gray>Ponów: <white>/zlecenia przyjmij <id></white>."
+  quest-acceptance-line: "<prefix><yellow>#<id> od <country><yellow>: przyjęcie i depozyt oczekują na potwierdzenie. Kliknij, aby wznowić ten sam zamiar."
+  quest-supply-required: "<prefix><gray>To dostawa do rzeczywistego magazynu kraju. Przy oddaniu w stolicy Ludnosc przeniesie zwykłe przedmioty z twojego ekwipunku do dostępnej skrzyni. Pełny lub niedostępny magazyn wstrzyma odbiór."
+  quest-supply-pending: "<prefix><yellow>#<id>: trwa potwierdzanie dostawy lub zapisu. <reason> <gray>Ponów: <white>/zlecenia oddaj <id></white>."
+  quest-supply-blocked: "<prefix><yellow>#<id>: magazyn nie przyjął towaru. <reason> <gray>Przedmioty pozostają u ciebie."
+  quest-supply-unavailable: "<prefix><yellow>#<id>: brak pewnego potwierdzenia magazynu lub zapisu. <reason> <gray>Ponów oddanie tego samego zlecenia; wypłata czeka."
+  quest-supply-payment: "<prefix><yellow>#<id>: towar dostarczony, wypłata z depozytu czeka. <reason>"
+  quest-supply-audit: "<prefix><yellow>#<id>: rozliczenie zatrzymane do audytu administratora. <reason>"
+  quest-accepted: "<prefix><green>Przyjąłeś zlecenie <yellow>#<id></yellow> od <country><green>: <white><task></white>. Nagroda: <gold><reward></gold><escrow><green>. Czas: <white><time></white>.\n<gray>Oddasz: <where><gray>. Lista: <white>/zlecenia</white>"
+  quest-accepted-escrow: " <gray>(już odłożona w depozycie)</gray>"
+  quest-reward-secured: " <green><hover:show_text:'<gray>Nagroda leży w depozycie skarbca kraju i jest pewna. Przy porażce wraca do skarbca.'>🔒</hover></green>"
+  quest-reward-uncovered: " <red><hover:show_text:'<gray>Ta nagroda nie ma pełnego depozytu (stare zlecenie lub audyt). Wypłata tylko z faktycznych środków kraju.'>⚠ bez pokrycia</hover></red>"
+  quest-board-secured: " <dark_gray><hover:show_text:'<gray>Przy przyjęciu nagroda zostanie zablokowana w depozycie skarbca kraju.'>🔒</hover></dark_gray>"
+  quest-cargo-given: "<prefix><gray>Dostajesz ładunek <white><cargo></white>. Nie zgub go — nie da się go postawić ani spalić."
+  quest-cargo-name: "<gold>Ładunek: <goods>"
+  quest-cargo-lore-target: "<gray>Do stolicy: <white><target>"
+  quest-cargo-lore-id: "<dark_gray>Zlecenie #<id> od <country>"
+  quest-cargo-no-place: "<prefix><red>Zapieczętowanego ładunku nie wolno rozpakować — zawieź go do celu."
+  quest-turnin-none: "<prefix><gray>Nie masz zleceń w toku. <white>/zlecenia</white> pokaże tablicę."
+  quest-turnin-where: "<prefix><red>#<id>: oddasz to <where><red>."
+  quest-turnin-missing: "<prefix><red>#<id>: brakuje ci <white><missing> × <item></white> <gray>(masz <have>/<amount>)."
+  quest-turnin-no-cargo: "<prefix><red>#<id>: nie masz przy sobie ładunku <white><cargo></white>."
+  quest-completed: "<prefix><green>Zlecenie <yellow>#<id></yellow> wykonane! <gold><reward></gold> <green>na twoim koncie. Reputacja u <country><green>: <white><rep_change></white> → <tier> <dark_gray>(<value>)"
+  quest-completed-unpaid: "<prefix><yellow>Zlecenie #<id> wykonane, ale skarbiec <country> <yellow>był pusty — nagroda przepadła. Reputacja: <white><rep_change></white>."
+  quest-abandon-which: "<prefix><gray>Które zlecenie porzucić? Kliknij <red>[Porzuć]</red> w <white>/zlecenia</white> albo wpisz <white>/zlecenia porzuc <numer></white>."
+  quest-abandoned: "<prefix><yellow>Porzuciłeś zlecenie #<id>. Reputacja u <country><yellow>: <white><rep_change></white>. Ten kraj nic ci nie zleci przez <white><minutes> min</white>."
+  quest-refused: "<prefix><gray>Odrzucasz zlecenie #<id>. Reputacja u <country><gray>: <white><rep_change></white>."
+  quest-expired: "<prefix><red>Minął czas na zlecenie #<id> (<task>). Reputacja u <country><red>: <white><rep_change></white>."
+  quest-cancelled: "<prefix><gray>Zlecenie #<id> anulowane — kraj upadł. Depozyt wrócił, reputacja bez zmian."
+  quest-offer-card: "<prefix><ruler> <gray>proponuje ci zlecenie <yellow>#<id></yellow>: <white><task></white>. Nagroda <gold><reward></gold>, czas <white><time></white>, <green>+<rep> rep.</green> <buttons>"
+  quest-tier-up: "<prefix><green>Twoja reputacja u <country> <green>rośnie — jesteś teraz: <tier><green>!"
+  quest-tier-down: "<prefix><red>Twoja reputacja u <country> <red>spada — jesteś teraz: <tier><red>."
+  quest-boards-refreshed: "<prefix><green>Nowe tablice zleceń dla <white><count></white> krajów (przy najbliższym otwarciu)."
+  quest-type-dostawa: "<#c8a165>[Dostawa]"
+  quest-type-surowce: "<#7fb069>[Surowce]"
+  quest-type-transport: "<#6fa8dc>[Transport]"
+  quest-task-dostawa: "dostarcz <amount> × <item>"
+  quest-task-surowce: "przynieś <amount> × <item><urgent>"
+  quest-task-urgent: " <red>(pilne)</red>"
+  quest-task-transport: "zawieź <item> do stolicy <target> (<distance> bl.)"
+  quest-where-home: "w stolicy <country> <gray>(do <radius> chunków)</gray> albo przy władcy"
+  quest-where-target: "w stolicy <target> <gray>(do <radius> chunków)</gray> albo przy jej władcy"
+  rep-header: "<gold><bold>▌ Reputacja</bold></gold> <gray>— <white><player></white> <dark_gray>(kliknij kraj, by zobaczyć szczegóły)"
+  rep-line: " <country> <dark_gray>—</dark_gray> <tier> <dark_gray>(<value>)"
+  rep-line-hover: "<gray>Szczegóły reputacji u tego kraju."
+  rep-none: " <gray>Żaden kraj cię jeszcze nie zna — wszędzie jesteś <white>Obcy</white>."
+  rep-detail: "<prefix><country> <gray>— reputacja <white><player></white>: <tier> <dark_gray>(<value>/100)</dark_gray>\n<gray>Do następnego progu: <white><next></white> · dziś zdobyto <white><gained></white>/<white><cap></white>\n<gray>Zlecenia: wykonane <white><completed></white>, nieudane <white><failed></white>, porzucone <white><abandoned></white>\n<gray>Nagrody za zlecenia: <white>×<reward_mult></white> · dary władcy: <white>×<gift_mult></white>"
+  rep-tiers: " <dark_gray>Progi: <dark_red>Wróg</dark_red> ≤ −60 · <red>Nieufny</red> −59…−20 · <gray>Obcy</gray> −19…19 · <green>Znajomy</green> 20…49 · <aqua>Przyjaciel</aqua> 50…79 · <gold>Bohater</gold> ≥ 80"
+  rep-admin-set: "<prefix><green>Reputacja <white><player></white> u <country><green>: <white><value></white> (<tier><green>)."
+  rep-admin-reset: "<prefix><green>Usunięto reputację <white><player></white> (wpisów: <white><count></white>)."
+  rep-unknown-player: "<prefix><red>Nie znam gracza <white><name></white>."
+  help-zlecenia:
+    title: "Zlecenia i reputacja"
+    categories:
+      zlecenia: "Zlecenia"
+      reputacja: "Reputacja"
+      admin: "Admin"
+    entries:
+      lista:
+        short: "zlecenia w toku i tablica kraju, na którym stoisz"
+        description: "Pokazuje twoje zlecenia (z przyciskami Oddaj/Porzuć). Na ziemi kraju NPC — jego dzienną tablicę z przyciskami Przyjmij/Odrzuć; gdzie indziej — najbliższe kraje NPC."
+        rank: "każdy"
+      kraj:
+        short: "tablica zleceń wybranego kraju NPC"
+        description: "Podgląd dziennej tablicy dowolnego kraju NPC. Przyjąć zlecenie możesz na ziemi tego kraju albo przy jego władcy."
+        rank: "każdy"
+      przyjmij:
+        short: "przyjmij zlecenie"
+        description: "Nagroda jest od razu odkładana ze skarbca władcy do depozytu i czeka na ciebie. Każde zlecenie możesz wziąć raz dziennie. Najwięcej zleceń naraz i dziennie ustala serwer."
+        rank: "każdy"
+      oddaj:
+        short: "oddaj gotowe zlecenia"
+        description: "Dostawy i surowce oddajesz w stolicy kraju (kilka chunków od niej) albo przy władcy — towar jest zabierany z ekwipunku. Ładunek oddajesz w stolicy kraju docelowego. Nagroda trafia na twoje konto w banku."
+        rank: "każdy"
+      porzuc:
+        short: "porzuć zlecenie"
+        description: "Depozyt wraca do władcy, reputacja spada, a ten kraj przez chwilę nic ci nie zleci."
+        rank: "każdy"
+      odrzuc:
+        short: "odrzuć proponowane zlecenie"
+        description: "Zlecenie znika z twojej tablicy do jutra; reputacja spada nieznacznie."
+        rank: "każdy"
+      pomoc:
+        short: "ta pomoc"
+        description: "Interaktywna pomoc. Najedź na komendę, by zobaczyć opis; kliknij, by wpisać ją na czat."
+        rank: "każdy"
+      reputacja:
+        short: "twoja reputacja u krajów (Wróg … Bohater)"
+        description: "Reputacja −100…100 u każdego kraju: rośnie za wykonane zlecenia i zapłacony trybut, spada za porzucone i nieudane. Wpływa na dostępne zlecenia, wysokość nagród, dary i ton władcy."
+        rank: "każdy"
+      rozmowa:
+        short: "poproś władcę o zlecenie w rozmowie"
+        description: "Władca sam może zaproponować zlecenie (przyciski Przyjmij/Odrzuć) i odebrać towar, gdy powiesz, że go przyniosłeś. Jego ton zależy od twojej reputacji."
+        rank: "każdy"
+      odswiez:
+        short: "nowe tablice zleceń (kraj albo wszystkie)"
+        description: "Losuje nowe oferty od razu. Zlecenia w toku zostają."
+        rank: "admin"
+      przeladuj:
+        short: "przeładuj config.yml"
+        description: "Wczytuje config (także zlecenia i reputację) i kończy trwające rozmowy."
+        rank: "admin"
+      rep-pokaz:
+        short: "reputacja gracza"
+        description: "Wszystkie kraje gracza albo szczegóły u jednego."
+        rank: "admin"
+      rep-daj:
+        short: "dodaj/odejmij reputację"
+        description: "Zmienia reputację gracza u kraju o podaną liczbę (bez dziennego limitu)."
+        rank: "admin"
+      rep-ustaw:
+        short: "ustaw reputację"
+        description: "Ustawia wartość −100…100."
+        rank: "admin"
+      rep-resetuj:
+        short: "wyczyść reputację"
+        description: "U jednego kraju albo u wszystkich."
+        rank: "admin"

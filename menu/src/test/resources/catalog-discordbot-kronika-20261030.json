@@ -1,0 +1,33 @@
+{
+  "roots": [
+    {
+      "name": "discord",
+      "executableUsagePaths": [
+        "/discord",
+        "/discord pomoc",
+        "/discord polacz",
+        "/discord odlacz",
+        "/discord status",
+        "/discord admin kronika",
+        "/discord admin przygotuj potwierdz",
+        "/discord admin synchronizuj",
+        "/discord admin uklad podglad",
+        "/discord admin uklad zastosuj potwierdz",
+        "/discord admin uklad usun-stare potwierdz <kod>"
+      ]
+    }
+  ],
+  "metadata": {
+    "plugins": [
+      {
+        "name": "DiscordBot",
+        "enabled": true
+      }
+    ]
+  },
+  "_copyright": "Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl",
+  "evidence": {
+    "source": "Izolowany Paper 218, 127.0.0.1:25632, bez tokenu; rzeczywisty dispatcher Brigadier",
+    "jarSha256": "4a3471bc51c2d655fd3620c52708075fcbc2e040a5a4dc820309a86e3e89ffae"
+  }
+}

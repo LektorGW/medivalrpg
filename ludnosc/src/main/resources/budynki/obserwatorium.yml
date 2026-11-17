@@ -1,0 +1,217 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: obserwatorium
+name: '<#9FB6CD>Obserwatorium</#9FB6CD>'
+description: 'Daje punkty badań (Postęp); bez premii do podatków. Wieża z kopułą i lunetą.'
+function: observatory
+beds: 0
+cost: 18000
+tier: 3
+category: civic
+zone: outer
+max-per-country: 1
+requires:
+  population: 30
+  treasury: 0
+  era: 2
+  discovery: astronomia
+foundation: fill
+foundation-block: polished_andesite
+ground-layer: 0
+palette:
+  'A': 'polished_andesite'
+  'B': 'calcite'
+  'C': 'polished_diorite'
+  'D': 'birch_door[facing=north,half=lower,hinge=left,open=false]'
+  'E': 'birch_door[facing=north,half=upper,hinge=left,open=false]'
+  'F': 'glass_pane'
+  'G': 'ladder[facing=south]'
+  'H': 'waxed_cut_copper'
+  'I': 'light_blue_stained_glass'
+  'J': 'lodestone'
+  'K': 'end_rod[facing=up]'
+  'L': 'lantern[hanging=false]'
+  'M': 'cartography_table'
+  'N': 'lectern[facing=north,has_book=false,powered=false]'
+  'O': 'lantern[hanging=true]'
+  'P': 'wall_torch[facing=south]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+    AAAAAAAAA
+  # y=1
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.M.N.B.
+    .B.....B.
+    .CBBDBBC.
+    .........
+  # y=2
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .CBBEBBC.
+    .........
+  # y=3
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    ...P.....
+  # y=4
+  - |
+    .........
+    .CBBFBBC.
+    .B..G..B.
+    .B.....B.
+    .F.....F.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=5
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=6
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=7
+  - |
+    .........
+    .CBBFBBC.
+    .B..G..B.
+    .B.....B.
+    .F.....F.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=8
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=9
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=10
+  - |
+    .........
+    .CBBBBBC.
+    .B..G..B.
+    .B.O...B.
+    .B.....B.
+    .B...O.B.
+    .B.....B.
+    .CBBBBBC.
+    .........
+  # y=11
+  - |
+    .........
+    .CCCCCCC.
+    .CCCGCCC.
+    .CCCCCCC.
+    .CCCCCCC.
+    .CCCCCCC.
+    .CCCCCCC.
+    .CCCCCCC.
+    .........
+  # y=12
+  - |
+    .........
+    .HHHHHHH.
+    .H.....H.
+    .H.....H.
+    .H..J..H.
+    .H.L...H.
+    .H.....H.
+    .HHHHHHH.
+    .........
+  # y=13
+  - |
+    .........
+    .........
+    ..IIIII..
+    ..I...I..
+    ..I.K.I..
+    ..I...I..
+    ..IIIII..
+    .........
+    .........
+  # y=14
+  - |
+    .........
+    .........
+    .........
+    ...HHH...
+    ...H.....
+    ...HHH...
+    .........
+    .........
+    .........
+  # y=15
+  - |
+    .........
+    .........
+    .........
+    .........
+    ....H....
+    .........
+    .........
+    .........
+    .........

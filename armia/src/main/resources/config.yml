@@ -1,0 +1,1287 @@
+# Armia — żołnierze NPC i AI państw NPC (MEDIVALRPG)
+# © 2026 Maciej Kaczmarczyk — lektoro.pl
+# Kwoty zawsze w miedziakach (1 sr = 10 md, 1 zł = 100 md). Teksty: MiniMessage.
+
+# Wygląd żołnierzy:
+#  mannequin — widoczne ciało to Mannequin (skin gracza), a AI i punkty życia ma NIEWIDZIALNY i ukryty przed
+#              klientami mob-"mózg" (brain-entity). Ciało jest co tick ustawiane na pozycji mózgu. (domyślne)
+#  mob       — widoczny humanoidalny mob (units.*.mob-type) z ekwipunkiem i (opcjonalnie) głową ze skinem.
+visual: mannequin
+# Mob niosący AI w trybie mannequin. Dozwolone: WANDERING_TRADER (domyślny: nie jest potworem, więc golemy go
+# nie atakują), ZOMBIE, HUSK, SKELETON, STRAY, VINDICATOR, PILLAGER, EVOKER, ILLUSIONER, WITCH, ZOMBIE_VILLAGER.
+brain-entity: WANDERING_TRADER
+# Drużyna na głównej tablicy wyników z collisionRule=never (żołnierze nie popychają graczy — spójnie z klientem).
+no-collision: true
+# Nazwa nad głową widoczna zawsze (false = tylko po najechaniu).
+show-names: false
+# visual: mob — zakładaj głowę gracza ze skinem jednostki zamiast hełmu.
+mob-skin-head: true
+
+limits:
+  global-max: 1000         # wszystkich żołnierzy na serwerze
+  country-base: 5          # na kraj: bazowo...
+  country-per-chunk: 0.5   # ...plus tyle na zajęty chunk
+  country-max: 60          # twardy limit na kraj
+
+cpu:
+  think-budget-ms: 2.0     # czas na tick na wybór celów (round-robin)
+  think-interval-ticks: 10 # co ile ticków żołnierz szuka celu
+  max-spawns-per-tick: 4
+  repair-seconds: 30       # co ile sprawdzać zaginionych żołnierzy
+
+command-rank: ADVISOR      # kto dowodzi (CITIZEN, ADVISOR, RULER)
+recruit:
+  rank: ADVISOR
+  require-citizen: true    # gdy jest Ludnosc: rekrut = obywatel (LudnoscApi.conscript)
+  max-per-command: 10
+  citizen-max-distance: 48 # dalszy obywatel → żołnierz pojawia się przy rekrutującym
+  barracks:
+    required: false
+    # Z Ludnosc: kraj musi mieć gotowy budynek tego typu (LudnoscApi.hasBuilding).
+    building: koszary
+    # Bez Ludnosc (albo ze starszą wersją): blok w promieniu od rekrutującego zastępuje koszary.
+    block: SMITHING_TABLE
+    radius: 12
+
+# Koszary (budynki Ludnosc z funkcją „koszary”: koszary, koszary2 i zgłoszone przez graczy wlasny_koszary).
+# Bez Ludnosc (albo ze starszą wersją) koszary nic nie dają, reszta działa jak dotąd.
+barracks:
+  limit-per-bed: 1             # każda prycza w czynnych koszarach = +tyle do limitu wojska kraju (0 = wyłączone)
+  limit-bonus-max: 60          # najwyżej tyle limitu z prycz na kraj (ponad limits.country-*; zawsze ≤ limits.global-max)
+  max-beds-per-building: 12    # tyle prycz liczy się z jednego budynku (koszary2 mają 12; hala pełna łóżek nie da więcej)
+  max-damage-percent: 50       # koszary uszkodzone bardziej niż tyle % są nieczynne (100 = uszkodzenia bez znaczenia)
+  recruit-spawn: true          # rekruci stawiają się w najbliższych czynnych koszarach
+  recruit-follow-distance: 40  # koszary bliżej niż tyle bloków: rekruci idą do rekrutującego; dalej: zostają jako
+                               # załoga koszar (zbiera ich /armia zamna na miejscu); -1 = zawsze idą do rekrutującego
+  heal-radius: 24              # żołnierze kraju w tym promieniu od czynnych koszar leczą się szybciej (0 = wyłączone)
+  heal-per-minute: 4.0         # dodatkowe HP na minutę (ponad combat.regen-per-minute), tylko poza walką
+  heal-interval-seconds: 10
+  heal-particles: true         # serduszko nad leczonym żołnierzem
+
+upkeep:
+  trigger: interval        # interval | treasury-tick (po dziennym ticku skarbca Kraje)
+  interval-minutes: 1440
+  max-catch-up: 3
+  morale-gain-paid: 10
+  morale-loss-unpaid: 34   # 3 dni bez żołdu → dezercja
+  desert-below: 1
+  deserter-to-population: true   # dezerter zostaje wieśniakiem na terenie kraju (Ludnosc go przyjmie)
+
+combat:
+  detect-radius: 14
+  leash-extra: 12          # jak daleko poza posterunek wolno gonić
+  attack-countryless-players: false
+  monsters-on-own-land: true
+  monsters-anywhere: false
+  only-enemies-can-hurt: true    # gracze/żołnierze krajów nie w wojnie nie zranią żołnierzy
+  countryless-can-hurt: false
+  follow-distance: 3.0
+  follow-teleport-distance: 40   # dociąganie oddziału teleportem
+  chase-speed: 1.25
+  regen-per-minute: 1.0
+  guard-radius: 8
+  guard-radius-max: 32
+  squad-gather-radius: 32
+  patrol-max-points: 10
+
+mace:
+  material: STICK
+  item-model: minecraft:mace     # wygląd buławy bez jej mocy
+  range: 64
+
+units:
+  piechota:
+    name: "<gray>Piechota"
+    description: "<gray>Miecz, tarcza i kolczuga"
+    cost: 300
+    wage: 20
+    health: 24
+    damage: 5
+    range: 2.6
+    cooldown-ticks: 20
+    speed: 0.30
+    siege-strength: 1.0
+    skin: losowy          # losowy = domyślny skin klienta (stały dla żołnierza), nick Mojang albo lista: [Nick1, Nick2]
+    mob-type: ZOMBIE
+    equipment:
+      head: CHAINMAIL_HELMET
+      chest: CHAINMAIL_CHESTPLATE
+      legs: LEATHER_LEGGINGS
+      feet: LEATHER_BOOTS
+      hand: IRON_SWORD
+      offhand: SHIELD
+  lucznik:
+    name: "<green>Łucznik"
+    description: "<gray>Łuk i skórzana zbroja"
+    cost: 350
+    wage: 25
+    health: 18
+    damage: 4
+    ranged: true
+    range: 16
+    cooldown-ticks: 30
+    projectile-speed: 1.6
+    spread: 0.04
+    speed: 0.30
+    siege-strength: 0.8
+    skin: losowy          # losowy = domyślny skin klienta (stały dla żołnierza), nick Mojang albo lista: [Nick1, Nick2]
+    mob-type: SKELETON
+    equipment:
+      head: LEATHER_HELMET
+      chest: LEATHER_CHESTPLATE
+      legs: LEATHER_LEGGINGS
+      feet: LEATHER_BOOTS
+      hand: BOW
+  rycerz:
+    name: "<gold>Rycerz"
+    description: "<gray>Żelazna zbroja, na koniu"
+    cost: 1200
+    wage: 60
+    damage: 8
+    range: 3.0
+    cooldown-ticks: 20
+    mounted: true
+    horse-health: 40
+    horse-speed: 0.30
+    horse-armor: IRON_HORSE_ARMOR
+    siege-strength: 2.0
+    skin: losowy          # losowy = domyślny skin klienta (stały dla żołnierza), nick Mojang albo lista: [Nick1, Nick2]
+    mob-type: ZOMBIE
+    equipment:
+      head: IRON_HELMET
+      chest: IRON_CHESTPLATE
+      legs: IRON_LEGGINGS
+      feet: IRON_BOOTS
+      hand: IRON_SWORD
+      offhand: SHIELD
+  kusznik:
+    enabled: true
+    name: "<dark_aqua>Kusznik"
+    description: "<gray>Kusza: wolno, ale mocno"
+    cost: 450
+    wage: 30
+    health: 20
+    damage: 7
+    ranged: true
+    range: 18
+    cooldown-ticks: 50
+    projectile-speed: 2.4
+    spread: 0.02
+    speed: 0.28
+    siege-strength: 1.0
+    skin: losowy          # losowy = domyślny skin klienta (stały dla żołnierza), nick Mojang albo lista: [Nick1, Nick2]
+    mob-type: PILLAGER
+    equipment:
+      head: CHAINMAIL_HELMET
+      chest: LEATHER_CHESTPLATE
+      legs: LEATHER_LEGGINGS
+      feet: LEATHER_BOOTS
+      hand: CROSSBOW
+  # ---- Jednostki epok (plugin Postep) -----------------------------------------------------------------------
+  # era: epoka 1..4 (2 Renesans, 3 Przemysł, 4 Nowoczesność), discovery: wymagane odkrycie Postep (puste = brak),
+  # replaces: starsze jednostki, które można przezbroić na tę (/armia przezbroj; AI robi to samo),
+  # camo: skóra w kamuflażu barw kraju, heal-per-second: medyk leczy swoich w promieniu 8 bloków.
+  # Bez pluginu Postep wszystkie kraje są w epoce 1 i te jednostki są niedostępne.
+  pikinier:
+    era: 2
+    replaces: piechota
+    name: "<gray>Pikinier"
+    description: "<gray>Długa pika i stalowy hełm — trzyma szyk przeciw jeździe"
+    cost: 400
+    wage: 25
+    health: 26
+    damage: 6
+    range: 3.4
+    cooldown-ticks: 22
+    speed: 0.28
+    siege-strength: 1.2
+    skin: losowy
+    mob-type: ZOMBIE
+    equipment: {head: IRON_HELMET, chest: CHAINMAIL_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: TRIDENT}
+  muszkieter:
+    era: 2
+    discovery: proch
+    replaces: kusznik
+    name: "<dark_aqua>Muszkieter"
+    description: "<gray>Muszkiet (kusza w grze): wolny, mocny strzał"
+    cost: 600
+    wage: 35
+    health: 22
+    damage: 9
+    ranged: true
+    range: 20
+    cooldown-ticks: 60
+    projectile-speed: 2.8
+    spread: 0.03
+    speed: 0.28
+    siege-strength: 1.1
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: LEATHER_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: CROSSBOW}
+  arkebuzer:
+    era: 2
+    discovery: proch
+    replaces: lucznik
+    name: "<green>Arkebuzer"
+    description: "<gray>Arkebuz: szybszy od muszkietu, słabszy"
+    cost: 550
+    wage: 32
+    health: 20
+    damage: 8
+    ranged: true
+    range: 18
+    cooldown-ticks: 45
+    projectile-speed: 2.6
+    spread: 0.035
+    speed: 0.30
+    siege-strength: 1.0
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: CHAINMAIL_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: CROSSBOW}
+  katapulta:
+    era: 1
+    name: "<gold>Katapulta"
+    description: "<gray>Wóz oblężniczy: kamienie, animowane ramię, salwa na oblegane mury"
+    cost: 1000
+    wage: 45
+    health: 40
+    damage: 10
+    ranged: true
+    range: 40
+    cooldown-ticks: 160
+    projectile-speed: 1.3
+    spread: 0
+    speed: 0.10
+    siege-strength: 3.5
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: CHAINMAIL_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: STICK, offhand: COBBLESTONE}
+  # Taran (2026-10-29): nie strzela. /armia taranuj (patrząc na bramę lub mur) — obsługa podjeżdża, aż głowica dotknie
+  # bloku, i uderza co cooldown-ticks (min. 3 s). Tylko w aktywnie obleganym chunku wroga, każdy blok przez
+  # KrajeApi.canSiegeBreak (kontenery i obszary chronione nietknięte), bez dropu i bez fizyki bloków.
+  taran:
+    era: 1
+    name: "<#a0522d>Taran"
+    description: "<gray>Kryty taran na kołach: wybija bramy i mury obleganego chunka; strzały mu niestraszne, ogień — bardzo"
+    cost: 800
+    wage: 35
+    health: 60          # wysokie wobec strzał (×0,25 obrażeń), niskie wobec ognia (×2,5)
+    damage: 2           # obsługa nie poluje na ludzi; broni się tylko na rozkaz /armia atakuj
+    ranged: false
+    range: 2.5
+    cooldown-ticks: 60  # uderzenie co 3 s (krótsze ustawienie i tak nie zejdzie poniżej 60)
+    speed: 0.08
+    siege-strength: 3.0
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: LEATHER_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: OAK_LOG}
+    ram:
+      arrow-multiplier: 0.25   # obrażenia od strzał, bełtów i rzucanych pocisków (pociski machin liczą się w pełni)
+      fire-multiplier: 2.5     # obrażenia od ognia i lawy; płonąca strzała lub zaklęcie Zaklęty ogień podpala taran
+      head-reach: 7.0          # odległość obsługi od środka uderzanego bloku (głowica modelu ~6,5 bloku przed obsługą)
+      blocks-per-strike: 4     # najwięcej bloków zniszczonych jednym uderzeniem (1–4)
+      # Ułamek wytrzymałości bloku zabierany jednym uderzeniem (1 = jedno uderzenie). Uderzenie trafia płaszczyznę
+      # 3 szer. × 3 wys. (od ziemi). Drewno: bloki na siekierę i miękkie (twardość < 1); umocnienia: lista niżej
+      # oraz twardość ≥ 3 (łupek głębinowy, żelazo, obsydian); reszta to kamień.
+      strength:
+        wood: 0.5              # 2 uderzenia
+        stone: 0.25            # 4 uderzenia
+        fortification: 0.1     # 10 uderzeń
+      fortification-blocks: [IRON_DOOR, IRON_BARS, IRON_TRAPDOOR, OBSIDIAN, CRYING_OBSIDIAN, IRON_BLOCK, ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL]
+      order-seconds: 180       # nieosiągnięta brama: rozkaz wygasa po tylu sekundach
+  armata:
+    era: 2
+    discovery: proch
+    name: "<dark_red>Armata"
+    description: "<gray>Bombarda na wozie: kule, odrzut lufy, ostrzał obleganych murów"
+    cost: 1500
+    wage: 70
+    health: 40
+    damage: 12
+    ranged: true
+    range: 24
+    cooldown-ticks: 100
+    projectile-speed: 3.0
+    spread: 0.05
+    speed: 0.12
+    siege-strength: 4.0
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: IRON_HELMET, chest: IRON_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: IRON_BOOTS, hand: CROSSBOW, offhand: FIRE_CHARGE}
+  piechota-liniowa:
+    era: 3
+    discovery: karabin_gwintowany
+    replaces: [pikinier, muszkieter, arkebuzer]
+    name: "<blue>Piechota liniowa"
+    description: "<gray>Karabin gwintowany i mundur w barwach kraju"
+    cost: 700
+    wage: 40
+    health: 26
+    damage: 10
+    ranged: true
+    range: 24
+    cooldown-ticks: 40
+    projectile-speed: 3.2
+    spread: 0.015
+    speed: 0.30
+    siege-strength: 1.5
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: LEATHER_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: CROSSBOW}
+  kawaleria:
+    era: 3
+    discovery: stal
+    replaces: rycerz
+    name: "<gold>Kawaleria"
+    description: "<gray>Szabla i stalowy kirys, szybki koń"
+    cost: 1400
+    wage: 65
+    health: 28
+    damage: 10
+    range: 3.0
+    cooldown-ticks: 18
+    mounted: true
+    horse-health: 50
+    horse-speed: 0.34
+    horse-armor: IRON_HORSE_ARMOR
+    siege-strength: 2.2
+    skin: losowy
+    mob-type: ZOMBIE
+    equipment: {head: IRON_HELMET, chest: IRON_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: IRON_SWORD}
+  artyleria:
+    era: 3
+    discovery: stal
+    replaces: armata
+    name: "<dark_red>Artyleria"
+    description: "<gray>Działo polowe: daleki, ciężki ostrzał, kruszy obronę"
+    cost: 2200
+    wage: 90
+    health: 40
+    damage: 15
+    ranged: true
+    range: 30
+    cooldown-ticks: 90
+    projectile-speed: 3.6
+    spread: 0.04
+    speed: 0.12
+    siege-strength: 6.0
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: IRON_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: IRON_BOOTS, hand: CROSSBOW, offhand: TNT}
+  zolnierz:
+    era: 4
+    replaces: piechota-liniowa
+    camo: true
+    name: "<dark_green>Żołnierz"
+    description: "<gray>Mundur polowy w kamuflażu kraju, hełm, karabin"
+    cost: 900
+    wage: 50
+    health: 30
+    damage: 12
+    ranged: true
+    range: 28
+    cooldown-ticks: 25
+    projectile-speed: 3.6
+    spread: 0.01
+    speed: 0.32
+    siege-strength: 1.8
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: IRON_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: CROSSBOW}
+  snajper:
+    era: 4
+    camo: true
+    name: "<dark_green>Snajper"
+    description: "<gray>Bardzo daleki, precyzyjny strzał"
+    cost: 1300
+    wage: 60
+    health: 22
+    damage: 20
+    ranged: true
+    range: 48
+    cooldown-ticks: 80
+    projectile-speed: 4.0
+    spread: 0.003
+    speed: 0.30
+    siege-strength: 1.2
+    skin: losowy
+    mob-type: PILLAGER
+    equipment: {head: LEATHER_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: CROSSBOW}
+  # „Pojazd opancerzony” po vanillowemu: załoga w netherytowej zbroi na koniu w diamentowym pancerzu — bardzo
+  # wytrzymały, szybki szturm i oblężenia (bez modów nie da się pokazać czołgu, a to nie wygląda absurdalnie).
+  pojazd-opancerzony:
+    era: 4
+    discovery: samochod
+    replaces: kawaleria
+    name: "<dark_gray>Pojazd opancerzony"
+    description: "<gray>Pancerna załoga na opancerzonym wierzchowcu"
+    cost: 3000
+    wage: 120
+    health: 40
+    damage: 14
+    range: 3.0
+    cooldown-ticks: 20
+    mounted: true
+    horse-health: 90
+    horse-speed: 0.32
+    horse-armor: DIAMOND_HORSE_ARMOR
+    siege-strength: 3.0
+    skin: losowy
+    mob-type: ZOMBIE
+    equipment: {head: NETHERITE_HELMET, chest: NETHERITE_CHESTPLATE, legs: NETHERITE_LEGGINGS, feet: NETHERITE_BOOTS, hand: NETHERITE_SWORD}
+  medyk:
+    era: 4
+    discovery: antybiotyki
+    camo: true
+    heal-per-second: 1.0
+    name: "<white>Medyk"
+    description: "<gray>Leczy swoich żołnierzy w promieniu 8 bloków"
+    cost: 800
+    wage: 45
+    health: 24
+    damage: 2
+    range: 2.5
+    cooldown-ticks: 20
+    speed: 0.32
+    siege-strength: 0.5
+    skin: losowy
+    mob-type: ZOMBIE
+    equipment: {head: IRON_HELMET, chest: LEATHER_CHESTPLATE, legs: LEATHER_LEGGINGS, feet: LEATHER_BOOTS, hand: GLISTERING_MELON_SLICE}
+
+# Epoki (Postep): bonus do HP i obrażeń za każdą epokę powyżej pierwszej (plus efekt „sila-armii” z odkryć),
+# przezbrojenie kosztuje rearm-cost-share kosztu nowej jednostki; AI przezbraja do ai-rearm-per-tick żołnierzy na tick.
+eras:
+  hp-bonus-per-era: 0.1
+  damage-bonus-per-era: 0.1
+  rearm-cost-share: 0.5
+  ai-rearm-per-tick: 3
+
+ai:
+  enabled: true
+  tick-minutes: 5
+  create-force: false      # /nk stworz pomija odstępy od innych krajów
+  require-citizen: false   # kraje NPC rekrutują bez poboru obywateli
+  border-guard-fraction: 0.6
+  border-guard-radius: 7
+  war-cooldown-minutes: 180
+  # AI wypowiada wojny przez KrajeApi.declareWar: koszt (war.declare-cost w Kraje), cooldown i reguły wasalstwa jak u graczy.
+  # Ta wartość (≥ 0) zmienia już tylko koszt pokazywany w panelu; -1 = jak w Kraje.
+  war-declare-cost: -1
+  proposal-cooldown-minutes: 60
+  # Ważność propozycji sojuszu/pokoju (jak proposal-expiry-seconds w Kraje) — do pokazania „oczekujących” w panelu.
+  proposal-expiry-minutes: 5
+  # AI v2: nastawienie (panel), postawa, podział budżetu, obrona i odbudowa, kapitulacje, trybuty.
+  v2:
+    friendly-opinion: 30          # nastawienie „przyjazne” = +30 do opinii (rzadsze wojny, łatwiejszy sojusz)
+    hostile-opinion: 30           # „wrogie” / „cel ataku” = −30
+    preferred-weight: 3.0         # „cel ataku”: waga celu wojny/oblężeń ×3
+    preferred-advantage: 0.8      # „cel ataku”: wymagana przewaga ×0.8
+    offensive-war-chance: 1.5     # postawa ofensywna: szansa wojny ×1.5
+    offensive-advantage: 0.9
+    offensive-siege-cooldown: 0.5 # ofensywna: oblężenia 2× częściej
+    defensive-siege-cooldown: 1.5 # obronna: rzadziej i tylko po utracone ziemie
+    defensive-guard-bonus: 0.25   # obronna: +25% żołnierzy na granicy
+    offensive-guard-cut: 0.2
+    reclaim-weight: 0.5           # waga wojny +50% za każdy utracony chunk (max 3)
+    reclaim-cooldown-minutes: 360 # po pokoju utracone ziemie są powodem nowej wojny dopiero po tym czasie
+    revenge-war-declared: 40      # opinia o agresorze spada o tyle
+    revenge-chunk-lost: 15        # … i o tyle za każdy zdobyty chunk
+    revenge-siege: 10
+    negative-decay-ticks: 4       # ujemna opinia wraca o 1 pkt co 4 ticki AI (dodatnia co tick)
+    crisis-hours: 2.0             # utrata chunka (albo oblężenie) w ostatnich 2 h wojny = tryb kryzysowy
+    crisis-army-share: 0.85       # w kryzysie tyle udziału budów idzie na wojsko
+    crisis-recruit-multiplier: 2.0
+    crisis-soldiers-multiplier: 1.3
+    war-army-share: 0.6           # w zwykłej wojnie
+    rebuild-hours: 6.0            # po pokoju: odbudowa (domy, spichlerz, więcej na budowy)
+    rebuild-buildings-share: 0.5
+    help-cooldown-minutes: 60     # prośba o pomoc do sojuszników
+    ally-join-threshold: 0.6      # wynik, od którego sojusznik NPC dołącza do wojny
+    capitulate-ratio: 0.6         # przegrywający (siła < 0.6 wroga) …
+    capitulate-lost-chunks: 2     # … który stracił tyle chunków …
+    capitulate-treasury-drop: 0.4 # … albo 40% skarbca, sam proponuje kapitulację
+    capitulate-cooldown-minutes: 60
+    capitulation-threshold: 0.5   # wynik potrzebny do przyjęcia czyjejś kapitulacji
+    greedy-tribute-per-strength: 15 # chciwy władca (dyplomacja < 40, agresja > 60) chce trybutu ≥ 15 md × siła przegranego
+    release-opinion: 85           # suweren zwalnia wasala przy takiej opinii (±10 zależnie od agresji)
+    buyout-reserve-factor: 1.5    # wasal wykupuje się, gdy po wykupie zostaje 1.5 × rezerwa
+    tribute-days: 7               # żądany trybut płaci się codziennie przez tyle dni
+    tribute-expiry-minutes: 30    # czas gracza na odpowiedź na żądanie
+    tribute-max: 100000           # największy dzienny trybut (md)
+    tribute-accept-ratio: 1.5     # kraj NPC ulega żądaniu przy przewadze żądającego ×1.5 (przy agresji 50)
+    tribute-refused-opinion: 15
+    ledger-keep-hours: 48         # historia przepływów pieniędzy (rozbicie 24 h w panelu)
+  war-on-npc: true
+  claim-cost-estimate: 100
+  unit-mix:
+    piechota: 5
+    lucznik: 3
+    rycerz: 1
+    kusznik: 1
+    pikinier: 5
+    muszkieter: 3
+    arkebuzer: 3
+    katapulta: 1
+    taran: 1
+    armata: 1
+    piechota-liniowa: 6
+    kawaleria: 2
+    artyleria: 1
+    zolnierz: 6
+    snajper: 1
+    pojazd-opancerzony: 1
+    medyk: 1
+  defaults:
+    agresja: 50
+    ekspansja: 50
+    dyplomacja: 50
+    bogactwo: 50
+    max-chunki: 40
+    max-zolnierze: 20
+  buildings:
+    enabled: true
+    # Z nową Ludnosc budowę planuje jej planer osady; poniższe listy są tylko dla starszej Ludnosc.
+    housing: [dom, chata]
+    utilities: [spichlerz, koszary, studnia, kuznia, wieza]
+    max-housing: 12
+  sieges:
+    enabled: true
+    player-radius: 96      # oblężenie tylko gdy w pobliżu chunka są gracze
+    soldiers: 8
+    cooldown-minutes: 30
+    # Machiny (katapulta/armata) wysłane do oblężenia NPC same ostrzeliwują oblegany chunk (te same reguły co /armia ostrzal:
+    # aktywne oblężenie, KrajeApi.canSiegeBreak, amunicja ze skarbca). Najwyżej tyle salw na przebieg (co 5 s).
+    artillery: true
+    artillery-shots-per-run: 4
+    # Tarany wysłane do oblężenia NPC same wybierają bramę (drzwi, furtę) albo najbliższy mur obleganego chunka
+    # od strony taranu i uderzają w niego (te same reguły co /armia taranuj).
+    rams: true
+  # Zamknięta pula pieniędzy (Skarbiec 2026-10-28): AI nie tworzy pieniędzy. „Dochód kraju NPC” to przelew z budżetu
+  # operacyjnego świata (world:payments — tam trafiają żołd, opłaty i koszty), ograniczony udziałem i progiem.
+  economy:
+    closed-pool: auto              # auto | true | false
+    payments-floor: 100000         # tyle md budżetu operacyjnego zawsze zostaje dla innych systemów (1000 zł)
+    payments-share-per-tick: 0.002 # najwyżej 0,2% nadwyżki ponad próg na kraj i tick AI
+    sustain-days: 14               # armia ma być opłacalna z dochodu + oszczędności przez tyle dni
+  # Desanty AI (wave 13/16): kraj NPC w wojnie z wrogiem bez wspólnej granicy lądowej buduje transportowiec/karawelę,
+  # zaokrętowuje oddział, płynie (tylko w załadowanych chunkach, przy graczach), wyładowuje go i zaczyna desant w Kraje.
+  naval:
+    enabled: true
+    min-soldiers: 4
+    max-soldiers: 12
+    max-range: 256          # bloki od własnego wybrzeża do brzegu wroga
+    cooldown-minutes: 90    # między operacjami jednego kraju
+    timeout-minutes: 15     # operacja bez postępu jest przerywana (wojsko wraca na brzeg)
+    min-aggression: 40      # poniżej tylko odbijanie utraconych ziem
+    min-advantage: 0.9      # wymagany stosunek sił (my / oni), nie dotyczy odbijania
+    max-operations: 3       # jednocześnie na całym serwerze
+    require-players-near: true # cel desantu tylko przy graczach (jak oblężenia lądowe); false wyłącznie do testów
+    # Wyprawy dalekie (2026-10-31): wróg poza zasięgiem fizycznego rejsu (np. 3500 bloków niewczytanego morza).
+    # Rejs liczony w tle (żołnierze zostają w rejestrze: limit 1000 i żołd), stan przetrwa restart. U celu flota czeka,
+    # aż przy wybrzeżu wroga będą gracze, wtedy statek pojawia się na wodzie, wojsko ląduje i zaczyna desant Kraje.
+    long-range:
+      enabled: true
+      minutes-per-1000-blocks: 6   # czas rejsu ~ odległość (stolica → cel)
+      min-minutes: 3
+      max-minutes: 30
+      wait-minutes: 240            # tyle flota czeka u brzegu na okazję do lądowania, potem wraca
+      max-soldiers: 16             # na wyprawę (i nie więcej niż mieści statek)
+      home-guard-share: 0.35       # tyle armii zawsze zostaje w domu
+      vs-npc: false                # AI sama płynie tylko na kraje graczy (z NPC walczy w tle); admin: /nk desant
+      approach-warning-minutes: 3  # drugie ostrzeżenie obrońców przed przybyciem
+  # Wojny w tle (2026-10-29): państwa NPC podbijają się nawzajem także daleko od graczy. Ofensywa to abstrakcyjne
+  # oblężenie jednego chunka liczone w rundach (siła i typy jednostek, epoka, morale, żołd, umocnienia Ludnosci, odległość
+  # od stolicy, zmęczenie wojną, sojusznicy, statki). Straty żołnierzy są prawdziwe (rejestr i limit 1000). Gdy przy celu
+  # pojawi się gracz, ofensywa staje i działa zwykła walka fizyczna. Zdobycie stosuje Kraje (te same zasady co oblężenie).
+  conquest:
+    enabled: true
+    abstract-vs-players: false   # ziemi krajów graczy NIE zdobywa się w tle (tylko fizycznie, przy graczach)
+    interval-minutes: 5          # jedna runda bitwy / cykl symulacji
+    budget-ms: 4                 # czas głównego wątku na krok; reszta w następnej sekundzie
+    player-radius: 160           # gracz bliżej celu (bloki) = walka fizyczna zamiast tła
+    min-war-minutes: 30          # pierwsza ofensywa po tylu minutach wojny
+    offensive-cooldown-minutes: 45
+    target-retry-minutes: 120    # nieudany cel nie jest atakowany ponownie przez tyle minut
+    max-chunks-per-day: 3        # zdobycze jednego kraju na dobę
+    max-loss-per-day: 3          # straty jednego kraju na dobę (ochrona słabszych)
+    global-max-chunks-per-day: 20
+    min-soldiers: 4
+    min-odds: 1.2                # ofensywa tylko przy szacowanej przewadze (ten sam wzór co bitwa, bez losowości)
+    max-force: 12
+    home-guard-share: 0.35       # tyle armii zawsze zostaje w domu
+    max-rounds: 18
+    progress-per-round: 0.35
+    luck: 0.15
+    casualty-rate: 0.10
+    supply-cost-per-soldier: 3   # md za żołnierza i rundę (skarbiec → budżet operacyjny świata)
+    war-range-chunks: 80         # kraje NPC w tym zasięgu są możliwym celem wojny (nie tylko sąsiedzi)
+    distance-penalty: 0.35       # utrata siły przy maksymalnej odległości od stolicy
+    ally-share: 0.25             # sojusznicy NPC w wojnie z tym samym wrogiem dokładają tyle swojej siły (bez strat)
+    expeditions:
+      enabled: true              # cel bez wspólnej granicy: wyprawa zakłada przyczółek (limit przyczółków z Kraje)
+      max-distance-chunks: 96
+      strength: 0.8
+      naval-bonus: 0.1           # własny statek poprawia siłę wyprawy (wsparcie desantu)
+    defence:
+      capital-bonus: 0.5         # premia obrońcy przy stolicy, maleje do 0 na capital-bonus-range chunków
+      capital-bonus-range: 8
+      fort-wall: 0.12            # mury i bramy Ludnosci w promieniu fort-radius-chunks
+      fort-tower: 0.10
+      fort-castle: 0.30
+      fort-max: 1.0
+      fort-radius-chunks: 2
+      engine-vs-fort: 0.15       # każda katapulta/armata atakującego zbija tyle premii z umocnień
+      militia: 1.0               # uzbrojeni mieszkańcy bronią się nawet bez żołnierzy
+      garrison-radius-chunks: 6
+      reinforcement-share: 0.5
+    exhaustion:
+      per-hour-at-war: 0.6
+      per-soldier-lost: 1.5
+      per-chunk-lost: 4
+      per-failed-offensive: 5
+      decay-per-hour-peace: 2
+      block-offensive: 70        # od tej wartości brak nowych ofensyw
+      propose-peace: 60          # kraj sam proponuje pokój
+      accept-peace: 75           # kraj przyjmuje każdy pokój
+      strength-penalty: 0.4
+    overextension:
+      free-chunks: 100           # powyżej rośnie dzienny koszt zarządu i słabnie armia
+      cost-per-chunk: 4
+      strength-floor: 0.6
+    revolt:
+      window-hours: 72           # zdobyte ziemie mogą się zbuntować przez tyle godzin
+      chance-per-day: 0.04
+      max-per-day: 1
+    vassals:
+      secession-chance-per-day: 0.15
+      secession-overlord-exhaustion: 60
+    coalition:
+      share: 0.30                # kraj NPC z takim udziałem ziem NPC (albo ratio × drugi) jest hegemonem
+      ratio: 1.8
+      opinion-per-day: 8
+      opinion-floor: -60
+      join-chance-per-day: 0.25
+    peace:
+      tribute-share: 0.15        # pokój po zdobyczach: przegrany płaci trybut (udział dochodu + za chunk)
+      tribute-per-chunk: 20
+      tribute-max: 2000
+    announce-minutes: 15         # zbiorcze ogłoszenia na czacie (bez spamu)
+    log-rounds: true
+  rail:
+    base-fee: 500           # opłata za zgodę na tory przy neutralnej opinii (md); mnożona przez nieufność i bogactwo
+  log:
+    size: 200
+    file: true             # plugins/Armia/logs/ai-decisions.log
+  tuning:
+    base-income-per-day: 300
+    income-per-chunk-per-day: 25
+    expansion-chance: 0.6
+    reserve-days-of-wages: 2.0
+    min-reserve: 200
+    soldiers-per-chunk: 0.5
+    max-recruit-per-tick: 3
+    min-aggression-for-war: 55
+    war-advantage: 1.6
+    war-advantage-aggression: 0.8
+    war-chance: 0.35
+    max-concurrent-wars: 1
+    war-opinion-block: 40
+    min-war-hours: 2.0
+    fatigue-hours: 6.0
+    loss-tolerance: 4
+    losing-ratio: 0.8
+    peace-threshold: 0.5
+    alliance-threshold: 0.55
+    min-diplomacy-for-alliance: 30
+    alliance-propose-diplomacy: 65
+    alliance-propose-chance: 0.25
+    player-weight: 1.5
+    offline-player-weight: 0.3
+    # Rozbudowa osady (LudnoscApi.developSettlement): budżet = udział skarbca ponad rezerwę.
+    build-base-share: 0.15        # udział przy bogactwie i ekspansji 0
+    build-wealth-share: 0.25      # + przy bogactwie 100
+    build-expansion-share: 0.15   # + przy ekspansji 100
+    build-war-cut: 0.6            # w wojnie tyle udziału (i oszczędności) idzie na armię
+    build-max-share: 0.6
+    build-min-budget: 100         # mniejszy budżet = nie zamawiaj
+    # Bogate państwo odkłada na budynki reprezentacyjne: gdy planer odpowie „brak środków”, rekrutacja
+    # nie rusza build-savings-share skarbca, dopóki budowa się nie uda.
+    rich-wealth: 70
+    rich-treasury: 5000
+    build-savings-share: 0.5
+
+
+# ============================================================
+#  Najemnicy — wojsko do wynajęcia od ręki (bez poboru obywateli i bez koszar), droższe, na kontrakt
+# ============================================================
+mercenaries:
+  enabled: true
+  cost-multiplier: 2.5        # koszt wynajęcia = koszt jednostki bazowej × 2,5
+  wage-multiplier: 2.0        # żołd = żołd jednostki bazowej × 2
+  contract-hours: 72          # długość kontraktu (realne godziny); potem odchodzą, chyba że przedłużysz
+  extend-cost-share: 0.5      # przedłużenie kontraktu = 50% kosztu wynajęcia
+  max-share: 0.3              # najwyżej 30% limitu wojska kraju to najemnicy (i tak wliczają się w limit)
+  # Bez żołdu najemnicy odchodzą od razu. defect-to-enemy: true = gdy skarbiec jest prawie pusty, przechodzą
+  # do najbogatszego wroga (wojna), który ma wolne miejsce.
+  defect-to-enemy: false
+  defect-treasury-below: 100
+  ai:
+    enabled: true             # AI w trybie kryzysowym najmuje, gdy ma mało ludności i dużo pieniędzy
+    max-population: 10
+    min-treasury: 5000
+    per-tick: 2
+  types:
+    najemnik-piechur:
+      base: piechota
+      name: "<dark_gray>Najemnik piechur"
+      description: "<gray>Topór i kolczuga, bez barw"
+      company: "Czarna Kompania"
+      skin: losowy
+      equipment: {head: CHAINMAIL_HELMET, chest: CHAINMAIL_CHESTPLATE, legs: CHAINMAIL_LEGGINGS, feet: CHAINMAIL_BOOTS, hand: IRON_AXE}
+    kusznik-genuenski:
+      base: kusznik
+      name: "<gray>Kusznik genueński"
+      description: "<gray>Kusza i stalowy hełm"
+      company: "Kompania Genueńska"
+      skin: losowy
+      equipment: {head: IRON_HELMET, chest: CHAINMAIL_CHESTPLATE, legs: CHAINMAIL_LEGGINGS, feet: CHAINMAIL_BOOTS, hand: CROSSBOW}
+    rycerz-najemnik:
+      base: rycerz
+      name: "<dark_gray>Rycerz-najemnik"
+      description: "<gray>Czarny hełm, żelazna zbroja, koń"
+      company: "Wolni Kopijnicy"
+      skin: losowy
+      equipment: {head: NETHERITE_HELMET, chest: IRON_CHESTPLATE, legs: IRON_LEGGINGS, feet: IRON_BOOTS, hand: IRON_SWORD}
+diplomacy:
+  rank: RULER              # kto może prowadzić dyplomację w GUI władcy NPC
+  tribute-amounts: [100, 1000, 5000, 20000]
+  copper-per-opinion: 50   # 1 punkt opinii za tyle miedziaków trybutu
+
+ruler:
+  default-skin: ""
+  # Władcy NPC nie otrzymują żadnych obrażeń (także od graczy w trybie kreatywnym). true = gracz z armia.admin
+  # może zranić władcę, kucając. Zniknięty władca wraca na swoje miejsce (co 30 s, po załadowaniu chunka, w ticku AI).
+  admin-kill: false
+  names: [Bolesław, Mieszko, Kazimierz, Władysław, Przemysł, Leszek, Jadwiga, Dobrawa]
+
+# Scenariusze (/nk scenariusz): gdy cel wypada na wodzie, ląd jest szukany po spirali coraz dalej (krok search-step bl.,
+# do max-search-radius bl.), z preferencją miejsc bliżej celu i bliżej środka mapy; chunki wczytywane asynchronicznie,
+# step-timeout-seconds na jeden krok.
+scenario:
+  max-search-radius: 800
+  search-step: 48
+  step-timeout-seconds: 15
+
+# ============================================================
+#  Wioski → państwa NPC (/nk wioska, panel admin.npc.fromVillage, automat)
+# ============================================================
+villages:
+  find-radius: 96              # szukanie wioski wokół gracza / punktu (Ludnosc findVillage)
+  auto:
+    enabled: true
+    chance: 0.33               # każda wioska losowana raz
+    min-spawn-distance: 600    # od obszarów chronionych Kraje (spawn) albo spawnu świata
+    min-country-distance: 400  # od każdego zajętego chunka każdego kraju (także graczy)
+    max-countries: 18          # wszystkie kraje NPC razem (scenariusz ma 12) — przy tylu automat nic nie robi
+    max-auto-countries: 6      # osobny limit państw powstałych z wiosek
+    scan-radius: 4000          # jednorazowy skan pregenerowanego świata (stan w plugins/Armia/villages.json)
+    scan-step: 800             # siatka skanu
+    interval-seconds: 5        # jeden krok automatu (punkt skanu albo nowa wioska) co tyle sekund
+  # Nazwy (spacje → _, bo Kraje nie przyjmuje spacji; w ogłoszeniu wracają spacje) i władcy.
+  names: [Księstwo_Wiślan, Ziemia_Sądecka, Hrabstwo_Pomorskie, Księstwo_Mazowieckie, Ziemia_Łęczycka, Księstwo_Opolskie,
+          Ziemia_Dobrzyńska, Hrabstwo_Kłodzkie, Księstwo_Raciborskie, Ziemia_Sieradzka, Kasztelania_Wiska, Księstwo_Oświęcimskie,
+          Ziemia_Chełmińska, Księstwo_Głogowskie, Ziemia_Przemyska, Margrabstwo_Łużyckie, Księstwo_Cieszyńskie, Ziemia_Lubelska]
+  rulers: [Bolesław, Mieszko, Kazimierz, Władysław, Przemysł, Leszek, Siemowit, Henryk, Konrad, Ziemowit, Bolko, Wacław,
+           Jadwiga, Dobrawa, Rycheza, Salomea]
+
+messages:
+  fleet-deck-built: "<prefix><gold>Statek zwodowany. /armia flota wejdz — wejście na pokład; /armia flota steruj — objęcie steru."
+  fleet-deck-boarded: "<prefix><green>Jesteś na pokładzie. Możesz chodzić i skakać. /armia flota steruj zajmuje ster; /armia flota zejdz schodzi na brzeg lub do wody."
+  fleet-deck-captain: "<prefix><gold>Objąłeś ster. W/S — przód/tył, A/D — skręt. Shift zwalnia ster i stawia na pokładzie."
+  fleet-helm-released: "<prefix><green>Zwolniłeś ster. Możesz swobodnie chodzić po pokładzie."
+  fleet-error: "<prefix><yellow><reason>"
+  fleet-built: "<prefix><gold>Statek zwodowany. /armia flota wejdz — kapitan steruje zwykłymi klawiszami łodzi; inni członkowie kraju zajmują miejsca pasażerskie."
+  fleet-captain: "<prefix><gold>Jesteś kapitanem. Steruj jak łodzią; szeroki kadłub wymaga otwartej wody i miejsca na maszty. /armia flota zejdz przy brzegu."
+  fleet-boarded: "<prefix><green>Zajęto miejsce pasażerskie. /armia flota zejdz pozwala bezpiecznie wyjść przy brzegu."
+  fleet-left: "<prefix><green>Opuszczono statek na bezpieczny brzeg."
+  fleet-left-water: "<prefix><yellow>Opuszczono statek do wody przy burcie. Masz 30 s oddychania pod wodą i 20 s łaski delfina; dopłyń do brzegu. Statek i wojsko pozostały na miejscu."
+  fleet-stay: "<prefix><yellow>Brak bezpiecznego brzegu — dopłyń bliżej i użyj /armia flota zejdz."
+  fleet-loaded: "<prefix><gold>Zaokrętowano <count> żołnierzy oddziału. Muszą faktycznie stać do 12 bl. od statku; nikt nie teleportuje się z odległego brzegu."
+  fleet-landed: "<prefix><gold>Desant: <count> żołnierzy wysiadło na bezpiecznej ziemi (własnej, dzikiej lub wroga w wojnie). Pozostali czekają na pokładzie. Przyczółek: /kraj desant."
+  fleet-list: "<prefix><gold>Flota twojego kraju (max 3 / globalnie 24):"
+  fleet-line: "<gray><id> <white><type> <gray>HP:<hp> wojsko:<cargo> <pos>"
+  fleet-removed: "<prefix><yellow>Pusty statek usunięty bez zwrotu kosztów."
+  fleet-fired: "<prefix><red>Karawela oddała salwę! Koszt 30 md; następna za 10 s. Trafiają wyłącznie statki wroga w wojnie."
+  fleet-sunk: "<prefix><red>Nasz statek zatonął. Pasażerowie otrzymali czas na wypłynięcie; żołnierze bez bezpiecznego brzegu zginęli: <lost>."
+  # Wyprawy dalekie (2026-10-31): wieści dla obywateli atakowanego kraju (tylko gracze online).
+  naval-expedition-departed: "<prefix><gold>⚓ Zwiadowcy donoszą:</gold> <gray>flota <attacker> wypłynęła na wojnę z <defender> — <white><soldiers></white> zbrojnych pod żaglami, nadciąga <white><from></white>. U waszych brzegów stanie za około <white><eta> min</white>. Bijcie w dzwony i strzeżcie wybrzeża!"
+  naval-expedition-approach: "<prefix><gold>⚓ Żagle na horyzoncie!</gold> <gray>Okręty <attacker> będą u brzegów <defender> za około <white><eta> min</white>. Obsadźcie plaże i bramy!"
+  naval-expedition-offshore: "<prefix><red>⚓ Flota <attacker> rzuciła kotwice u wybrzeży <defender>!</red> <gray>Wysadzi wojsko na ląd, gdy tylko ktoś pojawi się przy brzegu — stańcie do obrony."
+  naval-expedition-retreat: "<prefix><gray>⚓ Okręty <attacker> odpływają od wybrzeży <defender>."
+  siege-ammo-unknown: "<prefix><yellow>Wybierz amunicję: kamien (katapulta), kula lub kartacz (armata)."
+  siege-ammo-set: "<prefix><gold>Amunicja: <ammo> dla <count> machin; pominięto niezgodne: <skipped>. Kamień 5 md, kula 10 md, kartacz 15 md/salwa (16 bl., bez niszczenia bloków). Wybór zapisano."
+  siege-no-block: "<prefix><yellow>Spójrz na mur lub blok w zasięgu 64 bloków."
+  siege-no-engines: "<prefix><yellow>Brak załadowanych machin w oddziale. Zwerbuj katapultę lub armatę i użyj /armia zamna."
+  siege-forbidden: "<prefix><red>Ostrzał terenu jest możliwy tylko w aktywnie obleganym chunku wroga podczas wojny."
+  siege-not-ready: "<prefix><yellow>Nie oddano salwy: sprawdź zasięg (kartacz 16 bl.), chroniony blok, przeładowanie (katapulta 8 s, armata 5 s) i skarbiec (kamień 5, kula 10, kartacz 15 md)."
+  siege-ram-none: "<prefix><yellow>Brak taranów w oddziale. Zwerbuj: /armia rekrutuj taran, potem /armia zamna."
+  siege-ram-use: "<prefix><yellow>Tarany nie strzelają — spójrz na bramę lub mur i użyj /armia taranuj."
+  siege-ram-height: "<prefix><yellow>Głowica taranu sięga od ziemi do 2 bloków wyżej — wskaż bramę lub dół muru."
+  siege-ram-ordered: "<prefix><gold><count> taranów rusza na cel i uderza co 3 s, aż przebije przejście. Drewno: <wood> uderz., kamień: <stone>, umocnienia: <fort>. Strzeż ich przed ogniem."
+  siege-fired: "<prefix><gold>Oddano salwę z <count> machin. Kolejny /armia ostrzal po przeładowaniu. Chronione bloki pozostają nietknięte."
+  prefix: "<dark_red>[Armia]</dark_red> "
+  players-only: "<prefix><red>Tylko dla graczy."
+  usage: "<prefix><gray>Użycie: <white><syntax>"
+  reloaded: "<prefix><green>Przeładowano config."
+  no-country: "<prefix><red>Nie należysz do żadnego kraju."
+  no-rank: "<prefix><red>Potrzebujesz rangi <white><rank></white> lub wyższej."
+  unknown-unit: "<prefix><red>Nieznany typ jednostki <white><type></white>. Dostępne: <gray><types>"
+  unknown-country: "<prefix><red>Nie ma kraju <white><name></white>."
+  not-npc: "<prefix><red><white><name></white> nie jest krajem NPC."
+  bad-amount: "<prefix><red>Zła kwota: <white><input></white> (np. 150, 3zł, 1zł 5sr)."
+  bad-color: "<prefix><red>Zły kolor: <white><input></white> (nazwa lub RRGGBB)."
+  kraje-failed: "<prefix><red>Kraje odmówiło: <gray><reason>"
+  protected: "<prefix><red>Żołnierze kraju <white><country></white> są pod ochroną — nie jesteście w wojnie."
+
+  soldier-name: "<unit> <dark_gray>·</dark_gray> <country>"
+  soldier-description: "<country>"
+  ruler-name: "<gold><name></gold> <dark_gray>·</dark_gray> <country>"
+  ruler-description: "<gray>Władca <country>"
+
+  recruit-own-land: "<prefix><red>Rekrutować możesz tylko na terenie swojego kraju."
+  recruit-no-barracks: "<prefix><red>Potrzebne koszary: blok <white><block></white> w promieniu <radius> bloków."
+  recruit-no-barracks-building: "<prefix><red>Twój kraj potrzebuje koszar (budynek <white><building></white>): <white>/ludnosc buduj <building>"
+  recruit-limit: "<prefix><red>Limit wojska osiągnięty (kraj: <white><cap></white>, serwer: <white><global></white>)."
+  recruit-limit-barracks: "<prefix><red>Limit wojska osiągnięty: <white><count>/<cap></white>. <gray>Limit <white><cap></white> = <white><base></white> (kraj) + <white><bonus></white> (prycze w koszarach). <yellow>Zbudujcie koszary — każda prycza w czynnych koszarach to +<perbed> do limitu: <white>/ludnosc buduj <building></white> albo własne <white>/ludnosc budynek zglos <building>"
+  recruit-limit-barracks-max: "<prefix><red>Limit wojska osiągnięty: <white><count>/<cap></white>. <gray>Limit <white><cap></white> = <white><base></white> (kraj) + <white><bonus></white> (prycze w koszarach) — więcej z koszar już się nie da."
+  recruit-limit-global: "<prefix><red>Limit wojska całego serwera osiągnięty (<white><globalcount>/<global></white>). Koszary tu nie pomogą."
+  recruited-at-barracks: "<prefix><green>Zrekrutowano <white><count>×</white> <unit><green> za <white><cost></white>. Żołd: <white><wage></white>/dzień. <gray>Rekruci stawili się w koszarach przy <white><x> <y> <z></white> (<distance> bloków stąd) i trzymają tam straż. Podejdź i zbierz ich: <white>/armia zamna"
+  recruited-from-barracks: "<prefix><gray>Rekruci wyszli z koszar przy <white><x> <y> <z></white> i idą do ciebie."
+  recruit-no-money: "<prefix><red>Za mało pieniędzy w skarbcu (koszt <white><cost></white>, w skarbcu <white><balance></white>)."
+  recruit-no-citizen: "<prefix><red>Brak obywateli do poboru w pobliżu."
+  recruit-partial: "<prefix><yellow>Zrekrutowano <count> z <requested>."
+  recruited: "<prefix><green>Zrekrutowano <white><count>×</white> <unit><green> za <white><cost></white>. Żołd: <white><wage></white>/dzień. Idą za tobą."
+
+  squad-empty: "<prefix><yellow>Nie dowodzisz żadnym oddziałem. Zbierz go: <white>/armia zamna"
+  squad-follow: "<prefix><green><count> żołnierzy idzie za tobą."
+  squad-none-near: "<prefix><yellow>Brak twoich żołnierzy w promieniu <radius> bloków."
+  squad-hold: "<prefix><green><count> żołnierzy stoi w miejscu."
+  squad-move: "<prefix><green><count> żołnierzy idzie na <white><pos></white>."
+  squad-return: "<prefix><green><count> żołnierzy wraca na posterunki."
+  squad-guard: "<prefix><green><count> żołnierzy pilnuje tego miejsca (promień <radius>)."
+  patrol-added: "<prefix><green>Dodano punkt patrolu (<count>). <gray>Gotowe? <white>/armia patrol start"
+  patrol-full: "<prefix><red>Najwyżej <max> punktów patrolu."
+  patrol-cleared: "<prefix><gray>Wyczyszczono trasę patrolu."
+  patrol-too-short: "<prefix><red>Trasa potrzebuje co najmniej 2 punktów: <white>/armia patrol dodaj"
+  patrol-started: "<prefix><green><count> żołnierzy patroluje trasę (<points> punktów)."
+  attack-no-target: "<prefix><yellow>Spójrz na cel, który mają zaatakować."
+  attack-forbidden: "<prefix><red>Tego celu nie wolno atakować (swoi, sojusznicy i neutralni są chronieni)."
+  attack-ordered: "<prefix><red><count> żołnierzy atakuje: <white><target>"
+  dismiss-confirm: "<prefix><yellow>Rozpuścić <count> żołnierzy oddziału? <click:run_command:'/armia rozpusc potwierdz'><red>[Potwierdź]</red></click>"
+  dismissed: "<prefix><gray>Rozpuszczono <count> żołnierzy, <back> wróciło do ludności."
+  mace-name: "<gold>Buława dowódcy"
+  mace-lore-1: "<gray>PPM na blok — idźcie tam"
+  mace-lore-2: "<gray>PPM na cel — atakujcie"
+  mace-lore-3: "<gray>Shift + PPM — za mną / stój"
+  mace-given: "<prefix><green>Otrzymujesz buławę dowódcy."
+  mace-have: "<prefix><yellow>Masz już buławę."
+
+  upkeep-paid: "<prefix><gray>Wypłacono żołd: <white><paid></white> dla <count> żołnierzy."
+  upkeep-unpaid: "<prefix><red>Brak pieniędzy na żołd dla <unpaid> żołnierzy — morale spada!"
+  upkeep-desertion: "<prefix><red>Brak żołdu: <deserters> żołnierzy zdezerterowało."
+
+  info-header: "<gold>— Armia: <country> <gold>—"
+  info-count: "<gray>Żołnierze: <white><count>/<cap></white> (w świecie <loaded>), serwer <global>"
+  info-limit: "<gray>Limit wojska: <white><cap></white> = <white><base></white> (kraj) + <white><bonus></white> (prycze w koszarach) <dark_gray>· czynne koszary: <barracks>, prycze: <beds>"
+  info-limit-none: "<gray>Limit wojska: <white><cap></white> = <white><base></white> (kraj) + <white>0</white> (prycze w koszarach). <yellow>Zbudujcie koszary — każda prycza to +<perbed> do limitu: <white>/ludnosc buduj <building>"
+  info-over-limit: "<yellow>Wojska jest więcej, niż wynosi limit (<white><count>/<cap></white>). Nikt nie zostanie zwolniony, ale nowa rekrutacja jest wstrzymana."
+  info-barracks-idle: "<yellow>Nieczynne koszary: <white><idle></white> — nie liczą się do limitu i nie leczą, dopóki nie zostaną naprawione (<white>/ludnosc budynki</white>)."
+  info-barracks-garrison: "<gray>Koszary: rekruci stawiają się w najbliższych; żołnierze do <white><radius></white> bloków od koszar leczą się <white>+<heal> HP/min</white> (poza walką)."
+  info-barracks-muster: "<gray>Koszary: rekruci stawiają się w najbliższych czynnych koszarach."
+  info-type: "<gray> • <unit><gray>: <white><count></white> <dark_gray>(koszt <cost>, żołd <wage>)"
+  info-wages: "<gray>Żołd dziennie: <white><wages></white> · skarbiec: <white><balance></white> · morale: <white><morale>%"
+  list-header: "<gold>— Żołnierze (<count>) — strona <page>/<pages>"
+  list-line: "<gray><n>. <unit> <dark_gray>|</dark_gray> <white><mode></white> <dark_gray>|</dark_gray> <pos> <dark_gray>|</dark_gray> <red>❤ <hp></red> <dark_gray>|</dark_gray> morale <morale> <dark_gray>|</dark_gray> dowódca <commander>"
+  list-line-unloaded: "<dark_gray><n>. <unit> <dark_gray>| <mode> | <pos> (niezaładowany) | ❤ <hp> | morale <morale>"
+  list-footer: "<cmd><gray>[następna strona]</gray></cmd>"
+
+  suggest-unit: "<unit> <dark_gray>—</dark_gray> <description><newline><gray>Koszt: <white><cost></white> · żołd: <white><wage></white>/dzień<newline><gray>Życie: <white><hp></white> · obrażenia: <white><damage>"
+  suggest-amount: "<gray>Razem <white><cost></white>, żołd <white><wage></white>/dzień"
+  suggest-radius: "<gray>Promień <radius> bloków"
+  suggest-country: "<country> <gray>— żołnierzy: <soldiers>"
+  suggest-npc-country: "<country> <gray>(NPC) — <chunks> chunków, <soldiers> żołnierzy, <status>"
+  suggest-all-npc: "<gray>Wszystkie kraje NPC"
+  suggest-hex: "<gray>Kolor RRGGBB (bez #)"
+  suggest-money: "<gray>Kwota (md, sr, zł)"
+  suggest-current: "<gray>Obecna wartość"
+
+  ai-conquest-summary: "<dark_red>⚔</dark_red> <country> <gray>zdobywa</gray> <white><count></white> <gray><lands> kraju</gray> <white><target></white><gray><extra>.</gray>"
+  ai-conquest-fell: "<dark_red>☠ <country> <red>zdobywa ostatnią ziemię kraju <white><target></white> — <target> upada!"
+  ai-conquest-revolt: "<gold>⚑ Bunt na ziemiach</gold> <country><gray>: <white><count></white> <lands> przechodzi do <white><target></white>.</gray>"
+  ai-conquest-secession: "<gold>⚑ <white><vassal></white> odpada od suwerena</gold> <country><gray> — wyczerpanego wojną.</gray>"
+  ai-conquest-coalition: "<yellow>⚔</yellow> <country> <gray>dołącza do koalicji przeciw</gray> <white><target></white><gray>!</gray>"
+  ai-conquest-peace-tribute: "<gray>Pokój: <white><target></white> płaci</gray> <country> <gray>trybut <white><amount></white>/dzień przez <days> dni.</gray>"
+  ai-conquest-more: "<gray>…i jeszcze <count> wieści z frontów."
+  ai-war-declared: "<dark_red>⚔ <white><ruler></white> z <country> wypowiada wojnę krajowi <white><target></white>!"
+  ai-reply-accept: "<prefix><green><ruler> z <country> przyjmuje <proposal>."
+  ai-reply-refuse: "<prefix><red><ruler> z <country> odrzuca <proposal>."
+  tribute-paid: "<prefix><gold>Wysłano trybut <white><amount></white> dla <white><country></white>. Władca patrzy na was przychylniej."
+  tribute-no-money: "<prefix><red>W skarbcu twojego kraju brakuje <amount>."
+  unit-locked: "<prefix><red><unit> <red>jest jeszcze niedostępna (<white><reason></white>)."
+  rearm-none: "<prefix><gray>Nie ma żołnierzy do przezbrojenia — wszyscy mają broń twojej epoki."
+  rearmed: "<prefix><green>Przezbrojono <white><count></white> żołnierzy za <white><cost></white><gray> (zostało do przezbrojenia: <left>)."
+  suggest-rearm: "<gray>→ <unit> <gray>(koszt <cost> za żołnierza)"
+  era-units: "<prefix><gold>Nowa epoka: <white><era></white>! Nowe jednostki: <white><units></white>. <gray>Stare oddziały przezbroisz: /armia przezbroj"
+  mercenary-disabled: "<prefix><red>Najemnicy są wyłączeni na tym serwerze."
+  mercenary-limit: "<prefix><red>Osiągnięto limit najemników (<white><max></white>, część limitu wojska)."
+  mercenary-hired: "<prefix><green>Wynajęto <white><count></white> × <unit> za <white><cost></white> (żołd <white><wage></white>/dzień, kontrakt <white><hours></white> h)."
+  mercenary-list-header: "<prefix><gold>Najemnicy (<count>/<max>) <gray>— kliknij, aby przedłużyć:"
+  # <cmd>…</cmd> = klikalny fragment (komendę wstawia kod)
+  mercenary-list-line: "<dark_gray>-</dark_gray> <white><id></white> <unit> <gray>do końca <white><left></white>, żołd <wage> <cmd><yellow>[przedłuż za <extend>]</yellow></cmd>"
+  mercenary-none: "<prefix><gray>Twój kraj nie ma najemników."
+  mercenary-extended: "<prefix><green>Przedłużono <white><count></white> kontraktów o <white><hours></white> h za <white><cost></white>."
+  mercenary-dismissed: "<prefix><yellow>Zwolniono <white><count></white> najemników."
+  mercenary-contract-ended: "<prefix><yellow>Kontrakt <white><count></white> najemników wygasł — odeszli."
+  mercenary-unpaid: "<prefix><red>Brak żołdu: <white><count></white> najemników odeszło od razu<gray> (do wroga: <defected>)."
+  mercenary-defected-to-us: "<prefix><gold>Najemnik wroga (<unit><gold>) przechodzi na waszą stronę!"
+  suggest-mercenary: "<unit> <gray>— <description><newline><gold>koszt <cost></gold>, żołd <wage>/dzień, kontrakt <hours> h"
+  suggest-all-mercenaries: "<gray>Przedłuż wszystkie kontrakty"
+  ai-help-request: "<prefix><gold><ruler> z <country> prosi was o pomoc w wojnie z <white><enemy></white>!"
+  ai-capitulation-accept: "<prefix><gold><ruler> z <country> przyjmuje waszą kapitulację."
+  ai-capitulation-refuse: "<prefix><red><ruler> z <country> odrzuca waszą kapitulację<reason>."
+  # <accept>…</accept> i <refuse>…</refuse> to klikalne fragmenty (komendy wstawia kod, nie wpisuj ich tutaj).
+  ai-tribute-demand: "<prefix><gold><ruler> z <country> żąda trybutu <white><amount></white> dziennie przez <white><days></white> dni.</gold> <accept><green><bold>[Przyjmij]</bold></green></accept> <refuse><red><bold>[Odrzuć]</bold></red></refuse> <dark_gray>(<minutes> min)"
+  ai-tribute-accepted: "<prefix><yellow>Zgodziliście się płacić <white><country></white> trybut <white><amount></white> dziennie przez <white><days></white> dni."
+  ai-tribute-refused: "<prefix><red>Odrzuciliście żądanie trybutu <white><country></white>. Władca tego nie zapomni."
+  ai-tribute-no-demand: "<prefix><red><country> nie żąda od was trybutu (albo żądanie wygasło)."
+  ai-tribute-collected: "<prefix><gray>Zapłacono trybut <white><amount></white> dla <white><country></white>."
+  ai-tribute-unpaid: "<prefix><red>W skarbcu brakuje <white><amount></white> na trybut dla <white><country></white>. Dwa niezapłacone trybuty zrywają umowę."
+
+  opinion-hostile: "wroga"
+  opinion-cold: "chłodna"
+  opinion-neutral: "obojętna"
+  opinion-friendly: "przyjazna"
+  opinion-warm: "serdeczna"
+  trait-aggressive: "wojowniczy"
+  trait-peaceful: "pokojowy"
+  trait-diplomatic: "dyplomata"
+  trait-expansive: "zaborczy"
+  trait-rich: "bogaty"
+  trait-balanced: "rozważny"
+  status-none: "brak AI"
+  status-global-paused: "AI wstrzymane globalnie"
+  status-inactive: "nieaktywna"
+  status-paused: "pauza"
+  status-active: "aktywna"
+
+  gui-title: "Władca: <country>"
+  gui-tribute-title: "Trybut: <country>"
+  gui-relation-none: "brak (nie masz kraju)"
+  gui-info: "<country>"
+  gui-info-lore-1: "<gray>Władca: <white><ruler>"
+  gui-info-lore-2: "<gray>Ziemie: <white><chunks></white> chunków · ludność: <white><population>"
+  gui-info-lore-3: "<gray>Żołnierze: <white><soldiers>"
+  gui-info-lore-4: "<gray>Sojusze: <white><allies></white> · wojny: <white><enemies>"
+  gui-info-lore-5: "<gray>Relacja z wami: <white><relation>"
+  gui-info-lore-6: "<gray>Nastawienie: <white><opinion></white> · charakter: <white><character>"
+  gui-alliance: "<green>Zaproponuj sojusz"
+  gui-alliance-lore-1: "<gray>Władca rozważy propozycję."
+  gui-alliance-have: "<green>Jesteście sojusznikami"
+  gui-alliance-war: "<gray>Sojusz niemożliwy w czasie wojny"
+  gui-peace: "<white>Zaproponuj pokój"
+  gui-peace-lore-1: "<gray>Trybut zwiększa szansę na zgodę."
+  gui-peace-none: "<gray>Nie jesteście w wojnie"
+  gui-tribute: "<gold>Zapłać trybut"
+  gui-tribute-lore-1: "<gray>Pieniądze ze skarbca waszego kraju."
+  gui-tribute-amount: "<gold>Trybut: <white><amount>"
+  gui-tribute-amount-lore-1: "<gray>Kliknij, aby wysłać do <country>."
+  gui-war: "<red>Wypowiedz wojnę"
+  gui-war-lore-1: "<gray>Koszt i zasady jak w /kraj wojna."
+  gui-war-already: "<red>Jesteście w wojnie"
+  gui-war-confirm: "<dark_red><bold>Kliknij ponownie, aby potwierdzić"
+  gui-war-confirm-lore-1: "<gray>Wojna z <country>!"
+  gui-not-diplomat: "<gray>Tylko informacje"
+  gui-not-diplomat-lore-1: "<gray>Dyplomację prowadzi ranga <white><rank></white> innego kraju."
+  gui-talk: "<aqua>Porozmawiaj"
+  gui-talk-lore-1: "<gray>Rozmowa z władcą na czacie (plugin Wladcy)."
+  gui-close: "<red>Zamknij"
+  gui-back: "<gray>Wróć"
+
+  nk-created: "<prefix><green>Utworzono kraj NPC <white><name></white>, władca <white><ruler></white> stoi tutaj."
+  nk-delete-confirm: "<prefix><yellow>Usunąć kraj <white><name></white>? <cmd><red>[Potwierdź]</red></cmd>"
+  nk-deleted: "<prefix><green>Usunięto kraj <white><name></white>."
+  nk-set: "<prefix><green><name>: <white><param></white> = <white><value>"
+  nk-set-failed: "<prefix><red><reason>"
+  nk-ruler: "<prefix><green>Władca <white><ruler></white> kraju <white><name></white> stoi tutaj."
+  nk-treasury: "<prefix><green>Skarbiec <white><name></white>: <white><balance>"
+  nk-treasury-failed: "<prefix><red>Operacja nieudana (<result>). Skarbiec <name>: <balance>"
+  nk-army-added: "<prefix><green>Dodano <count>× <unit><green> dla <white><name>."
+  nk-army-cleared: "<prefix><green>Usunięto <count> żołnierzy kraju <white><name>."
+  nk-relation: "<prefix><green><a> i <b>: <white><relation>"
+  nk-paused: "<prefix><yellow>AI kraju <name> wstrzymane."
+  nk-resumed: "<prefix><green>AI kraju <name> wznowione."
+  nk-paused-all: "<prefix><yellow>AI wszystkich krajów NPC wstrzymane."
+  nk-resumed-all: "<prefix><green>AI krajów NPC wznowione."
+  nk-ticked: "<prefix><green>Wykonano tick AI kraju <white><name>."
+  nk-desant-started: "<prefix><green>Wyprawa morska <white><name></white> na <white><target></white> wyrusza: <detail>. Postęp: <white>/nk desant \"<name>\" status</white>."
+  nk-desant-refused: "<prefix><red>Desant <white><name></white> na <white><target></white> niemożliwy: <detail>."
+  nk-desant-no-target: "<prefix><red><white><name></white> nie ma wroga na desant. Podaj cel (kraj w wojnie) albo wypowiedz wojnę/ustaw cel oblężeń w panelu."
+  nk-desant-result: "<prefix><yellow><name>:</yellow> <white><detail>"
+  nk-tp-done: "<prefix><green>Jesteś w stolicy <country>, obok władcy."
+  nk-tp-failed: "<prefix><red>Nie udało się znaleźć bezpiecznego miejsca w stolicy <white><name></white>."
+  nk-village-searching: "<prefix><gray>Szukam wioski w promieniu <radius> bloków..."
+  nk-village-none: "<prefix><red>Nie znaleziono wioski w promieniu <radius> bloków (stań przy dzwonie; potrzebna aktualna Ludnosc)."
+  # <cmd>…</cmd> = klikalny fragment (komendę wstawia kod)
+  nk-village-preview: "<prefix><gold>Wioska przy <white><x>, <z></white>: <white><chunks></white> chunków, <white><beds></white> łóżek, <white><villagers></white> wieśniaków, <white><jobs></white> stanowisk pracy.<newline><gray>Powstanie: <name> <gray>pod rządami <white><ruler></white>. <cmd><green><bold>[Potwierdź]</bold></green></cmd> <dark_gray>(/nk wioska potwierdz, 5 min)"
+  nk-village-no-pending: "<prefix><red>Brak podglądu wioski do potwierdzenia — najpierw /nk wioska."
+  nk-village-created: "<prefix><green><text>"
+  nk-village-failed: "<prefix><red>Nie utworzono kraju: <text>"
+  village-founded-broadcast: "<gold>⚜ <direction>, w okolicach (<white><x>, <z></white>), powstało <white><country></white> pod rządami <title> <white><ruler></white>!"
+  nk-scenario-none: "<prefix><gray>Brak scenariuszy w plugins/Armia/scenarios/."
+  nk-scenario-unknown: "<prefix><red>Nie ma scenariusza <white><id></white> (/nk scenariusz lista)."
+  nk-scenario-invalid: "<prefix><red>Scenariusz ma błędy: <white><errors></white>"
+  nk-scenario-warning: "<prefix><yellow>Uwaga: <text>"
+  nk-scenario-busy: "<prefix><red>Inny scenariusz jest właśnie ładowany — poczekaj."
+  nk-scenario-list-header: "<prefix><gold>Scenariusze <gray>(kliknij, aby zobaczyć):"
+  # <cmd>…</cmd> = klikalny fragment (komendę wstawia kod)
+  nk-scenario-list-line: "<dark_gray>-</dark_gray> <cmd><white><id></white></cmd> <gray><name> — <count> państw"
+  nk-scenario-show-header: "<prefix><gold><name></gold> <dark_gray>(<id>)</dark_gray> <gray><description> — <count> państw:"
+  nk-scenario-show-line: "<dark_gray>-</dark_gray> <color><name></color> <gray>(<ruler>) cel <white><x>, <z></white>, cechy <white><traits></white>, skarbiec <white><treasury></white>, wojsko <white><army></white> — <status>"
+  nk-scenario-confirm: "<prefix><yellow>Stolice trafią do najbliższych wiosek (albo w pozycje docelowe). <cmd><green><bold>[Załaduj scenariusz]</bold></green></cmd> <dark_gray>(/nk scenariusz zaladuj <id> potwierdz)"
+  nk-scenario-start: "<prefix><gold>Ładowanie scenariusza <white><name></white>: <count> państw w świecie <white><world></white> (jedno co 2 s)..."
+  nk-scenario-skip: "<prefix><gray>[<n>/<total>] <name> już istnieje — pomijam."
+  nk-scenario-honor: "<prefix><gray>[<n>/<total>] <name>: uzupełniono honor z pliku (<white><honor></white>)."
+  nk-scenario-searching: "<prefix><yellow>[<n>/<total>] <name>: cel w wodzie — szukam lądu po spirali (krok <step> bl., do <radius> bl.)..."
+  nk-scenario-search-progress: "<prefix><gray>[<n>/<total>] <name>: szukam lądu <white><distance></white> bl. od celu (sprawdzono <tried> miejsc)..."
+  nk-scenario-failed: "<prefix><red>[<n>/<total>] <name>: nie utworzono — <reason>."
+  nk-scenario-progress: "<prefix><green>[<n>/<total>] <white><name></white>: stolica <white><x> <y> <z></white> (<where>), żołnierzy <soldiers><notes>."
+  nk-scenario-done: "<prefix><gold>Scenariusz <white><name></white> gotowy: utworzono <white><created></white>, pominięto <white><skipped></white>, błędy <white><failed></white>; sojusze <alliances>, opinie/nastawienia <attitudes>.<missing>"
+  nk-info-header: "<gold>— <country> <gray>(NPC) <gold>— władca <white><ruler></white>, <status>"
+  nk-info-traits: "<gray>agresja <white><agresja></white>, ekspansja <white><ekspansja></white>, dyplomacja <white><dyplomacja></white>, bogactwo <white><bogactwo></white>, max-chunki <white><maxchunks></white>, max-zolnierze <white><maxsoldiers>"
+  nk-info-state: "<gray>Chunki <white><chunks></white> · żołnierze <white><soldiers>/<cap></white> (w świecie <loaded>) · siła <white><strength></white> · skarbiec <white><treasury></white> · ludność <white><population>/<housing></white> · następny tick za <white><next></white> min"
+  nk-info-relations: "<gray>Sojusznicy: <white><allies></white> · wrogowie: <white><enemies>"
+  nk-list-header: "<gold>— Kraje NPC (<count>) — <global>"
+  nk-list-line: "<cmd><country></cmd> <gray>chunki <white><chunks></white>, żołnierze <white><soldiers></white>, skarbiec <white><treasury></white>, <status>"
+  nk-log-header: "<gold>— Decyzje AI: <name> (ostatnie <count>)"
+  nk-log-line: "<dark_gray><time></dark_gray> <gray><text>"
+  nk-param:
+    agresja: "<gray>0–100: chęć wojny, niechęć do pokoju"
+    ekspansja: "<gray>0–100: zajmowanie dziczy"
+    dyplomacja: "<gray>0–100: sojusze i pokój"
+    bogactwo: "<gray>0–100: dochód i oszczędności"
+    max-chunki: "<gray>Limit terytorium"
+    max-zolnierze: "<gray>Limit armii"
+    aktywna: "<gray>tak/nie — AI włączone"
+    honor: "<gray>0–100 albo auto: dotrzymywanie słowa, pogarda dla podłych interesów (rozmowy z Wladcy)"
+
+  help-header: "<gold><title> — <category> <gray>(strona <page>/<pages>)"
+  help-line: "<yellow><syntax></yellow> <dark_gray>—</dark_gray> <gray><short>"
+  help-hover: "<yellow><syntax></yellow><newline><description><newline><dark_gray>Wymaga: </dark_gray><rank><newline><gray>Kliknij, aby wpisać"
+  help-nav: "<prev> <dark_gray>|</dark_gray> <next>"
+  help-prev: "<yellow>« poprzednia"
+  help-prev-disabled: "<dark_gray>« poprzednia"
+  help-next: "<yellow>następna »"
+  help-next-disabled: "<dark_gray>następna »"
+  help-tabs: "<tabs>"
+  help-tab: "<gray><category>"
+  help-tab-current: "<gold><underlined><category></underlined>"
+  help-tab-separator: "<dark_gray> · "
+  help-page-hover: "<gray>Strona <page>: <category>"
+
+  help-armia:
+    title: "Armia"
+    categories:
+      wojsko: "Wojsko"
+      dowodzenie: "Dowodzenie"
+      informacje: "Informacje"
+      admin: "Admin"
+    entries:
+      rekrutuj:
+        short: "zrekrutuj żołnierzy"
+        description: "<gray>Rekrutuje żołnierzy za pieniądze ze skarbca kraju. Każdy rekrut to obywatel (Ludnosc). Trzeba stać na terenie kraju (i mieć koszary, jeśli serwer tego wymaga). Rekruci stawiają się w najbliższych koszarach; każda prycza w koszarach to +1 do limitu wojska, a żołnierze przy koszarach szybciej się leczą."
+        rank: "<white>Doradca+"
+      rozpusc:
+        short: "rozpuść oddział"
+        description: "<gray>Żołnierze twojego oddziału wracają do ludności (stają się wieśniakami)."
+        rank: "<white>Doradca+"
+      bulawa:
+        short: "buława dowódcy"
+        description: "<gray>PPM na blok — idźcie tam, PPM na cel — atak, Shift+PPM — za mną / stój."
+        rank: "<white>Doradca+"
+      przezbroj:
+        short: "przezbrój na broń epoki"
+        description: "<gray>Stare jednostki dostają odpowiednik twojej epoki (Postep), np. piechota → pikinier → piechota liniowa → żołnierz. Płatne ze skarbca."
+        rank: "<white>Doradca+"
+      najmij:
+        short: "wynajmij najemników"
+        description: "<gray>Najemnicy od ręki: bez obywateli i koszar, ale ×2,5 drożej i ×2 żołd. Kontrakt na kilka dni; bez żołdu odchodzą od razu."
+        rank: "<white>Doradca+"
+      najemnicy:
+        short: "lista kontraktów"
+        description: "<gray>Twoi najemnicy, czas do końca kontraktu i koszt przedłużenia."
+        rank: "<white>Obywatel"
+      przedluz:
+        short: "przedłuż kontrakty"
+        description: "<gray>Przedłuża kontrakt jednego najemnika (id z listy) albo wszystkich."
+        rank: "<white>Doradca+"
+      zwolnij-najemnikow:
+        short: "zwolnij najemników"
+        description: "<gray>Wszyscy najemnicy odchodzą (bez zwrotu pieniędzy)."
+        rank: "<white>Doradca+"
+      zamna:
+        short: "oddział za mną"
+        description: "<gray>Twoi żołnierze w pobliżu dołączają do oddziału i idą za tobą."
+        rank: "<white>Doradca+"
+      stoj:
+        short: "oddział stoi"
+        description: "<gray>Oddział zatrzymuje się i pilnuje miejsca."
+        rank: "<white>Doradca+"
+      wroc:
+        short: "wracajcie na posterunki"
+        description: "<gray>Oddział wraca na swoje posterunki lub trasy patrolu."
+        rank: "<white>Doradca+"
+      straz:
+        short: "pilnujcie tego miejsca"
+        description: "<gray>Oddział zostaje strażą w tym miejscu w podanym promieniu."
+        rank: "<white>Doradca+"
+      patrol:
+        short: "trasa patrolu"
+        description: "<gray><white>dodaj</white> — punkt w miejscu, gdzie stoisz; <white>start</white> — oddział patroluje trasę; <white>wyczysc</white> — nowa trasa."
+        rank: "<white>Doradca+"
+      atakuj:
+        short: "atakujcie cel"
+        description: "<gray>Oddział atakuje to, na co patrzysz (tylko wrogów w wojnie i potwory)."
+        rank: "<white>Doradca+"
+      ostrzal:
+        short: "salwa machin w blok"
+        description: "<gray>Zbierz machiny przez /armia zamna i spójrz na blok. Jedna salwa w aktywnie obleganym chunku wroga w wojnie. Katapulta: 40 bl., 8 s, 5 md; armata: 24 bl., 5 s, 10 md. Koszt ze skarbca."
+        rank: "<white>Doradca+"
+      taranuj:
+        short: "taran na bramę lub mur"
+        description: "<gray>Zbierz tarany przez /armia zamna i spójrz na bramę lub dół muru w aktywnie obleganym chunku wroga w wojnie. Taran podjeżdża i uderza co 3 s, aż przebije przejście (do 3 bloków w głąb). Drewno 2 uderzenia, kamień 4, umocnienia 10. Kontenery i ziemie chronione nietknięte. Odporny na strzały, wrażliwy na ogień. Stój/wróć przerywa."
+        rank: "<white>Doradca+"
+      amunicja:
+        short: "wybierz pociski machin"
+        description: "<gray>Ustawia i zapisuje amunicję machin oddziału. Katapulta: kamien (5 md). Armata: kula (10 md) lub kartacz (15 md, 5 małych kul, max 5 różnych wrogów w wojnie, zasięg 16 bl., nie niszczy bloków). Kartaczem atakuj przez /armia atakuj."
+        rank: "<white>Doradca+"
+      flota:
+        short: "statki, transport i desanty"
+        description: "<gray>/armia flota zbuduj transportowiec|karawela — spójrz na otwartą wodę. Transportowiec: epoka 1, 3000 md, 4 graczy razem z kapitanem +16 NPC. Karawela: epoka 2, 6000 md, 6 graczy +32 NPC. wejdz|zejdz, zaladuj (oddział przez /armia zamna), desant (spójrz na brzeg), salwa (karawela, proch, statek wroga w wojnie, 30 md/10 s), lista, usun potwierdz (pusty statek, Władca)."
+        rank: "<white>Pasażer: Obywatel+, kapitan/dowodzenie: Doradca+, usuwanie: Władca"
+      trybut:
+        short: "odpowiedz na żądanie trybutu"
+        description: "<gray>Kraj NPC zażądał od was dziennego trybutu: przyjmij (płacicie codziennie ze skarbca przez kilka dni) albo odrzuć (władca to zapamięta). Klikalne też w wiadomości na czacie."
+        rank: "<white>Władca"
+      info:
+        short: "armia kraju"
+        description: "<gray>Liczba żołnierzy, limity, żołd i morale."
+        rank: "<white>każdy"
+      lista:
+        short: "lista żołnierzy"
+        description: "<gray>Wszyscy żołnierze twojego kraju z trybem, pozycją, życiem i morale."
+        rank: "<white>Obywatel+"
+      pomoc:
+        short: "ta pomoc"
+        description: "<gray>Strona lub nazwa działu."
+        rank: "<white>każdy"
+      przeladuj:
+        short: "przeładuj config"
+        description: "<gray>Wczytuje config.yml ponownie."
+        rank: "<red>admin"
+      npckraj:
+        short: "kraje NPC"
+        description: "<gray>Komendy administratora krajów NPC."
+        rank: "<red>admin"
+
+  help-nk:
+    title: "Kraje NPC"
+    categories:
+      kraje: "Kraje"
+      ai: "AI"
+      dyplomacja: "Dyplomacja"
+      zasoby: "Zasoby"
+    entries:
+      stworz:
+        short: "nowy kraj NPC tutaj"
+        description: "<gray>Tworzy kraj NPC ze stolicą w twoim chunku i stawia władcę w twoim miejscu. Nazwy z polskimi literami w cudzysłowie."
+        rank: "<red>admin"
+      usun:
+        short: "usuń kraj"
+        description: "<gray>Usuwa kraj NPC z żołnierzami i władcą."
+        rank: "<red>admin"
+      wladca:
+        short: "postaw władcę tutaj"
+        description: "<gray>Stawia (lub przenosi) władcę NPC z imieniem i skinem (nick Mojang)."
+        rank: "<red>admin"
+      info:
+        short: "stan kraju NPC"
+        description: "<gray>Parametry, skarbiec, wojsko, relacje i ostatnie decyzje."
+        rank: "<red>admin"
+      lista:
+        short: "wszystkie kraje NPC"
+        description: "<gray>Lista krajów NPC ze stanem AI."
+        rank: "<red>admin"
+      wioska:
+        short: "wioska → państwo NPC"
+        description: "<gray>Stojąc w wiosce: podgląd (chunki, łóżka, wieśniacy), potem potwierdz — państwo ze stolicą przy dzwonie, zajętą wioską i przejętymi wieśniakami. Bez nazwy/koloru/władcy losuje polskie."
+        rank: "<red>admin"
+      tp:
+        short: "teleport do stolicy"
+        description: "<gray>Przenosi cię do stolicy państwa NPC, obok władcy, na bezpieczny blok."
+        rank: "<red>admin"
+      scenariusz:
+        short: "scenariusze startowe"
+        description: "<gray>lista — pliki z plugins/Armia/scenarios; pokaz ID — państwa i miejsca; zaladuj ID potwierdz — tworzy brakujące państwa (stolice przy wioskach, skarbiec, wojsko, osadnicy, relacje)."
+        rank: "<red>admin"
+      ustaw:
+        short: "zmień parametr AI"
+        description: "<gray>agresja, ekspansja, dyplomacja, bogactwo (0–100), max-chunki, max-zolnierze, aktywna (tak/nie)."
+        rank: "<red>admin"
+      pauza:
+        short: "wstrzymaj AI"
+        description: "<gray>Wstrzymuje AI kraju albo wszystkich."
+        rank: "<red>admin"
+      wznow:
+        short: "wznów AI"
+        description: "<gray>Wznawia AI kraju albo wszystkich."
+        rank: "<red>admin"
+      tick:
+        short: "wymuś decyzje"
+        description: "<gray>Natychmiastowy tick AI z wypisaniem decyzji."
+        rank: "<red>admin"
+      log:
+        short: "log decyzji"
+        description: "<gray>Ostatnie decyzje AI (też w logs/ai-decisions.log)."
+        rank: "<red>admin"
+      desant:
+        short: "wyprawa morska (desant)"
+        description: "<gray>Kraj NPC w wojnie płynie na wroga (także tysiące bloków przez morze): rejs liczony w tle, lądowanie przy graczach na brzegu wroga, potem oblężenie desantowe Kraje. Bez celu — cel oblężeń z panelu albo pierwszy wróg. status — postęp; anuluj — flota zawraca; teraz — pomija resztę rejsu."
+        rank: "<red>admin"
+      wojny:
+        short: "wojny NPC i ofensywy w tle"
+        description: "<gray>Wojny z udziałem państw NPC: zdobycze, ofensywy w tle z postępem i siłami, zmęczenie wojną, hegemon, ostatnie wydarzenia. Z nazwą kraju — tylko jego wojny."
+        rank: "<red>admin"
+      wojna:
+        short: "ustaw wojnę"
+        description: "<gray>Natychmiastowa wojna między krajami."
+        rank: "<red>admin"
+      pokoj:
+        short: "ustaw pokój"
+        description: "<gray>Natychmiastowy pokój (relacja neutralna)."
+        rank: "<red>admin"
+      sojusz:
+        short: "ustaw sojusz"
+        description: "<gray>Natychmiastowy sojusz."
+        rank: "<red>admin"
+      skarbiec:
+        short: "pieniądze kraju"
+        description: "<gray>Dodaje lub zabiera pieniądze ze skarbca (np. 10zł)."
+        rank: "<red>admin"
+      armia:
+        short: "dodaj żołnierzy"
+        description: "<gray>Darmowi żołnierze kraju jako straż w twoim miejscu."
+        rank: "<red>admin"
+      armia-rozpusc:
+        short: "usuń całe wojsko"
+        description: "<gray>Usuwa wszystkich żołnierzy kraju."
+        rank: "<red>admin"

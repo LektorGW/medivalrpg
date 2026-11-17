@@ -1,0 +1,300 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: most_stalowy
+name: '<#708090>Most stalowy</#708090>'
+description: 'Przeprawa przez wodę; nie daje premii do podatków ani wzrostu. Stawiany nad wodą. Stalowy most kratownicowy.'
+function: bridge
+beds: 0
+cost: 15000
+tier: 2
+category: infrastructure
+zone: water
+max-per-country: 4
+requires:
+  population: 25
+  treasury: 0
+  era: 3
+  discovery: stal
+foundation: none
+foundation-block: cobblestone
+ground-layer: 3
+palette:
+  'A': 'iron_block'
+  'B': 'smooth_stone'
+  'C': 'polished_blackstone_bricks'
+  'D': 'iron_bars'
+  'E': 'lantern[hanging=false]'
+layers:
+  # y=0
+  - |
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+  # y=1
+  - |
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+  # y=2
+  - |
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+    _CCCCC_
+    _______
+    _______
+    _______
+    _______
+    _______
+    _______
+  # y=3
+  - |
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+    ABBBBBA
+  # y=4
+  - |
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+    D.....D
+  # y=5
+  - |
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+  # y=6
+  - |
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+    .......
+    D.....D
+  # y=7
+  - |
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+    .......
+    .......
+    .......
+    D.....D
+  # y=8
+  - |
+    A.....A
+    D.....D
+    D.....D
+    D.....D
+    A.....A
+    D.....D
+    D.....D
+    D.....D
+    A.....A
+    D.....D
+    D.....D
+    D.....D
+    A.....A
+    D.....D
+    D.....D
+    D.....D
+    A.....A
+    D.....D
+    D.....D
+    D.....D
+    A.....A
+    D.....D
+    D.....D
+    D.....D
+    A.....A
+  # y=9
+  - |
+    E.....E
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    E.....E
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    .......
+    E.....E

@@ -1,0 +1,20 @@
+name: Kraje
+version: '${version}'
+main: pl.medivalrpg.kraje.KrajePlugin
+api-version: '26.3'
+description: System krajów dla serwera MEDIVALRPG (granice, ochrona, dyplomacja, wojny, oblężenia i łupy, kapitulacje i wasalstwo, skarbce i podatki, kraje NPC, mapa squaremap, tablista, czat).
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+softdepend: [squaremap, Skarbiec, WorldEdit, BetterModel]
+permissions:
+  kraje.use:
+    description: Dostęp do /kraj, /kc i /ks
+    default: true
+  kraje.flagi.moderuj:
+    description: Zatwierdzanie i odrzucanie flag krajów (/kraj flaga admin), przebudowa paczki z flagami
+    default: op
+  kraje.admin:
+    description: Komendy administracyjne /kraj admin, podgląd czatów krajowych, natychmiastowy /kraj spawn
+    default: op
+    children:
+      kraje.use: true

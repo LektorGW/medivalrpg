@@ -1,0 +1,16 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+name: Kolej
+version: '${version}'
+main: pl.medivalrpg.kolej.KolejPlugin
+api-version: '26.3'
+authors: [Maciej Kaczmarczyk]
+website: https://lektoro.pl
+depend: [Kraje, Skarbiec]
+softdepend: [BetterModel, WorldGuard, Ludnosc, Armia, nLogin]
+permissions:
+  kolej.use:
+    default: true
+  kolej.admin:
+    default: op
+  kolej.maszynista:
+    default: false

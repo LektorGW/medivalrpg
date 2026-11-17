@@ -1,0 +1,160 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: zielarnia
+name: '<#3CB371>Zielarnia</#3CB371>'
+description: 'Szansa na nowego osadnika +25% w każdym cyklu wzrostu i lepszy nastrój; praca dla kapłanów (zielarzy). Chata zielarza z ogródkiem ziół.'
+function: herbalist
+beds: 0
+cost: 3000
+tier: 1
+category: civic
+zone: inner
+max-per-country: 1
+requires:
+  population: 10
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+palette:
+  'A': '@floor'
+  'B': '@base'
+  'C': '@wall'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@roof_stairs[facing=north,half=bottom]'
+  'H': '@roof_stairs[facing=south,half=bottom]'
+  'I': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'J': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'K': 'wall_torch[facing=south]'
+  'L': '@window'
+  'M': 'brewing_stand'
+  'N': 'water_cauldron[level=3]'
+  'O': 'composter'
+  'P': 'barrel[facing=up]'
+  'Q': 'spruce_slab[type=top]'
+  'R': 'potted_red_tulip'
+  'S': 'potted_blue_orchid'
+  'T': 'potted_fern'
+  'U': 'lantern[hanging=true]'
+  'V': 'grass_block[snowy=false]'
+  'W': 'allium'
+  'X': 'azure_bluet'
+  'Y': 'cornflower'
+  'Z': 'poppy'
+  'a': 'oxeye_daisy'
+  'b': 'lily_of_the_valley'
+  'c': 'dirt_path'
+  'd': 'dandelion'
+  'e': '@fence'
+  'f': 'spruce_fence_gate[facing=south,open=false,in_wall=false,powered=false]'
+  'g': 'lantern[hanging=false]'
+layers:
+  # y=0
+  - |
+    _________
+    _BBBBBBB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BAAAAAB_
+    _BBBBBBB_
+    _________
+    _VVVcVVV_
+    _VVVcVVV_
+    _________
+  # y=1
+  - |
+    .........
+    .DBBBBBD.
+    .BMN.OPB.
+    .B.....B.
+    .BQ...QB.
+    .B....TB.
+    .DBBIBBD.
+    e.......e
+    eWYa.Zbde
+    eXZb.WYae
+    eeeefeeee
+  # y=2
+  - |
+    .........
+    .DCLCLCD.
+    .C.....C.
+    .L.....L.
+    .CR...SC.
+    .C.....C.
+    .DLCJCLD.
+    ...K.K...
+    .........
+    .........
+    g.......g
+  # y=3
+  - |
+    .........
+    .DCCCCCD.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .DCCCCCD.
+    .........
+    .........
+    .........
+    .........
+  # y=4
+  - |
+    HHHHHHHHH
+    .DEEEEED.
+    .F.....F.
+    .F.....F.
+    .F.....F.
+    .F.....F.
+    .DEEEEED.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+  # y=5
+  - |
+    .........
+    HHHHHHHHH
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    .C.....C.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+  # y=6
+  - |
+    .........
+    .........
+    HHHHHHHHH
+    .C..U..C.
+    .C.....C.
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+    .........
+  # y=7
+  - |
+    .........
+    .........
+    .........
+    HHHHHHHHH
+    GGGGGGGGG
+    .........
+    .........
+    .........
+    .........
+    .........
+    .........

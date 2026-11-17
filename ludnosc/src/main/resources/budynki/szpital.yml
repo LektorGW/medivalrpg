@@ -1,0 +1,182 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: szpital
+name: '<#FFFFFF>Szpital</#FFFFFF>'
+description: 'Szansa na nowego osadnika +30% w każdym cyklu wzrostu i punkty badań (Postęp). Łóżka dla chorych (8) nie liczą się jako mieszkania. Ceglany szpital z salami chorych i apteką.'
+function: hospital
+beds: 8
+cost: 25000
+tier: 2
+category: civic
+zone: inner
+max-per-country: 1
+requires:
+  population: 30
+  treasury: 0
+  era: 3
+  discovery: szczepionki
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'white_terracotta'
+  'C': 'bricks'
+  'D': 'glass_pane'
+  'E': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'F': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'G': 'wall_torch[facing=south]'
+  'H': 'lantern[hanging=true]'
+  'I': 'white_bed[facing=north,part=head]'
+  'J': 'white_bed[facing=north,part=foot]'
+  'K': 'brewing_stand'
+  'L': 'cauldron'
+  'M': 'red_concrete'
+  'N': 'ladder[facing=south]'
+layers:
+  # y=0
+  - |
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    _________________
+  # y=1
+  - |
+    CAAAAAAAAAAAAAAAC
+    A.I..I.....I..INA
+    A.J..J..K..J..J.A
+    A...............A
+    A...............A
+    A...............A
+    A...............A
+    A...............A
+    A...............A
+    CAAAAAAAEAAAAAAAC
+    .................
+  # y=2
+  - |
+    CBDBDBDBDBDBDBDBC
+    B..............NB
+    D...............D
+    B...............B
+    D...............D
+    B...............B
+    D...............D
+    B...............B
+    B...............B
+    CBDBDBDBFBDBDBDBC
+    .................
+  # y=3
+  - |
+    CBBBBBBBBBBBBBBBC
+    B..............NB
+    B..H...H...H....B
+    B...............B
+    B...............B
+    B...............B
+    B..H...H...H....B
+    B...............B
+    B...............B
+    CBBBBBBBBBBBBBBBC
+    .......G.........
+  # y=4
+  - |
+    CBBBBBBBBBBBBBBBC
+    BAAAAAAAAAAAAAANB
+    BAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAB
+    BAAAAAAAAAAAAAAAB
+    CBBBBBBBBBBBBBBBC
+    .................
+  # y=5
+  - |
+    CBBBBBBBBBBBBBBBC
+    B.I..I.....I..I.B
+    B.J..J..L..J..J.B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    CBBBBBBBBBBBBBBBC
+    .................
+  # y=6
+  - |
+    CBDBDBDBDBDBDBDBC
+    B...............B
+    D...............D
+    B...............B
+    D...............D
+    B...............B
+    D...............D
+    B...............B
+    B...............B
+    CBDBDBDBDBDBDBDBC
+    .................
+  # y=7
+  - |
+    CBBBBBBBBBBBBBBBC
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    CBBBBBBBMBBBBBBBC
+    .................
+  # y=8
+  - |
+    CBBBBBBBBBBBBBBBC
+    B...............B
+    B..H...H...H....B
+    B...............B
+    B...............B
+    B...............B
+    B..H...H...H....B
+    B...............B
+    B...............B
+    CBBBBBBMMMBBBBBBC
+    .................
+  # y=9
+  - |
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAA
+    AAAAAAAAMAAAAAAAA
+    .................
+  # y=10
+  - |
+    BBBBBBBBBBBBBBBBB
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    B...............B
+    BBBBBBBBBBBBBBBBB
+    .................

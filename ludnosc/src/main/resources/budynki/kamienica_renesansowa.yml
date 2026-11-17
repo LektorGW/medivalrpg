@@ -1,0 +1,259 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: kamienica_renesansowa
+name: '<#F4E1C1>Kamienica renesansowa</#F4E1C1>'
+description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Tynkowana kamienica z podcieniami i attyką.'
+function: housing
+beds: 6
+cost: 9000
+tier: 1
+category: housing
+zone: inner
+max-per-country: 0
+requires:
+  population: 14
+  treasury: 0
+  era: 2
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'polished_andesite'
+  'B': 'stone_bricks'
+  'C': 'white_terracotta'
+  'D': 'smooth_sandstone'
+  'E': 'stone_brick_stairs[facing=west,half=top]'
+  'F': 'stone_brick_stairs[facing=east,half=top]'
+  'G': 'chiseled_stone_bricks'
+  'H': 'birch_door[facing=north,half=lower,hinge=left,open=false]'
+  'I': 'birch_door[facing=north,half=upper,hinge=left,open=false]'
+  'J': 'barrel[facing=up]'
+  'K': 'chest[facing=south]'
+  'L': 'crafting_table'
+  'M': 'lantern[hanging=true]'
+  'N': 'birch_planks'
+  'O': 'ladder[facing=south]'
+  'P': 'glass_pane'
+  'Q': 'red_bed[facing=north,part=head]'
+  'R': 'red_bed[facing=north,part=foot]'
+  'S': 'blue_bed[facing=north,part=head]'
+  'T': 'blue_bed[facing=north,part=foot]'
+  'U': 'chest[facing=east]'
+  'V': 'bookshelf'
+  'W': 'green_bed[facing=north,part=head]'
+  'X': 'green_bed[facing=north,part=foot]'
+  'Y': 'resin_bricks'
+  'Z': 'birch_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]'
+  'a': 'smooth_sandstone_slab[type=bottom]'
+  'b': 'sandstone_wall'
+  'c': 'lantern[hanging=false]'
+  'd': 'chiseled_sandstone'
+  'e': 'spruce_fence'
+layers:
+  # y=0
+  - |
+    ___________
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    AAAAAAAAAAA
+    BBBBBBBBBBB
+  # y=1
+  - |
+    ...........
+    DBBBBBBBBBD
+    B........OB
+    B.JK...LJ.B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    DB..BHB..BD
+    e.........e
+  # y=2
+  - |
+    ...........
+    DBBBBBBBBBD
+    B........OB
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    B.........B
+    DB..BIB..BD
+    e.........e
+  # y=3
+  - |
+    ...........
+    DBBBBBBBBBD
+    B........OB
+    B.........B
+    B....M....B
+    B.........B
+    B.........B
+    B.........B
+    DBEFBGBEFBD
+    c.........c
+  # y=4
+  - |
+    ...........
+    DCCCCCCCCCD
+    CNNNNNNNNOC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    DDDDDDDDDDD
+    ...........
+  # y=5
+  - |
+    ...........
+    DCCCCCCCCCD
+    C.Q.Q..S.OC
+    C.R.R..T..C
+    C.........C
+    C.........C
+    C.U..L..V.C
+    C.........C
+    DCCCCCCCCCD
+    ...........
+  # y=6
+  - |
+    ...........
+    DCPCCPCCPCD
+    C........OC
+    P.........P
+    C.........C
+    C.........C
+    P.........P
+    C.........C
+    DCPCCPCCPCD
+    ...........
+  # y=7
+  - |
+    ...........
+    DCCCCCCCCCD
+    C........OC
+    C.........C
+    C....M....C
+    C.........C
+    C.........C
+    C.........C
+    DCPCCPCCPCD
+    ...........
+  # y=8
+  - |
+    ...........
+    DCCCCCCCCCD
+    CNNNNNNNNOC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    CNNNNNNNNNC
+    DDDDDDDDDDD
+    ...........
+  # y=9
+  - |
+    ...........
+    DCCCCCCCCCD
+    C.Q.Q..W.OC
+    C.R.R..X..C
+    C.........C
+    C.........C
+    C.U..L..V.C
+    C.........C
+    DCCCCCCCCCD
+    ...........
+  # y=10
+  - |
+    ...........
+    DCPCCPCCPCD
+    C........OC
+    P.........P
+    C.........C
+    C.........C
+    P.........P
+    C.........C
+    DCPCCPCCPCD
+    ...........
+  # y=11
+  - |
+    ...........
+    DCCCCCCCCCD
+    C........OC
+    C.........C
+    C.........C
+    C.........C
+    C.........C
+    C.........C
+    DCPCCPCCPCD
+    ...........
+  # y=12
+  - |
+    ...........
+    DCCCCCCCCCD
+    C........OC
+    C.........C
+    C....M....C
+    C.........C
+    C.........C
+    C.........C
+    DCCCCCCCCCD
+    ...........
+  # y=13
+  - |
+    ...........
+    YYYYYYYYYYY
+    YYYYYYYYYZY
+    YYYYYYYYYYY
+    YYYYYYYYYYY
+    YYYYYYYYYYY
+    YYYYYYYYYYY
+    YYYYYYYYYYY
+    YYYYYYYYYYY
+    ...........
+  # y=14
+  - |
+    ...........
+    aaaaaaaaaaa
+    a.........a
+    a.........a
+    a.........a
+    a.........a
+    a.........a
+    a.........a
+    aDDDDDDDDDa
+    ...........
+  # y=15
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    b.a.ada.a.b
+    ...........
+  # y=16
+  - |
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    ...........
+    c....c....c
+    ...........

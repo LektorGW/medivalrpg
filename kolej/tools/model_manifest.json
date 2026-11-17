@@ -1,0 +1,884 @@
+[
+  {
+    "name": "kolej_parowoz",
+    "length": 112,
+    "seats": [
+      {
+        "name": "seat_00",
+        "position": [
+          -9,
+          23,
+          -39.0
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_01",
+        "position": [
+          9,
+          23,
+          -39.0
+        ],
+        "yaw": 0
+      }
+    ],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          9,
+          -34.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          9,
+          -34.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          9,
+          -10.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          9,
+          -10.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_2_l",
+        "pivot": [
+          -19,
+          9,
+          14.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_2_r",
+        "pivot": [
+          19,
+          9,
+          14.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_3_l",
+        "pivot": [
+          -19,
+          9,
+          36.0
+        ],
+        "radius": 9
+      },
+      {
+        "name": "wheel_3_r",
+        "pivot": [
+          19,
+          9,
+          36.0
+        ],
+        "radius": 9
+      }
+    ],
+    "cubes": 206,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r",
+          "wheel_2_l",
+          "wheel_2_r",
+          "wheel_3_l",
+          "wheel_3_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r",
+          "wheel_2_l",
+          "wheel_2_r",
+          "wheel_3_l",
+          "wheel_3_r"
+        ]
+      },
+      {
+        "name": "idle",
+        "loop": "loop",
+        "length": 2,
+        "bones": [
+          "body"
+        ]
+      },
+      {
+        "name": "start",
+        "loop": "once",
+        "length": 1.6,
+        "bones": [
+          "body",
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r",
+          "wheel_2_l",
+          "wheel_2_r",
+          "wheel_3_l",
+          "wheel_3_r"
+        ]
+      },
+      {
+        "name": "brake",
+        "loop": "loop",
+        "length": 0.4,
+        "bones": [
+          "body"
+        ]
+      },
+      {
+        "name": "whistle",
+        "loop": "once",
+        "length": 1.5,
+        "bones": [
+          "whistle_valve"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_tender",
+    "length": 112,
+    "seats": [],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 146,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_pasazerski",
+    "length": 112,
+    "seats": [
+      {
+        "name": "seat_00",
+        "position": [
+          -11,
+          23,
+          -28.0
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_01",
+        "position": [
+          11,
+          23,
+          -28.0
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_02",
+        "position": [
+          -11,
+          23,
+          -9.333333333333334
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_03",
+        "position": [
+          11,
+          23,
+          -9.333333333333334
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_04",
+        "position": [
+          -11,
+          23,
+          9.333333333333334
+        ],
+        "yaw": 180
+      },
+      {
+        "name": "seat_05",
+        "position": [
+          11,
+          23,
+          9.333333333333334
+        ],
+        "yaw": 180
+      },
+      {
+        "name": "seat_06",
+        "position": [
+          -11,
+          23,
+          28.0
+        ],
+        "yaw": 180
+      },
+      {
+        "name": "seat_07",
+        "position": [
+          11,
+          23,
+          28.0
+        ],
+        "yaw": 180
+      }
+    ],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 142,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "doors",
+        "loop": "once",
+        "length": 5,
+        "bones": [
+          "door_front_l",
+          "door_front_r",
+          "door_rear_l",
+          "door_rear_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_salonowy",
+    "length": 112,
+    "seats": [
+      {
+        "name": "seat_00",
+        "position": [
+          -11,
+          23,
+          -25.666666666666668
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_01",
+        "position": [
+          11,
+          23,
+          -25.666666666666668
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_02",
+        "position": [
+          -11,
+          23,
+          21.0
+        ],
+        "yaw": 180
+      },
+      {
+        "name": "seat_03",
+        "position": [
+          11,
+          23,
+          21.0
+        ],
+        "yaw": 180
+      }
+    ],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 127,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_kryty",
+    "length": 112,
+    "seats": [],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 104,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "doors",
+        "loop": "once",
+        "length": 5,
+        "bones": [
+          "door_l",
+          "door_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_weglarka",
+    "length": 112,
+    "seats": [],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 145,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_platforma",
+    "length": 112,
+    "seats": [],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 100,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_cysterna",
+    "length": 112,
+    "seats": [],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 110,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "kolej_hamulcowy",
+    "length": 112,
+    "seats": [
+      {
+        "name": "seat_00",
+        "position": [
+          -11,
+          23,
+          -25.666666666666668
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_01",
+        "position": [
+          11,
+          23,
+          -25.666666666666668
+        ],
+        "yaw": 0
+      },
+      {
+        "name": "seat_02",
+        "position": [
+          -11,
+          23,
+          21.0
+        ],
+        "yaw": 180
+      },
+      {
+        "name": "seat_03",
+        "position": [
+          11,
+          23,
+          21.0
+        ],
+        "yaw": 180
+      }
+    ],
+    "wheels": [
+      {
+        "name": "wheel_0_l",
+        "pivot": [
+          -19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_0_r",
+        "pivot": [
+          19,
+          7,
+          -35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_l",
+        "pivot": [
+          -19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      },
+      {
+        "name": "wheel_1_r",
+        "pivot": [
+          19,
+          7,
+          35.0
+        ],
+        "radius": 7
+      }
+    ],
+    "cubes": 131,
+    "animations": [
+      {
+        "name": "run",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      },
+      {
+        "name": "run_reverse",
+        "loop": "loop",
+        "length": 1,
+        "bones": [
+          "wheel_0_l",
+          "wheel_0_r",
+          "wheel_1_l",
+          "wheel_1_r"
+        ]
+      }
+    ]
+  }
+]

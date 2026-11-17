@@ -1,0 +1,22 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.meadow"
+      }
+    },
+    "minecraft:visual/sky_color": "#7ba4ff"
+  },
+  "carvers": [],
+  "downfall": 0.8,
+  "effects": {
+    "foliage_color": "#67b449",
+    "grass_color": "#88c764",
+    "water_color": "#0e4ecf"
+  },
+  "features": [],
+  "has_precipitation": true,
+  "temperature": 0.5
+}

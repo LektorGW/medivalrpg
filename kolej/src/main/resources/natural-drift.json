@@ -1,0 +1,25 @@
+{
+  "copyright": "Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl",
+  "version": 1,
+  "purpose": "Single source of truth for SELF-CHANGING vanilla block states between the offline survey and the live build: hash-pinned natural fingerprints, sapling soil, and the worker's re-check. Same coordinate, same block family, only the listed derived/growth properties may differ; every other property must stay equal and the 'require' values must hold on BOTH states. Material changes (except the listed growth pairs of one plant) and player-placed states (persistent leaves) never match. Shared by pl.medivalrpg.kolej.build.NaturalDrift and pipeline/natural_drift.py; agreement is tested with natural-drift-cases.json.",
+  "families": [
+    {"id": "leaves", "note": "distance recalculated on chunk load / after nearby logs change",
+     "types": ["oak_leaves", "spruce_leaves", "birch_leaves", "jungle_leaves", "acacia_leaves", "dark_oak_leaves", "pale_oak_leaves", "mangrove_leaves", "cherry_leaves", "azalea_leaves", "flowering_azalea_leaves"],
+     "mutable": ["distance"], "require": {"persistent": "false"}},
+    {"id": "kelp", "note": "random-tick growth: age of the top; the top becomes a stem under a new top (production stop 3334:51:773)",
+     "types": ["kelp", "kelp_plant"], "interchangeable": true, "mutable": ["age"]},
+    {"id": "cave_vines", "note": "growth and glow berries", "types": ["cave_vines", "cave_vines_plant"], "interchangeable": true, "mutable": ["age", "berries"]},
+    {"id": "weeping_vines", "types": ["weeping_vines", "weeping_vines_plant"], "interchangeable": true, "mutable": ["age"]},
+    {"id": "twisting_vines", "types": ["twisting_vines", "twisting_vines_plant"], "interchangeable": true, "mutable": ["age"]},
+    {"id": "growing_plants", "note": "random-tick age/stage", "types": ["sugar_cane", "cactus", "sweet_berry_bush", "bamboo", "chorus_flower", "mangrove_propagule"],
+     "mutable": ["age", "stage", "leaves", "hanging"]},
+    {"id": "saplings", "types": ["oak_sapling", "spruce_sapling", "birch_sapling", "jungle_sapling", "acacia_sapling", "dark_oak_sapling", "cherry_sapling", "pale_oak_sapling"], "mutable": ["stage"]},
+    {"id": "huge_mushrooms", "note": "faces derived from neighbours", "types": ["brown_mushroom_block", "red_mushroom_block", "mushroom_stem"], "mutable": ["down", "east", "north", "south", "up", "west"]},
+    {"id": "snowy_soil", "note": "snowy follows the block above", "types": ["grass_block", "podzol", "mycelium"], "mutable": ["snowy"]},
+    {"id": "vine", "note": "spreads to other faces", "types": ["vine", "glow_lichen"], "mutable": ["down", "east", "north", "south", "up", "west"]},
+    {"id": "snow", "note": "snowfall accumulates", "types": ["snow"], "mutable": ["layers"]},
+    {"id": "dripstone", "note": "thickness follows neighbours while it grows", "types": ["pointed_dripstone"], "mutable": ["thickness"]},
+    {"id": "fluids", "note": "flowing level", "types": ["water", "lava"], "mutable": ["level"]},
+    {"id": "small_dripleaf_tilt", "types": ["big_dripleaf"], "mutable": ["tilt"]}
+  ]
+}

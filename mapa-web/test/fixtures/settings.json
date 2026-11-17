@@ -1,0 +1,1 @@
+{"worlds":[{"name":"minecraft_overworld","icon":"","display_name":"minecraft:overworld","type":"normal","order":0}],"ui":{"sidebar":{"player_list_label":"Gracze ({cur}/{max})","world_list_label":"Światy","pinned":"unpinned"},"coordinates":{"html":"Współrzędne\u003cbr/\u003e{x}, {z}","enabled":true},"link":{"enabled":true},"title":"MEDIVALRPG - Mapa świata"}}

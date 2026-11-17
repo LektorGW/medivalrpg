@@ -1,0 +1,230 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: karczma
+name: '<#B5651D>Karczma</#B5651D>'
+description: 'Podatki +5%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i lepszy nastrój — mieszkańcy schodzą się tu wieczorami. Łóżka dla podróżnych (4) nie liczą się jako mieszkania. Karczma z szynkiem i kominkiem.'
+function: tavern
+beds: 4
+cost: 7000
+tier: 1
+category: civic
+zone: inner
+max-per-country: 2
+requires:
+  population: 12
+  treasury: 0
+foundation: fill
+foundation-block: cobblestone
+ground-layer: 0
+# Materiały szablonu na danym poziomie osady (nadpisują wspólną paletę; poziom 1 = klasyczny wygląd).
+materials:
+  '1':
+    base: stone_bricks
+    frame: dark_oak_log
+    roof: spruce
+    wall: oak_planks
+    window: glass_pane
+palette:
+  'A': 'spruce_planks'
+  'B': '@base'
+  'C': '@base'
+  'D': '@frame[axis=y]'
+  'E': '@frame[axis=x]'
+  'F': '@frame[axis=z]'
+  'G': '@wall'
+  'H': '@roof_stairs[facing=north,half=bottom]'
+  'I': '@roof_stairs[facing=south,half=bottom]'
+  'J': '@roof_slab[type=bottom]'
+  'K': '@window'
+  'L': 'dark_oak_door[facing=north,half=lower,hinge=left,open=false]'
+  'M': 'dark_oak_door[facing=north,half=upper,hinge=left,open=false]'
+  'N': 'wall_torch[facing=south]'
+  'O': 'barrel[facing=up]'
+  'P': 'lantern[hanging=false]'
+  'Q': 'campfire[lit=true,signal_fire=false,facing=south]'
+  'R': 'bricks'
+  'S': 'stripped_spruce_log[axis=x]'
+  'T': 'barrel[facing=south]'
+  'U': 'brewing_stand'
+  'V': 'water_cauldron[level=3]'
+  'W': 'spruce_fence'
+  'X': 'spruce_pressure_plate'
+  'Y': '@roof_stairs[facing=east,half=bottom]'
+  'Z': 'crafting_table'
+  'a': 'red_carpet'
+  'b': 'lantern[hanging=true]'
+  'c': 'ladder[facing=east]'
+  'd': 'green_bed[facing=north,part=head]'
+  'e': 'green_bed[facing=north,part=foot]'
+  'f': 'chest[facing=south]'
+  'g': 'brown_carpet'
+  'h': 'brown_wall_banner[facing=south]'
+layers:
+  # y=0
+  - |
+    _____________
+    _BBBBBBBBBBB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BAAAAAAAAAB_
+    _BBBBBBBBBBB_
+    _BBBBBBBBBBB_
+  # y=1
+  - |
+    .............
+    .DBBBBDBBBBD.
+    .BTTTV...RQB.
+    .BSSS..HH..B.
+    .D.....WW..D.
+    .B.....II..B.
+    .BcWYaa...ZB.
+    .DBBBBLBBBBD.
+    .O.H.....H.O.
+  # y=2
+  - |
+    .............
+    .DCKCCDCCKCD.
+    .CO......RRC.
+    .K.U.......C.
+    .D.....XX..D.
+    .K.........C.
+    .CcX.......C.
+    .DKKCCMCCKKD.
+    .P...N.N...P.
+  # y=3
+  - |
+    .............
+    .DCCCCDCCCCD.
+    .C........RC.
+    .C......b..C.
+    .D..b......D.
+    .C.........C.
+    .Cc........C.
+    .DCCCCCCCCCD.
+    .............
+  # y=4
+  - |
+    .............
+    .DEEEEEEEEED.
+    .FAAAAAAAARF.
+    .FAAAAAAAAAF.
+    .FAAAAAAAAAF.
+    .FAAAAAAAAAF.
+    .FcAAAAAAAAF.
+    .DEEEEEEEEED.
+    ......h......
+  # y=5
+  - |
+    .............
+    .DGGDGGGDGGD.
+    .G.dd.f.ddRG.
+    .G.ee...ee.G.
+    .D...g.g..OD.
+    .G.........G.
+    .G.W.......G.
+    .DGGDGGGDGGD.
+    .............
+  # y=6
+  - |
+    .............
+    .DKGDGKGDGKD.
+    .K....P...RG.
+    .G.........G.
+    .D.........D.
+    .G.........G.
+    .G.........K.
+    .DKGDGKGDGKD.
+    .............
+  # y=7
+  - |
+    .............
+    .DGGDGGGDGGD.
+    .G........RG.
+    .G.........G.
+    .D.........D.
+    .G.........G.
+    .G.........G.
+    .DGGDGGGDGGD.
+    .............
+  # y=8
+  - |
+    IIIIIIIIIIIII
+    .DEEEEEEEEED.
+    .F........RF.
+    .F.........F.
+    .F.........F.
+    .F.........F.
+    .F.........F.
+    .DEEEEEEEEED.
+    HHHHHHHHHHHHH
+  # y=9
+  - |
+    .............
+    IIIIIIIIIIIII
+    .G........RG.
+    .G.........G.
+    .G.........G.
+    .G.........G.
+    .G.........G.
+    HHHHHHHHHHHHH
+    .............
+  # y=10
+  - |
+    .............
+    .............
+    IIIIIIIIIIRII
+    .G.........G.
+    .K.........K.
+    .G.........G.
+    HHHHHHHHHHHHH
+    .............
+    .............
+  # y=11
+  - |
+    .............
+    .............
+    ..........R..
+    IIIIIIIIIIIII
+    .G....b....G.
+    HHHHHHHHHHHHH
+    .............
+    .............
+    .............
+  # y=12
+  - |
+    .............
+    .............
+    ..........R..
+    .............
+    AAAAAAAAAAAAA
+    .............
+    .............
+    .............
+    .............
+  # y=13
+  - |
+    .............
+    .............
+    ..........R..
+    .............
+    JJJJJJJJJJJJJ
+    .............
+    .............
+    .............
+    .............
+  # y=14
+  - |
+    .............
+    .............
+    ..........Q..
+    .............
+    .............
+    .............
+    .............
+    .............
+    .............

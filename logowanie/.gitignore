@@ -1,0 +1,5 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+.gradle/
+build/
+.idea/
+*.iml

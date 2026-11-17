@@ -1,0 +1,40 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Plany uruchomienia linii: /kolej uruchom <plan> (sprawdzenie i koszty), /kolej uruchom <plan> potwierdz (wykonanie).
+# Działa dopiero po DONE wszystkich części i fizycznym odbiorze torów (stacje „gotowe”, odcinki BUILT).
+# Płaci kolej:przewoznik według koszty.* i firma.dzienny-zold*: parowóz z tendrem, każdy wagon, zatrudnienie NPC
+# i pierwszy dzienny żołd. Węgiel i woda pochodzą wyłącznie z zawartości wskazanych beczek (COAL = 10 kg,
+# WATER_BUCKET = 250 l); beczki stawia i napełnia zarządca w podanych miejscach przed uruchomieniem.
+# Ponowne uruchomienie niczego nie kupuje drugi raz (sprawdza istniejące składy, wagony i załogi).
+plany:
+  glowna:
+    nazwa: 'Linia Królewska: Baza przewoźnika — Spawn'
+    linia:
+      id: krolewska
+      przystanki: [baza_krolewska, hub-j01]
+      # Cena biletu w md (pobierana przy wsiadaniu, przelew na kolej:przewoznik).
+      bilet: 20
+      # Odjazdy z bazy co 60 minut od 06:00 do 22:00; powrót ze spawnu 30 minut po odjeździe z bazy.
+      # Przejazd ok. 19,5 min w dół i 20,5 min pod górę (6772 m, hub 1 m/s; LineTripSimulationTest na zatwierdzonym grafie).
+      rozklad: '60'
+      od: '06:00'
+      do: '22:00'
+      powrot-po-minutach: 30
+    pociagi:
+      - id: krolewski-1
+        stacja: baza_krolewska
+        # Jeden wagon pasażerski (8 miejsc): pod górę do bazy (+45 m) parowóz zużywa ok. 364 kg węgla i 3040 l wody
+        # z 500 kg / 4000 l tendera; z trzema wagonami tender nie wystarczałby (496 kg). Tender jest uzupełniany
+        # do pełna na obu końcach (zapasy.do-pelna-na-koncowkach).
+        wagony: [pasazerski]
+        maszynista: Jan Kowalik
+        palacz: Stach Węglarz
+    # Miejsca beczek: offline z kopii regionów 28.10 + wszystkich operacji planu (tools/plan_line_launch_sites.py).
+    # Przed płatnością plugin sprawdza je na żywo (wolna bryła modelu, skrajnia, zgoda terenu, zasięg 16 m od parowozu).
+    infrastruktura:
+      - {id: baza-woda, typ: wieza, stacja: baza_krolewska, x: 4842, y: 110, z: 1194, obrot: 0}
+      - {id: baza-wegiel, typ: wegiel, stacja: baza_krolewska, x: 4839, y: 110, z: 1202, obrot: 0}
+      - {id: spawn-woda, typ: wieza, stacja: hub-j01, x: 208, y: 65, z: -126, obrot: 0}
+      - {id: spawn-wegiel, typ: wegiel, stacja: hub-j01, x: 203, y: 65, z: -126, obrot: 90}
+    tablice:
+      - {id: baza-odjazdy, stacja: baza_krolewska, x: 4843, y: 110, z: 1202, obrot: 180}
+      - {id: spawn-odjazdy, stacja: hub-j01, x: 208, y: 65, z: -119, obrot: 0}

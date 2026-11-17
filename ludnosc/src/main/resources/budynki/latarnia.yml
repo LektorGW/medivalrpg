@@ -1,0 +1,231 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py — zmiany wprowadzaj w generatorze.
+# Warstwy od dołu do góry; w warstwie wiersze z północy (góra) na południe, kolumny z zachodu na wschód.
+# Front (drzwi) = południe przy obrocie 0. "." = powietrze, "_" = nie ruszaj terenu,
+# {kolor} w nazwie bloku = kolor kraju (barwnik).
+id: latarnia
+name: '<#F5F5F5>Latarnia morska</#F5F5F5>'
+description: 'Podatki +3%; nie zwiększa połowów. Stawiaj nad wodą. Pasiasta latarnia morska z galerią.'
+function: lighthouse
+beds: 0
+cost: 9000
+tier: 2
+category: economy
+zone: water
+max-per-country: 1
+requires:
+  population: 20
+  treasury: 0
+foundation: fill
+foundation-block: stone_bricks
+ground-layer: 0
+palette:
+  'A': 'stone_bricks'
+  'B': 'calcite'
+  'C': 'red_terracotta'
+  'D': 'spruce_door[facing=north,half=lower,hinge=left,open=false]'
+  'E': 'spruce_door[facing=north,half=upper,hinge=left,open=false]'
+  'F': 'wall_torch[facing=south]'
+  'G': 'ladder[facing=south]'
+  'H': 'glass_pane'
+  'I': 'wall_torch[facing=north]'
+  'J': 'spruce_fence'
+  'K': 'stone_brick_wall'
+  'L': 'sea_lantern'
+  'M': 'deepslate_tile_slab[type=bottom]'
+  'N': 'deepslate_tile_stairs[facing=east,half=bottom]'
+  'O': 'deepslate_tile_stairs[facing=south,half=bottom]'
+  'P': 'deepslate_tiles'
+  'Q': 'deepslate_tile_stairs[facing=north,half=bottom]'
+  'R': 'deepslate_tile_stairs[facing=west,half=bottom]'
+  'S': 'lightning_rod[facing=up,powered=false]'
+layers:
+  # y=0
+  - |
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+  # y=1
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .B...B.
+    .B...B.
+    .ABDBA.
+    .......
+  # y=2
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .B...B.
+    .B...B.
+    .ABEBA.
+    ..F.F..
+  # y=3
+  - |
+    .......
+    .ACCCA.
+    .C.G.C.
+    .C...C.
+    .C...C.
+    .ACCCA.
+    .......
+  # y=4
+  - |
+    .......
+    .ACCCA.
+    .C.G.C.
+    .H...H.
+    .C...C.
+    .ACCCA.
+    .......
+  # y=5
+  - |
+    .......
+    .ACCCA.
+    .C.G.C.
+    .C...C.
+    .CI..C.
+    .ACCCA.
+    .......
+  # y=6
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .B...B.
+    .B...B.
+    .ABBBA.
+    .......
+  # y=7
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .B...B.
+    .B...B.
+    .ABBBA.
+    .......
+  # y=8
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .H...H.
+    .B...B.
+    .ABBBA.
+    .......
+  # y=9
+  - |
+    .......
+    .ACCCA.
+    .C.G.C.
+    .C...C.
+    .C...C.
+    .ACCCA.
+    .......
+  # y=10
+  - |
+    .......
+    .ACCCA.
+    .C.G.C.
+    .C...C.
+    .C..IC.
+    .ACCCA.
+    .......
+  # y=11
+  - |
+    .......
+    .ACCCA.
+    .C.G.C.
+    .C...C.
+    .C...C.
+    .ACCCA.
+    .......
+  # y=12
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .H...H.
+    .B...B.
+    .ABBBA.
+    .......
+  # y=13
+  - |
+    .......
+    .ABBBA.
+    .B.G.B.
+    .B...B.
+    .B...B.
+    .ABBBA.
+    .......
+  # y=14
+  - |
+    AAAAAAA
+    AAAAAAA
+    AAAGAAA
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+    AAAAAAA
+  # y=15
+  - |
+    JJJJJJJ
+    JKHHHKJ
+    JH...HJ
+    JH.L.HJ
+    JH...HJ
+    JKHHHKJ
+    JJJJJJJ
+  # y=16
+  - |
+    .......
+    .KHHHK.
+    .H...H.
+    .H.L.H.
+    .H...H.
+    .KHHHK.
+    .......
+  # y=17
+  - |
+    .......
+    .MOOOM.
+    .NPPPR.
+    .NPPPR.
+    .NPPPR.
+    .MQQQM.
+    .......
+  # y=18
+  - |
+    .......
+    .......
+    ..MOM..
+    ..NPR..
+    ..MQM..
+    .......
+    .......
+  # y=19
+  - |
+    .......
+    .......
+    .......
+    ...P...
+    .......
+    .......
+    .......
+  # y=20
+  - |
+    .......
+    .......
+    .......
+    ...S...
+    .......
+    .......
+    .......

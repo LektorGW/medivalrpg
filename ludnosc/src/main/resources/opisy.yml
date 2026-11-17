@@ -1,0 +1,628 @@
+# Copyright (c) 2026 Maciej Kaczmarczyk — lektoro.pl
+# Wygenerowane przez templates-src/generate.py (opisy.py) — zmiany wprowadzaj w generatorze.
+# effect = krótki skutek na liście /ludnosc typy, description = pełny opis, look = zdanie o wyglądzie,
+# previous = opisy z wcześniejszych wersji (nieedytowana kopia w plugins/Ludnosc/budynki dostaje nowy opis).
+akademia:
+  base: 'akademia'
+  effect: 'punkty badań'
+  description: 'Daje punkty badań (Postęp) i pracę bibliotekarzom; bez premii do podatków. Sala wykładowa i plac ćwiczeń rycerskich.'
+  look: 'Sala wykładowa i plac ćwiczeń rycerskich.'
+  previous:
+    - 'Sala wykładowa z pulpitami i plac ćwiczeń z tarczami, kukłami i torem do kopii.'
+arena:
+  base: 'arena'
+  effect: 'podatki +4%, osadnicy +5%'
+  description: 'Podatki +4%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i lepszy nastrój (od renesansu). Amfiteatr z piaszczystą areną i trybunami.'
+  look: 'Amfiteatr z piaszczystą areną i trybunami.'
+  previous:
+    - 'Amfiteatr z piaszczystą areną, trybunami, bramami i blankami.'
+bank:
+  base: 'bank'
+  effect: 'podatki +10%, badania'
+  description: 'Podatki +10% i punkty badań (Postęp). Bank z kolumnowym portykiem i skarbcem.'
+  look: 'Bank z kolumnowym portykiem i skarbcem.'
+  previous:
+    - 'Bank z kolumnowym portykiem, kasą za kratą i skarbcem.'
+biblioteka:
+  base: 'biblioteka'
+  effect: 'podatki +2%, osadnicy +15%, badania'
+  description: 'Podatki +2%, szansa na nowego osadnika +15% w każdym cyklu wzrostu i punkty badań (Postęp); praca dla bibliotekarzy i kartografów. Biblioteka z regałami i pulpitami.'
+  look: 'Biblioteka z regałami i pulpitami.'
+  previous:
+    - 'Biblioteka z regałami i pulpitami. Szybszy wzrost osady.'
+blok:
+  base: 'blok'
+  effect: 'dom dla 15 obywateli'
+  description: 'Mieszkanie dla 15 obywateli (15 łóżek); bez wolnych łóżek nie przybywa osadników. Sześciopiętrowy blok z betonu.'
+  look: 'Sześciopiętrowy blok z betonu.'
+  previous:
+    - 'Sześciopiętrowy blok z betonu z oknami w pasach, klatką i płaskim dachem. 15 łóżek.'
+brama:
+  base: 'brama'
+  effect: 'przejście w murach, bez premii'
+  description: 'Przejście w murach miejskich; nie daje premii do podatków ani wzrostu. Brama z dwiema basztami i broną.'
+  look: 'Brama z dwiema basztami i broną.'
+  previous:
+    - 'Brama z dwiema basztami, broną i chorągwiami kraju.'
+browar:
+  base: 'browar'
+  effect: 'podatki +4%, osadnicy +10%'
+  description: 'Podatki +4%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i lepszy nastrój (liczy się jak karczma); praca dla rolników. Browar z kadziami i beczkami.'
+  look: 'Browar z kadziami i beczkami.'
+  previous:
+    - 'Browar z kadziami, warnikami i beczkami. Wyższe podatki.'
+cegielnia:
+  base: 'cegielnia'
+  effect: 'cegły i terakota z gliny na budowy'
+  description: 'Ceglarz kopie glinę w promieniu 24 bloków (do 24 dziennie) i wypala cegły oraz terakotę do skrzyni cegielni — dla budów. Potrzebuje gliny (także spod wody), paliwa (węgiel, węgiel drzewny albo kłody) i gracza w promieniu 96 bloków. Cegielnia z piecem komorowym i wiatą suszarni.'
+  look: 'Cegielnia z piecem komorowym i wiatą suszarni.'
+  previous:
+    - 'Cegielnia z ceglanym piecem komorowym, wiatą suszarni i zasiekiem gliny. Ceglarz kopie glinę z rzek i brzegów, wypala cegły i terakotę.'
+cegielnia_kryta:
+  base: 'cegielnia'
+  effect: 'cegły i terakota z gliny na budowy'
+  description: 'Ceglarz kopie glinę w promieniu 24 bloków (do 24 dziennie) i wypala cegły oraz terakotę do skrzyni cegielni — dla budów. Potrzebuje gliny (także spod wody), paliwa (węgiel, węgiel drzewny albo kłody) i gracza w promieniu 96 bloków. Kryta suszarnia z muru pruskiego i ceglany piec.'
+  look: 'Kryta suszarnia z muru pruskiego i ceglany piec.'
+  previous:
+    - 'Kryta suszarnia z muru pruskiego z regałami surówki i zasiekiem gliny oraz ceglany piec ze schodkowym sklepieniem i kominem. Ceglarz kopie glinę z rzek i brzegów, wypala cegły i terakotę.'
+chata:
+  base: 'chata'
+  effect: 'dom dla 2 obywateli'
+  description: 'Mieszkanie dla 2 obywateli (2 łóżka); bez wolnych łóżek nie przybywa osadników. Mała drewniana chata na kamiennej podmurówce.'
+  look: 'Mała drewniana chata na kamiennej podmurówce.'
+  previous:
+    - 'Mała drewniana chata na kamiennej podmurówce. 2 łóżka.'
+chata_szachulec:
+  base: 'chata'
+  effect: 'dom dla 2 obywateli'
+  description: 'Mieszkanie dla 2 obywateli (2 łóżka); bez wolnych łóżek nie przybywa osadników. Niska chata z muru pruskiego z okiennicami i kominem.'
+  look: 'Niska chata z muru pruskiego z okiennicami i kominem.'
+  previous:
+    - 'Niska chata z muru pruskiego na kamiennej podmurówce, z nawisem dachu, okiennicami, skrzynkami kwiatów i kominem. 2 łóżka.'
+chata_zrebowa:
+  base: 'chata'
+  effect: 'dom dla 2 obywateli'
+  description: 'Mieszkanie dla 2 obywateli (2 łóżka); bez wolnych łóżek nie przybywa osadników. Chata z bali z gankiem na słupach.'
+  look: 'Chata z bali z gankiem na słupach.'
+  previous:
+    - 'Chata z bali z gankiem na słupach, kamiennym kominem i okiennicami. 2 łóżka.'
+cmentarz:
+  base: 'cmentarz'
+  effect: 'osadnicy +5%'
+  description: 'Szansa na nowego osadnika +5% w każdym cyklu wzrostu; przebudowa miasta nigdy go nie wyburza. Ogrodzony cmentarz z nagrobkami.'
+  look: 'Ogrodzony cmentarz z nagrobkami.'
+  previous:
+    - 'Ogrodzony cmentarz z nagrobkami i krzyżem.'
+dom:
+  base: 'dom'
+  effect: 'dom dla 4 obywateli'
+  description: 'Mieszkanie dla 4 obywateli (4 łóżka); bez wolnych łóżek nie przybywa osadników. Piętrowy dom z muru pruskiego.'
+  look: 'Piętrowy dom z muru pruskiego.'
+  previous:
+    - 'Piętrowy dom z muru pruskiego. 4 łóżka na piętrze.'
+dom_kamienny:
+  base: 'dom'
+  effect: 'dom dla 4 obywateli'
+  description: 'Mieszkanie dla 4 obywateli (4 łóżka); bez wolnych łóżek nie przybywa osadników. Murowany dom z okapem i dużym kominem.'
+  look: 'Murowany dom z okapem i dużym kominem.'
+  previous:
+    - 'Murowany dom z okapem na wspornikach, daszkiem nad wejściem, okiennicami i dużym kominem przy szczycie. 4 łóżka.'
+dom_szachulec:
+  base: 'dom'
+  effect: 'dom dla 4 obywateli'
+  description: 'Mieszkanie dla 4 obywateli (4 łóżka); bez wolnych łóżek nie przybywa osadników. Dom z muru pruskiego z wysuniętym piętrem i lukarną.'
+  look: 'Dom z muru pruskiego z wysuniętym piętrem i lukarną.'
+  previous:
+    - 'Dom z muru pruskiego z wysuniętym piętrem na wspornikach, lukarną, skrzynkami kwiatów i kominem. 4 łóżka na piętrze.'
+drukarnia:
+  base: 'drukarnia'
+  effect: 'podatki +3%, osadnicy +5%, badania'
+  description: 'Podatki +3%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i punkty badań (Postęp); praca dla kartografów. Warsztat z prasami drukarskimi.'
+  look: 'Warsztat z prasami drukarskimi.'
+  previous:
+    - 'Warsztat drukarski z prasami (krosna), pulpitami i papierem.'
+dworzec:
+  base: 'dworzec'
+  effect: 'podatki +6%, osadnicy +5%'
+  description: 'Podatki +6%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i punkty badań (Postęp). Ceglany dworzec z halą i peronem pod wiatą.'
+  look: 'Ceglany dworzec z halą i peronem pod wiatą.'
+  previous:
+    - 'Ceglany dworzec z halą, peronem pod wiatą i torami.'
+dworzec_nowoczesny:
+  base: 'dworzec_nowoczesny'
+  effect: 'podatki +10%, osadnicy +5%'
+  description: 'Podatki +10%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i punkty badań (Postęp). Przeszklony dworzec z peronem.'
+  look: 'Przeszklony dworzec z peronem.'
+  previous:
+    - 'Przeszklony dworzec z peronem pod szklanym dachem.'
+elektrownia:
+  base: 'elektrownia'
+  effect: 'podatki +12%'
+  description: 'Podatki +12%. Elektrownia z kotłami i dwoma kominami.'
+  look: 'Elektrownia z kotłami i dwoma kominami.'
+  previous:
+    - 'Elektrownia z kotłami, transformatorami i dwoma kominami.'
+fabryka:
+  base: 'fabryka'
+  effect: 'podatki +10%, badania'
+  description: 'Podatki +10% i punkty badań (Postęp). Ceglana hala z dachem szedowym i dwoma kominami.'
+  look: 'Ceglana hala z dachem szedowym i dwoma kominami.'
+  previous:
+    - 'Ceglana hala fabryczna z dachem szedowym, piecami, taśmą i dwoma kominami.'
+galeria:
+  base: 'galeria'
+  effect: 'podatki +18%'
+  description: 'Podatki +18%. Dwupoziomowa galeria ze szklaną fasadą.'
+  look: 'Dwupoziomowa galeria ze szklaną fasadą.'
+  previous:
+    - 'Dwupoziomowa galeria ze szklaną fasadą i sklepami.'
+huta_szkla:
+  base: 'huta_szkla'
+  effect: 'szkło z piasku na budowy'
+  description: 'Hutnik kopie piasek w promieniu 24 bloków (do 48 dziennie) i wytapia szkło do skrzyni huty — dla budów. Potrzebuje piasku, paliwa (węgiel, węgiel drzewny albo kłody) i gracza w promieniu 96 bloków. Huta z kopułowym piecem szklarskim.'
+  look: 'Huta z kopułowym piecem szklarskim.'
+  previous:
+    - 'Huta z kopułowym piecem szklarskim i zasiekiem piasku. Hutnik kopie piasek z brzegów na ziemi kraju i wytapia szkło (paliwo: węgiel albo węgiel drzewny).'
+huta_szkla_murowana:
+  base: 'huta_szkla'
+  effect: 'szkło z piasku na budowy'
+  description: 'Hutnik kopie piasek w promieniu 24 bloków (do 48 dziennie) i wytapia szkło do skrzyni huty — dla budów. Potrzebuje piasku, paliwa (węgiel, węgiel drzewny albo kłody) i gracza w promieniu 96 bloków. Murowana huta ze szkarpami i kominem.'
+  look: 'Murowana huta ze szkarpami i kominem.'
+  previous:
+    - 'Murowana huta ze szkarpami, piecem szklarskim o trzech otworach roboczych, kominem i zasiekiem piasku. Hutnik kopie piasek z brzegów na ziemi kraju i wytapia szkło (paliwo: węgiel albo węgiel drzewny).'
+kamienica:
+  base: 'kamienica'
+  effect: 'dom dla 6 obywateli'
+  description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Trzykondygnacyjna kamienica ze sklepem na parterze.'
+  look: 'Trzykondygnacyjna kamienica ze sklepem na parterze.'
+  previous:
+    - 'Trzykondygnacyjna kamienica mieszczańska ze sklepem na parterze. 6 łóżek.'
+kamienica_czynszowa:
+  base: 'kamienica_czynszowa'
+  effect: 'dom dla 8 obywateli'
+  description: 'Mieszkanie dla 8 obywateli (8 łóżek); bez wolnych łóżek nie przybywa osadników. Pięciokondygnacyjna ceglana kamienica z balkonami.'
+  look: 'Pięciokondygnacyjna ceglana kamienica z balkonami.'
+  previous:
+    - 'Pięciokondygnacyjna ceglana kamienica z balkonami i kominami. 8 łóżek.'
+kamienica_podcieniowa:
+  base: 'kamienica'
+  effect: 'dom dla 6 obywateli'
+  description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Kamienica z podcieniami na kamiennych filarach.'
+  look: 'Kamienica z podcieniami na kamiennych filarach.'
+  previous:
+    - 'Kamienica z podcieniami na kamiennych filarach, dachem czterospadowym i lukarnami. 6 łóżek.'
+kamienica_renesansowa:
+  base: 'kamienica_renesansowa'
+  effect: 'dom dla 6 obywateli'
+  description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Tynkowana kamienica z podcieniami i attyką.'
+  look: 'Tynkowana kamienica z podcieniami i attyką.'
+  previous:
+    - 'Tynkowana kamienica z podcieniami, attyką i sklepem na parterze. 6 łóżek.'
+kamienica_renesansowa_loggia:
+  base: 'kamienica_renesansowa'
+  effect: 'dom dla 6 obywateli'
+  description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Renesansowa kamienica z arkadową loggią.'
+  look: 'Renesansowa kamienica z arkadową loggią.'
+  previous:
+    - 'Renesansowa kamienica z arkadową loggią na piętrze, gzymsami, boniowanym parterem i attyką. 6 łóżek.'
+kamienica_szczytowa:
+  base: 'kamienica'
+  effect: 'dom dla 6 obywateli'
+  description: 'Mieszkanie dla 6 obywateli (6 łóżek); bez wolnych łóżek nie przybywa osadników. Kamienica ze schodkowym szczytem i kramem pod markizą.'
+  look: 'Kamienica ze schodkowym szczytem i kramem pod markizą.'
+  previous:
+    - 'Kamienica zwrócona schodkowym szczytem do ulicy, z kramem pod markizą w barwach kraju i skrzynkami kwiatów. 6 łóżek.'
+kamieniolom:
+  base: 'kamieniolom'
+  effect: 'do 32 bloków kamienia dziennie, podatki +4%'
+  description: 'Kamieniarz wycina z wyrobiska pod budynkiem do 32 bloków kamienia dziennie (do skrzyni); podatki +4%. Stawiaj na skale: złoże jest skończone (wyrobisko ok. 9×9, do 7 tarasów). Tarasowy kamieniołom z dźwigiem.'
+  look: 'Tarasowy kamieniołom z dźwigiem.'
+  previous:
+    - 'Tarasowy kamieniołom z dźwigiem i ogrodzeniem; dochód z kamienia. Najlepiej w skałach.'
+karczma:
+  base: 'karczma'
+  effect: 'podatki +5%, osadnicy +10%, lepszy nastrój'
+  description: 'Podatki +5%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i lepszy nastrój — mieszkańcy schodzą się tu wieczorami. Łóżka dla podróżnych (4) nie liczą się jako mieszkania. Karczma z szynkiem i kominkiem.'
+  look: 'Karczma z szynkiem i kominkiem.'
+  previous:
+    - 'Karczma z szynkiem, kominkiem i pokojami gościnnymi (4 łóżka dla podróżnych).'
+karczma_zajazd:
+  base: 'karczma'
+  effect: 'podatki +5%, osadnicy +10%, lepszy nastrój'
+  description: 'Podatki +5%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i lepszy nastrój — mieszkańcy schodzą się tu wieczorami. Łóżka dla podróżnych (4) nie liczą się jako mieszkania. Przydrożny zajazd z galerią na słupach i koniowiązem.'
+  look: 'Przydrożny zajazd z galerią na słupach i koniowiązem.'
+  previous:
+    - 'Przydrożny zajazd z galerią na słupach, poidłem i koniowiązem, salą z długimi stołami i kominkiem (4 łóżka dla podróżnych).'
+katedra:
+  base: 'katedra'
+  effect: 'podatki +2%, osadnicy +30%, badania'
+  description: 'Podatki +2%, szansa na nowego osadnika +30% w każdym cyklu wzrostu i punkty badań (Postęp); liczy się jak kościół. Gotycka katedra z dwiema wieżami; pod nią katakumby.'
+  look: 'Gotycka katedra z dwiema wieżami; pod nią katakumby.'
+  previous:
+    - 'Gotycka katedra z dwiema wieżami, witrażami, rozetą i ołtarzem; pod nią katakumby.'
+kopalnia:
+  base: 'kopalnia'
+  effect: 'bruk, węgiel i rudy do skrzyni'
+  description: 'Górnicy drążą chodnik w głąb i znoszą do skrzyni kopalni bruk, węgiel i rudy (bez dochodu w monetach). Potrzebuje górników (2 miejsca pracy na poziom kopalni) i pochodni w skrzyni — bez światła praca staje. Szyb z wyciągiem.'
+  look: 'Szyb z wyciągiem.'
+  previous:
+    - 'Szyb kopalni z wyciągiem; górnicy drążą chodniki w głąb (rozbudowa daje dochód).'
+kosciol:
+  base: 'kosciol'
+  effect: 'osadnicy +20%, lepszy nastrój'
+  description: 'Szansa na nowego osadnika +20% w każdym cyklu wzrostu, lepszy nastrój (niedzielna msza) i praca dla kapłanów; przebudowa miasta nigdy go nie wyburza. Kamienny kościół z dzwonnicą i witrażami.'
+  look: 'Kamienny kościół z dzwonnicą i witrażami.'
+  previous:
+    - 'Kamienny kościół z dzwonnicą, witrażami i ołtarzem.'
+kosciol_drewniany:
+  base: 'kosciol'
+  effect: 'osadnicy +20%, lepszy nastrój'
+  description: 'Szansa na nowego osadnika +20% w każdym cyklu wzrostu, lepszy nastrój (niedzielna msza) i praca dla kapłanów; przebudowa miasta nigdy go nie wyburza. Drewniany kościół z bali z wieżą-dzwonnicą.'
+  look: 'Drewniany kościół z bali z wieżą-dzwonnicą.'
+  previous:
+    - 'Drewniany kościół z bali z wieżą-dzwonnicą nad wejściem, stromym dachem, prezbiterium, ławami i ołtarzem.'
+koszary:
+  base: 'koszary'
+  effect: 'limit żołnierzy +6'
+  description: 'Każda prycza podnosi limit żołnierzy kraju o 1 (6 prycz = +6); rekruci stawiają się przy koszarach, a żołnierze stojący w pobliżu powoli się leczą. Prycze nie liczą się jako mieszkania. Kamienne koszary.'
+  look: 'Kamienne koszary.'
+  previous:
+    - 'Kamienne koszary z 6 pryczami dla żołnierzy (nie liczą się jako mieszkania).'
+koszary2:
+  base: 'koszary2'
+  effect: 'limit żołnierzy +12'
+  description: 'Każda prycza podnosi limit żołnierzy kraju o 1 (12 prycz = +12); rekruci stawiają się przy koszarach, a żołnierze stojący w pobliżu powoli się leczą. Prycze nie liczą się jako mieszkania. Dwupiętrowe kamienne koszary ze zbrojownią i blankami.'
+  look: 'Dwupiętrowe kamienne koszary ze zbrojownią i blankami.'
+  previous:
+    - 'Dwupiętrowe kamienne koszary z 12 pryczami, zbrojownią i blankami (łóżka dla wojska).'
+kuznia:
+  base: 'kuznia'
+  effect: 'sztabki żelaza i pochodnie dla kopalni'
+  description: 'Kowal przetapia surowe żelazo na sztabki i robi pochodnie dla kopalni (1 kłoda + 4 węgla → 16 pochodni); daje pracę kowalom. Potrzebuje surowego żelaza, węgla i kłód (donoszą tragarze) oraz gracza w promieniu 96 bloków. Otwarta kuźnia z paleniskiem, kowadłem i kominem.'
+  look: 'Otwarta kuźnia z paleniskiem, kowadłem i kominem.'
+  previous:
+    - 'Otwarta kuźnia z paleniskiem, kowadłem i kominem.'
+kuznia_kamienna:
+  base: 'kuznia'
+  effect: 'sztabki żelaza i pochodnie dla kopalni'
+  description: 'Kowal przetapia surowe żelazo na sztabki i robi pochodnie dla kopalni (1 kłoda + 4 węgla → 16 pochodni); daje pracę kowalom. Potrzebuje surowego żelaza, węgla i kłód (donoszą tragarze) oraz gracza w promieniu 96 bloków. Murowana kuźnia z zadaszonym placem i kowadłem.'
+  look: 'Murowana kuźnia z zadaszonym placem i kowadłem.'
+  previous:
+    - 'Murowana kuźnia z paleniskiem i kominem, zadaszonym placem z kowadłem, korytem do hartowania i węglem.'
+laboratorium:
+  base: 'laboratorium'
+  effect: 'dużo punktów badań'
+  description: 'Daje bardzo dużo punktów badań (Postęp); bez premii do podatków. Laboratorium z aparaturą.'
+  look: 'Laboratorium z aparaturą.'
+  previous:
+    - 'Laboratorium z dygestoriami, stołami i aparaturą. Dużo punktów badań.'
+latarnia:
+  base: 'latarnia'
+  effect: 'podatki +3%'
+  description: 'Podatki +3%; nie zwiększa połowów. Stawiaj nad wodą. Pasiasta latarnia morska z galerią.'
+  look: 'Pasiasta latarnia morska z galerią.'
+  previous:
+    - 'Pasiasta latarnia z galerią i światłem morskim. Stawiana nad wodą; bezpieczniejsze połowy i handel.'
+laznia:
+  base: 'laznia'
+  effect: 'osadnicy +15%, lepszy nastrój'
+  description: 'Szansa na nowego osadnika +15% w każdym cyklu wzrostu i lepszy nastrój. Łaźnia z basenem i ławami.'
+  look: 'Łaźnia z basenem i ławami.'
+  previous:
+    - 'Łaźnia z basenem, kadziami gorącej wody i ławami. Zdrowsza i liczniejsza ludność.'
+lotnisko:
+  base: 'lotnisko'
+  effect: 'podatki +15%, osadnicy +5%'
+  description: 'Podatki +15% i szansa na nowego osadnika +5% w każdym cyklu wzrostu. Pas startowy, terminal i wieża kontroli lotów.'
+  look: 'Pas startowy, terminal i wieża kontroli lotów.'
+  previous:
+    - 'Pas startowy ze światłami, terminal i wieża kontroli lotów.'
+magazyn:
+  base: 'magazyn'
+  effect: 'skład materiałów kraju, pojemność spichlerza +300'
+  description: 'Skład kraju: tragarze znoszą tu urobek z pełnych skrzyń kopalni, tartaku, kamieniołomu i zakładów, a budowy biorą stąd materiały; pojemność spichlerza +300. Liczy się każda skrzynia i beczka w budynku — towar możesz wkładać sam. Magazyn z piwnicą pełną beczek.'
+  look: 'Magazyn z piwnicą pełną beczek.'
+  previous:
+    - 'Magazyn z piwnicą pełną beczek. Duży przyrost pojemności spichlerza.'
+mlyn:
+  base: 'mlyn'
+  effect: 'praca dla rolników'
+  description: 'Daje pracę rolnikom (młynarzom); sam nie zwiększa zapasu jedzenia. Wiatrak z żarnami w środku.'
+  look: 'Wiatrak z żarnami w środku.'
+  previous:
+    - 'Wiatrak ze skrzydłami z płotków i wełny, z żarnami w środku.'
+most:
+  base: 'most'
+  effect: 'podatki +2%, przeprawa'
+  description: 'Przeprawa przez wodę; podatki +2%. Stawiany nad wodą. Kamienny most z łukami i latarniami.'
+  look: 'Kamienny most z łukami i latarniami.'
+  previous:
+    - 'Kamienny most na dwóch filarach z łukami, balustradą i latarniami.'
+most_stalowy:
+  base: 'most_stalowy'
+  effect: 'przeprawa, bez premii'
+  description: 'Przeprawa przez wodę; nie daje premii do podatków ani wzrostu. Stawiany nad wodą. Stalowy most kratownicowy.'
+  look: 'Stalowy most kratownicowy.'
+  previous:
+    - 'Stalowy most kratownicowy na kamiennych filarach z latarniami.'
+mur:
+  base: 'mur'
+  effect: 'odcinek murów, bez premii'
+  description: 'Odcinek murów miejskich z basztą; nie daje premii do podatków ani wzrostu. Mur z blankami.'
+  look: 'Mur z blankami.'
+  previous:
+    - 'Moduł murów miejskich: odcinek muru z blankami i basztą.'
+obserwatorium:
+  base: 'obserwatorium'
+  effect: 'punkty badań'
+  description: 'Daje punkty badań (Postęp); bez premii do podatków. Wieża z kopułą i lunetą.'
+  look: 'Wieża z kopułą i lunetą.'
+  previous:
+    - 'Wieża z kopułą ze szkła i miedzi i lunetą.'
+ogrody:
+  base: 'ogrody'
+  effect: 'podatki +3%, osadnicy +10%'
+  description: 'Podatki +3%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i lepszy nastrój (od renesansu). Żywopłoty, kwietniki, staw i altana.'
+  look: 'Żywopłoty, kwietniki, staw i altana.'
+  previous:
+    - 'Strzyżone żywopłoty, kwietniki, staw z liliami, altana i posągi.'
+owczarnia:
+  base: 'owczarnia'
+  effect: 'wełna i bele siana na budowy'
+  description: 'Stado do 4 owiec daje wełnę, a pasterz wiąże bele siana (9 pszenicy → 1 bela) — do skrzyni owczarni, dla budów. Potrzebuje pszenicy z pól (jagnię kosztuje 2 pszenice) i gracza w promieniu 96 bloków. Szopa z krosnem i zagroda dla owiec.'
+  look: 'Szopa z krosnem i zagroda dla owiec.'
+  previous:
+    - 'Szopa z krosnem i sianem oraz zagroda ze stadem owiec. Pasterz strzyże wełnę i wiąże bele siana z pszenicy z pól; z wełny i drewna powstają łóżka.'
+owczarnia_kamienna:
+  base: 'owczarnia'
+  effect: 'wełna i bele siana na budowy'
+  description: 'Stado do 4 owiec daje wełnę, a pasterz wiąże bele siana (9 pszenicy → 1 bela) — do skrzyni owczarni, dla budów. Potrzebuje pszenicy z pól (jagnię kosztuje 2 pszenice) i gracza w promieniu 96 bloków. Kamienna owczarnia ze stryszkiem i zagrodą.'
+  look: 'Kamienna owczarnia ze stryszkiem i zagrodą.'
+  previous:
+    - 'Kamienna owczarnia ze stryszkiem na siano, krosnem i zagrodą na kamiennym krawężniku. Pasterz strzyże wełnę i wiąże bele siana z pszenicy z pól; z wełny i drewna powstają łóżka.'
+palac:
+  base: 'palac'
+  effect: 'podatki +15%, badania'
+  description: 'Podatki +15% i punkty badań (Postęp). Łóżka (4) nie liczą się jako mieszkania. Pałac z kolumnadą, ogrodem i salą tronową.'
+  look: 'Pałac z kolumnadą, ogrodem i salą tronową.'
+  previous:
+    - 'Pałac z kolumnadą, ogrodem z fontanną, salą tronową ze złotym tronem i komnatami (4 łóżka).'
+palac_renesansowy:
+  base: 'palac_renesansowy'
+  effect: 'podatki +12%, osadnicy +5%, badania'
+  description: 'Podatki +12%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i punkty badań (Postęp). Łóżka (4) nie liczą się jako mieszkania. Czteroskrzydłowy pałac z arkadowym dziedzińcem.'
+  look: 'Czteroskrzydłowy pałac z arkadowym dziedzińcem.'
+  previous:
+    - 'Czteroskrzydłowy pałac z arkadowym dziedzińcem, ogrodem i fontanną. 4 łóżka.'
+park:
+  base: 'park'
+  effect: 'osadnicy +15%'
+  description: 'Szansa na nowego osadnika +15% w każdym cyklu wzrostu. Ogrodzony park z alejkami i stawem.'
+  look: 'Ogrodzony park z alejkami i stawem.'
+  previous:
+    - 'Ogrodzony park z alejkami, drzewami, stawem, ławkami i latarniami.'
+parking:
+  base: 'parking'
+  effect: 'podatki +3%'
+  description: 'Podatki +3%. Asfaltowy parking z latarniami.'
+  look: 'Asfaltowy parking z latarniami.'
+  previous:
+    - 'Asfaltowy parking z liniami i latarniami.'
+parlament:
+  base: 'parlament'
+  effect: 'podatki +12%, osadnicy +5%'
+  description: 'Podatki +12% i szansa na nowego osadnika +5% w każdym cyklu wzrostu. Gmach z kolumnadą i szklaną kopułą.'
+  look: 'Gmach z kolumnadą i szklaną kopułą.'
+  previous:
+    - 'Gmach parlamentu z kolumnadą, szklaną kopułą i salą obrad.'
+piekarnia:
+  base: 'piekarnia'
+  effect: 'praca dla rolników i rzeźników'
+  description: 'Daje pracę rolnikom i rzeźnikom (piekarzom); sama nie zwiększa zapasu jedzenia. Piekarnia z ceglanym piecem i kominem.'
+  look: 'Piekarnia z ceglanym piecem i kominem.'
+  previous:
+    - 'Piekarnia z ceglanym piecem i kominem. Więcej jedzenia.'
+piekarnia_szachulec:
+  base: 'piekarnia'
+  effect: 'praca dla rolników i rzeźników'
+  description: 'Daje pracę rolnikom i rzeźnikom (piekarzom); sama nie zwiększa zapasu jedzenia. Piekarnia z muru pruskiego z okienkiem sprzedaży.'
+  look: 'Piekarnia z muru pruskiego z okienkiem sprzedaży.'
+  previous:
+    - 'Piekarnia z muru pruskiego z ceglanym piecem chlebowym, okienkiem sprzedaży pod markizą i kominem. Więcej jedzenia.'
+pole:
+  base: 'pole'
+  effect: 'plony (jedzenie) do spichlerza lub magazynu'
+  description: 'Rolnicy (2 miejsca pracy) zbierają i od razu obsiewają pszenicę, marchew i ziemniaki; plony karmią ludność. Nie ma własnej skrzyni — plony trafiają do spichlerza albo magazynu; zimą prawie nie rodzi. Ogrodzone pole z kanałem wody.'
+  look: 'Ogrodzone pole z kanałem wody.'
+  previous:
+    - 'Ogrodzone pole z kanałem wody, pszenicą, marchwią i ziemniakami. Daje jedzenie do spichlerza.'
+pomnik:
+  base: 'pomnik'
+  effect: 'podatki +3%'
+  description: 'Podatki +3%; przebudowa miasta nigdy go nie wyburza. Pomnik władcy na cokole w barwach kraju.'
+  look: 'Pomnik władcy na cokole w barwach kraju.'
+  previous:
+    - 'Pomnik władcy na schodkowym cokole w barwach kraju.'
+port:
+  base: 'port'
+  effect: 'podatki +8%, badania'
+  description: 'Podatki +8% i punkty badań (Postęp); nie zwiększa połowów. Stawiany nad wodą. Port z molo na palach i dźwigiem.'
+  look: 'Port z molo na palach i dźwigiem.'
+  previous:
+    - 'Port z molo na palach, dźwigiem i magazynem portowym. Handel morski.'
+przystan:
+  base: 'przystan'
+  effect: 'ryby do skrzyni, podatki +3%'
+  description: 'Rybacy (2 miejsca pracy) łowią dorsze i łososie do skrzyni przystani — do 6 ryb dziennie na rybaka; podatki +3%. Łowią za dnia, gdy gracz jest w promieniu 64 bloków; stawiaj nad wodą. Chata rybacka z pomostem.'
+  look: 'Chata rybacka z pomostem.'
+  previous:
+    - 'Chata rybacka z pomostem. Stawiana nad wodą, daje ryby.'
+ratusz:
+  base: 'ratusz'
+  effect: 'podatki +8%'
+  description: 'Podatki od obywateli +8% i praca dla kartografów; przebudowa miasta nigdy go nie wyburza. Ratusz z wieżą zegarową i salą rady.'
+  look: 'Ratusz z wieżą zegarową i salą rady.'
+  previous:
+    - 'Ratusz z wieżą zegarową, salą rady i kancelarią.'
+ratusz_renesansowy:
+  base: 'ratusz_renesansowy'
+  effect: 'podatki +10%, badania'
+  description: 'Podatki +10% i punkty badań (Postęp). Tynkowany ratusz z attyką i wieżą zegarową.'
+  look: 'Tynkowany ratusz z attyką i wieżą zegarową.'
+  previous:
+    - 'Tynkowany ratusz z attyką, salą rady i wieżą zegarową z dzwonem.'
+rynek:
+  base: 'rynek'
+  effect: 'podatki +6%, osadnicy +5%, lepszy nastrój'
+  description: 'Podatki +6%, szansa na nowego osadnika +5% w każdym cyklu wzrostu i lepszy nastrój; plac festynów i spotkań. Duży brukowany rynek z fontanną i kramami.'
+  look: 'Duży brukowany rynek z fontanną i kramami.'
+  previous:
+    - 'Duży brukowany rynek z fontanną, ławami, latarniami, drzewami i kramami.'
+skarbiec:
+  base: 'skarbiec'
+  effect: 'podatki +8%'
+  description: 'Podatki +8%. Grubościenny skarbiec z kratami.'
+  look: 'Grubościenny skarbiec z kratami.'
+  previous:
+    - 'Grubościenny skarbiec z kratami, złotem i kancelarią. Wyższe podatki.'
+spichlerz:
+  base: 'spichlerz'
+  effect: 'pojemność spichlerza +2000'
+  description: 'Zwiększa pojemność spichlerza kraju o 2000 pkt jedzenia; jedzenie włożone do jego skrzyń i beczek karmi ludność (obywatel zjada 4 pkt dziennie). Przyjmuje też plony z pól i ryby z przystani. Drewniany spichlerz ze skrzyniami na zapasy.'
+  look: 'Drewniany spichlerz ze skrzyniami na zapasy.'
+  previous:
+    - 'Drewniany spichlerz ze skrzyniami na zapasy. Zwiększa pojemność spichlerza kraju.'
+spichlerz_kamienny:
+  base: 'spichlerz'
+  effect: 'pojemność spichlerza +2000'
+  description: 'Zwiększa pojemność spichlerza kraju o 2000 pkt jedzenia; jedzenie włożone do jego skrzyń i beczek karmi ludność (obywatel zjada 4 pkt dziennie). Przyjmuje też plony z pól i ryby z przystani. Murowany spichlerz ze szkarpami i belką wyciągu.'
+  look: 'Murowany spichlerz ze szkarpami i belką wyciągu.'
+  previous:
+    - 'Murowany spichlerz ze szkarpami, otworami wentylacyjnymi, poddaszem i belką wyciągu. Zwiększa pojemność spichlerza kraju.'
+stadion:
+  base: 'stadion'
+  effect: 'podatki +6%, osadnicy +10%'
+  description: 'Podatki +6% i szansa na nowego osadnika +10% w każdym cyklu wzrostu. Stadion z boiskiem i trybunami.'
+  look: 'Stadion z boiskiem i trybunami.'
+  previous:
+    - 'Stadion z boiskiem, bramkami, trybunami i masztami oświetlenia.'
+stajnia:
+  base: 'stajnia'
+  effect: 'praca dla garbarzy i pasterzy'
+  description: 'Daje pracę garbarzom i pasterzom; nie daje premii do podatków ani wzrostu. Drewniana stajnia z boksami i korytami.'
+  look: 'Drewniana stajnia z boksami i korytami.'
+  previous:
+    - 'Drewniana stajnia z boksami, sianem i korytami.'
+stajnia_kamienna:
+  base: 'stajnia'
+  effect: 'praca dla garbarzy i pasterzy'
+  description: 'Daje pracę garbarzom i pasterzom; nie daje premii do podatków ani wzrostu. Murowana stajnia ze stryszkiem na siano.'
+  look: 'Murowana stajnia ze stryszkiem na siano.'
+  previous:
+    - 'Murowana stajnia z bramą, boksami, korytami, stryszkiem na siano i siodlarnią.'
+studnia:
+  base: 'studnia'
+  effect: 'lepszy nastrój, woda do gaszenia pożarów'
+  description: 'Poprawia nastrój mieszkańców, jest miejscem wieczornych spotkań i źródłem wody dla ekip gaszących pożary. Nie potrzebuje pracowników. Kamienna studnia z daszkiem.'
+  look: 'Kamienna studnia z daszkiem.'
+  previous:
+    - 'Kamienna studnia z daszkiem — serce osady.'
+    - 'Kamienna studnia z daszkiem.'
+szkola:
+  base: 'szkola'
+  effect: 'podatki +2%, osadnicy +10%, badania'
+  description: 'Podatki +2%, szansa na nowego osadnika +10% w każdym cyklu wzrostu i punkty badań (Postęp); praca dla bibliotekarzy. Ceglana szkoła z dwiema klasami.'
+  look: 'Ceglana szkoła z dwiema klasami.'
+  previous:
+    - 'Ceglana szkoła z dwiema klasami, ławkami i dzwonkiem.'
+szkola_nowoczesna:
+  base: 'szkola_nowoczesna'
+  effect: 'podatki +3%, osadnicy +15%, badania'
+  description: 'Podatki +3%, szansa na nowego osadnika +15% w każdym cyklu wzrostu i punkty badań (Postęp). Betonowa szkoła z dużymi oknami.'
+  look: 'Betonowa szkoła z dużymi oknami.'
+  previous:
+    - 'Betonowa szkoła z dużymi oknami i dwoma piętrami klas.'
+szpital:
+  base: 'szpital'
+  effect: 'osadnicy +30%'
+  description: 'Szansa na nowego osadnika +30% w każdym cyklu wzrostu i punkty badań (Postęp). Łóżka dla chorych (8) nie liczą się jako mieszkania. Ceglany szpital z salami chorych i apteką.'
+  look: 'Ceglany szpital z salami chorych i apteką.'
+  previous:
+    - 'Ceglany szpital z salami chorych (8 łóżek dla chorych) i apteką.'
+szpital_nowoczesny:
+  base: 'szpital_nowoczesny'
+  effect: 'osadnicy +45%'
+  description: 'Szansa na nowego osadnika +45% w każdym cyklu wzrostu i punkty badań (Postęp). Łóżka dla chorych (8) nie liczą się jako mieszkania. Trzypiętrowy szpital z lądowiskiem.'
+  look: 'Trzypiętrowy szpital z lądowiskiem.'
+  previous:
+    - 'Trzypiętrowy szpital z oddziałami (8 łóżek) i lądowiskiem.'
+targ:
+  base: 'targ'
+  effect: 'podatki +10%, lepszy nastrój'
+  description: 'Podatki +10%, lepszy nastrój (mieszkańcy przychodzą tu w południe) i praca dla rzeźników i garbarzy. Brukowany plac ze straganami w barwach kraju.'
+  look: 'Brukowany plac ze straganami w barwach kraju.'
+  previous:
+    - 'Brukowany plac targowy ze straganami w barwach kraju i fontanną.'
+tartak:
+  base: 'tartak'
+  effect: 'kłody z drzew w promieniu 28 bloków, podatki +5%'
+  description: 'Drwal ścina drzewa w promieniu 28 bloków na ziemi kraju, sadzi sadzonki i składa kłody do skrzyni tartaku; podatki +5%. Potrzebuje lasu w zasięgu. Zadaszony tartak z piłą i stosami bali.'
+  look: 'Zadaszony tartak z piłą i stosami bali.'
+  previous:
+    - 'Zadaszony tartak ze stosami bali i piłą. Najlepiej przy lesie.'
+tartak_kryty:
+  base: 'tartak'
+  effect: 'kłody z drzew w promieniu 28 bloków, podatki +5%'
+  description: 'Drwal ścina drzewa w promieniu 28 bloków na ziemi kraju, sadzi sadzonki i składa kłody do skrzyni tartaku; podatki +5%. Potrzebuje lasu w zasięgu. Kryta hala tartaku na kamiennych stopach.'
+  look: 'Kryta hala tartaku na kamiennych stopach.'
+  previous:
+    - 'Kryta hala tartaku na kamiennych stopach, z zastrzałami, piłą i stosami bali. Najlepiej przy lesie.'
+uniwersytet:
+  base: 'uniwersytet'
+  effect: 'dużo punktów badań'
+  description: 'Daje najwięcej punktów badań (Postęp) i pracę bibliotekarzom i kartografom; bez premii do podatków. Kolegium z salami wykładowymi i portykiem.'
+  look: 'Kolegium z salami wykładowymi i portykiem.'
+  previous:
+    - 'Kolegium z salami wykładowymi, biblioteką i portykiem. Dużo punktów badań.'
+wieza:
+  base: 'wieza'
+  effect: 'posterunek straży, bez premii'
+  description: 'Budowla obronna: posterunek dla strażników; nie daje premii do podatków ani wzrostu. Kamienna wieża z platformą obserwacyjną i blankami.'
+  look: 'Kamienna wieża z platformą obserwacyjną i blankami.'
+  previous:
+    - 'Kamienna wieża z platformą obserwacyjną i blankami.'
+wieza_okragla:
+  base: 'wieza'
+  effect: 'posterunek straży, bez premii'
+  description: 'Budowla obronna: posterunek dla strażników; nie daje premii do podatków ani wzrostu. Okrągła baszta ze strzelnicami i stożkowym dachem.'
+  look: 'Okrągła baszta ze strzelnicami i stożkowym dachem.'
+  previous:
+    - 'Okrągła kamienna baszta ze strzelnicami, drewnianym gankiem obronnym na wspornikach i stożkowym dachem.'
+wiezowiec:
+  base: 'wiezowiec'
+  effect: 'dom dla 28 obywateli'
+  description: 'Mieszkanie dla 28 obywateli (28 łóżek); bez wolnych łóżek nie przybywa osadników. Wieżowiec mieszkalny (ok. 65 bloków); tylko na płaskiej działce.'
+  look: 'Wieżowiec mieszkalny (ok. 65 bloków); tylko na płaskiej działce.'
+  previous:
+    - 'Mieszkalny wieżowiec (ok. 65 bl.) z 15 piętrami, windą i oświetleniem. 28 łóżek. Tylko na płaskiej działce.'
+wiezowiec_biurowy:
+  base: 'wiezowiec_biurowy'
+  effect: 'podatki +15%'
+  description: 'Podatki +15%. Tylko na płaskiej działce. Szklany biurowiec (ok. 45 bloków).'
+  look: 'Szklany biurowiec (ok. 45 bloków).'
+  previous:
+    - 'Szklany biurowiec (ok. 45 bl.) z windą, oświetlonymi piętrami i lądowiskiem na dachu. Tylko na płaskiej działce.'
+zamek:
+  base: 'zamek'
+  effect: 'podatki +10%, badania'
+  description: 'Podatki +10% i punkty badań (Postęp). Łóżka (4) nie liczą się jako mieszkania. Warowny zamek z czterema wieżami, bramą i donżonem.'
+  look: 'Warowny zamek z czterema wieżami, bramą i donżonem.'
+  previous:
+    - 'Warowny zamek: mury z blankami, cztery wieże, brama z broną, dziedziniec i donżon (4 łóżka).'
+zielarnia:
+  base: 'zielarnia'
+  effect: 'osadnicy +25%, lepszy nastrój'
+  description: 'Szansa na nowego osadnika +25% w każdym cyklu wzrostu i lepszy nastrój; praca dla kapłanów (zielarzy). Chata zielarza z ogródkiem ziół.'
+  look: 'Chata zielarza z ogródkiem ziół.'
+  previous:
+    - 'Chata zielarza z ogródkiem ziół i alembikiem. Zdrowsza ludność.'
